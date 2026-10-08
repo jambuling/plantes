@@ -566,19 +566,63 @@
       gap: 12px;
     }
 
-    .photo-upload-box {
-      border: 2px dashed var(--border-strong);
-      border-radius: var(--radius-md);
-      padding: 20px;
+    .source-options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 520px) {
+      .source-options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .btn-source-option {
+      border: 2px dashed #256a38;
+      border-radius: 14px;
+      background: #f4faf5;
+      padding: 22px 14px;
       text-align: center;
       cursor: pointer;
-      background: #fafcf9;
-      position: relative;
-      margin-bottom: 16px;
-      transition: border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      font-family: inherit;
     }
-    .photo-upload-box:hover {
-      border-color: var(--accent);
+    .btn-source-option:hover {
+      background: #eaf5ec;
+      border-color: #1e582e;
+      transform: translateY(-2px);
+    }
+    .btn-source-camera {
+      border-color: #256a38;
+      background: #edf6ef;
+    }
+    .btn-source-gallery {
+      border-color: #0284c7;
+      background: #f0f9ff;
+    }
+    .btn-source-gallery:hover {
+      background: #e0f2fe;
+      border-color: #0369a1;
+    }
+    .preset-chip-btn {
+      background: #f4f8f4;
+      border: 1px solid #cce0cd;
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      color: #243525;
+      transition: all 0.15s ease;
+      font-weight: 500;
+    }
+    .preset-chip-btn:hover {
+      background: #256a38;
+      color: #ffffff;
+      border-color: #256a38;
     }
     .photo-preview {
       width: 100%;
@@ -783,13 +827,64 @@
         Fes una foto o tria-la de la galeria. La Intel·ligència Artificial identificarà l'espècie i calcularà automàticament el calendari de reg, adob i cures.
       </p>
 
-      <!-- BOTÓ PUJAR / FER FOTO -->
+      <!-- BOTONS FER FOTO O GALERIA -->
       <div id="aiUploadPromptSection">
-        <div class="photo-upload-box" style="padding: 36px 20px; border: 2px dashed var(--accent); background: #f4faf5; border-radius: 16px; cursor: pointer;" onclick="document.getElementById('aiPlantPhotoInput').click()">
-          <input type="file" id="aiPlantPhotoInput" accept="image/*" style="display:none;" onchange="handleAIPhotoFile(event)">
-          <div style="font-size: 3rem; margin-bottom: 8px;">📷</div>
-          <strong style="font-size: 1.1rem; color: var(--accent); display:block; margin-bottom: 6px;">Fes una foto o tria de la galeria</strong>
-          <span style="font-size: 0.82rem; color: var(--text-muted);">Toca aquí per obrir la càmera o els teus àlbums</span>
+        <div class="source-options-grid">
+          <button type="button" class="btn-source-option btn-source-camera" onclick="document.getElementById('aiCameraInput').click()">
+            <input type="file" id="aiCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleAIPhotoFile(event)">
+            <span style="font-size: 2.2rem; line-height: 1;">📸</span>
+            <strong style="font-size: 1rem; color: #1e582e;">Fer Foto ara</strong>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Obre la càmera del mòbil</span>
+          </button>
+
+          <button type="button" class="btn-source-option btn-source-gallery" onclick="document.getElementById('aiGalleryInput').click()">
+            <input type="file" id="aiGalleryInput" accept="image/*" style="display:none;" onchange="handleAIPhotoFile(event)">
+            <span style="font-size: 2.2rem; line-height: 1;">🖼️</span>
+            <strong style="font-size: 1rem; color: #0284c7;">Triar de la Galeria</strong>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Tria una foto desada</span>
+          </button>
+        </div>
+
+        <div style="background: #fafaf9; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
+          <span>🤖 IA Botànica Automàtica</span>
+          <button type="button" onclick="toggleAICfgPanel()" style="background:none; border:none; color: var(--accent); cursor: pointer; text-decoration: underline; font-size: 0.8rem; font-weight:600;">
+            ⚙️ Configuració Clau IA
+          </button>
+        </div>
+
+        <div id="aiCfgPanel" style="display:none; margin-top: 10px; padding: 12px; background: #ffffff; border: 1px solid var(--border-subtle); border-radius: 10px;">
+          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Clau API Gemini (Google AI Studio):</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy..." class="form-control" style="font-size: 0.82rem; padding: 6px 10px;">
+            <button type="button" class="btn-action" style="background: #256a38; color: white; padding: 6px 14px; white-space: nowrap; font-size: 0.8rem;" onclick="saveGeminiApiKey()">Desar</button>
+          </div>
+          <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Permet identificació visual 100% autònoma directament de la imatge.</span>
+        </div>
+      </div>
+
+      <!-- SECCIÓ DE TRIA RÀPIDA / RESILIENT SI LA IA NECESSITA CONFIRMACIÓ -->
+      <div id="aiFallbackPickerSection" style="display: none;">
+        <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 14px; background: #f8faf8; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px;">
+          <img id="aiFallbackPreviewImg" src="" style="width: 64px; height: 64px; border-radius: 8px; object-fit: cover;" alt="Foto capturada">
+          <div>
+            <div style="font-size: 0.76rem; font-weight: 700; color: #256a38; text-transform: uppercase;">📸 Foto capturada amb èxit</div>
+            <p style="font-size: 0.84rem; color: var(--text-main); margin: 2px 0; font-weight: 600;">Quina planta és?</p>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Tria una de les habituals o cerca-la: la IA calcularà totes les cures automàticament.</span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <input type="text" id="fallbackPlantSearchInput" placeholder="🔍 Cerca nom (ex: Pothos, Monstera, Cinta, Ficus...)" class="form-control" oninput="filterFallbackPresets(this.value)">
+        </div>
+
+        <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;">🌱 Opcions freqüents (1 clic):</div>
+        <div id="fallbackPresetsContainer" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 180px; overflow-y: auto; margin-bottom: 16px;">
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+          <button class="btn-action" style="background: #e5e7eb; color: #374151;" onclick="resetAIModal()">
+            🔄 Repetir foto
+          </button>
         </div>
       </div>
 
@@ -1517,7 +1612,10 @@
           .maybeSingle();
 
         if (cfgRow && cfgRow.data) {
-          aiAppConfig = cfgRow.data;
+          aiAppConfig = { ...aiAppConfig, ...cfgRow.data };
+          if (cfgRow.data.gemini_key) {
+            try { localStorage.setItem("registre_plantes_gemini_key", cfgRow.data.gemini_key); } catch(e) {}
+          }
         }
 
         // Re-renderitzem amb les dades sincronitzades del núvol
@@ -1599,15 +1697,42 @@
   }
 
   // -------------------------------------------------------------
-  // ALTA DE NOVA PLANTA AMB IA (Pl@ntNet + Groq des de Supabase)
+  // ALTA DE NOVA PLANTA AMB IA (Gemini Vision + Pl@ntNet + Supabase)
   // -------------------------------------------------------------
   let aiAppConfig = {
+    gemini_key: localStorage.getItem("registre_plantes_gemini_key") || "",
     plantnet_key: "",
     groq_key: ""
   };
 
   let currentAIIdentifiedPlant = null;
   let currentAIPhotoBase64 = null;
+
+  function toggleAICfgPanel() {
+    const p = document.getElementById("aiCfgPanel");
+    p.style.display = (p.style.display === "none" || !p.style.display) ? "block" : "none";
+    if (p.style.display === "block" && aiAppConfig.gemini_key) {
+      document.getElementById("geminiApiKeyInput").value = aiAppConfig.gemini_key;
+    }
+  }
+
+  async function saveGeminiApiKey() {
+    const val = document.getElementById("geminiApiKeyInput").value.trim();
+    aiAppConfig.gemini_key = val;
+    try {
+      localStorage.setItem("registre_plantes_gemini_key", val);
+    } catch(e) {}
+
+    if (supabaseClient && isCloudConnected) {
+      try {
+        await supabaseClient
+          .from('plantes_history')
+          .upsert({ id: 'app_config', data: aiAppConfig, updated_at: new Date().toISOString() });
+      } catch(e) {}
+    }
+    showToast("Clau de Gemini desada amb èxit!", "🔑");
+    toggleAICfgPanel();
+  }
 
   function openAddPlantModal() {
     resetAIModal();
@@ -1619,8 +1744,13 @@
     currentAIPhotoBase64 = null;
     document.getElementById("aiUploadPromptSection").style.display = "block";
     document.getElementById("aiScanningSection").style.display = "none";
+    document.getElementById("aiFallbackPickerSection").style.display = "none";
     document.getElementById("aiResultSection").style.display = "none";
-    document.getElementById("aiPlantPhotoInput").value = "";
+    
+    const camInp = document.getElementById("aiCameraInput");
+    if (camInp) camInp.value = "";
+    const galInp = document.getElementById("aiGalleryInput");
+    if (galInp) galInp.value = "";
   }
 
   async function handleAIPhotoFile(event) {
@@ -1629,36 +1759,219 @@
 
     // 1. Mostrar pantalla d'escaneig
     document.getElementById("aiUploadPromptSection").style.display = "none";
+    document.getElementById("aiFallbackPickerSection").style.display = "none";
     document.getElementById("aiScanningSection").style.display = "block";
     document.getElementById("aiResultSection").style.display = "none";
-    document.getElementById("aiScanningStepText").innerText = "Processant la fotografia...";
+    document.getElementById("aiScanningStepText").innerText = "Processant la fotografia capturada...";
 
     try {
-      // Comprimir foto per a visualització i emmagatzematge
+      // Comprimir foto per a visualització ràpida i estalvi d'espai
       const base64 = await compressImageFile(file);
       currentAIPhotoBase64 = base64;
       document.getElementById("aiScanningPreviewImg").src = base64;
 
-      document.getElementById("aiScanningStepText").innerText = "1/2: Pl@ntNet està consultant la base científica botànica...";
+      let identifiedProfile = null;
 
-      // Pas 1: Identificar espècie amb Pl@ntNet
-      const speciesInfo = await identifySpeciesWithPlantNet(file);
+      // Intent 1: Si tenim clau Gemini (Google AI), és la més potent i té CORS oficial
+      if (aiAppConfig.gemini_key && aiAppConfig.gemini_key.trim().length > 10) {
+        document.getElementById("aiScanningStepText").innerText = "Consultant Gemini AI Vision per identificar la planta...";
+        try {
+          identifiedProfile = await identifyWithGemini(base64);
+        } catch(geminiErr) {
+          console.warn("Gemini vision error, provant alternatives:", geminiErr);
+        }
+      }
 
-      document.getElementById("aiScanningStepText").innerText = "2/2: Calculant el calendari de reg, adob i cures en català...";
+      // Intent 2: Si no hi ha Gemini o ha fallat, provar Pl@ntNet si té clau
+      if (!identifiedProfile && aiAppConfig.plantnet_key) {
+        document.getElementById("aiScanningStepText").innerText = "Consultant la base científica Pl@ntNet...";
+        try {
+          const speciesInfo = await identifySpeciesWithPlantNet(file);
+          document.getElementById("aiScanningStepText").innerText = "Calculant calendari de cures i reg en català...";
+          identifiedProfile = await generateCareProfileWithAI(speciesInfo);
+        } catch(pnetErr) {
+          console.warn("Pl@ntNet error (CORS o xarxa):", pnetErr);
+        }
+      }
 
-      // Pas 2: Generar perfil complet de cures
-      const plantProfile = await generateCareProfileWithAI(speciesInfo);
-
-      currentAIIdentifiedPlant = plantProfile;
-
-      // Pas 3: Mostrar resultat final
-      displayAIResult(plantProfile, base64);
+      // Si la IA ha reconegut la planta directament:
+      if (identifiedProfile) {
+        currentAIIdentifiedPlant = identifiedProfile;
+        displayAIResult(identifiedProfile, base64);
+      } else {
+        // Flux resilient: Si la xarxa no té accés directe a l'API de visió,
+        // obrim el selector ràpid de planta (1 sol clic) mantenint la foto de l'usuari
+        showFallbackPlantPicker(base64);
+      }
 
     } catch (err) {
       console.error("AI analysis error:", err);
-      alert(err.message || "No s'ha pogut reconèixer la planta. Assegura't que a la foto es vegin bé les fulles.");
-      resetAIModal();
+      showFallbackPlantPicker(currentAIPhotoBase64 || "");
     }
+  }
+
+  // Identificació visual directa amb Gemini (Google AI Studio)
+  async function identifyWithGemini(base64Image) {
+    const cleanBase64 = base64Image.replace(/^data:image\/\w+;base64,/, '');
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${aiAppConfig.gemini_key.trim()}`;
+
+    const prompt = `Analitza aquesta fotografia botànica d'una planta domèstica o de jardí.
+Identifica l'espècie i retorna EXCLUSIVAMENT un objecte JSON amb aquests camps exactes, redactat en català:
+{
+  "name": "Nom comú habitual en català (ex: Pothos, Monstera, Cinta, Ficus)",
+  "scientific": "Nom científic de l'espècie",
+  "zone": "interior" o "exterior",
+  "difficulty": "molt_facil", "facil" o "mitjana",
+  "difficultyLabel": "Molt fàcil", "Fàcil" o "Mitjana",
+  "toxic": true o false (si és tòxica per a gats/gossos),
+  "waterDaysSummer": nombre enter de dies entre regs a l'estiu (ex: 6),
+  "waterDaysWinter": nombre enter de dies entre regs a l'hivern (ex: 12),
+  "waterSummerText": "ex: Cada 6 dies",
+  "waterWinterText": "ex: Cada 12 dies",
+  "waterDetail": "Descripció breu i consell de reg en català",
+  "fertilizerType": "Tipus d'adob recomanat en català",
+  "fertilizerDays": nombre enter de dies de freqüència d'adob (ex: 20),
+  "fertilizerFreq": "ex: Cada 20 dies",
+  "fertilizerSeason": "Primavera i Estiu",
+  "fertilizerNotes": "Notes d'adob en català",
+  "light": "Requeriments de llum en català",
+  "substrate": "Tipus de substrat idoni en català",
+  "tip": "Consell clau per mantenir-la sana en català"
+}`;
+
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { text: prompt },
+            { inline_data: { mime_type: "image/jpeg", data: cleanBase64 } }
+          ]
+        }]
+      })
+    });
+
+    if (!resp.ok) {
+      throw new Error(`Gemini API error: ${resp.status}`);
+    }
+
+    const data = await resp.json();
+    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!rawText) throw new Error("Resposta buida de Gemini");
+
+    const cleaned = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+    return JSON.parse(cleaned);
+  }
+
+  // Selector resilient si no hi ha connexió directa amb l'API de visió
+  function showFallbackPlantPicker(base64) {
+    document.getElementById("aiScanningSection").style.display = "none";
+    document.getElementById("aiFallbackPickerSection").style.display = "block";
+    document.getElementById("aiFallbackPreviewImg").src = base64;
+
+    const input = document.getElementById("fallbackPlantSearchInput");
+    if (input) input.value = "";
+
+    renderFallbackChips("");
+  }
+
+  function renderFallbackChips(query) {
+    const container = document.getElementById("fallbackPresetsContainer");
+    const q = query.toLowerCase().trim();
+
+    // Llista unificada de totes les espècies conegudes
+    const allPresets = [];
+
+    // 1. Les plantes del catàleg actual
+    initialDefaultPlants.forEach(p => {
+      allPresets.push({
+        id: p.id,
+        name: p.name,
+        scientific: p.scientific,
+        data: {
+          name: p.name,
+          scientific: p.scientific,
+          zone: p.zone,
+          difficulty: p.difficulty,
+          difficultyLabel: p.difficultyLabel,
+          toxic: p.toxic,
+          waterDaysSummer: p.waterDaysSummer,
+          waterDaysWinter: p.waterDaysWinter,
+          waterSummerText: p.waterSummerText,
+          waterWinterText: p.waterWinterText,
+          waterDetail: p.waterDetail,
+          fertilizerType: p.fertilizerType,
+          fertilizerDays: p.fertilizerDays,
+          fertilizerFreq: p.fertilizerFreq,
+          fertilizerSeason: p.fertilizerSeason,
+          fertilizerNotes: p.fertilizerNotes,
+          light: p.light,
+          substrate: p.substrate,
+          tip: p.tip
+        }
+      });
+    });
+
+    // 2. Les plantes de la biblioteca botànica
+    Object.entries(botanicalPresets).forEach(([k, b]) => {
+      if (!allPresets.some(item => item.scientific.toLowerCase() === b.scientific.toLowerCase())) {
+        allPresets.push({
+          id: k,
+          name: k.split('(')[0].trim(),
+          scientific: b.scientific,
+          data: {
+            name: k.split('(')[0].trim(),
+            scientific: b.scientific,
+            zone: b.zone,
+            difficulty: b.difficulty,
+            difficultyLabel: b.difficulty === 'molt_facil' ? 'Molt fàcil' : (b.difficulty === 'facil' ? 'Fàcil' : 'Mitjana'),
+            toxic: b.toxic,
+            waterDaysSummer: b.waterSummer,
+            waterDaysWinter: b.waterWinter,
+            waterSummerText: "Cada " + b.waterSummer + " dies",
+            waterWinterText: "Cada " + b.waterWinter + " dies",
+            waterDetail: "Regar moderadament quan el substrat s'assequi.",
+            fertilizerType: b.fertType,
+            fertilizerDays: b.fertDays,
+            fertilizerFreq: "Cada " + b.fertDays + " dies",
+            fertilizerSeason: "Primavera i Estiu",
+            fertilizerNotes: "Adobar en temps de creixement actiu.",
+            light: b.light,
+            substrate: b.substrate,
+            tip: b.tip
+          }
+        });
+      }
+    });
+
+    const filtered = allPresets.filter(p => {
+      if (!q) return true;
+      return p.name.toLowerCase().includes(q) || p.scientific.toLowerCase().includes(q);
+    });
+
+    container.innerHTML = filtered.map((item, idx) => `
+      <button type="button" class="preset-chip-btn" onclick="selectFallbackPlant(${idx})">
+        🌱 ${item.name}
+      </button>
+    `).join('');
+
+    // Guardem la llista activa per a la selecció per índex
+    window.__currentFilteredPresets = filtered;
+  }
+
+  function filterFallbackPresets(val) {
+    renderFallbackChips(val);
+  }
+
+  function selectFallbackPlant(index) {
+    const list = window.__currentFilteredPresets || [];
+    const chosen = list[index];
+    if (!chosen) return;
+
+    currentAIIdentifiedPlant = chosen.data;
+    document.getElementById("aiFallbackPickerSection").style.display = "none";
+    displayAIResult(chosen.data, currentAIPhotoBase64);
   }
 
   function compressImageFile(file) {
@@ -1712,19 +2025,18 @@
     });
 
     if (!resp.ok) {
-      throw new Error("Pl@ntNet no ha pogut analitzar la foto (Codi " + resp.status + "). Prova amb una altra foto més clara.");
+      throw new Error("Pl@ntNet status: " + resp.status);
     }
 
     const data = await resp.json();
     if (!data.results || data.results.length === 0) {
-      throw new Error("No s'ha pogut identificar cap espècie botànica reconeguda en aquesta foto.");
+      throw new Error("Sense resultats");
     }
 
     const best = data.results[0];
     const scientific = best.species.scientificNameWithoutAuthor || "Planta desconeguda";
     let common = (best.species.commonNames && best.species.commonNames.length > 0) ? best.species.commonNames[0] : scientific;
 
-    // Si als nostres presets botànics tenim el nom en català, el prioritzem
     const lowerSci = scientific.toLowerCase();
     for (const [presetName, pData] of Object.entries(botanicalPresets)) {
       if (lowerSci.includes(pData.scientific.toLowerCase()) || pData.scientific.toLowerCase().includes(lowerSci)) {
