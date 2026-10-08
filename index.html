@@ -786,6 +786,12 @@
         <option value="mitjana">🟡 Mitjana</option>
       </select>
 
+      <select id="sortFilter" title="Criteri d'ordenació">
+        <option value="urgency">💧 Toca regar abans (Urgència)</option>
+        <option value="name_asc">🔤 Alfabètic (A - Z)</option>
+        <option value="name_desc">🔤 Alfabètic (Z - A)</option>
+      </select>
+
       <div class="view-toggle">
         <button id="viewGridBtn" class="active" title="Vista de Targetes">▦ Targetes</button>
         <button id="viewTableBtn" title="Vista de Taula">▤ Taula</button>
@@ -2266,6 +2272,43 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       return matchSearch && matchZone && matchDiff && matchStatus;
     });
 
+    // Ordenació: per estat de reg (més urgent primer) o alfabètica
+    const sortVal = document.getElementById("sortFilter") ? document.getElementById("sortFilter").value : "urgency";
+
+    filtered.sort((a, b) => {
+      if (sortVal === "name_asc") {
+        return a.name.localeCompare(b.name, "ca", { sensitivity: "base" });
+      }
+      if (sortVal === "name_desc") {
+        return b.name.localeCompare(a.name, "ca", { sensitivity: "base" });
+      }
+
+      // Per defecte 'urgency': de les que toca regar més aviat a les que ja han estat regades
+      const wsA = computeWaterStatus(a);
+      const wsB = computeWaterStatus(b);
+
+      function getUrgencyRank(ws) {
+        if (ws.status === 'overdue') return 0;   // 1r: alertes vençudes / regar avui
+        if (ws.status === 'none') return 1;      // 2n: pendents de primer reg
+        if (ws.status === 'due_soon') return 2;  // 3r: avisos (1-2 dies)
+        return 3;                                // 4t: al dia (3+ dies)
+      }
+
+      const rankA = getUrgencyRank(wsA);
+      const rankB = getUrgencyRank(wsB);
+
+      if (rankA !== rankB) {
+        return rankA - rankB;
+      }
+
+      // Dins del mateix grup d'urgència: com més petit daysLeft, més proper és el reg
+      if (wsA.daysLeft !== null && wsB.daysLeft !== null) {
+        return wsA.daysLeft - wsB.daysLeft;
+      }
+
+      return a.name.localeCompare(b.name, "ca", { sensitivity: "base" });
+    });
+
     if (filtered.length === 0) {
       emptyStateEl.style.display = "block";
       gridEl.innerHTML = "";
@@ -2513,6 +2556,16 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   document.getElementById("statusFilter").addEventListener("change", renderPlants);
   document.getElementById("zoneFilter").addEventListener("change", renderPlants);
   document.getElementById("difficultyFilter").addEventListener("change", renderPlants);
+  
+  const sortSelect = document.getElementById("sortFilter");
+  if (sortSelect) {
+    const savedSort = localStorage.getItem("registre_plantes_sort_order");
+    if (savedSort) sortSelect.value = savedSort;
+    sortSelect.addEventListener("change", (e) => {
+      try { localStorage.setItem("registre_plantes_sort_order", e.target.value); } catch(err) {}
+      renderPlants();
+    });
+  }
 
   const gridBtn = document.getElementById("viewGridBtn");
   const tableBtn = document.getElementById("viewTableBtn");
