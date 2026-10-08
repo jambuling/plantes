@@ -51,6 +51,11 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-primary);
@@ -60,7 +65,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    .container { max-width: 1320px; margin: 0 auto; }
+    .container { max-width: 1320px; margin: 0 auto; width: 100%; }
 
     /* HEADER */
     header {
@@ -253,8 +258,8 @@
     /* GRID */
     .plants-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+      gap: 20px;
     }
 
     .plant-card {
@@ -615,6 +620,67 @@
     .toast-notification.show { transform: translateY(0); opacity: 1; }
 
     .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); grid-column: 1 / -1; display: none; }
+
+    /* RESPONSIVE SMARTPHONE FIXES */
+    @media (max-width: 768px) {
+      body {
+        padding: 12px 10px 80px;
+      }
+      header {
+        padding: 22px 18px;
+        border-radius: var(--radius-md);
+      }
+      h1 {
+        font-size: 1.55rem;
+      }
+      .controls {
+        padding: 12px;
+        gap: 10px;
+      }
+      .search-box {
+        min-width: 100%;
+      }
+      .filters-row {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .filters-row select, .view-toggle {
+        width: 100%;
+      }
+      .view-toggle button {
+        flex: 1;
+        justify-content: center;
+      }
+      .plants-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .plant-card {
+        width: 100%;
+        max-width: 100%;
+      }
+      .card-image-wrap {
+        height: 220px;
+      }
+      .card-body {
+        padding: 14px 14px 16px;
+      }
+      .tracker-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .tracker-btn-group {
+        align-items: stretch;
+      }
+      .tracker-btn-group .btn-action {
+        width: 100%;
+        justify-content: center;
+        padding: 9px 12px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -707,113 +773,95 @@
 
 </div>
 
-<!-- MODAL AFEGIR NOVA PLANTA -->
+<!-- MODAL AFEGIR NOVA PLANTA AMB IA -->
 <div class="modal-overlay" id="addPlantModal">
-  <div class="modal-card" style="max-width: 620px;">
+  <div class="modal-card" style="max-width: 540px;">
     <button class="modal-close" onclick="closeModal('addPlantModal')">&times;</button>
     <div class="modal-content" style="padding: 24px;">
-      <h2 style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px;">➕ Afegir Nova Planta</h2>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
-        Puja una foto i tria o escriu el nom per omplir les cures automàticament.
+      <h2 style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px;">📸 Afegir Planta amb IA</h2>
+      <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px;">
+        Fes una foto o tria-la de la galeria. La Intel·ligència Artificial identificarà l'espècie i calcularà automàticament el calendari de reg, adob i cures.
       </p>
 
-      <!-- PUJAR FOTO -->
-      <div class="photo-upload-box" onclick="document.getElementById('newPlantPhotoFile').click()">
-        <input type="file" id="newPlantPhotoFile" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoUpload(event)">
-        <div id="uploadPromptText">
-          <span style="font-size: 1.8rem;">📸</span><br>
-          <strong style="color:var(--accent);">Clica per fer o triar una foto</strong><br>
-          <span style="font-size: 0.78rem; color:var(--text-muted);">Es comprimirà i desarà automàticament a la base de dades</span>
-        </div>
-        <img id="uploadPreviewImg" class="photo-preview" alt="Previsualització">
-      </div>
-
-      <!-- AUTO-COMPLETAT PER NOM -->
-      <div class="form-group">
-        <label for="newPlantName">Nom Comú (Escriu o tria de la llista per auto-completar):</label>
-        <input type="text" id="newPlantName" list="presetPlantsList" class="form-control" placeholder="ex: Monstera deliciosa, Ficus elastica, Calathea..." oninput="autoFillPlantInfo(this.value)">
-        <datalist id="presetPlantsList">
-          <!-- Generat dinàmicament per JS amb la biblioteca botànica -->
-        </datalist>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="newPlantScientific">Nom Científic:</label>
-          <input type="text" id="newPlantScientific" class="form-control" placeholder="Nom botànic">
-        </div>
-        <div class="form-group">
-          <label for="newPlantZone">Zona:</label>
-          <select id="newPlantZone" class="form-control">
-            <option value="interior">🏠 Interior</option>
-            <option value="exterior">☀️ Balcó / Exterior</option>
-          </select>
+      <!-- BOTÓ PUJAR / FER FOTO -->
+      <div id="aiUploadPromptSection">
+        <div class="photo-upload-box" style="padding: 36px 20px; border: 2px dashed var(--accent); background: #f4faf5; border-radius: 16px; cursor: pointer;" onclick="document.getElementById('aiPlantPhotoInput').click()">
+          <input type="file" id="aiPlantPhotoInput" accept="image/*" style="display:none;" onchange="handleAIPhotoFile(event)">
+          <div style="font-size: 3rem; margin-bottom: 8px;">📷</div>
+          <strong style="font-size: 1.1rem; color: var(--accent); display:block; margin-bottom: 6px;">Fes una foto o tria de la galeria</strong>
+          <span style="font-size: 0.82rem; color: var(--text-muted);">Toca aquí per obrir la càmera o els teus àlbums</span>
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="newPlantDiff">Dificultat:</label>
-          <select id="newPlantDiff" class="form-control">
-            <option value="molt_facil">🟢 Molt fàcil</option>
-            <option value="facil" selected>🔵 Fàcil</option>
-            <option value="mitjana">🟡 Mitjana</option>
-          </select>
+      <!-- ESTAT DE CÀRREGA / ESCANEIG IA -->
+      <div id="aiScanningSection" style="display: none; text-align: center; padding: 24px 10px;">
+        <div style="width: 140px; height: 140px; margin: 0 auto 16px; position: relative; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-md);">
+          <img id="aiScanningPreviewImg" src="" style="width: 100%; height: 100%; object-fit: cover;" alt="Planta">
+          <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(34,197,94,0) 0%, rgba(34,197,94,0.4) 50%, rgba(34,197,94,0) 100%); animation: scanAnim 1.8s infinite ease-in-out;"></div>
         </div>
-        <div class="form-group">
-          <label for="newPlantToxic">Seguretat Mascotes:</label>
-          <select id="newPlantToxic" class="form-control">
-            <option value="true">🔴 Tòxica si es mossega</option>
-            <option value="false">🟢 Segura / Inofensiva</option>
-          </select>
+        <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 6px;">🔍 Identificant la planta amb IA...</h3>
+        <p style="font-size: 0.84rem; color: var(--text-muted);" id="aiScanningStepText">
+          Reconeixent l'espècie botànica i calculant les necessitats de reg i adob...
+        </p>
+      </div>
+
+      <!-- RESULTAT DE LA IDENTIFICACIÓ -->
+      <div id="aiResultSection" style="display: none;">
+        <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 16px; background: #f8faf8; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 12px;">
+          <img id="aiResultImg" src="" style="width: 74px; height: 74px; border-radius: 8px; object-fit: cover;" alt="Foto">
+          <div>
+            <div style="font-size: 0.76rem; font-weight: 700; color: #16a34a; text-transform: uppercase; letter-spacing: 0.04em;">✨ Planta Identificada</div>
+            <h3 id="aiResultCommonName" style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 2px 0;"></h3>
+            <p id="aiResultScientificName" style="font-size: 0.86rem; font-style: italic; color: var(--text-muted);"></p>
+          </div>
+        </div>
+
+        <!-- RESUM DE CURES GENERAT PER IA -->
+        <div style="background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px; margin-bottom: 18px; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+            <span style="color: var(--text-muted);">💧 Freqüència de reg:</span>
+            <strong id="aiResultWaterText" style="color: var(--text-main);"></strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+            <span style="color: var(--text-muted);">🧪 Adob recomanat:</span>
+            <strong id="aiResultFertText" style="color: var(--text-main);"></strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+            <span style="color: var(--text-muted);">☀️ Exposició de llum:</span>
+            <strong id="aiResultLightText" style="color: var(--text-main);"></strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+            <span style="color: var(--text-muted);">🐾 Toxicitat mascotes:</span>
+            <span id="aiResultToxicBadge" class="badge"></span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: var(--text-muted);">📊 Nivell de dificultat:</span>
+            <span id="aiResultDiffBadge" class="badge"></span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: space-between;">
+          <button class="btn-action" style="background: #e5e7eb; color: #374151;" onclick="resetAIModal()">
+            🔄 Repetir foto
+          </button>
+          <button class="btn-action" style="background: #256a38; color: white; padding: 10px 20px; font-size: 0.92rem;" onclick="confirmSaveAIPlant()">
+            🌿 Afegir al Meu Jardí
+          </button>
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="newPlantWaterSummer">Dies entre regs (Estiu):</label>
-          <input type="number" id="newPlantWaterSummer" class="form-control" value="7" min="1" max="60">
-        </div>
-        <div class="form-group">
-          <label for="newPlantWaterWinter">Dies entre regs (Hivern):</label>
-          <input type="number" id="newPlantWaterWinter" class="form-control" value="14" min="1" max="60">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="newPlantLight">Requeriment de Llum:</label>
-        <input type="text" id="newPlantLight" class="form-control" placeholder="ex: Llum indirecta abundant">
-      </div>
-
-      <div class="form-group">
-        <label for="newPlantSubstrate">Substrat Recomanat:</label>
-        <input type="text" id="newPlantSubstrate" class="form-control" placeholder="ex: Universal amb perlita">
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="newPlantFertType">Tipus d'Adob:</label>
-          <input type="text" id="newPlantFertType" class="form-control" placeholder="ex: Líquid plantes verdes">
-        </div>
-        <div class="form-group">
-          <label for="newPlantFertDays">Dies entre adobs:</label>
-          <input type="number" id="newPlantFertDays" class="form-control" value="21" min="7" max="180">
+      <!-- CONFIGURACIÓ CLAU IA -->
+      <div id="aiKeyConfigSection" style="margin-top: 16px; padding: 12px 14px; background: #fefce8; border: 1px solid #fef08a; border-radius: 8px; font-size: 0.82rem;">
+        <p style="margin-bottom: 6px; color: #854d0e;">
+          <strong>🔑 Clau d'IA Google Gemini (gratuïta):</strong>
+          Permet identificar qualsevol planta per foto. <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#256a38; font-weight:700;">Obtenir clau a Google AI Studio ↗</a>
+        </p>
+        <div style="display:flex; gap:8px;">
+          <input type="password" id="geminiApiKeyInput" placeholder="Enganxa la teva clau AIzaSy..." style="flex:1; padding:7px 10px; border-radius:6px; border:1px solid #d4d4d8; font-family:monospace; font-size:0.8rem;">
+          <button class="btn-action" style="background:#256a38; color:white; padding:6px 12px;" onclick="saveGeminiKey()">Desar Clau</button>
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="newPlantTip">Consell Clau:</label>
-        <input type="text" id="newPlantTip" class="form-control" placeholder="ex: Deixar assecar els primers centímetres abans de regar">
-      </div>
-
-      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
-        <button class="btn-action" style="background:#e5e7eb; color:#374151;" onclick="closeModal('addPlantModal')">
-          Cancel·lar
-        </button>
-        <button class="btn-action" style="background:#256a38; color:white; padding:8px 18px;" onclick="saveNewPlant()">
-          💾 Guardar Planta al Núvol
-        </button>
-      </div>
     </div>
   </div>
 </div>
@@ -1619,81 +1667,240 @@
   }
 
   // -------------------------------------------------------------
-  // ALTA DE NOVA PLANTA
+  // ALTA DE NOVA PLANTA AMB IA
   // -------------------------------------------------------------
+  const GEMINI_STORAGE_KEY = "registre_plantes_gemini_api_key";
+  let currentAIIdentifiedPlant = null;
+  let currentAIPhotoBase64 = null;
+
   function openAddPlantModal() {
-    document.getElementById("newPlantName").value = "";
-    document.getElementById("newPlantScientific").value = "";
-    document.getElementById("newPlantLight").value = "";
-    document.getElementById("newPlantSubstrate").value = "";
-    document.getElementById("newPlantFertType").value = "Líquid plantes verdes";
-    document.getElementById("newPlantTip").value = "";
-    document.getElementById("uploadPreviewImg").style.display = "none";
-    document.getElementById("uploadPromptText").style.display = "block";
-    currentUploadedPhotoBase64 = null;
+    resetAIModal();
+    const savedKey = localStorage.getItem(GEMINI_STORAGE_KEY);
+    const keyInput = document.getElementById("geminiApiKeyInput");
+    if (keyInput && savedKey) keyInput.value = savedKey;
 
     document.getElementById("addPlantModal").classList.add("active");
   }
 
-  async function saveNewPlant() {
-    const name = document.getElementById("newPlantName").value.trim();
-    if (!name) {
-      alert("Si us plau, introdueix el nom de la planta.");
+  function resetAIModal() {
+    currentAIIdentifiedPlant = null;
+    currentAIPhotoBase64 = null;
+    document.getElementById("aiUploadPromptSection").style.display = "block";
+    document.getElementById("aiScanningSection").style.display = "none";
+    document.getElementById("aiResultSection").style.display = "none";
+    document.getElementById("aiPlantPhotoInput").value = "";
+  }
+
+  function saveGeminiKey() {
+    const val = document.getElementById("geminiApiKeyInput").value.trim();
+    if (!val) {
+      alert("Si us plau, enganxa una clau vàlida de Google Gemini.");
       return;
     }
+    localStorage.setItem(GEMINI_STORAGE_KEY, val);
+    showToast("Clau d'IA desada correctament!", "🔑");
+  }
 
-    const scientific = document.getElementById("newPlantScientific").value.trim() || name;
-    const zone = document.getElementById("newPlantZone").value;
-    const difficulty = document.getElementById("newPlantDiff").value;
-    const toxic = document.getElementById("newPlantToxic").value === "true";
-    const waterSummer = parseInt(document.getElementById("newPlantWaterSummer").value) || 7;
-    const waterWinter = parseInt(document.getElementById("newPlantWaterWinter").value) || 14;
-    const light = document.getElementById("newPlantLight").value.trim() || "Llum indirecta moderada";
-    const substrate = document.getElementById("newPlantSubstrate").value.trim() || "Substrat universal ben drenat";
-    const fertType = document.getElementById("newPlantFertType").value.trim() || "Líquid plantes verdes";
-    const fertDays = parseInt(document.getElementById("newPlantFertDays").value) || 21;
-    const tip = document.getElementById("newPlantTip").value.trim() || "Regar només quan la part superior del substrat estigui seca.";
+  async function handleAIPhotoFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-    const id = "planta_" + Date.now();
-    const photo = currentUploadedPhotoBase64 || "04_pothos_epipremnum.jpeg"; // Fallback foto
+    // 1. Mostrar pantalla d'escaneig immediatament
+    document.getElementById("aiUploadPromptSection").style.display = "none";
+    document.getElementById("aiScanningSection").style.display = "block";
+    document.getElementById("aiResultSection").style.display = "none";
+    document.getElementById("aiScanningStepText").innerText = "Processant la fotografia...";
 
-    const diffLabels = {
-      molt_facil: { label: "Molt fàcil", cls: "badge-diff-very-easy" },
-      facil: { label: "Fàcil", cls: "badge-diff-easy" },
-      mitjana: { label: "Mitjana", cls: "badge-diff-medium" }
+    try {
+      const base64 = await compressImageFile(file);
+      currentAIPhotoBase64 = base64;
+      document.getElementById("aiScanningPreviewImg").src = base64;
+
+      document.getElementById("aiScanningStepText").innerText = "La IA està consultant la base de dades botànica...";
+
+      // 2. Analitzar amb Gemini IA
+      const plantData = await requestPlantIdentificationAI(base64);
+
+      if (!plantData) {
+        throw new Error("No s'ha pogut identificar la planta.");
+      }
+
+      currentAIIdentifiedPlant = plantData;
+
+      // 3. Mostrar pantalla de resultat
+      displayAIResult(plantData, base64);
+
+    } catch (err) {
+      console.error("AI analysis error:", err);
+      alert(err.message || "Hi ha hagut un problema analitzant la planta. Revisa la clau d'IA o torna a provar.");
+      resetAIModal();
+    }
+  }
+
+  function compressImageFile(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const maxDim = 1000;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            }
+          } else {
+            if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Base64 JPEG qualitat 0.82
+          resolve(canvas.toDataURL("image/jpeg", 0.82));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function requestPlantIdentificationAI(base64DataUrl) {
+    const rawBase64 = base64DataUrl.split(",")[1];
+    const apiKey = localStorage.getItem(GEMINI_STORAGE_KEY) || "";
+
+    if (!apiKey) {
+      document.getElementById("aiKeyConfigSection").scrollIntoView({ behavior: 'smooth' });
+      throw new Error("Cal introduir la clau d'IA de Google Gemini per reconèixer la foto. Enganxa-la a sota.");
+    }
+
+    const prompt = `Ets un botànic expert. Identifica la planta d'aquesta imatge.
+Retorna EXCLUSIVAMENT un objecte JSON vàlid sense cap text addicional ni markdown (sense \`\`\`json):
+{
+  "name": "Nom comú habitual en català (ex: Monstera deliciosa, Potos, Ficus lira...)",
+  "scientific": "Nom científic botànic",
+  "zone": "interior" o "exterior",
+  "difficulty": "molt_facil" o "facil" o "mitjana",
+  "difficultyLabel": "Molt fàcil" o "Fàcil" o "Mitjana",
+  "toxic": true o false,
+  "waterDaysSummer": nombre enter de dies de freqüència a l'estiu (ex: 4),
+  "waterDaysWinter": nombre enter de dies de freqüència a l'hivern (ex: 10),
+  "waterSummerText": "Text curt de reg d'estiu (ex: Cada 4-5 dies)",
+  "waterWinterText": "Text curt de reg d'hivern (ex: Cada 10-12 dies)",
+  "waterDetail": "Recomanació pràctica de reg en català (ex: Regar quan els primers 3 cm de terra estiguin secs)",
+  "fertilizerType": "Tipus d'adob recomanat (ex: Líquid universal / ric en nitrogen)",
+  "fertilizerDays": nombre enter de dies d'abonat (ex: 15),
+  "fertilizerFreq": "Text curt (ex: Cada 15 dies)",
+  "fertilizerSeason": "Temporada d'abonament (ex: Primavera a Tardor)",
+  "fertilizerNotes": "Consell d'abonament en català",
+  "light": "Requisit de llum (ex: Molta llum indirecta, sense sol directe)",
+  "substrate": "Substrat recomanat",
+  "tip": "Consell clau de supervivència"
+}`;
+
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey;
+    const payload = {
+      contents: [{
+        parts: [
+          { text: prompt },
+          { inline_data: { mime_type: "image/jpeg", data: rawBase64 } }
+        ]
+      }],
+      generationConfig: {
+        temperature: 0.2,
+        response_mime_type: "application/json"
+      }
     };
 
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!resp.ok) {
+      const errText = await resp.text();
+      throw new Error("Error cridant la IA de Google: " + resp.status + ". Comprova la clau.");
+    }
+
+    const data = await resp.json();
+    const candidateText = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : null;
+    if (!candidateText) throw new Error("La IA no ha retornat cap resposta per a la imatge.");
+
+    const cleaned = candidateText.replace(/```json/gi, '').replace(/```/g, '').trim();
+    return JSON.parse(cleaned);
+  }
+
+  function displayAIResult(plant, photoBase64) {
+    document.getElementById("aiScanningSection").style.display = "none";
+    document.getElementById("aiResultSection").style.display = "block";
+
+    document.getElementById("aiResultImg").src = photoBase64;
+    document.getElementById("aiResultCommonName").innerText = plant.name;
+    document.getElementById("aiResultScientificName").innerText = plant.scientific;
+
+    document.getElementById("aiResultWaterText").innerText = "Estiu: cada " + plant.waterDaysSummer + " dies | Hivern: cada " + plant.waterDaysWinter + " dies";
+    document.getElementById("aiResultFertText").innerText = plant.fertilizerType + " (" + plant.fertilizerFreq + ")";
+    document.getElementById("aiResultLightText").innerText = plant.light;
+
+    const toxicBadge = document.getElementById("aiResultToxicBadge");
+    toxicBadge.className = "badge " + (plant.toxic ? "badge-toxic" : "badge-safe");
+    toxicBadge.innerText = plant.toxic ? "🔴 Tòxica" : "🟢 Segura";
+
+    const diffBadge = document.getElementById("aiResultDiffBadge");
+    const diffCls = plant.difficulty === 'molt_facil' ? 'badge-diff-very-easy' : (plant.difficulty === 'facil' ? 'badge-diff-easy' : 'badge-diff-medium');
+    diffBadge.className = "badge " + diffCls;
+    diffBadge.innerText = plant.difficultyLabel || "Fàcil";
+  }
+
+  async function confirmSaveAIPlant() {
+    if (!currentAIIdentifiedPlant || !currentAIPhotoBase64) return;
+
+    const p = currentAIIdentifiedPlant;
+    const diffCls = p.difficulty === 'molt_facil' ? 'badge-diff-very-easy' : (p.difficulty === 'facil' ? 'badge-diff-easy' : 'badge-diff-medium');
+
     const newPlantObj = {
-      id,
-      name,
-      scientific,
-      photo,
-      difficulty,
-      difficultyLabel: diffLabels[difficulty].label,
-      difficultyClass: diffLabels[difficulty].cls,
-      zone,
-      zoneLabel: zone === "interior" ? "🏠 Interior" : "☀️ Balcó / Exterior",
-      waterDaysSummer: waterSummer,
-      waterDaysWinter: waterWinter,
-      waterSummerText: `Cada ${waterSummer} dies`,
-      waterWinterText: `Cada ${waterWinter} dies`,
-      waterDetail: `A l'estiu regar cada ${waterSummer} dies aproximadament; a l'hivern espaiar el reg a cada ${waterWinter} dies.`,
-      fertilizerType: fertType,
-      fertilizerDays: fertDays,
+      id: "planta_" + Date.now(),
+      name: p.name,
+      scientific: p.scientific,
+      photo: currentAIPhotoBase64,
+      difficulty: p.difficulty || "facil",
+      difficultyLabel: p.difficultyLabel || "Fàcil",
+      difficultyClass: diffCls,
+      zone: p.zone || "interior",
+      zoneLabel: p.zone === "exterior" ? "☀️ Balcó / Exterior" : "🏠 Interior",
+      waterDaysSummer: parseInt(p.waterDaysSummer) || 7,
+      waterDaysWinter: parseInt(p.waterDaysWinter) || 14,
+      waterSummerText: p.waterSummerText || ("Cada " + p.waterDaysSummer + " dies"),
+      waterWinterText: p.waterWinterText || ("Cada " + p.waterDaysWinter + " dies"),
+      waterDetail: p.waterDetail || "Regar moderadament quan el substrat comenci a assecar-se.",
+      fertilizerType: p.fertilizerType || "Líquid plantes verdes",
+      fertilizerDays: parseInt(p.fertilizerDays) || 20,
       fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8, 9],
-      fertilizerFreq: `Cada ${fertDays} dies`,
-      fertilizerSeason: "Primavera i Estiu",
-      fertilizerNotes: "Aplicar a la primavera i estiu. A la tardor i hivern deixar descansar sense adob.",
-      light,
-      substrate,
-      toxic,
-      toxicityDetail: toxic ? "🔴 Tòxica en cas d'ingesta per mascotes." : "🟢 Segura i no tòxica.",
-      tip
+      fertilizerFreq: p.fertilizerFreq || ("Cada " + (p.fertilizerDays || 20) + " dies"),
+      fertilizerSeason: p.fertilizerSeason || "Primavera i Estiu",
+      fertilizerNotes: p.fertilizerNotes || "Adobar regularment en temps de creixement actiu.",
+      light: p.light || "Llum indirecta moderada",
+      substrate: p.substrate || "Universal ben drenat",
+      toxic: !!p.toxic,
+      toxicityDetail: p.toxic ? "🔴 Tòxica en cas d'ingesta per mascotes." : "🟢 Segura per mascotes.",
+      tip: p.tip || "Vigilar l'excés d'aigua per no podrir les arrels."
     };
 
     plantsCatalog.unshift(newPlantObj);
     closeModal("addPlantModal");
-    showToast(`Planta "${name}" afegida correctament!`, "🌿");
+    showToast("Planta \"" + p.name + "\" afegida amb èxit!", "🌿");
     renderPlants();
     await syncCatalogToCloud();
   }
