@@ -627,16 +627,13 @@
       <div class="header-top">
         <div>
           <h1>🌱 El Meu Registre de Plantes</h1>
-          <p class="header-subtitle">Catàleg complet al núvol amb Supabase, històric i alta de noves plantes.</p>
+          <p class="header-subtitle">Seguiment de reg, abonament i cures de les plantes domèstiques.</p>
         </div>
 
         <div class="header-actions">
           <button class="btn-header btn-add-plant" onclick="openAddPlantModal()">
             ➕ Afegir Nova Planta
           </button>
-          <span id="cloudStatusBadge" style="display:inline-flex; align-items:center; gap:6px; font-size:0.82rem; font-weight:600; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3); padding:8px 14px; border-radius:20px; color:#ffffff;">
-            ☁️ Supabase Sincronitzat
-          </span>
         </div>
       </div>
       
@@ -1513,7 +1510,6 @@
       if (window.supabase) {
         supabaseClient = window.supabase.createClient(DEFAULT_SUPABASE_URL, DEFAULT_SUPABASE_KEY);
         isCloudConnected = true;
-        updateCloudBadge(true);
 
         // 2. Carregar o pujar catàleg de plantes a Supabase
         const { data: catData } = await supabaseClient
@@ -1566,21 +1562,6 @@
       }
     } catch(e) {
       console.warn("Supabase init error:", e);
-      updateCloudBadge(false);
-    }
-  }
-
-  function updateCloudBadge(connected) {
-    const badge = document.getElementById("cloudStatusBadge");
-    if (!badge) return;
-    if (connected) {
-      badge.innerHTML = "☁️ Supabase Sincronitzat";
-      badge.style.background = "rgba(255,255,255,0.18)";
-      badge.style.borderColor = "rgba(255,255,255,0.3)";
-    } else {
-      badge.innerHTML = "💾 Mode Local";
-      badge.style.background = "rgba(245, 158, 11, 0.25)";
-      badge.style.borderColor = "rgba(245, 158, 11, 0.5)";
     }
   }
 
