@@ -634,16 +634,9 @@
           <button class="btn-header btn-add-plant" onclick="openAddPlantModal()">
             ➕ Afegir Nova Planta
           </button>
-          <button class="btn-header" id="btnCloudStatus" onclick="openCloudModal()">
-            ⚡ Sincronització Supabase
-          </button>
-          <button class="btn-header" onclick="exportDataJSON()">
-            📥 Còpia (JSON)
-          </button>
-          <button class="btn-header" onclick="document.getElementById('importFileInput').click()">
-            📤 Restaurar
-          </button>
-          <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importDataJSON(event)">
+          <span id="cloudStatusBadge" style="display:inline-flex; align-items:center; gap:6px; font-size:0.82rem; font-weight:600; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3); padding:8px 14px; border-radius:20px; color:#ffffff;">
+            ☁️ Supabase Sincronitzat
+          </span>
         </div>
       </div>
       
@@ -907,39 +900,6 @@
   </div>
 </div>
 
-<!-- MODAL CONFIGURACIÓ SUPABASE -->
-<div class="modal-overlay" id="cloudModal">
-  <div class="modal-card" style="max-width: 580px;">
-    <button class="modal-close" onclick="closeModal('cloudModal')">&times;</button>
-    <div class="modal-content" style="padding: 26px;">
-      <h2 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 6px;">⚡ Sincronització amb Supabase</h2>
-      <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px;">
-        Connecta el teu projecte gratuït de Supabase per sincronitzar el catàleg i els regs entre el mòbil i l'ordinador.
-      </p>
-
-      <div id="cloudStatusBanner" style="padding:10px 14px; border-radius:8px; font-size:0.86rem; margin-bottom:16px;"></div>
-
-      <label style="display:block; font-size:0.82rem; font-weight:700; margin-bottom:4px; color:var(--text-main);">
-        1. Project URL:
-      </label>
-      <input type="text" id="supabaseUrlInput" placeholder="https://xyzabcdef.supabase.co" style="width:100%; padding:9px 12px; border-radius:6px; border:1px solid var(--border-subtle); margin-bottom:14px; font-family:monospace; font-size:0.85rem;">
-
-      <label style="display:block; font-size:0.82rem; font-weight:700; margin-bottom:4px; color:var(--text-main);">
-        2. API Key (anon / public):
-      </label>
-      <textarea id="supabaseKeyInput" rows="3" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." style="width:100%; padding:9px 12px; border-radius:6px; border:1px solid var(--border-subtle); font-family:monospace; font-size:0.80rem;"></textarea>
-
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; gap:10px;">
-        <button class="btn-action" style="background:#ef4444; color:white;" onclick="disconnectSupabase()">
-          Desconnectar
-        </button>
-        <button class="btn-action" style="background:#256a38; color:white; padding:8px 16px;" onclick="saveSupabaseConfig()">
-          💾 Guardar i Sincronitzar
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- TOAST -->
 <div class="toast-notification" id="toastNotification">
@@ -1542,87 +1502,85 @@
     } catch(e) {}
   }
 
-  // Inicialització Supabase
+  // Inicialització Supabase & Catàleg
   async function initSupabase() {
+    // 1. Carreguem d'immediat del disc local per mostrar les targetes instantàniament
     plantsCatalog = loadLocalCatalog();
     inMemoryHistory = loadLocalHistory();
+    renderPlants();
 
     try {
-      const cfgStr = localStorage.getItem(SUPABASE_CONFIG_KEY);
-      let config = cfgStr ? JSON.parse(cfgStr) : null;
-      if (!config || !config.url) {
-        config = { url: DEFAULT_SUPABASE_URL, key: DEFAULT_SUPABASE_KEY };
-      }
-      if (config && config.url && config.key && window.supabase) {
-        supabaseClient = window.supabase.createClient(config.url, config.key);
+      if (window.supabase) {
+        supabaseClient = window.supabase.createClient(DEFAULT_SUPABASE_URL, DEFAULT_SUPABASE_KEY);
         isCloudConnected = true;
-        updateCloudButton(true);
+        updateCloudBadge(true);
 
-          // 1. Carregar o sincronitzar catàleg de plantes
-          const { data: catData } = await supabaseClient
+        // 2. Carregar o pujar catàleg de plantes a Supabase
+        const { data: catData } = await supabaseClient
+          .from('plantes_history')
+          .select('data')
+          .eq('id', 'plants_catalog')
+          .maybeSingle();
+
+        if (catData && catData.data && Array.isArray(catData.data) && catData.data.length > 0) {
+          plantsCatalog = catData.data;
+          saveLocalCatalog(plantsCatalog);
+        } else {
+          // Si el núvol és buit, pugem el catàleg inicial complet de 13 plantes
+          await supabaseClient
             .from('plantes_history')
-            .select('data')
-            .eq('id', 'plants_catalog')
-            .single();
-
-          if (catData && catData.data && Array.isArray(catData.data)) {
-            plantsCatalog = catData.data;
-            saveLocalCatalog(plantsCatalog);
-          } else {
-            // Pujar les plantes inicials a Supabase
-            await supabaseClient
-              .from('plantes_history')
-              .upsert({ id: 'plants_catalog', data: plantsCatalog, updated_at: new Date().toISOString() });
-          }
-
-          // 2. Carregar historial de regs i adobs
-          const { data: histData } = await supabaseClient
-            .from('plantes_history')
-            .select('data')
-            .eq('id', 'main_history')
-            .single();
-
-          if (histData && histData.data) {
-            inMemoryHistory = histData.data;
-            saveLocalHistory(inMemoryHistory);
-          }
-
-          // 3. Subscripció en temps real
-          supabaseClient
-            .channel('public:plantes_history')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'plantes_history' }, payload => {
-              if (payload.new && payload.new.id === 'plants_catalog' && payload.new.data) {
-                plantsCatalog = payload.new.data;
-                saveLocalCatalog(plantsCatalog);
-                renderPlants();
-              }
-              if (payload.new && payload.new.id === 'main_history' && payload.new.data) {
-                inMemoryHistory = payload.new.data;
-                saveLocalHistory(inMemoryHistory);
-                renderPlants();
-              }
-            })
-            .subscribe();
+            .upsert({ id: 'plants_catalog', data: plantsCatalog, updated_at: new Date().toISOString() });
         }
-      } else {
-        updateCloudButton(false);
+
+        // 3. Carregar historial de regs i adobs
+        const { data: histData } = await supabaseClient
+          .from('plantes_history')
+          .select('data')
+          .eq('id', 'main_history')
+          .maybeSingle();
+
+        if (histData && histData.data) {
+          inMemoryHistory = histData.data;
+          saveLocalHistory(inMemoryHistory);
+        }
+
+        // Re-renderitzem amb les dades sincronitzades del núvol
+        renderPlants();
+
+        // 4. Subscripció en temps real (multi-dispositiu)
+        supabaseClient
+          .channel('public:plantes_history')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'plantes_history' }, payload => {
+            if (payload.new && payload.new.id === 'plants_catalog' && payload.new.data) {
+              plantsCatalog = payload.new.data;
+              saveLocalCatalog(plantsCatalog);
+              renderPlants();
+            }
+            if (payload.new && payload.new.id === 'main_history' && payload.new.data) {
+              inMemoryHistory = payload.new.data;
+              saveLocalHistory(inMemoryHistory);
+              renderPlants();
+            }
+          })
+          .subscribe();
       }
     } catch(e) {
       console.warn("Supabase init error:", e);
-      updateCloudButton(false);
+      updateCloudBadge(false);
     }
-
-    renderPlants();
   }
 
-  function updateCloudButton(connected) {
-    const btn = document.getElementById("btnCloudStatus");
+  function updateCloudBadge(connected) {
+    const badge = document.getElementById("cloudStatusBadge");
+    if (!badge) return;
     if (connected) {
-      btn.innerHTML = "⚡ Supabase Connectat";
-      btn.className = "btn-header supabase-connected";
+      badge.innerHTML = "☁️ Supabase Sincronitzat";
+      badge.style.background = "rgba(255,255,255,0.18)";
+      badge.style.borderColor = "rgba(255,255,255,0.3)";
     } else {
-      btn.innerHTML = "⚡ Connectar Supabase";
-      btn.className = "btn-header";
+      badge.innerHTML = "💾 Mode Local";
+      badge.style.background = "rgba(245, 158, 11, 0.25)";
+      badge.style.borderColor = "rgba(245, 158, 11, 0.5)";
     }
   }
 
@@ -2172,51 +2130,6 @@
     }).join('');
   }
 
-  function openCloudModal() {
-    const cfgStr = localStorage.getItem(SUPABASE_CONFIG_KEY);
-    const cfg = cfgStr ? JSON.parse(cfgStr) : { url: DEFAULT_SUPABASE_URL, key: DEFAULT_SUPABASE_KEY };
-    const banner = document.getElementById("cloudStatusBanner");
-
-    document.getElementById("supabaseUrlInput").value = cfg.url || DEFAULT_SUPABASE_URL;
-    document.getElementById("supabaseKeyInput").value = cfg.key || DEFAULT_SUPABASE_KEY;
-
-    if (isCloudConnected) {
-      banner.style.background = "#dcfce7";
-      banner.style.color = "#15803d";
-      banner.innerHTML = "✅ <strong>Estat: Connectat a Supabase.</strong> Catàleg i regs sincronitzats a temps real.";
-    } else {
-      banner.style.background = "#fef3c7";
-      banner.style.color = "#b45309";
-      banner.innerHTML = "ℹ️ <strong>Mode Local actiu o pendent de connexió.</strong>";
-    }
-
-    document.getElementById("cloudModal").classList.add("active");
-  }
-
-  function saveSupabaseConfig() {
-    const url = document.getElementById("supabaseUrlInput").value.trim();
-    const key = document.getElementById("supabaseKeyInput").value.trim();
-
-    if (!url || !key) {
-      alert("Si us plau, omple tant la URL com la clau API.");
-      return;
-    }
-
-    localStorage.setItem(SUPABASE_CONFIG_KEY, JSON.stringify({ url, key }));
-    closeModal("cloudModal");
-    showToast("Configuració guardada! Sincronitzant...", "⚡");
-    setTimeout(() => location.reload(), 600);
-  }
-
-  function disconnectSupabase() {
-    if (confirm("Vols desconnectar la sincronització de Supabase d'aquest dispositiu?")) {
-      localStorage.removeItem(SUPABASE_CONFIG_KEY);
-      closeModal("cloudModal");
-      showToast("Desconnectat de Supabase", "ℹ️");
-      setTimeout(() => location.reload(), 500);
-    }
-  }
-
   function closeModal(modalId) {
     document.getElementById(modalId).classList.remove("active");
   }
@@ -2243,45 +2156,6 @@
     toastTimer = setTimeout(() => {
       toast.classList.remove("show");
     }, 3200);
-  }
-
-  function exportDataJSON() {
-    const backup = {
-      catalog: plantsCatalog,
-      history: inMemoryHistory
-    };
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup, null, 2));
-    const downloadAnchor = document.createElement("a");
-    const dateStr = new Date().toISOString().slice(0, 10);
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `copia_completa_jardi_${dateStr}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-    showToast("Còpia completa descarregada!", "📥");
-  }
-
-  function importDataJSON(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-      try {
-        const imported = JSON.parse(e.target.result);
-        if (imported.catalog) plantsCatalog = imported.catalog;
-        if (imported.history) inMemoryHistory = imported.history;
-        saveLocalCatalog(plantsCatalog);
-        saveLocalHistory(inMemoryHistory);
-        await syncCatalogToCloud();
-        await syncHistoryToCloud();
-        renderPlants();
-        showToast("Dades restaurades completament!", "📤");
-      } catch (err) {
-        alert("El fitxer seleccionat no és un JSON vàlid.");
-      }
-    };
-    reader.readAsText(file);
   }
 
   document.getElementById("searchInput").addEventListener("input", renderPlants);
