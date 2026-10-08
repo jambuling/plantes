@@ -850,17 +850,6 @@
         </div>
       </div>
 
-      <!-- CONFIGURACIÓ CLAU IA -->
-      <div id="aiKeyConfigSection" style="margin-top: 16px; padding: 12px 14px; background: #fefce8; border: 1px solid #fef08a; border-radius: 8px; font-size: 0.82rem;">
-        <p style="margin-bottom: 6px; color: #854d0e;">
-          <strong>🔑 Clau d'IA Google Gemini (gratuïta):</strong>
-          Permet identificar qualsevol planta per foto. <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#256a38; font-weight:700;">Obtenir clau a Google AI Studio ↗</a>
-        </p>
-        <div style="display:flex; gap:8px;">
-          <input type="password" id="geminiApiKeyInput" placeholder="Enganxa la teva clau AIzaSy..." style="flex:1; padding:7px 10px; border-radius:6px; border:1px solid #d4d4d8; font-family:monospace; font-size:0.8rem;">
-          <button class="btn-action" style="background:#256a38; color:white; padding:6px 12px;" onclick="saveGeminiKey()">Desar Clau</button>
-        </div>
-      </div>
 
     </div>
   </div>
@@ -1520,6 +1509,17 @@
           saveLocalHistory(inMemoryHistory);
         }
 
+        // 4. Carregar claus d'IA des de Supabase
+        const { data: cfgRow } = await supabaseClient
+          .from('plantes_history')
+          .select('data')
+          .eq('id', 'app_config')
+          .maybeSingle();
+
+        if (cfgRow && cfgRow.data) {
+          aiAppConfig = cfgRow.data;
+        }
+
         // Re-renderitzem amb les dades sincronitzades del núvol
         renderPlants();
 
@@ -1599,18 +1599,18 @@
   }
 
   // -------------------------------------------------------------
-  // ALTA DE NOVA PLANTA AMB IA
+  // ALTA DE NOVA PLANTA AMB IA (Pl@ntNet + Groq des de Supabase)
   // -------------------------------------------------------------
-  const GEMINI_STORAGE_KEY = "registre_plantes_gemini_api_key";
+  let aiAppConfig = {
+    plantnet_key: "",
+    groq_key: ""
+  };
+
   let currentAIIdentifiedPlant = null;
   let currentAIPhotoBase64 = null;
 
   function openAddPlantModal() {
     resetAIModal();
-    const savedKey = localStorage.getItem(GEMINI_STORAGE_KEY);
-    const keyInput = document.getElementById("geminiApiKeyInput");
-    if (keyInput && savedKey) keyInput.value = savedKey;
-
     document.getElementById("addPlantModal").classList.add("active");
   }
 
@@ -1623,48 +1623,40 @@
     document.getElementById("aiPlantPhotoInput").value = "";
   }
 
-  function saveGeminiKey() {
-    const val = document.getElementById("geminiApiKeyInput").value.trim();
-    if (!val) {
-      alert("Si us plau, enganxa una clau vàlida de Google Gemini.");
-      return;
-    }
-    localStorage.setItem(GEMINI_STORAGE_KEY, val);
-    showToast("Clau d'IA desada correctament!", "🔑");
-  }
-
   async function handleAIPhotoFile(event) {
     const file = event.target.files[0];
     if (!file) return;
 
-    // 1. Mostrar pantalla d'escaneig immediatament
+    // 1. Mostrar pantalla d'escaneig
     document.getElementById("aiUploadPromptSection").style.display = "none";
     document.getElementById("aiScanningSection").style.display = "block";
     document.getElementById("aiResultSection").style.display = "none";
     document.getElementById("aiScanningStepText").innerText = "Processant la fotografia...";
 
     try {
+      // Comprimir foto per a visualització i emmagatzematge
       const base64 = await compressImageFile(file);
       currentAIPhotoBase64 = base64;
       document.getElementById("aiScanningPreviewImg").src = base64;
 
-      document.getElementById("aiScanningStepText").innerText = "La IA està consultant la base de dades botànica...";
+      document.getElementById("aiScanningStepText").innerText = "1/2: Pl@ntNet està consultant la base científica botànica...";
 
-      // 2. Analitzar amb Gemini IA
-      const plantData = await requestPlantIdentificationAI(base64);
+      // Pas 1: Identificar espècie amb Pl@ntNet
+      const speciesInfo = await identifySpeciesWithPlantNet(file);
 
-      if (!plantData) {
-        throw new Error("No s'ha pogut identificar la planta.");
-      }
+      document.getElementById("aiScanningStepText").innerText = "2/2: Calculant el calendari de reg, adob i cures en català...";
 
-      currentAIIdentifiedPlant = plantData;
+      // Pas 2: Generar perfil complet de cures
+      const plantProfile = await generateCareProfileWithAI(speciesInfo);
 
-      // 3. Mostrar pantalla de resultat
-      displayAIResult(plantData, base64);
+      currentAIIdentifiedPlant = plantProfile;
+
+      // Pas 3: Mostrar resultat final
+      displayAIResult(plantProfile, base64);
 
     } catch (err) {
       console.error("AI analysis error:", err);
-      alert(err.message || "Hi ha hagut un problema analitzant la planta. Revisa la clau d'IA o torna a provar.");
+      alert(err.message || "No s'ha pogut reconèixer la planta. Assegura't que a la foto es vegin bé les fulles.");
       resetAIModal();
     }
   }
@@ -1708,70 +1700,144 @@
     });
   }
 
-  async function requestPlantIdentificationAI(base64DataUrl) {
-    const rawBase64 = base64DataUrl.split(",")[1];
-    const apiKey = localStorage.getItem(GEMINI_STORAGE_KEY) || "";
+  async function identifySpeciesWithPlantNet(file) {
+    const formData = new FormData();
+    formData.append("images", file);
 
-    if (!apiKey) {
-      document.getElementById("aiKeyConfigSection").scrollIntoView({ behavior: 'smooth' });
-      throw new Error("Cal introduir la clau d'IA de Google Gemini per reconèixer la foto. Enganxa-la a sota.");
-    }
-
-    const prompt = `Ets un botànic expert. Identifica la planta d'aquesta imatge.
-Retorna EXCLUSIVAMENT un objecte JSON vàlid sense cap text addicional ni markdown (sense \`\`\`json):
-{
-  "name": "Nom comú habitual en català (ex: Monstera deliciosa, Potos, Ficus lira...)",
-  "scientific": "Nom científic botànic",
-  "zone": "interior" o "exterior",
-  "difficulty": "molt_facil" o "facil" o "mitjana",
-  "difficultyLabel": "Molt fàcil" o "Fàcil" o "Mitjana",
-  "toxic": true o false,
-  "waterDaysSummer": nombre enter de dies de freqüència a l'estiu (ex: 4),
-  "waterDaysWinter": nombre enter de dies de freqüència a l'hivern (ex: 10),
-  "waterSummerText": "Text curt de reg d'estiu (ex: Cada 4-5 dies)",
-  "waterWinterText": "Text curt de reg d'hivern (ex: Cada 10-12 dies)",
-  "waterDetail": "Recomanació pràctica de reg en català (ex: Regar quan els primers 3 cm de terra estiguin secs)",
-  "fertilizerType": "Tipus d'adob recomanat (ex: Líquid universal / ric en nitrogen)",
-  "fertilizerDays": nombre enter de dies d'abonat (ex: 15),
-  "fertilizerFreq": "Text curt (ex: Cada 15 dies)",
-  "fertilizerSeason": "Temporada d'abonament (ex: Primavera a Tardor)",
-  "fertilizerNotes": "Consell d'abonament en català",
-  "light": "Requisit de llum (ex: Molta llum indirecta, sense sol directe)",
-  "substrate": "Substrat recomanat",
-  "tip": "Consell clau de supervivència"
-}`;
-
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey;
-    const payload = {
-      contents: [{
-        parts: [
-          { text: prompt },
-          { inline_data: { mime_type: "image/jpeg", data: rawBase64 } }
-        ]
-      }],
-      generationConfig: {
-        temperature: 0.2,
-        response_mime_type: "application/json"
-      }
-    };
-
+    const pKey = (aiAppConfig && aiAppConfig.plantnet_key) ? aiAppConfig.plantnet_key : "";
+    const url = "https://my-api.plantnet.org/v2/identify/all?lang=ca&api-key=" + pKey;
     const resp = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: formData
     });
 
     if (!resp.ok) {
-      const errText = await resp.text();
-      throw new Error("Error cridant la IA de Google: " + resp.status + ". Comprova la clau.");
+      throw new Error("Pl@ntNet no ha pogut analitzar la foto (Codi " + resp.status + "). Prova amb una altra foto més clara.");
     }
 
     const data = await resp.json();
-    const candidateText = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : null;
-    if (!candidateText) throw new Error("La IA no ha retornat cap resposta per a la imatge.");
+    if (!data.results || data.results.length === 0) {
+      throw new Error("No s'ha pogut identificar cap espècie botànica reconeguda en aquesta foto.");
+    }
 
-    const cleaned = candidateText.replace(/```json/gi, '').replace(/```/g, '').trim();
-    return JSON.parse(cleaned);
+    const best = data.results[0];
+    const scientific = best.species.scientificNameWithoutAuthor || "Planta desconeguda";
+    let common = (best.species.commonNames && best.species.commonNames.length > 0) ? best.species.commonNames[0] : scientific;
+
+    // Si als nostres presets botànics tenim el nom en català, el prioritzem
+    const lowerSci = scientific.toLowerCase();
+    for (const [presetName, pData] of Object.entries(botanicalPresets)) {
+      if (lowerSci.includes(pData.scientific.toLowerCase()) || pData.scientific.toLowerCase().includes(lowerSci)) {
+        common = presetName.split("(")[0].trim();
+        break;
+      }
+    }
+
+    return { scientific, common, score: best.score };
+  }
+
+  async function generateCareProfileWithAI(speciesInfo) {
+    // 1. Si tenim un preset botànic complet, l'aprofitem
+    const lowerSci = speciesInfo.scientific.toLowerCase();
+    for (const [presetName, pData] of Object.entries(botanicalPresets)) {
+      if (lowerSci.includes(pData.scientific.toLowerCase()) || pData.scientific.toLowerCase().includes(lowerSci)) {
+        return {
+          name: presetName.split("(")[0].trim(),
+          scientific: pData.scientific,
+          zone: pData.zone,
+          difficulty: pData.difficulty,
+          difficultyLabel: pData.difficulty === 'molt_facil' ? 'Molt fàcil' : (pData.difficulty === 'facil' ? 'Fàcil' : 'Mitjana'),
+          toxic: pData.toxic,
+          waterDaysSummer: pData.waterSummer,
+          waterDaysWinter: pData.waterWinter,
+          waterSummerText: "Cada " + pData.waterSummer + " dies",
+          waterWinterText: "Cada " + pData.waterWinter + " dies",
+          waterDetail: "Regar moderadament evitant entollar el substrat.",
+          fertilizerType: pData.fertType,
+          fertilizerDays: pData.fertDays,
+          fertilizerFreq: "Cada " + pData.fertDays + " dies",
+          fertilizerSeason: "Primavera i Estiu",
+          fertilizerNotes: "Adobar periòdicament durant els mesos càlids.",
+          light: pData.light,
+          substrate: pData.substrate,
+          tip: pData.tip
+        };
+      }
+    }
+
+    // 2. Si no és als presets, demanem la fitxa en català a Groq
+    try {
+      const prompt = `Genera la fitxa botànica de cures per a la planta "${speciesInfo.common}" (${speciesInfo.scientific}).
+Retorna EXCLUSIVAMENT un objecte JSON vàlid sense markdown ni text addicional:
+{
+  "name": "${speciesInfo.common}",
+  "scientific": "${speciesInfo.scientific}",
+  "zone": "interior",
+  "difficulty": "facil",
+  "difficultyLabel": "Fàcil",
+  "toxic": false,
+  "waterDaysSummer": 6,
+  "waterDaysWinter": 12,
+  "waterSummerText": "Cada 6 dies",
+  "waterWinterText": "Cada 12 dies",
+  "waterDetail": "Regar quan la capa superior de terra estigui seca.",
+  "fertilizerType": "Líquid plantes verdes",
+  "fertilizerDays": 20,
+  "fertilizerFreq": "Cada 20 dies",
+  "fertilizerSeason": "Primavera i Estiu",
+  "fertilizerNotes": "Adobar en mesos de creixement actiu.",
+  "light": "Llum indirecta moderada",
+  "substrate": "Substrat universal ben drenat",
+  "tip": "Evitar entollaments per protegir les arrels."
+}`;
+
+      const groqResp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + ((aiAppConfig && aiAppConfig.groq_key) ? aiAppConfig.groq_key : ""),
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "qwen/qwen3.8-27b",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.1
+        })
+      });
+
+      if (groqResp.ok) {
+        const groqData = await groqResp.json();
+        const content = groqData.choices && groqData.choices[0] && groqData.choices[0].message ? groqData.choices[0].message.content : null;
+        if (content) {
+          const cleaned = content.replace(/```json/gi, '').replace(/```/g, '').trim();
+          return JSON.parse(cleaned);
+        }
+      }
+    } catch (e) {
+      console.warn("Groq profile fallback error:", e);
+    }
+
+    // 3. Fallback segur
+    return {
+      name: speciesInfo.common,
+      scientific: speciesInfo.scientific,
+      zone: "interior",
+      difficulty: "facil",
+      difficultyLabel: "Fàcil",
+      toxic: false,
+      waterDaysSummer: 7,
+      waterDaysWinter: 14,
+      waterSummerText: "Cada 7 dies",
+      waterWinterText: "Cada 14 dies",
+      waterDetail: "Regar quan la terra comenci a assecar-se.",
+      fertilizerType: "Líquid plantes verdes",
+      fertilizerDays: 21,
+      fertilizerFreq: "Cada 21 dies",
+      fertilizerSeason: "Primavera i Estiu",
+      fertilizerNotes: "Adobar cada 3 setmanes a la primavera i estiu.",
+      light: "Llum indirecta suau",
+      substrate: "Substrat universal ben drenat",
+      tip: "Bona ventilació i evitar sol abrasador directe."
+    };
   }
 
   function displayAIResult(plant, photoBase64) {
