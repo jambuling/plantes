@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#064e3b" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Fons suau circular -->
+  <circle cx="32" cy="32" r="30" fill="#ecfdf5"/>
+  <circle cx="32" cy="32" r="29" fill="none" stroke="#a7f3d0" stroke-width="2"/>
+
+  <!-- Fulla principal estilitzada -->
+  <g filter="url(#shadow)">
+    <!-- Limbe de la fulla -->
+    <path d="M 32,8 C 48,12 56,28 52,44 C 48,54 38,56 32,54 C 26,56 16,54 12,44 C 8,28 16,12 32,8 Z" 
+          fill="url(#leafGrad)"/>
+    
+    <!-- Nervi central -->
+    <path d="M 32,10 Q 32,32 32,56" 
+          stroke="#065f46" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    
+    <!-- Nervis secundaris drets -->
+    <path d="M 32,22 Q 40,24 45,20" stroke="#a7f3d0" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+    <path d="M 32,32 Q 42,34 47,30" stroke="#a7f3d0" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+    <path d="M 32,42 Q 39,44 43,40" stroke="#a7f3d0" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+
+    <!-- Nervis secundaris esquerres -->
+    <path d="M 32,22 Q 24,24 19,20" stroke="#a7f3d0" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+    <path d="M 32,32 Q 22,34 17,30" stroke="#a7f3d0" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+    <path d="M 32,42 Q 25,44 21,40" stroke="#a7f3d0" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>
