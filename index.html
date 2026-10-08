@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Meu Jardí · Registre, Històric i Alertes</title>
+  
+  <!-- Supabase JS Client via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg-primary: #f4f7f3;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --border-subtle: #e1e7de;
+      --border-strong: #c2d1bf;
+      --text-main: #182319;
+      --text-muted: #576858;
+      --accent: #256a38;
+      --accent-hover: #1c522b;
+      --accent-light: #eaf3ec;
+
+      /* Alertes d'estat de reg i adob */
+      --status-overdue-bg: #fee2e2;
+      --status-overdue-text: #991b1b;
+      --status-overdue-border: #f87171;
+
+      --status-due-soon-bg: #fef3c7;
+      --status-due-soon-text: #92400e;
+      --status-due-soon-border: #fcd34d;
+
+      --status-ok-bg: #dcfce7;
+      --status-ok-text: #166534;
+      --status-ok-border: #86efac;
+
+      --status-none-bg: #f1f5f0;
+      --status-none-text: #647466;
+      --status-none-border: #d4ded3;
+
+      --status-winter-bg: #e0f2fe;
+      --status-winter-text: #075985;
+      --status-winter-border: #bae6fd;
+
+      --shadow-sm: 0 2px 8px rgba(24, 35, 25, 0.05);
+      --shadow-md: 0 8px 24px rgba(24, 35, 25, 0.08);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 20px 16px 90px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 1320px; margin: 0 auto; }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #15341f 0%, #295736 100%);
+      color: white;
+      padding: 32px 30px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "🌿";
+      position: absolute;
+      right: 20px;
+      bottom: -25px;
+      font-size: 140px;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .header-content { position: relative; z-index: 2; }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .header-subtitle {
+      font-size: 0.95rem;
+      color: #cfe2d3;
+      max-width: 680px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-header {
+      background: rgba(255, 255, 255, 0.18);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(8px);
+      padding: 8px 13px;
+      border-radius: var(--radius-sm);
+      font-size: 0.83rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-header:hover { background: rgba(255, 255, 255, 0.3); }
+
+    .btn-header.btn-add-plant {
+      background: #22c55e;
+      border-color: #4ade80;
+      color: #0b2e13;
+      font-weight: 700;
+    }
+    .btn-header.btn-add-plant:hover { background: #16a34a; color: white; }
+
+    .btn-header.supabase-connected {
+      background: #059669;
+      border-color: #34d399;
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.14);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-pill.alert {
+      background: rgba(239, 68, 68, 0.3);
+      border-color: rgba(239, 68, 68, 0.6);
+      font-weight: 700;
+    }
+
+    /* CONTROLS */
+    .controls {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-box { flex: 1; min-width: 240px; position: relative; }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-primary);
+      font-size: 0.92rem;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(37, 106, 56, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .filters-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    select {
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      font-size: 0.86rem;
+      color: var(--text-main);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .view-toggle {
+      display: flex;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .view-toggle button {
+      padding: 8px 12px;
+      border: none;
+      background: var(--bg-surface);
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-muted);
+    }
+
+    .view-toggle button.active {
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+
+    /* GRID */
+    .plants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 24px;
+    }
+
+    .plant-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+      position: relative;
+    }
+
+    .plant-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-strong);
+    }
+
+    .plant-card.alert-water {
+      border-left: 5px solid var(--status-overdue-border);
+    }
+
+    .card-image-wrap {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      background: #e8eee6;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .card-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .plant-card:hover .card-image-wrap img { transform: scale(1.03); }
+
+    .card-badges {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      pointer-events: none;
+    }
+
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+
+    .badge-safe { background: #e6f6eb; color: #16642e; border: 1px solid #c2e9c8; }
+    .badge-toxic { background: #fde8e8; color: #9f1c1c; border: 1px solid #f8b4b4; }
+    .badge-zone { background: rgba(255, 255, 255, 0.94); color: #273829; }
+    .badge-diff-very-easy { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .badge-diff-easy { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+    .badge-diff-medium { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+
+    .card-body {
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-header {
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .plant-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 2px;
+      line-height: 1.25;
+    }
+
+    .plant-scientific {
+      font-size: 0.84rem;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: var(--bg-primary);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin-bottom: 12px;
+    }
+
+    .spec-item { display: flex; flex-direction: column; }
+    .spec-label {
+      font-size: 0.70rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    .spec-val { font-size: 0.84rem; font-weight: 600; color: var(--text-main); }
+
+    /* TRACKER BOXES */
+    .tracker-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .tracker-card {
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .tracker-card.status-overdue {
+      background: var(--status-overdue-bg);
+      border-color: var(--status-overdue-border);
+      color: var(--status-overdue-text);
+    }
+    .tracker-card.status-due-soon {
+      background: var(--status-due-soon-bg);
+      border-color: var(--status-due-soon-border);
+      color: var(--status-due-soon-text);
+    }
+    .tracker-card.status-ok {
+      background: var(--status-ok-bg);
+      border-color: var(--status-ok-border);
+      color: var(--status-ok-text);
+    }
+    .tracker-card.status-none {
+      background: var(--status-none-bg);
+      border-color: var(--status-none-border);
+      color: var(--status-none-text);
+    }
+    .tracker-card.status-winter {
+      background: var(--status-winter-bg);
+      border-color: var(--status-winter-border);
+      color: var(--status-winter-text);
+    }
+
+    .tracker-info { flex: 1; font-size: 0.82rem; line-height: 1.35; }
+    .tracker-title { font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 5px; }
+    .tracker-next-date { font-weight: 600; display: block; margin-top: 2px; }
+    .tracker-last-date { font-size: 0.76rem; opacity: 0.85; display: block; }
+
+    .tracker-btn-group { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+
+    .btn-action {
+      border: none;
+      padding: 6px 11px;
+      border-radius: 6px;
+      font-size: 0.80rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: transform 0.1s ease;
+      white-space: nowrap;
+    }
+    .btn-action:active { transform: scale(0.96); }
+    .btn-water-action { background: #256a38; color: #ffffff; }
+    .btn-water-action:hover { background: #1c522b; }
+    .btn-fert-action { background: #0284c7; color: #ffffff; }
+    .btn-fert-action:hover { background: #0369a1; }
+    .btn-history-link {
+      background: transparent;
+      border: none;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    /* TABLE */
+    .table-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+      display: none;
+    }
+
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+    th {
+      background: #edf3ec;
+      padding: 12px 14px;
+      font-weight: 700;
+      color: #243525;
+      border-bottom: 2px solid var(--border-strong);
+      white-space: nowrap;
+    }
+    td { padding: 12px 14px; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+    tr:hover td { background: #fafcf9; }
+    .table-img { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid var(--border-subtle); }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(16, 26, 18, 0.68);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; z-index: 1000;
+      opacity: 0; visibility: hidden;
+      transition: all 0.2s ease;
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      max-width: 720px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute; top: 14px; right: 14px;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border-subtle);
+      cursor: pointer; font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10;
+    }
+
+    .modal-image-wrap { width: 100%; height: 340px; background: #141c15; }
+    .modal-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .modal-content { padding: 24px 28px 30px; }
+    .modal-header { margin-bottom: 18px; }
+    .modal-section { margin-bottom: 16px; }
+    .modal-section-title {
+      font-size: 0.80rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--accent); margin-bottom: 6px;
+    }
+    .modal-box-highlight {
+      background: #f4f8f4; border: 1px solid #d2e4d3; border-radius: var(--radius-sm);
+      padding: 12px 14px; font-size: 0.86rem;
+    }
+    .modal-box-highlight p { margin-bottom: 4px; }
+    .tip-box {
+      background: #fdf6e7; border-left: 4px solid #d49c24;
+      padding: 10px 14px; border-radius: 0 8px 8px 0;
+      font-size: 0.85rem; color: #634304; margin-top: 14px;
+    }
+
+    /* FORMULARI NOVA PLANTA */
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.88rem;
+      outline: none;
+      background: var(--bg-surface);
+    }
+    .form-control:focus {
+      border-color: var(--accent);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .photo-upload-box {
+      border: 2px dashed var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      background: #fafcf9;
+      position: relative;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .photo-upload-box:hover {
+      border-color: var(--accent);
+    }
+    .photo-preview {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      display: none;
+      margin-top: 10px;
+    }
+
+    /* HISTÒRIC LIST */
+    .history-list {
+      list-style: none; margin-top: 12px;
+      max-height: 280px; overflow-y: auto;
+      border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);
+    }
+    .history-item {
+      padding: 10px 14px; border-bottom: 1px solid var(--border-subtle);
+      display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;
+    }
+    .history-item:last-child { border-bottom: none; }
+    .history-item.water { background: #f7faf8; }
+    .history-item.fert { background: #f0f9ff; }
+    .history-delete-btn {
+      background: #fee2e2; color: #991b1b; border: none;
+      padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer;
+    }
+
+    /* TOAST */
+    .toast-notification {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #182319; color: #ffffff;
+      padding: 12px 20px; border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      font-size: 0.90rem; display: flex; align-items: center; gap: 10px;
+      z-index: 2000; transform: translateY(100px); opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .toast-notification.show { transform: translateY(0); opacity: 1; }
+
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); grid-column: 1 / -1; display: none; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-content">
+      <div class="header-top">
+        <div>
+          <h1>🌱 El Meu Registre de Plantes</h1>
+          <p class="header-subtitle">Catàleg complet al núvol amb Supabase, històric i alta de noves plantes.</p>
+        </div>
+
+        <div class="header-actions">
+          <button class="btn-header btn-add-plant" onclick="openAddPlantModal()">
+            ➕ Afegir Nova Planta
+          </button>
+          <button class="btn-header" id="btnCloudStatus" onclick="openCloudModal()">
+            ⚡ Sincronització Supabase
+          </button>
+          <button class="btn-header" onclick="exportDataJSON()">
+            📥 Còpia (JSON)
+          </button>
+          <button class="btn-header" onclick="document.getElementById('importFileInput').click()">
+            📤 Restaurar
+          </button>
+          <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importDataJSON(event)">
+        </div>
+      </div>
+      
+      <div class="stats-bar" id="statsBar"></div>
+    </div>
+  </header>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Cerca per nom comú o científic...">
+    </div>
+
+    <div class="filters-row">
+      <select id="statusFilter">
+        <option value="all">Tots els estats</option>
+        <option value="overdue">🔴 ALERTA: Toca regar avui / vençut</option>
+        <option value="due_soon">🟡 Avis: Toca aviat (1-2 dies)</option>
+        <option value="ok">🟢 Al dia</option>
+        <option value="none">⚪ Sense registre inicial</option>
+      </select>
+
+      <select id="zoneFilter">
+        <option value="all">Totes les zones</option>
+        <option value="interior">🏠 Interior</option>
+        <option value="exterior">☀️ Balcó / Exterior</option>
+      </select>
+
+      <select id="difficultyFilter">
+        <option value="all">Totes les dificultats</option>
+        <option value="molt_facil">🟢 Molt fàcil</option>
+        <option value="facil">🔵 Fàcil</option>
+        <option value="mitjana">🟡 Mitjana</option>
+      </select>
+
+      <div class="view-toggle">
+        <button id="viewGridBtn" class="active" title="Vista de Targetes">▦ Targetes</button>
+        <button id="viewTableBtn" title="Vista de Taula">▤ Taula</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="plants-grid" id="plantsGrid"></div>
+
+  <!-- TABLE -->
+  <div class="table-container" id="plantsTableContainer">
+    <table>
+      <thead>
+        <tr>
+          <th>Foto</th>
+          <th>Nom Comú</th>
+          <th>Estat Reg</th>
+          <th>Proper Reg</th>
+          <th>Estat Adob</th>
+          <th>Proper Adob</th>
+          <th>Dificultat</th>
+          <th>Zona</th>
+          <th>Acció Ràpida</th>
+        </tr>
+      </thead>
+      <tbody id="plantsTableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    <h3>No s'ha trobat cap planta</h3>
+    <p>Prova de canviar els filtres de cerca.</p>
+  </div>
+
+</div>
+
+<!-- MODAL AFEGIR NOVA PLANTA -->
+<div class="modal-overlay" id="addPlantModal">
+  <div class="modal-card" style="max-width: 620px;">
+    <button class="modal-close" onclick="closeModal('addPlantModal')">&times;</button>
+    <div class="modal-content" style="padding: 24px;">
+      <h2 style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px;">➕ Afegir Nova Planta</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+        Puja una foto i tria o escriu el nom per omplir les cures automàticament.
+      </p>
+
+      <!-- PUJAR FOTO -->
+      <div class="photo-upload-box" onclick="document.getElementById('newPlantPhotoFile').click()">
+        <input type="file" id="newPlantPhotoFile" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoUpload(event)">
+        <div id="uploadPromptText">
+          <span style="font-size: 1.8rem;">📸</span><br>
+          <strong style="color:var(--accent);">Clica per fer o triar una foto</strong><br>
+          <span style="font-size: 0.78rem; color:var(--text-muted);">Es comprimirà i desarà automàticament a la base de dades</span>
+        </div>
+        <img id="uploadPreviewImg" class="photo-preview" alt="Previsualització">
+      </div>
+
+      <!-- AUTO-COMPLETAT PER NOM -->
+      <div class="form-group">
+        <label for="newPlantName">Nom Comú (Escriu o tria de la llista per auto-completar):</label>
+        <input type="text" id="newPlantName" list="presetPlantsList" class="form-control" placeholder="ex: Monstera deliciosa, Ficus elastica, Calathea..." oninput="autoFillPlantInfo(this.value)">
+        <datalist id="presetPlantsList">
+          <!-- Generat dinàmicament per JS amb la biblioteca botànica -->
+        </datalist>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="newPlantScientific">Nom Científic:</label>
+          <input type="text" id="newPlantScientific" class="form-control" placeholder="Nom botànic">
+        </div>
+        <div class="form-group">
+          <label for="newPlantZone">Zona:</label>
+          <select id="newPlantZone" class="form-control">
+            <option value="interior">🏠 Interior</option>
+            <option value="exterior">☀️ Balcó / Exterior</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="newPlantDiff">Dificultat:</label>
+          <select id="newPlantDiff" class="form-control">
+            <option value="molt_facil">🟢 Molt fàcil</option>
+            <option value="facil" selected>🔵 Fàcil</option>
+            <option value="mitjana">🟡 Mitjana</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="newPlantToxic">Seguretat Mascotes:</label>
+          <select id="newPlantToxic" class="form-control">
+            <option value="true">🔴 Tòxica si es mossega</option>
+            <option value="false">🟢 Segura / Inofensiva</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="newPlantWaterSummer">Dies entre regs (Estiu):</label>
+          <input type="number" id="newPlantWaterSummer" class="form-control" value="7" min="1" max="60">
+        </div>
+        <div class="form-group">
+          <label for="newPlantWaterWinter">Dies entre regs (Hivern):</label>
+          <input type="number" id="newPlantWaterWinter" class="form-control" value="14" min="1" max="60">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="newPlantLight">Requeriment de Llum:</label>
+        <input type="text" id="newPlantLight" class="form-control" placeholder="ex: Llum indirecta abundant">
+      </div>
+
+      <div class="form-group">
+        <label for="newPlantSubstrate">Substrat Recomanat:</label>
+        <input type="text" id="newPlantSubstrate" class="form-control" placeholder="ex: Universal amb perlita">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="newPlantFertType">Tipus d'Adob:</label>
+          <input type="text" id="newPlantFertType" class="form-control" placeholder="ex: Líquid plantes verdes">
+        </div>
+        <div class="form-group">
+          <label for="newPlantFertDays">Dies entre adobs:</label>
+          <input type="number" id="newPlantFertDays" class="form-control" value="21" min="7" max="180">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="newPlantTip">Consell Clau:</label>
+        <input type="text" id="newPlantTip" class="form-control" placeholder="ex: Deixar assecar els primers centímetres abans de regar">
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button class="btn-action" style="background:#e5e7eb; color:#374151;" onclick="closeModal('addPlantModal')">
+          Cancel·lar
+        </button>
+        <button class="btn-action" style="background:#256a38; color:white; padding:8px 18px;" onclick="saveNewPlant()">
+          💾 Guardar Planta al Núvol
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALL PLANTA -->
+<div class="modal-overlay" id="plantModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('plantModal')">&times;</button>
+    <div class="modal-image-wrap">
+      <img id="modalImg" src="" alt="">
+    </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <h2 id="modalTitle" style="font-size: 1.55rem; color: var(--text-main); margin-bottom: 2px;"></h2>
+            <p id="modalScientific" style="font-style: italic; color: var(--text-muted);"></p>
+          </div>
+          <button id="modalDeletePlantBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:6px 10px; border-radius:6px; font-size:0.78rem; cursor:pointer; font-weight:600;">
+            🗑️ Eliminar Planta
+          </button>
+        </div>
+        <div id="modalBadges" style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;"></div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">🧪 Pauta d'Abonament</div>
+        <div class="modal-box-highlight">
+          <p><strong>Tipus:</strong> <span id="modalFertType"></span></p>
+          <p><strong>Freqüència:</strong> <span id="modalFertFreq"></span></p>
+          <p><strong>Temporada activa:</strong> <span id="modalFertSeason"></span></p>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;" id="modalFertNotes"></p>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">💧 Pauta de Reg</div>
+        <p id="modalWaterDetail"></p>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">☀️ Llum i Ubicació</div>
+        <p id="modalLight"></p>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">🪴 Substrat Recomanat</div>
+        <p id="modalSubstrate"></p>
+      </div>
+
+      <div class="tip-box" id="modalTip"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL HISTÒRIC -->
+<div class="modal-overlay" id="historyModal">
+  <div class="modal-card" style="max-width: 520px;">
+    <button class="modal-close" onclick="closeModal('historyModal')">&times;</button>
+    <div class="modal-content" style="padding: 24px;">
+      <h2 id="historyPlantTitle" style="font-size: 1.35rem; color: var(--text-main); margin-bottom: 4px;"></h2>
+      <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px;">Registre complet de regs i adobs.</p>
+
+      <div style="display:flex; gap:10px; margin-bottom:14px;">
+        <button class="btn-action btn-water-action" id="btnHistoryAddWater" style="flex:1; justify-content:center;">
+          💧 Regar avui
+        </button>
+        <button class="btn-action btn-fert-action" id="btnHistoryAddFert" style="flex:1; justify-content:center;">
+          🧪 Abonar avui
+        </button>
+      </div>
+
+      <ul class="history-list" id="historyListContainer"></ul>
+
+      <div style="margin-top:14px; text-align:right;">
+        <button class="btn-action" style="background:#e5e7eb; color:#374151;" onclick="closeModal('historyModal')">
+          Tancar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIGURACIÓ SUPABASE -->
+<div class="modal-overlay" id="cloudModal">
+  <div class="modal-card" style="max-width: 580px;">
+    <button class="modal-close" onclick="closeModal('cloudModal')">&times;</button>
+    <div class="modal-content" style="padding: 26px;">
+      <h2 style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 6px;">⚡ Sincronització amb Supabase</h2>
+      <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px;">
+        Connecta el teu projecte gratuït de Supabase per sincronitzar el catàleg i els regs entre el mòbil i l'ordinador.
+      </p>
+
+      <div id="cloudStatusBanner" style="padding:10px 14px; border-radius:8px; font-size:0.86rem; margin-bottom:16px;"></div>
+
+      <label style="display:block; font-size:0.82rem; font-weight:700; margin-bottom:4px; color:var(--text-main);">
+        1. Project URL:
+      </label>
+      <input type="text" id="supabaseUrlInput" placeholder="https://xyzabcdef.supabase.co" style="width:100%; padding:9px 12px; border-radius:6px; border:1px solid var(--border-subtle); margin-bottom:14px; font-family:monospace; font-size:0.85rem;">
+
+      <label style="display:block; font-size:0.82rem; font-weight:700; margin-bottom:4px; color:var(--text-main);">
+        2. API Key (anon / public):
+      </label>
+      <textarea id="supabaseKeyInput" rows="3" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." style="width:100%; padding:9px 12px; border-radius:6px; border:1px solid var(--border-subtle); font-family:monospace; font-size:0.80rem;"></textarea>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; gap:10px;">
+        <button class="btn-action" style="background:#ef4444; color:white;" onclick="disconnectSupabase()">
+          Desconnectar
+        </button>
+        <button class="btn-action" style="background:#256a38; color:white; padding:8px 16px;" onclick="saveSupabaseConfig()">
+          💾 Guardar i Sincronitzar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-notification" id="toastNotification">
+  <span id="toastIcon">🌱</span>
+  <span id="toastMsg">Acció registrada correctament</span>
+</div>
+
+<script>
+  // -------------------------------------------------------------
+  // BIBLIOTECA BOTÀNICA PER A AUTO-COMPLETAT INTEL·LIGENT
+  // -------------------------------------------------------------
+  const botanicalPresets = {
+    "Monstera deliciosa (Costella d'Adam)": {
+      scientific: "Monstera deliciosa",
+      zone: "interior",
+      difficulty: "facil",
+      toxic: true,
+      waterSummer: 7,
+      waterWinter: 14,
+      light: "Llum indirecta abundant o mitjana",
+      substrate: "Substrat ric en torba amb un 30% de perlita i escorça",
+      fertType: "Líquid plantes verdes",
+      fertDays: 20,
+      tip: "Neteja la pols de les fulles amb un drap humit i evita sol directe fort."
+    },
+    "Ficus elastica (Arbre del cautxú)": {
+      scientific: "Ficus elastica",
+      zone: "interior",
+      difficulty: "facil",
+      toxic: true,
+      waterSummer: 7,
+      waterWinter: 14,
+      light: "Llum indirecta molt brillant",
+      substrate: "Universal amb bona dosi de perlita",
+      fertType: "Líquid plantes verdes",
+      fertDays: 21,
+      tip: "Molt sensible a corrents d'aire fred i canvis d'ubicació."
+    },
+    "Ficus lyrata (Figuera de fulles de violí)": {
+      scientific: "Ficus lyrata",
+      zone: "interior",
+      difficulty: "mitjana",
+      toxic: true,
+      waterSummer: 7,
+      waterWinter: 12,
+      light: "Molta llum indirecta (agraeix una mica de sol suau matinal)",
+      substrate: "Lleuger i drenant amb torba i perlita",
+      fertType: "Líquid equilibrat",
+      fertDays: 21,
+      tip: "No tolerar els canvis sobtats de lloc ni l'excés d'aigua estancada."
+    },
+    "Zamioculcas (Planta ZZ)": {
+      scientific: "Zamioculcas zamiifolia",
+      zone: "interior",
+      difficulty: "molt_facil",
+      toxic: true,
+      waterSummer: 15,
+      waterWinter: 30,
+      light: "Molt adaptable: tolera espais foscos o amb poca llum",
+      substrate: "Substrat de cactus o universal molt sorrenc",
+      fertType: "Universal a meitat de dosi",
+      fertDays: 30,
+      tip: "Té rizomes bulbs que emmagatzemen aigua. Davant del dubte, no reguis."
+    },
+    "Calathea / Maranta (Planta de l'oració)": {
+      scientific: "Calathea spp.",
+      zone: "interior",
+      difficulty: "mitjana",
+      toxic: false,
+      waterSummer: 5,
+      waterWinter: 9,
+      light: "Llum indirecta mitjana a suau (l'ombra la protegeix)",
+      substrate: "Substrat airejat ric en matèria orgànica",
+      fertType: "Líquid a mitja dosi",
+      fertDays: 21,
+      tip: "Exigeix humitat ambiental alta (>60%) i reg amb aigua sense calç."
+    },
+    "Orquídia (Phalaenopsis)": {
+      scientific: "Phalaenopsis",
+      zone: "interior",
+      difficulty: "mitjana",
+      toxic: false,
+      waterSummer: 7,
+      waterWinter: 12,
+      light: "Llum indirecta molt abundant (finestres est o sud filtrades)",
+      substrate: "100% escorça de pi especial orquídies",
+      fertType: "Específic orquídies",
+      fertDays: 21,
+      tip: "Regar per immersió quan les arrels interiors es vegin blanquinoses o grises."
+    },
+    "Àloe vera": {
+      scientific: "Aloe vera",
+      zone: "exterior",
+      difficulty: "molt_facil",
+      toxic: true,
+      waterSummer: 12,
+      waterWinter: 28,
+      light: "Sol directe o llum molt abundant",
+      substrate: "Substrat de cactus i suculentes amb drenatge total",
+      fertType: "Cactus (molt suau)",
+      fertDays: 45,
+      tip: "Odis l'excés d'humitat. Deixar assecar la terra abans de tornar a regar."
+    },
+    "Lavanda": {
+      scientific: "Lavandula angustifolia",
+      zone: "exterior",
+      difficulty: "facil",
+      toxic: false,
+      waterSummer: 7,
+      waterWinter: 18,
+      light: "Ple sol directe (mínim 6 hores/dia)",
+      substrate: "Calcari, pobre i extremadament drenant",
+      fertType: "Orgànic molt moderat",
+      fertDays: 60,
+      tip: "Podar després de la floració d'estiu per mantenir la planta arrodonida."
+    },
+    "Alfàbrega": {
+      scientific: "Ocimum basilicum",
+      zone: "exterior",
+      difficulty: "facil",
+      toxic: false,
+      waterSummer: 2,
+      waterWinter: 6,
+      light: "Sol suau o molta claredat protegida del sol abrasador de tarda",
+      substrate: "Universal ric i ben humit",
+      fertType: "🌱 Orgànic líquid culinari",
+      fertDays: 15,
+      tip: "Pessigar les puntes per evitar que floreixi ràpid i prolongar les fulles aromàtiques."
+    }
+  };
+
+  // Omplir la datalist amb les opcions
+  const presetDatalist = document.getElementById("presetPlantsList");
+  Object.keys(botanicalPresets).forEach(name => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    presetDatalist.appendChild(opt);
+  });
+
+  // Funció d'autocompletat quan l'usuari tria o escriu
+  function autoFillPlantInfo(val) {
+    const preset = botanicalPresets[val];
+    if (preset) {
+      document.getElementById("newPlantScientific").value = preset.scientific;
+      document.getElementById("newPlantZone").value = preset.zone;
+      document.getElementById("newPlantDiff").value = preset.difficulty;
+      document.getElementById("newPlantToxic").value = preset.toxic ? "true" : "false";
+      document.getElementById("newPlantWaterSummer").value = preset.waterSummer;
+      document.getElementById("newPlantWaterWinter").value = preset.waterWinter;
+      document.getElementById("newPlantLight").value = preset.light;
+      document.getElementById("newPlantSubstrate").value = preset.substrate;
+      document.getElementById("newPlantFertType").value = preset.fertType;
+      document.getElementById("newPlantFertDays").value = preset.fertDays;
+      document.getElementById("newPlantTip").value = preset.tip;
+    }
+  }
+
+  // Comprimir foto a Base64
+  let currentUploadedPhotoBase64 = null;
+  function handlePhotoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement("canvas");
+        const MAX_WIDTH = 900;
+        const MAX_HEIGHT = 900;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        currentUploadedPhotoBase64 = canvas.toDataURL("image/jpeg", 0.78);
+        document.getElementById("uploadPreviewImg").src = currentUploadedPhotoBase64;
+        document.getElementById("uploadPreviewImg").style.display = "block";
+        document.getElementById("uploadPromptText").style.display = "none";
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // -------------------------------------------------------------
+  // LES 13 PLANTES INICIALS PER DEFECTE
+  // -------------------------------------------------------------
+  const initialDefaultPlants = [
+    {
+      id: "chamaedorea",
+      name: "Palmera de saló",
+      scientific: "Chamaedorea elegans",
+      photo: "01_chamaedorea_elegans.jpeg",
+      difficulty: "facil",
+      difficultyLabel: "Fàcil",
+      difficultyClass: "badge-diff-easy",
+      zone: "interior",
+      zoneLabel: "🏠 Interior",
+      waterDaysSummer: 5,
+      waterDaysWinter: 12,
+      waterSummerText: "1-2 cops / setmana",
+      waterWinterText: "Cada 10-14 dies",
+      waterDetail: "Mantenir el substrat lleugerament humit a l'estiu sense embassar. A l'hivern, deixar assecar el primer terç abans de regar.",
+      fertilizerType: "Líquid plantes verdes (ric en N)",
+      fertilizerDays: 25,
+      fertilizerActiveMonths: [3, 4, 5, 6, 7, 8],
+      fertilizerFreq: "Cada 3-4 setmanes",
+      fertilizerSeason: "Abril a Setembre",
+      fertilizerNotes: "És de creixement lent: no sobrealimentar per no danyar arrels.",
+      light: "Llum indirecta moderada / ombra suau (mai sol directe)",
+      substrate: "70% substrat universal + 30% perlita.",
+      toxic: false,
+      toxicityDetail: "🟢 Totalment segura per a mascotes.",
+      tip: "Si les puntes es posen marrons, sol ser per manca d'humitat ambiental (calefacció) o aigua amb calç."
+    },
+    {
+      id: "spathiphyllum",
+      name: "Espatifil·le (Liri de pau)",
+      scientific: "Spathiphyllum wallisii",
+      photo: "02_spathiphyllum_espatifil.jpeg",
+      difficulty: "facil",
+      difficultyLabel: "Fàcil",
+      difficultyClass: "badge-diff-easy",
+      zone: "interior",
+      zoneLabel: "🏠 Interior",
+      waterDaysSummer: 4,
+      waterDaysWinter: 8,
+      waterSummerText: "2 cops / setmana",
+      waterWinterText: "1 cop / setmana",
+      waterDetail: "Li agrada la terra humida sense entollar. Avisa tombant les fulles quan té set.",
+      fertilizerType: "Líquid plantes amb flor (ric en P i K)",
+      fertilizerDays: 18,
+      fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8, 9],
+      fertilizerFreq: "Cada 15-20 dies",
+      fertilizerSeason: "Març a Octubre",
+      fertilizerNotes: "L'adob per a flor estimula noves espates blanques contínuament.",
+      light: "Llum indirecta mitjana a suau.",
+      substrate: "Substrat universal ric en matèria orgànica + 20% perlita.",
+      toxic: true,
+      toxicityDetail: "🔴 Tòxica per a mascotes (oxalats).",
+      tip: "Regar amb aigua reposada 24 hores per evaporar el clor."
+    },
+    {
+      id: "anthurium",
+      name: "Anturi Rosa",
+      scientific: "Anthurium andreanum",
+      photo: "03_anthurium_anturi.jpeg",
+      difficulty: "mitjana",
+      difficultyLabel: "Mitjana",
+      difficultyClass: "badge-diff-medium",
+      zone: "interior",
+      zoneLabel: "🏠 Interior",
+      waterDaysSummer: 7,
+      waterDaysWinter: 11,
+      waterSummerText: "1 cop / setmana",
+      waterWinterText: "Cada 10-12 dies",
+      waterDetail: "Esperar que la superfície del substrat s'assequi abans de regar. Retirar sempre l'aigua del platet.",
+      fertilizerType: "Específic flor o orquídies (dosi meitat)",
+      fertilizerDays: 18,
+      fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8],
+      fertilizerFreq: "Cada 2-3 setmanes",
+      fertilizerSeason: "Març a Setembre",
+      fertilizerNotes: "Diluir a la meitat de la dosi del fabricant.",
+      light: "Llum indirecta molt abundant.",
+      substrate: "50% universal + 30% escorça pi orquídia + 20% perlita.",
+      toxic: true,
+      toxicityDetail: "🔴 Tòxica per a mascotes.",
+      tip: "Com a epífita, les arrels necessiten airejar-se. No deixis mai aigua al cubrellits."
+    },
+    {
+      id: "pothos_penjant",
+      name: "Potos Daurat (Penjant)",
+      scientific: "Epipremnum aureum",
+      photo: "04_pothos_epipremnum.jpeg",
+      difficulty: "molt_facil",
+      difficultyLabel: "Molt fàcil",
+      difficultyClass: "badge-diff-very-easy",
+      zone: "interior",
+      zoneLabel: "🏠 Interior",
+      waterDaysSummer: 6,
+      waterDaysWinter: 12,
+      waterSummerText: "Cada 5-7 dies",
+      waterWinterText: "Cada 10-15 dies",
+      waterDetail: "Esperar que la meitat del substrat s'assequi. Suporta molt millor la falta que l'excés.",
+      fertilizerType: "Líquid plantes verdes",
+      fertilizerDays: 15,
+      fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8, 9],
+      fertilizerFreq: "Cada 15 dies",
+      fertilizerSeason: "Març a Octubre",
+      fertilizerNotes: "El nitrogen afavoreix el creixement ràpid.",
+      light: "Molt adaptable: llum indirecta mitjana a brillant.",
+      substrate: "Universal amb bona dosi de perlita.",
+      toxic: true,
+      toxicityDetail: "🔴 Tòxic per a mascotes.",
+      tip: "Si les fulles es posen grogues i toves és excés d'aigua; si s'arronsen és set."
+    },
+    {
+      id: "sansevieria_gran",
+      name: "Llengua de sogra (Gran)",
+      scientific: "Sansevieria trifasciata 'Laurentii'",
+      photo: "05_sansevieria_trifasciata.jpeg",
+      difficulty: "molt_facil",
+      difficultyLabel: "Molt fàcil",
+      difficultyClass: "badge-diff-very-easy",
+      zone: "interior",
+      zoneLabel: "🏠 Interior",
+      waterDaysSummer: 18,
+      waterDaysWinter: 32,
+      waterSummerText: "Cada 15-20 dies",
+      waterWinterText: "1 cop al mes",
+      waterDetail: "El substrat ha d'estar TOTALMENT sec abans de regar.",
+      fertilizerType: "Cactus i suculentes (moderat)",
+      fertilizerDays: 30,
+      fertilizerActiveMonths: [4, 5, 6, 7],
+      fertilizerFreq: "1 cop al mes",
+      fertilizerSeason: "Maig a Agost",
+      fertilizerNotes: "Consum de nutrients molt baix. Mai abonar a la tardor/hivern.",
+      light: "Tot terreny: des d'ombra fins a sol suau.",
+      substrate: "Substrat de cactus o 50% universal + 50% perlita.",
+      toxic: true,
+      toxicityDetail: "🔴 Tòxica en cas d'ingesta.",
+      tip: "Davant del dubte, NO REGAR. És immune a la sequera."
+    },
+    {
+      id: "dracaena",
+      name: "Tronc del Brasil",
+      scientific: "Dracaena fragrans",
+      photo: "06_dracaena_tronc_brasil.jpeg",
+      difficulty: "facil",
+      difficultyLabel: "Fàcil",
+      difficultyClass: "badge-diff-easy",
+      zone: "interior",
+      zoneLabel: "🏠 Interior",
+      waterDaysSummer: 8,
+      waterDaysWinter: 18,
+      waterSummerText: "Cada 7-10 dies",
+      waterWinterText: "Cada 15-20 dies",
+      waterDetail: "Deixar assecar els primers 3-4 cm de terra abans de regar.",
+      fertilizerType: "Líquid plantes verdes",
+      fertilizerDays: 25,
+      fertilizerActiveMonths: [3, 4, 5, 6, 7, 8],
+      fertilizerFreq: "Cada 3-4 setmanes",
+      fertilizerSeason: "Abril a Setembre",
+      fertilizerNotes: "Ajuda a mantenir la intensitat del verd.",
+      light: "Llum indirecta abundant o mitjana.",
+      substrate: "Substrat universal de qualitat amb perlita.",
+      toxic: true,
+      toxicityDetail: "🔴 Tòxica per a gossos i gats.",
+      tip: "Sensible al clor i calç. Deixa reposar l'aigua 24h."
+    },
+    {
+      id: "pothos_tutor",
+      name: "Potos Enfiladís (amb Tutor)",
+      scientific: "Epipremnum aureum",
+      photo: "07_pothos_tutor_bambu.jpeg",
+      difficulty: "molt_facil",
+      difficultyLabel: "Molt fàcil",
+      difficultyClass: "badge-diff-very-easy",
+      zone: "interior",
+      zoneLabel: "🏠 Interior",
+      waterDaysSummer: 6,
+      waterDaysWinter: 12,
+      waterSummerText: "Cada 5-7 dies",
+      waterWinterText: "Cada 10-14 dies",
+      waterDetail: "Regar quan el substrat comenci a assecar-se a dalt.",
+      fertilizerType: "Líquid plantes verdes",
+      fertilizerDays: 15,
+      fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8, 9],
+      fertilizerFreq: "Cada 15 dies",
+      fertilizerSeason: "Març a Octubre",
+      fertilizerNotes: "L'adob afavoreix fulles més grosses.",
+      light: "Llum indirecta abundant.",
+      substrate: "Universal amb bona dosi de perlita.",
+      toxic: true,
+      toxicityDetail: "🔴 Tòxic per a mascotes.",
+      tip: "Quan creix enfilant-se cap amunt, desenvolupa fulles més amples."
+    },
+    {
+      id: "callisia",
+      name: "Callisia fragrans (Planta Cistella)",
+      scientific: "Callisia fragrans",
+      photo: "08_callisia_fragrans.jpeg",
+      difficulty: "molt_facil",
+      difficultyLabel: "Molt fàcil",
+      difficultyClass: "badge-diff-very-easy",
+      zone: "exterior",
+      zoneLabel: "☀️ Balcó / Exterior",
+      waterDaysSummer: 5,
+      waterDaysWinter: 12,
+      waterSummerText: "1-2 cops / setmana",
+      waterWinterText: "Cada 10-15 dies",
+      waterDetail: "Tiges carnoses que guarden aigua.",
+      fertilizerType: "Universal o suculentes (dosi baixa)",
+      fertilizerDays: 30,
+      fertilizerActiveMonths: [3, 4, 5, 6, 7, 8],
+      fertilizerFreq: "1 cop al mes",
+      fertilizerSeason: "Abril a Setembre",
+      fertilizerNotes: "Poc exigent.",
+      light: "Llum brillant indirecta o sol matinal suau.",
+      substrate: "Universal drenant en test de terracota.",
+      toxic: false,
+      toxicityDetail: "🟢 Molt segura.",
+      tip: "Molt fàcil de reproduir per fillols."
+    },
+    {
+      id: "romani",
+      name: "Romaní",
+      scientific: "Salvia rosmarinus",
+      photo: "09_romani_salvia_rosmarinus.jpeg",
+      difficulty: "facil",
+      difficultyLabel: "Fàcil",
+      difficultyClass: "badge-diff-easy",
+      zone: "exterior",
+      zoneLabel: "☀️ Balcó / Exterior",
+      waterDaysSummer: 7,
+      waterDaysWinter: 18,
+      waterSummerText: "1 cop / setmana",
+      waterWinterText: "Cada 15-20 dies",
+      waterDetail: "Planta de secà: esperar que la terra s'assequi del tot.",
+      fertilizerType: "🌱 Orgànic (Humus de cuc)",
+      fertilizerDays: 60,
+      fertilizerActiveMonths: [2, 3, 4, 5],
+      fertilizerFreq: "Cada 2 mesos",
+      fertilizerSeason: "Març a Juny",
+      fertilizerNotes: "L'adob químic li fa perdre aroma.",
+      light: "Ple sol directe (mínim 5 hores/dia).",
+      substrate: "Molt porós amb sorra o grava.",
+      toxic: false,
+      toxicityDetail: "🟢 Comestible i no tòxica.",
+      tip: "El test de fang és ideal perquè transpira."
+    },
+    {
+      id: "menta",
+      name: "Menta (Herba-sana)",
+      scientific: "Mentha spicata",
+      photo: "10_menta_mentha.jpeg",
+      difficulty: "facil",
+      difficultyLabel: "Fàcil",
+      difficultyClass: "badge-diff-easy",
+      zone: "exterior",
+      zoneLabel: "☀️ Balcó / Exterior",
+      waterDaysSummer: 3,
+      waterDaysWinter: 7,
+      waterSummerText: "2-3 cops / setmana",
+      waterWinterText: "1 cop / setmana",
+      waterDetail: "Requereix terra constantment fresca i humida.",
+      fertilizerType: "🌱 Orgànic hort/humus",
+      fertilizerDays: 21,
+      fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8],
+      fertilizerFreq: "Cada 3 setmanes",
+      fertilizerSeason: "Març a Setembre",
+      fertilizerNotes: "Planta voraç en ple creixement.",
+      light: "Semisombra o sol suau del matí.",
+      substrate: "Substrat universal ric en humus que retingui la humitat.",
+      toxic: false,
+      toxicityDetail: "🟢 Comestible i segura.",
+      tip: "Si s'espiga molt, fes una poda severa i rebrotarà frondosa."
+    },
+    {
+      id: "farigola",
+      name: "Farigola (Timó)",
+      scientific: "Thymus vulgaris",
+      photo: "11_farigola_thymus_vulgaris.jpeg",
+      difficulty: "facil",
+      difficultyLabel: "Fàcil",
+      difficultyClass: "badge-diff-easy",
+      zone: "exterior",
+      zoneLabel: "☀️ Balcó / Exterior",
+      waterDaysSummer: 8,
+      waterDaysWinter: 18,
+      waterSummerText: "Cada 7-10 dies",
+      waterWinterText: "Cada 2-3 setmanes",
+      waterDetail: "Molt resistent a la sequera.",
+      fertilizerType: "🌱 Orgànic suau (humus a la base)",
+      fertilizerDays: 120,
+      fertilizerActiveMonths: [2, 3],
+      fertilizerFreq: "1 sol cop a l'any",
+      fertilizerSeason: "Març - Abril",
+      fertilizerNotes: "En terres pobres és quan concentra més essència.",
+      light: "Ple sol directe.",
+      substrate: "Pobre, calcari i molt drenant.",
+      toxic: false,
+      toxicityDetail: "🟢 Comestible i segura.",
+      tip: "No regar mai si la terra està encara humida."
+    },
+    {
+      id: "calaminta",
+      name: "Calaminta (Neveda de bosc)",
+      scientific: "Clinopodium nepeta (Calamintha)",
+      photo: "12_calaminta_neveda.jpeg",
+      difficulty: "facil",
+      difficultyLabel: "Fàcil",
+      difficultyClass: "badge-diff-easy",
+      zone: "exterior",
+      zoneLabel: "☀️ Balcó / Exterior",
+      waterDaysSummer: 4,
+      waterDaysWinter: 12,
+      waterSummerText: "2 cops / setmana",
+      waterWinterText: "Cada 10-15 dies",
+      waterDetail: "Reg moderat. Mantenir certa frescor.",
+      fertilizerType: "Líquid flor o fertilitzant ecològic",
+      fertilizerDays: 30,
+      fertilizerActiveMonths: [4, 5, 6, 7, 8],
+      fertilizerFreq: "1 cop al mes",
+      fertilizerSeason: "Maig a Setembre",
+      fertilizerNotes: "Reforç mensual durant la floració.",
+      light: "Sol o semisombra lluminosa.",
+      substrate: "Universal amb bona perlita.",
+      toxic: false,
+      toxicityDetail: "🟢 Segura i mel·lífera.",
+      tip: "Atrau abelles i pol·linitzadors beneficiosos."
+    },
+    {
+      id: "sansevieria_esqueix",
+      name: "Llengua de sogra (Esqueix / Fillol)",
+      scientific: "Sansevieria trifasciata 'Laurentii'",
+      photo: "13_sansevieria_esqueix.jpeg",
+      difficulty: "molt_facil",
+      difficultyLabel: "Molt fàcil",
+      difficultyClass: "badge-diff-very-easy",
+      zone: "interior",
+      zoneLabel: "🏠 Interior",
+      waterDaysSummer: 18,
+      waterDaysWinter: 35,
+      waterSummerText: "Cada 15-20 dies",
+      waterWinterText: "Cada 4-5 setmanes",
+      waterDetail: "Exemplar jove d'una sola fulla, gairebé no consumeix aigua.",
+      fertilizerType: "Cactus (molt diluït)",
+      fertilizerDays: 60,
+      fertilizerActiveMonths: [5, 6],
+      fertilizerFreq: "1 sol cop a l'estiu",
+      fertilizerSeason: "Juny - Juliol",
+      fertilizerNotes: "No aplicar adob fort.",
+      light: "Llum indirecta moderada a brillant.",
+      substrate: "Substrat de cactus i suculentes molt sorrenc.",
+      toxic: true,
+      toxicityDetail: "🔴 Tòxica per a mascotes.",
+      tip: "Té un creixement inicial lent; tardarà uns mesos a treure nous fillols."
+    }
+  ];
+
+  // -------------------------------------------------------------
+  // EMMAGATZEMATGE DE PLANTES I HISTÒRIC A SUPABASE & LOCAL
+  // -------------------------------------------------------------
+  const STORAGE_CATALOG_KEY = "registre_plantes_catalog_v4";
+  const STORAGE_HISTORY_KEY = "registre_plantes_history_v4";
+  const SUPABASE_CONFIG_KEY = "registre_plantes_supabase_cfg";
+
+  const DEFAULT_SUPABASE_URL = "https://uxspngtnsfabmsanyumd.supabase.co";
+  const DEFAULT_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4c3BuZ3Ruc2ZhYm1zYW55dW1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NTQ3NzUsImV4cCI6MjEwNzAzMDc3NX0.Wf6vPtmDPkdZhuznb0CN31UYw-zBKoMdWzwrzQNreCw";
+
+  let plantsCatalog = [];
+  let inMemoryHistory = {};
+  let supabaseClient = null;
+  let isCloudConnected = false;
+
+  function loadLocalCatalog() {
+    try {
+      const saved = localStorage.getItem(STORAGE_CATALOG_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch(e) {}
+    return initialDefaultPlants;
+  }
+
+  function saveLocalCatalog(catalog) {
+    plantsCatalog = catalog;
+    try {
+      localStorage.setItem(STORAGE_CATALOG_KEY, JSON.stringify(catalog));
+    } catch(e) {}
+  }
+
+  function loadLocalHistory() {
+    try {
+      const saved = localStorage.getItem(STORAGE_HISTORY_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch(e) {}
+    return inMemoryHistory;
+  }
+
+  function saveLocalHistory(hist) {
+    inMemoryHistory = hist;
+    try {
+      localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(hist));
+    } catch(e) {}
+  }
+
+  // Inicialització Supabase
+  async function initSupabase() {
+    plantsCatalog = loadLocalCatalog();
+    inMemoryHistory = loadLocalHistory();
+
+    try {
+      const cfgStr = localStorage.getItem(SUPABASE_CONFIG_KEY);
+      let config = cfgStr ? JSON.parse(cfgStr) : null;
+      if (!config || !config.url) {
+        config = { url: DEFAULT_SUPABASE_URL, key: DEFAULT_SUPABASE_KEY };
+      }
+      if (config && config.url && config.key && window.supabase) {
+        supabaseClient = window.supabase.createClient(config.url, config.key);
+        isCloudConnected = true;
+        updateCloudButton(true);
+
+          // 1. Carregar o sincronitzar catàleg de plantes
+          const { data: catData } = await supabaseClient
+            .from('plantes_history')
+            .select('data')
+            .eq('id', 'plants_catalog')
+            .single();
+
+          if (catData && catData.data && Array.isArray(catData.data)) {
+            plantsCatalog = catData.data;
+            saveLocalCatalog(plantsCatalog);
+          } else {
+            // Pujar les plantes inicials a Supabase
+            await supabaseClient
+              .from('plantes_history')
+              .upsert({ id: 'plants_catalog', data: plantsCatalog, updated_at: new Date().toISOString() });
+          }
+
+          // 2. Carregar historial de regs i adobs
+          const { data: histData } = await supabaseClient
+            .from('plantes_history')
+            .select('data')
+            .eq('id', 'main_history')
+            .single();
+
+          if (histData && histData.data) {
+            inMemoryHistory = histData.data;
+            saveLocalHistory(inMemoryHistory);
+          }
+
+          // 3. Subscripció en temps real
+          supabaseClient
+            .channel('public:plantes_history')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'plantes_history' }, payload => {
+              if (payload.new && payload.new.id === 'plants_catalog' && payload.new.data) {
+                plantsCatalog = payload.new.data;
+                saveLocalCatalog(plantsCatalog);
+                renderPlants();
+              }
+              if (payload.new && payload.new.id === 'main_history' && payload.new.data) {
+                inMemoryHistory = payload.new.data;
+                saveLocalHistory(inMemoryHistory);
+                renderPlants();
+              }
+            })
+            .subscribe();
+        }
+      } else {
+        updateCloudButton(false);
+      }
+    } catch(e) {
+      console.warn("Supabase init error:", e);
+      updateCloudButton(false);
+    }
+
+    renderPlants();
+  }
+
+  function updateCloudButton(connected) {
+    const btn = document.getElementById("btnCloudStatus");
+    if (connected) {
+      btn.innerHTML = "⚡ Supabase Connectat";
+      btn.className = "btn-header supabase-connected";
+    } else {
+      btn.innerHTML = "⚡ Connectar Supabase";
+      btn.className = "btn-header";
+    }
+  }
+
+  async function syncCatalogToCloud() {
+    saveLocalCatalog(plantsCatalog);
+    if (supabaseClient && isCloudConnected) {
+      try {
+        await supabaseClient
+          .from('plantes_history')
+          .upsert({ id: 'plants_catalog', data: plantsCatalog, updated_at: new Date().toISOString() });
+      } catch(e) { console.error("Error sincronitzant catàleg:", e); }
+    }
+  }
+
+  async function syncHistoryToCloud() {
+    saveLocalHistory(inMemoryHistory);
+    if (supabaseClient && isCloudConnected) {
+      try {
+        await supabaseClient
+          .from('plantes_history')
+          .upsert({ id: 'main_history', data: inMemoryHistory, updated_at: new Date().toISOString() });
+      } catch(e) { console.error("Error sincronitzant historial:", e); }
+    }
+  }
+
+  // Obtenir històric per planta
+  function getPlantHistory(plantId) {
+    if (!inMemoryHistory[plantId]) inMemoryHistory[plantId] = { waters: [], ferts: [] };
+    return inMemoryHistory[plantId];
+  }
+
+  async function recordAction(plantId, actionType) {
+    const pHist = getPlantHistory(plantId);
+    const nowIso = new Date().toISOString();
+    if (actionType === 'water') {
+      pHist.waters.unshift(nowIso);
+      showToast("💧 Reg registrat avui amb èxit!", "🌱");
+    } else if (actionType === 'fert') {
+      pHist.ferts.unshift(nowIso);
+      showToast("🧪 Abonament registrat avui amb èxit!", "✨");
+    }
+    renderPlants();
+    await syncHistoryToCloud();
+  }
+
+  async function deleteHistoryEntry(plantId, actionType, index) {
+    const pHist = getPlantHistory(plantId);
+    if (pHist[actionType]) {
+      pHist[actionType].splice(index, 1);
+      renderHistoryModal(plantId);
+      renderPlants();
+      showToast("Registre eliminat", "🗑️");
+      await syncHistoryToCloud();
+    }
+  }
+
+  // -------------------------------------------------------------
+  // ALTA DE NOVA PLANTA
+  // -------------------------------------------------------------
+  function openAddPlantModal() {
+    document.getElementById("newPlantName").value = "";
+    document.getElementById("newPlantScientific").value = "";
+    document.getElementById("newPlantLight").value = "";
+    document.getElementById("newPlantSubstrate").value = "";
+    document.getElementById("newPlantFertType").value = "Líquid plantes verdes";
+    document.getElementById("newPlantTip").value = "";
+    document.getElementById("uploadPreviewImg").style.display = "none";
+    document.getElementById("uploadPromptText").style.display = "block";
+    currentUploadedPhotoBase64 = null;
+
+    document.getElementById("addPlantModal").classList.add("active");
+  }
+
+  async function saveNewPlant() {
+    const name = document.getElementById("newPlantName").value.trim();
+    if (!name) {
+      alert("Si us plau, introdueix el nom de la planta.");
+      return;
+    }
+
+    const scientific = document.getElementById("newPlantScientific").value.trim() || name;
+    const zone = document.getElementById("newPlantZone").value;
+    const difficulty = document.getElementById("newPlantDiff").value;
+    const toxic = document.getElementById("newPlantToxic").value === "true";
+    const waterSummer = parseInt(document.getElementById("newPlantWaterSummer").value) || 7;
+    const waterWinter = parseInt(document.getElementById("newPlantWaterWinter").value) || 14;
+    const light = document.getElementById("newPlantLight").value.trim() || "Llum indirecta moderada";
+    const substrate = document.getElementById("newPlantSubstrate").value.trim() || "Substrat universal ben drenat";
+    const fertType = document.getElementById("newPlantFertType").value.trim() || "Líquid plantes verdes";
+    const fertDays = parseInt(document.getElementById("newPlantFertDays").value) || 21;
+    const tip = document.getElementById("newPlantTip").value.trim() || "Regar només quan la part superior del substrat estigui seca.";
+
+    const id = "planta_" + Date.now();
+    const photo = currentUploadedPhotoBase64 || "04_pothos_epipremnum.jpeg"; // Fallback foto
+
+    const diffLabels = {
+      molt_facil: { label: "Molt fàcil", cls: "badge-diff-very-easy" },
+      facil: { label: "Fàcil", cls: "badge-diff-easy" },
+      mitjana: { label: "Mitjana", cls: "badge-diff-medium" }
+    };
+
+    const newPlantObj = {
+      id,
+      name,
+      scientific,
+      photo,
+      difficulty,
+      difficultyLabel: diffLabels[difficulty].label,
+      difficultyClass: diffLabels[difficulty].cls,
+      zone,
+      zoneLabel: zone === "interior" ? "🏠 Interior" : "☀️ Balcó / Exterior",
+      waterDaysSummer: waterSummer,
+      waterDaysWinter: waterWinter,
+      waterSummerText: `Cada ${waterSummer} dies`,
+      waterWinterText: `Cada ${waterWinter} dies`,
+      waterDetail: `A l'estiu regar cada ${waterSummer} dies aproximadament; a l'hivern espaiar el reg a cada ${waterWinter} dies.`,
+      fertilizerType: fertType,
+      fertilizerDays: fertDays,
+      fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8, 9],
+      fertilizerFreq: `Cada ${fertDays} dies`,
+      fertilizerSeason: "Primavera i Estiu",
+      fertilizerNotes: "Aplicar a la primavera i estiu. A la tardor i hivern deixar descansar sense adob.",
+      light,
+      substrate,
+      toxic,
+      toxicityDetail: toxic ? "🔴 Tòxica en cas d'ingesta per mascotes." : "🟢 Segura i no tòxica.",
+      tip
+    };
+
+    plantsCatalog.unshift(newPlantObj);
+    closeModal("addPlantModal");
+    showToast(`Planta "${name}" afegida correctament!`, "🌿");
+    renderPlants();
+    await syncCatalogToCloud();
+  }
+
+  async function deletePlant(plantId) {
+    const plant = plantsCatalog.find(p => p.id === plantId);
+    if (!plant) return;
+
+    if (confirm(`Estàs segur que vols eliminar la planta "${plant.name}" del teu registre?`)) {
+      plantsCatalog = plantsCatalog.filter(p => p.id !== plantId);
+      delete inMemoryHistory[plantId];
+      closeModal("plantModal");
+      showToast(`Planta "${plant.name}" eliminada`, "🗑️");
+      renderPlants();
+      await syncCatalogToCloud();
+      await syncHistoryToCloud();
+    }
+  }
+
+  // -------------------------------------------------------------
+  // DATES I ALERTES
+  // -------------------------------------------------------------
+  function isSummerSeason() {
+    const month = new Date().getMonth();
+    return month >= 4 && month <= 8;
+  }
+
+  function formatDateFriendly(dateObj) {
+    const d = new Date(dateObj);
+    return d.toLocaleDateString("ca-ES", { day: "numeric", month: "short" });
+  }
+
+  function formatDateTimeFriendly(dateObj) {
+    const d = new Date(dateObj);
+    return d.toLocaleDateString("ca-ES", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  }
+
+  function computeWaterStatus(plant) {
+    const history = getPlantHistory(plant.id);
+    const lastWaterIso = history.waters[0];
+    const isSummer = isSummerSeason();
+    const intervalDays = isSummer ? plant.waterDaysSummer : plant.waterDaysWinter;
+
+    if (!lastWaterIso) {
+      return {
+        status: "none", statusClass: "status-none", badgeText: "⚪ Sense registre",
+        nextText: "Pendent de primer reg", lastText: "Mai registrat", daysLeft: null
+      };
+    }
+
+    const lastDate = new Date(lastWaterIso);
+    const now = new Date();
+    const lastDayMidnight = new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate());
+    const nowDayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    const diffDaysPassed = Math.round((nowDayMidnight - lastDayMidnight) / (1000 * 60 * 60 * 24));
+    const nextDate = new Date(lastDayMidnight);
+    nextDate.setDate(nextDate.getDate() + intervalDays);
+
+    const daysLeft = intervalDays - diffDaysPassed;
+
+    let status = "ok";
+    let statusClass = "status-ok";
+    let badgeText = "🟢 Al dia";
+
+    if (daysLeft < 0) {
+      status = "overdue"; statusClass = "status-overdue";
+      const absDays = Math.abs(daysLeft);
+      badgeText = `🔴 TOCA REGAR! (${absDays} ${absDays === 1 ? 'dia de retard' : 'dies de retard'})`;
+    } else if (daysLeft === 0) {
+      status = "overdue"; statusClass = "status-overdue";
+      badgeText = "🔴 TOCA REGAR AVUI!";
+    } else if (daysLeft <= 2) {
+      status = "due_soon"; statusClass = "status-due-soon";
+      badgeText = `🟡 Toca aviat (d'aquí a ${daysLeft} ${daysLeft === 1 ? 'dia' : 'dies'})`;
+    } else {
+      status = "ok"; statusClass = "status-ok";
+      badgeText = `🟢 Al dia (${daysLeft} dies)`;
+    }
+
+    return {
+      status, statusClass, badgeText, nextText: formatDateFriendly(nextDate),
+      lastText: `Darrer reg: fa ${diffDaysPassed} ${diffDaysPassed === 1 ? 'dia' : 'dies'} (${formatDateFriendly(lastDate)})`,
+      daysLeft
+    };
+  }
+
+  function computeFertStatus(plant) {
+    const currentMonth = new Date().getMonth();
+    const activeMonths = plant.fertilizerActiveMonths || [2, 3, 4, 5, 6, 7, 8, 9];
+    const isSeasonActive = activeMonths.includes(currentMonth);
+
+    const history = getPlantHistory(plant.id);
+    const lastFertIso = history.ferts[0];
+
+    if (!isSeasonActive) {
+      return {
+        status: "winter", statusClass: "status-winter", badgeText: "❄️ En repòs d'hivern",
+        nextText: "Reprendre a la primavera",
+        lastText: lastFertIso ? `Darrer adob: ${formatDateFriendly(lastFertIso)}` : "Sense adob previ",
+        canFertilize: false
+      };
+    }
+
+    if (!lastFertIso) {
+      return {
+        status: "none", statusClass: "status-none", badgeText: "⚪ Sense registre d'adob",
+        nextText: "Pendent d'adobar", lastText: "Mai registrat", canFertilize: true
+      };
+    }
+
+    const lastDate = new Date(lastFertIso);
+    const now = new Date();
+    const lastDayMidnight = new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate());
+    const nowDayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    const diffDaysPassed = Math.round((nowDayMidnight - lastDayMidnight) / (1000 * 60 * 60 * 24));
+    const nextDate = new Date(lastDayMidnight);
+    nextDate.setDate(nextDate.getDate() + plant.fertilizerDays);
+
+    const daysLeft = plant.fertilizerDays - diffDaysPassed;
+
+    let status = "ok";
+    let statusClass = "status-ok";
+    let badgeText = "🟢 Adob al dia";
+
+    if (daysLeft < 0) {
+      status = "overdue"; statusClass = "status-overdue";
+      badgeText = `🔴 TOCA ADOBAR! (${Math.abs(daysLeft)} dies vençut)`;
+    } else if (daysLeft === 0) {
+      status = "overdue"; statusClass = "status-overdue";
+      badgeText = "🔴 TOCA ADOBAR AVUI!";
+    } else if (daysLeft <= 4) {
+      status = "due_soon"; statusClass = "status-due-soon";
+      badgeText = `🟡 Adobar aviat (d'aquí a ${daysLeft} dies)`;
+    } else {
+      status = "ok"; statusClass = "status-ok";
+      badgeText = `🟢 Adob al dia (${daysLeft} dies)`;
+    }
+
+    return {
+      status, statusClass, badgeText, nextText: formatDateFriendly(nextDate),
+      lastText: `Darrer adob: fa ${diffDaysPassed} dies (${formatDateFriendly(lastDate)})`,
+      canFertilize: true
+    };
+  }
+
+  // -------------------------------------------------------------
+  // RENDERITZACIÓ
+  // -------------------------------------------------------------
+  const gridEl = document.getElementById("plantsGrid");
+  const tableBodyEl = document.getElementById("plantsTableBody");
+  const emptyStateEl = document.getElementById("emptyState");
+
+  function renderStats() {
+    let overdueCount = 0;
+    let dueSoonCount = 0;
+
+    plantsCatalog.forEach(p => {
+      const ws = computeWaterStatus(p);
+      if (ws.status === 'overdue') overdueCount++;
+      else if (ws.status === 'due_soon') dueSoonCount++;
+    });
+
+    const isSummer = isSummerSeason();
+    const seasonText = isSummer ? "☀️ Temporada càlida" : "🍂 Tardor/Hivern";
+
+    document.getElementById("statsBar").innerHTML = `
+      <div class="stat-pill">🌿 <strong>${plantsCatalog.length}</strong> Plantes registrades</div>
+      <div class="stat-pill ${overdueCount > 0 ? 'alert' : ''}">
+        ${overdueCount > 0 ? `🚨 <strong>${overdueCount}</strong> per regar!` : `✅ Totes al dia`}
+      </div>
+      ${dueSoonCount > 0 ? `<div class="stat-pill" style="background:rgba(245, 158, 11, 0.25); border-color:rgba(245, 158, 11, 0.5);">🟡 <strong>${dueSoonCount}</strong> tocaran aviat</div>` : ''}
+      <div class="stat-pill">${seasonText}</div>
+    `;
+  }
+
+  function renderPlants() {
+    renderStats();
+
+    const searchVal = document.getElementById("searchInput").value.toLowerCase().trim();
+    const statusVal = document.getElementById("statusFilter").value;
+    const zoneVal = document.getElementById("zoneFilter").value;
+    const diffVal = document.getElementById("difficultyFilter").value;
+
+    const filtered = plantsCatalog.filter(plant => {
+      const ws = computeWaterStatus(plant);
+      const fs = computeFertStatus(plant);
+
+      const matchSearch = plant.name.toLowerCase().includes(searchVal) || 
+                          plant.scientific.toLowerCase().includes(searchVal);
+      const matchZone = (zoneVal === "all") || (plant.zone === zoneVal);
+      const matchDiff = (diffVal === "all") || (plant.difficulty === diffVal);
+      
+      let matchStatus = true;
+      if (statusVal !== "all") {
+        matchStatus = (ws.status === statusVal) || (fs.status === statusVal);
+      }
+
+      return matchSearch && matchZone && matchDiff && matchStatus;
+    });
+
+    if (filtered.length === 0) {
+      emptyStateEl.style.display = "block";
+      gridEl.innerHTML = "";
+      tableBodyEl.innerHTML = "";
+      return;
+    } else {
+      emptyStateEl.style.display = "none";
+    }
+
+    gridEl.innerHTML = filtered.map(plant => {
+      const ws = computeWaterStatus(plant);
+      const fs = computeFertStatus(plant);
+      const isCardAlert = (ws.status === 'overdue');
+
+      return `
+        <div class="plant-card ${isCardAlert ? 'alert-water' : ''}">
+          <div class="card-image-wrap" onclick="openPlantModal('${plant.id}')">
+            <img src="${plant.photo}" alt="${plant.name}" loading="lazy">
+            <div class="card-badges">
+              <span class="badge ${plant.toxic ? 'badge-toxic' : 'badge-safe'}">
+                ${plant.toxic ? '🔴 Tòxica' : '🟢 Segura'}
+              </span>
+              <span class="badge badge-zone">${plant.zoneLabel}</span>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="card-header">
+              <div>
+                <h2 class="plant-name">${plant.name}</h2>
+                <p class="plant-scientific">${plant.scientific}</p>
+              </div>
+              <span class="badge ${plant.difficultyClass}">
+                ${plant.difficultyLabel}
+              </span>
+            </div>
+
+            <div class="specs-grid">
+              <div class="spec-item">
+                <span class="spec-label">☀️ Llum</span>
+                <span class="spec-val">${plant.light.split('(')[0].trim()}</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">💧 Freq. Actual</span>
+                <span class="spec-val">${isSummerSeason() ? plant.waterSummerText : plant.waterWinterText}</span>
+              </div>
+            </div>
+
+            <div class="tracker-section">
+              <div class="tracker-card ${ws.statusClass}">
+                <div class="tracker-info">
+                  <span class="tracker-title">💧 Reg: ${ws.badgeText}</span>
+                  <span class="tracker-next-date">📅 Proper: <strong>${ws.nextText}</strong></span>
+                  <span class="tracker-last-date">${ws.lastText}</span>
+                </div>
+                <div class="tracker-btn-group">
+                  <button class="btn-action btn-water-action" onclick="recordAction('${plant.id}', 'water')">
+                    💧 Regar avui
+                  </button>
+                  <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')">
+                    📜 Històric
+                  </button>
+                </div>
+              </div>
+
+              <div class="tracker-card ${fs.statusClass}">
+                <div class="tracker-info">
+                  <span class="tracker-title">🧪 Adob: ${fs.badgeText}</span>
+                  <span class="tracker-next-date">📅 Proper: <strong>${fs.nextText}</strong></span>
+                  <span class="tracker-last-date">${fs.lastText}</span>
+                </div>
+                <div class="tracker-btn-group">
+                  <button class="btn-action btn-fert-action" onclick="recordAction('${plant.id}', 'fert')">
+                    🧪 Abonar avui
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    tableBodyEl.innerHTML = filtered.map(plant => {
+      const ws = computeWaterStatus(plant);
+      const fs = computeFertStatus(plant);
+
+      return `
+        <tr>
+          <td>
+            <img class="table-img" src="${plant.photo}" alt="${plant.name}" onclick="openPlantModal('${plant.id}')">
+          </td>
+          <td>
+            <strong>${plant.name}</strong><br>
+            <span style="font-size:0.75rem; color:var(--text-muted); font-style:italic;">${plant.scientific}</span>
+          </td>
+          <td>
+            <span class="badge" style="background:${getBadgeColor(ws.status)}; color:${getBadgeTextColor(ws.status)};">
+              ${ws.badgeText}
+            </span>
+          </td>
+          <td><strong>${ws.nextText}</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">${ws.lastText}</span></td>
+          <td>
+            <span class="badge" style="background:${getBadgeColor(fs.status)}; color:${getBadgeTextColor(fs.status)};">
+              ${fs.badgeText}
+            </span>
+          </td>
+          <td><strong>${fs.nextText}</strong></td>
+          <td><span class="badge ${plant.difficultyClass}">${plant.difficultyLabel}</span></td>
+          <td>${plant.zoneLabel}</td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn-action btn-water-action" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'water')">💧 Regat</button>
+              <button class="btn-action btn-fert-action" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'fert')">🧪 Abonat</button>
+              <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')">📜</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function getBadgeColor(st) {
+    if (st === 'overdue') return 'var(--status-overdue-bg)';
+    if (st === 'due_soon') return 'var(--status-due-soon-bg)';
+    if (st === 'winter') return 'var(--status-winter-bg)';
+    if (st === 'ok') return 'var(--status-ok-bg)';
+    return 'var(--status-none-bg)';
+  }
+
+  function getBadgeTextColor(st) {
+    if (st === 'overdue') return 'var(--status-overdue-text)';
+    if (st === 'due_soon') return 'var(--status-due-soon-text)';
+    if (st === 'winter') return 'var(--status-winter-text)';
+    if (st === 'ok') return 'var(--status-ok-text)';
+    return 'var(--status-none-text)';
+  }
+
+  function openPlantModal(plantId) {
+    const plant = plantsCatalog.find(p => p.id === plantId);
+    if (!plant) return;
+
+    document.getElementById("modalImg").src = plant.photo;
+    document.getElementById("modalTitle").innerText = plant.name;
+    document.getElementById("modalScientific").innerText = plant.scientific;
+    document.getElementById("modalFertType").innerText = plant.fertilizerType;
+    document.getElementById("modalFertFreq").innerText = plant.fertilizerFreq;
+    document.getElementById("modalFertSeason").innerText = plant.fertilizerSeason;
+    document.getElementById("modalFertNotes").innerText = plant.fertilizerNotes || "";
+    document.getElementById("modalLight").innerText = plant.light;
+    document.getElementById("modalWaterDetail").innerText = plant.waterDetail;
+    document.getElementById("modalSubstrate").innerText = plant.substrate;
+    document.getElementById("modalTip").innerHTML = `💡 <strong>Consell clau:</strong> ${plant.tip}`;
+
+    document.getElementById("modalBadges").innerHTML = `
+      <span class="badge ${plant.difficultyClass}">${plant.difficultyLabel}</span>
+      <span class="badge ${plant.toxic ? 'badge-toxic' : 'badge-safe'}">${plant.toxicityDetail}</span>
+      <span class="badge badge-zone">${plant.zoneLabel}</span>
+    `;
+
+    document.getElementById("modalDeletePlantBtn").onclick = () => deletePlant(plant.id);
+
+    document.getElementById("plantModal").classList.add("active");
+  }
+
+  function openHistoryModal(plantId) {
+    const plant = plantsCatalog.find(p => p.id === plantId);
+    if (!plant) return;
+
+    document.getElementById("historyPlantTitle").innerText = `Històric: ${plant.name}`;
+    
+    document.getElementById("btnHistoryAddWater").onclick = () => {
+      recordAction(plantId, 'water');
+      renderHistoryModal(plantId);
+    };
+    document.getElementById("btnHistoryAddFert").onclick = () => {
+      recordAction(plantId, 'fert');
+      renderHistoryModal(plantId);
+    };
+
+    renderHistoryModal(plantId);
+    document.getElementById("historyModal").classList.add("active");
+  }
+
+  function renderHistoryModal(plantId) {
+    const history = getPlantHistory(plantId);
+    const container = document.getElementById("historyListContainer");
+
+    const combined = [];
+    history.waters.forEach((wIso, index) => combined.push({ type: 'water', date: wIso, originalIndex: index }));
+    history.ferts.forEach((fIso, index) => combined.push({ type: 'fert', date: fIso, originalIndex: index }));
+
+    combined.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    if (combined.length === 0) {
+      container.innerHTML = `<div class="history-empty">Encara no hi ha cap registre anotat.</div>`;
+      return;
+    }
+
+    container.innerHTML = combined.map(item => {
+      const isWater = item.type === 'water';
+      return `
+        <li class="history-item ${item.type}">
+          <div>
+            <strong>${isWater ? '💧 Reg' : '🧪 Abonament'}</strong>
+            <span style="margin-left:8px; color:var(--text-muted);">${formatDateTimeFriendly(item.date)}</span>
+          </div>
+          <button class="history-delete-btn" onclick="deleteHistoryEntry('${plantId}', '${item.type}', ${item.originalIndex})">
+            Esborrar
+          </button>
+        </li>
+      `;
+    }).join('');
+  }
+
+  function openCloudModal() {
+    const cfgStr = localStorage.getItem(SUPABASE_CONFIG_KEY);
+    const cfg = cfgStr ? JSON.parse(cfgStr) : { url: DEFAULT_SUPABASE_URL, key: DEFAULT_SUPABASE_KEY };
+    const banner = document.getElementById("cloudStatusBanner");
+
+    document.getElementById("supabaseUrlInput").value = cfg.url || DEFAULT_SUPABASE_URL;
+    document.getElementById("supabaseKeyInput").value = cfg.key || DEFAULT_SUPABASE_KEY;
+
+    if (isCloudConnected) {
+      banner.style.background = "#dcfce7";
+      banner.style.color = "#15803d";
+      banner.innerHTML = "✅ <strong>Estat: Connectat a Supabase.</strong> Catàleg i regs sincronitzats a temps real.";
+    } else {
+      banner.style.background = "#fef3c7";
+      banner.style.color = "#b45309";
+      banner.innerHTML = "ℹ️ <strong>Mode Local actiu o pendent de connexió.</strong>";
+    }
+
+    document.getElementById("cloudModal").classList.add("active");
+  }
+
+  function saveSupabaseConfig() {
+    const url = document.getElementById("supabaseUrlInput").value.trim();
+    const key = document.getElementById("supabaseKeyInput").value.trim();
+
+    if (!url || !key) {
+      alert("Si us plau, omple tant la URL com la clau API.");
+      return;
+    }
+
+    localStorage.setItem(SUPABASE_CONFIG_KEY, JSON.stringify({ url, key }));
+    closeModal("cloudModal");
+    showToast("Configuració guardada! Sincronitzant...", "⚡");
+    setTimeout(() => location.reload(), 600);
+  }
+
+  function disconnectSupabase() {
+    if (confirm("Vols desconnectar la sincronització de Supabase d'aquest dispositiu?")) {
+      localStorage.removeItem(SUPABASE_CONFIG_KEY);
+      closeModal("cloudModal");
+      showToast("Desconnectat de Supabase", "ℹ️");
+      setTimeout(() => location.reload(), 500);
+    }
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove("active");
+  }
+
+  window.onclick = function(e) {
+    if (e.target.classList.contains('modal-overlay')) {
+      e.target.classList.remove('active');
+    }
+  };
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      document.querySelectorAll(".modal-overlay").forEach(m => m.classList.remove("active"));
+    }
+  });
+
+  let toastTimer = null;
+  function showToast(msg, icon = "🌱") {
+    const toast = document.getElementById("toastNotification");
+    document.getElementById("toastMsg").innerText = msg;
+    document.getElementById("toastIcon").innerText = icon;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 3200);
+  }
+
+  function exportDataJSON() {
+    const backup = {
+      catalog: plantsCatalog,
+      history: inMemoryHistory
+    };
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup, null, 2));
+    const downloadAnchor = document.createElement("a");
+    const dateStr = new Date().toISOString().slice(0, 10);
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `copia_completa_jardi_${dateStr}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    showToast("Còpia completa descarregada!", "📥");
+  }
+
+  function importDataJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (imported.catalog) plantsCatalog = imported.catalog;
+        if (imported.history) inMemoryHistory = imported.history;
+        saveLocalCatalog(plantsCatalog);
+        saveLocalHistory(inMemoryHistory);
+        await syncCatalogToCloud();
+        await syncHistoryToCloud();
+        renderPlants();
+        showToast("Dades restaurades completament!", "📤");
+      } catch (err) {
+        alert("El fitxer seleccionat no és un JSON vàlid.");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  document.getElementById("searchInput").addEventListener("input", renderPlants);
+  document.getElementById("statusFilter").addEventListener("change", renderPlants);
+  document.getElementById("zoneFilter").addEventListener("change", renderPlants);
+  document.getElementById("difficultyFilter").addEventListener("change", renderPlants);
+
+  const gridBtn = document.getElementById("viewGridBtn");
+  const tableBtn = document.getElementById("viewTableBtn");
+  const gridView = document.getElementById("plantsGrid");
+  const tableView = document.getElementById("plantsTableContainer");
+
+  gridBtn.addEventListener("click", () => {
+    gridBtn.classList.add("active");
+    tableBtn.classList.remove("active");
+    gridView.style.display = "grid";
+    tableView.style.display = "none";
+  });
+
+  tableBtn.addEventListener("click", () => {
+    tableBtn.classList.add("active");
+    gridBtn.classList.remove("active");
+    gridView.style.display = "none";
+    tableView.style.display = "block";
+  });
+
+  // Inicialització
+  initSupabase();
+</script>
+
+</body>
+</html>
