@@ -348,6 +348,23 @@
       pointer-events: none;
     }
 
+    .card-badges-bottom {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .tracker-section {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
     .badge {
       font-size: 0.72rem;
       font-weight: 600;
@@ -2683,6 +2700,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
               </span>
               <span class="badge badge-zone">${plant.zoneLabel}</span>
             </div>
+            <div class="card-badges-bottom">
+              <span class="badge ${plant.difficultyClass}">
+                ${plant.difficultyLabel}
+              </span>
+            </div>
           </div>
 
           <div class="card-body">
@@ -2691,9 +2713,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                 <h2 class="plant-name">${plant.name}</h2>
                 <p class="plant-scientific">${plant.scientific}</p>
               </div>
-              <span class="badge ${plant.difficultyClass}">
-                ${plant.difficultyLabel}
-              </span>
             </div>
 
             <div class="tracker-section">
