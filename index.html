@@ -670,8 +670,19 @@
     .history-item.water { background: #f7faf8; }
     .history-item.fert { background: #f0f9ff; }
     .history-delete-btn {
-      background: #fee2e2; color: #991b1b; border: none;
-      padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer;
+      background: #fee2e2; color: #991b1b; border: 1px solid #fecaca;
+      padding: 5px 11px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 4px;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .history-delete-btn:hover {
+      background: #fca5a5; color: #7f1d1d;
+    }
+    .history-delete-btn:active {
+      transform: scale(0.96);
+    }
+    .history-empty {
+      text-align: center; padding: 28px 16px; color: var(--text-muted); font-size: 0.90rem;
     }
 
     /* TOAST */
@@ -1914,20 +1925,52 @@
     });
   }
 
-  async function deleteHistoryEntry(plantId, actionType, index) {
-    const pHist = getPlantHistory(plantId);
-    if (pHist[actionType]) {
-      pHist[actionType].splice(index, 1);
-      saveLocalHistory(inMemoryHistory);
-      updatePlantCardDOM(plantId);
-      if (currentModalPlantId === plantId) {
-        updateModalTracker(plantId);
-      }
-      renderHistoryModal(plantId);
-      renderStats();
-      showToast("Registre eliminat", "🗑️");
-      await syncHistoryToCloud();
+  async function deleteHistoryEntry(plantId, actionType, targetDate, fallbackIndex, event) {
+    if (event && event.stopPropagation) {
+      event.stopPropagation();
     }
+    const pHist = getPlantHistory(plantId);
+    const key = (actionType === 'water' || actionType === 'waters') ? 'waters' : 'ferts';
+    if (!pHist[key] || !Array.isArray(pHist[key])) return;
+
+    let removed = false;
+    if (typeof targetDate === 'string' && targetDate.length > 5) {
+      const idx = pHist[key].indexOf(targetDate);
+      if (idx !== -1) {
+        pHist[key].splice(idx, 1);
+        removed = true;
+      }
+    }
+
+    if (!removed && typeof fallbackIndex === 'number' && fallbackIndex >= 0 && fallbackIndex < pHist[key].length) {
+      pHist[key].splice(fallbackIndex, 1);
+      removed = true;
+    }
+
+    if (!removed) {
+      console.warn("No s'ha trobat el registre a esborrar:", plantId, actionType, targetDate, fallbackIndex);
+      return;
+    }
+
+    // 1. Desar localment a memòria i localStorage
+    saveLocalHistory(inMemoryHistory);
+
+    // 2. Actualitzar el DOM de la targeta in-situ i el modal si està obert
+    updatePlantCardDOM(plantId);
+    if (currentModalPlantId === plantId) {
+      updateModalTracker(plantId);
+    }
+
+    // 3. Re-renderitzar la llista del modal d'històric
+    renderHistoryModal(plantId);
+
+    // 4. Actualitzar comptadors de la barra superior d'estadístiques
+    renderStats();
+
+    showToast("Registre eliminat amb èxit", "🗑️");
+
+    // 5. Sincronitzar canvis a Supabase en segon pla
+    await syncHistoryToCloud();
   }
 
   // -------------------------------------------------------------
@@ -2749,8 +2792,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             <strong>${isWater ? '💧 Reg' : '🧪 Abonament'}</strong>
             <span style="margin-left:8px; color:var(--text-muted);">${formatDateTimeFriendly(item.date)}</span>
           </div>
-          <button class="history-delete-btn" onclick="deleteHistoryEntry('${plantId}', '${item.type}', ${item.originalIndex})">
-            Esborrar
+          <button class="history-delete-btn" onclick="deleteHistoryEntry('${plantId}', '${item.type}', '${item.date}', ${item.originalIndex}, event)">
+            🗑️ Esborrar
           </button>
         </li>
       `;
