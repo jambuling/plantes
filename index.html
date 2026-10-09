@@ -459,6 +459,23 @@
     .btn-water-action:hover { background: #1c522b; }
     .btn-fert-action { background: #0284c7; color: #ffffff; }
     .btn-fert-action:hover { background: #0369a1; }
+    .btn-done-today {
+      background: #15803d !important;
+      color: #ffffff !important;
+      border: 1px solid #166534 !important;
+      box-shadow: 0 1px 3px rgba(22, 101, 52, 0.25);
+    }
+    .btn-done-today:hover {
+      background: #166534 !important;
+    }
+    @keyframes successPulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45); }
+      40% { transform: scale(1.02); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    .action-success-pulse {
+      animation: successPulse 0.55s ease;
+    }
     .btn-history-link {
       background: transparent;
       border: none;
@@ -981,6 +998,35 @@
           </button>
         </div>
         <div id="modalBadges" style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;"></div>
+        
+        <!-- TRACKER ACCIÓ RÀPIDA DIRECTE A LA FITXA -->
+        <div id="modalTrackerSection" style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div id="modalWaterBox" class="tracker-card status-ok" style="padding: 10px 12px; margin: 0;">
+            <div class="tracker-info">
+              <span class="tracker-title" id="modalWaterTitle">💧 Reg:</span>
+              <span class="tracker-next-date" id="modalWaterNext">📅 Proper:</span>
+              <span class="tracker-last-date" id="modalWaterLast"></span>
+            </div>
+            <div class="tracker-btn-group" style="margin-top: 8px;">
+              <button class="btn-action btn-water-action" id="modalWaterBtn" style="width:100%; justify-content:center; padding: 7px 10px;">
+                💧 Regar avui
+              </button>
+            </div>
+          </div>
+
+          <div id="modalFertBox" class="tracker-card status-ok" style="padding: 10px 12px; margin: 0;">
+            <div class="tracker-info">
+              <span class="tracker-title" id="modalFertTitle">🧪 Adob:</span>
+              <span class="tracker-next-date" id="modalFertNext">📅 Proper:</span>
+              <span class="tracker-last-date" id="modalFertLast"></span>
+            </div>
+            <div class="tracker-btn-group" style="margin-top: 8px;">
+              <button class="btn-action btn-fert-action" id="modalFertBtn" style="width:100%; justify-content:center; padding: 7px 10px;">
+                🧪 Abonar avui
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="modal-section">
@@ -1594,9 +1640,12 @@
           .eq('id', 'plants_catalog')
           .maybeSingle();
 
-        if (catData && catData.data && Array.isArray(catData.data) && catData.data.length > 0) {
-          plantsCatalog = catData.data;
-          saveLocalCatalog(plantsCatalog);
+        if (catData && catData.data) {
+          const parsedCat = typeof catData.data === 'string' ? JSON.parse(catData.data) : catData.data;
+          if (Array.isArray(parsedCat) && parsedCat.length > 0) {
+            plantsCatalog = parsedCat;
+            saveLocalCatalog(plantsCatalog);
+          }
         } else {
           // Si el núvol és buit, pugem el catàleg inicial complet de 13 plantes
           await supabaseClient
@@ -1612,7 +1661,8 @@
           .maybeSingle();
 
         if (histData && histData.data) {
-          inMemoryHistory = histData.data;
+          const parsedHist = typeof histData.data === 'string' ? JSON.parse(histData.data) : histData.data;
+          inMemoryHistory = parsedHist;
           saveLocalHistory(inMemoryHistory);
         }
 
@@ -1624,9 +1674,10 @@
           .maybeSingle();
 
         if (cfgRow && cfgRow.data) {
-          aiAppConfig = { ...aiAppConfig, ...cfgRow.data };
-          if (cfgRow.data.gemini_key) {
-            try { localStorage.setItem("registre_plantes_gemini_key", cfgRow.data.gemini_key); } catch(e) {}
+          const parsedCfg = typeof cfgRow.data === 'string' ? JSON.parse(cfgRow.data) : cfgRow.data;
+          aiAppConfig = { ...aiAppConfig, ...parsedCfg };
+          if (parsedCfg.gemini_key) {
+            try { localStorage.setItem("registre_plantes_gemini_key", parsedCfg.gemini_key); } catch(e) {}
           }
         }
 
@@ -1638,12 +1689,14 @@
           .channel('public:plantes_history')
           .on('postgres_changes', { event: '*', schema: 'public', table: 'plantes_history' }, payload => {
             if (payload.new && payload.new.id === 'plants_catalog' && payload.new.data) {
-              plantsCatalog = payload.new.data;
+              const data = typeof payload.new.data === 'string' ? JSON.parse(payload.new.data) : payload.new.data;
+              plantsCatalog = data;
               saveLocalCatalog(plantsCatalog);
               renderPlants();
             }
             if (payload.new && payload.new.id === 'main_history' && payload.new.data) {
-              inMemoryHistory = payload.new.data;
+              const data = typeof payload.new.data === 'string' ? JSON.parse(payload.new.data) : payload.new.data;
+              inMemoryHistory = data;
               saveLocalHistory(inMemoryHistory);
               renderPlants();
             }
@@ -1683,9 +1736,152 @@
     return inMemoryHistory[plantId];
   }
 
-  async function recordAction(plantId, actionType) {
+  let currentModalPlantId = null;
+
+  // Actualització immediata del DOM in-situ de la targeta (sense recarregar ni refer la llista)
+  function updatePlantCardDOM(plantId) {
+    const plant = plantsCatalog.find(p => p.id === plantId);
+    if (!plant) return;
+
+    const ws = computeWaterStatus(plant);
+    const fs = computeFertStatus(plant);
+
+    // 1. Targeta al Grid
+    const cardEl = document.getElementById(`plant-card-${plantId}`);
+    if (cardEl) {
+      if (ws.status === 'overdue') {
+        cardEl.classList.add('alert-water');
+      } else {
+        cardEl.classList.remove('alert-water');
+      }
+
+      // Caixa de Reg
+      const waterBox = document.getElementById(`plant-water-box-${plantId}`);
+      if (waterBox) waterBox.className = `tracker-card ${ws.statusClass}`;
+
+      const waterTitle = document.getElementById(`plant-water-title-${plantId}`);
+      if (waterTitle) waterTitle.innerText = `💧 Reg: ${ws.badgeText}`;
+
+      const waterNext = document.getElementById(`plant-water-next-${plantId}`);
+      if (waterNext) waterNext.innerHTML = `📅 Proper: <strong>${ws.nextText}</strong>`;
+
+      const waterLast = document.getElementById(`plant-water-last-${plantId}`);
+      if (waterLast) waterLast.innerText = ws.lastText;
+
+      const waterBtn = document.getElementById(`plant-water-btn-${plantId}`);
+      if (waterBtn) {
+        waterBtn.className = `btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}`;
+        waterBtn.innerText = ws.isToday ? '✅ Regat avui' : '💧 Regar avui';
+      }
+
+      // Caixa d'Adob
+      const fertBox = document.getElementById(`plant-fert-box-${plantId}`);
+      if (fertBox) fertBox.className = `tracker-card ${fs.statusClass}`;
+
+      const fertTitle = document.getElementById(`plant-fert-title-${plantId}`);
+      if (fertTitle) fertTitle.innerText = `🧪 Adob: ${fs.badgeText}`;
+
+      const fertNext = document.getElementById(`plant-fert-next-${plantId}`);
+      if (fertNext) fertNext.innerHTML = `📅 Proper: <strong>${fs.nextText}</strong>`;
+
+      const fertLast = document.getElementById(`plant-fert-last-${plantId}`);
+      if (fertLast) fertLast.innerText = fs.lastText;
+
+      const fertBtn = document.getElementById(`plant-fert-btn-${plantId}`);
+      if (fertBtn) {
+        fertBtn.className = `btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}`;
+        fertBtn.innerText = fs.isToday ? '✅ Abonat avui' : '🧪 Abonar avui';
+      }
+
+      // Micro-animació de confirmació visual immediata
+      cardEl.classList.remove('action-success-pulse');
+      void cardEl.offsetWidth; // Força el reflow per rellançar l'animació CSS
+      cardEl.classList.add('action-success-pulse');
+    }
+
+    // 2. Fila a la Vista de Taula
+    const rowWaterBadge = document.getElementById(`plant-row-water-badge-${plantId}`);
+    if (rowWaterBadge) {
+      rowWaterBadge.innerHTML = `<span class="badge" style="background:${getBadgeColor(ws.status)}; color:${getBadgeTextColor(ws.status)};">${ws.badgeText}</span>`;
+    }
+    const rowWaterDates = document.getElementById(`plant-row-water-dates-${plantId}`);
+    if (rowWaterDates) {
+      rowWaterDates.innerHTML = `<strong>${ws.nextText}</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">${ws.lastText}</span>`;
+    }
+    const rowWaterBtn = document.getElementById(`plant-row-water-btn-${plantId}`);
+    if (rowWaterBtn) {
+      rowWaterBtn.className = `btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}`;
+      rowWaterBtn.innerText = ws.isToday ? '✅ Regat' : '💧 Regat';
+    }
+
+    const rowFertBadge = document.getElementById(`plant-row-fert-badge-${plantId}`);
+    if (rowFertBadge) {
+      rowFertBadge.innerHTML = `<span class="badge" style="background:${getBadgeColor(fs.status)}; color:${getBadgeTextColor(fs.status)};">${fs.badgeText}</span>`;
+    }
+    const rowFertDates = document.getElementById(`plant-row-fert-dates-${plantId}`);
+    if (rowFertDates) {
+      rowFertDates.innerHTML = `<strong>${fs.nextText}</strong>`;
+    }
+    const rowFertBtn = document.getElementById(`plant-row-fert-btn-${plantId}`);
+    if (rowFertBtn) {
+      rowFertBtn.className = `btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}`;
+      rowFertBtn.innerText = fs.isToday ? '✅ Abonat' : '🧪 Abonat';
+    }
+  }
+
+  // Actualització del panell d'acció ràpida dins la fitxa modal
+  function updateModalTracker(plantId) {
+    const plant = plantsCatalog.find(p => p.id === plantId);
+    if (!plant) return;
+
+    const ws = computeWaterStatus(plant);
+    const fs = computeFertStatus(plant);
+
+    const modalWaterBox = document.getElementById("modalWaterBox");
+    const modalWaterTitle = document.getElementById("modalWaterTitle");
+    const modalWaterNext = document.getElementById("modalWaterNext");
+    const modalWaterLast = document.getElementById("modalWaterLast");
+    const modalWaterBtn = document.getElementById("modalWaterBtn");
+
+    if (modalWaterBox) {
+      modalWaterBox.className = `tracker-card ${ws.statusClass}`;
+      if (modalWaterTitle) modalWaterTitle.innerText = `💧 Reg: ${ws.badgeText}`;
+      if (modalWaterNext) modalWaterNext.innerHTML = `📅 Proper: <strong>${ws.nextText}</strong>`;
+      if (modalWaterLast) modalWaterLast.innerText = ws.lastText;
+      if (modalWaterBtn) {
+        modalWaterBtn.className = `btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}`;
+        modalWaterBtn.innerText = ws.isToday ? '✅ Regat avui' : '💧 Regar avui';
+        modalWaterBtn.onclick = (e) => recordAction(plantId, 'water', e);
+      }
+    }
+
+    const modalFertBox = document.getElementById("modalFertBox");
+    const modalFertTitle = document.getElementById("modalFertTitle");
+    const modalFertNext = document.getElementById("modalFertNext");
+    const modalFertLast = document.getElementById("modalFertLast");
+    const modalFertBtn = document.getElementById("modalFertBtn");
+
+    if (modalFertBox) {
+      modalFertBox.className = `tracker-card ${fs.statusClass}`;
+      if (modalFertTitle) modalFertTitle.innerText = `🧪 Adob: ${fs.badgeText}`;
+      if (modalFertNext) modalFertNext.innerHTML = `📅 Proper: <strong>${fs.nextText}</strong>`;
+      if (modalFertLast) modalFertLast.innerText = fs.lastText;
+      if (modalFertBtn) {
+        modalFertBtn.className = `btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}`;
+        modalFertBtn.innerText = fs.isToday ? '✅ Abonat avui' : '🧪 Abonar avui';
+        modalFertBtn.onclick = (e) => recordAction(plantId, 'fert', e);
+      }
+    }
+  }
+
+  // Registre instantani (Optimistic UI - 0 ms de latència)
+  async function recordAction(plantId, actionType, event) {
+    if (event) {
+      event.stopPropagation();
+    }
     const pHist = getPlantHistory(plantId);
     const nowIso = new Date().toISOString();
+
     if (actionType === 'water') {
       pHist.waters.unshift(nowIso);
       showToast("💧 Reg registrat avui amb èxit!", "🌱");
@@ -1693,16 +1889,42 @@
       pHist.ferts.unshift(nowIso);
       showToast("🧪 Abonament registrat avui amb èxit!", "✨");
     }
-    renderPlants();
-    await syncHistoryToCloud();
+
+    // 1. Guardem al disc local de forma immediata
+    saveLocalHistory(inMemoryHistory);
+
+    // 2. Actualitzem directament el DOM in-situ de la targeta i la fitxa modal
+    updatePlantCardDOM(plantId);
+    if (currentModalPlantId === plantId) {
+      updateModalTracker(plantId);
+    }
+
+    // 3. Actualitzem la barra d'estadístiques
+    renderStats();
+
+    // 4. Si el modal d'històric detallat està obert, actualitzar la llista
+    const histModal = document.getElementById("historyModal");
+    if (histModal && histModal.classList.contains("active")) {
+      renderHistoryModal(plantId);
+    }
+
+    // 5. Sincronització asíncrona amb el núvol (Supabase) en segon pla
+    syncHistoryToCloud().catch(err => {
+      console.warn("Background cloud sync error:", err);
+    });
   }
 
   async function deleteHistoryEntry(plantId, actionType, index) {
     const pHist = getPlantHistory(plantId);
     if (pHist[actionType]) {
       pHist[actionType].splice(index, 1);
+      saveLocalHistory(inMemoryHistory);
+      updatePlantCardDOM(plantId);
+      if (currentModalPlantId === plantId) {
+        updateModalTracker(plantId);
+      }
       renderHistoryModal(plantId);
-      renderPlants();
+      renderStats();
       showToast("Registre eliminat", "🗑️");
       await syncHistoryToCloud();
     }
@@ -2116,7 +2338,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (!lastWaterIso) {
       return {
         status: "none", statusClass: "status-none", badgeText: "⚪ Sense registre",
-        nextText: "Pendent de primer reg", lastText: "Mai registrat", daysLeft: null
+        nextText: "Pendent de primer reg", lastText: "Mai registrat", daysLeft: null,
+        isToday: false
       };
     }
 
@@ -2130,6 +2353,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     nextDate.setDate(nextDate.getDate() + intervalDays);
 
     const daysLeft = intervalDays - diffDaysPassed;
+    const isToday = (diffDaysPassed === 0);
 
     let status = "ok";
     let statusClass = "status-ok";
@@ -2147,13 +2371,14 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       badgeText = `🟡 Toca aviat (d'aquí a ${daysLeft} ${daysLeft === 1 ? 'dia' : 'dies'})`;
     } else {
       status = "ok"; statusClass = "status-ok";
-      badgeText = `🟢 Al dia (${daysLeft} dies)`;
+      badgeText = isToday ? `🟢 Regat avui (${daysLeft} dies)` : `🟢 Al dia (${daysLeft} dies)`;
     }
 
     return {
       status, statusClass, badgeText, nextText: formatDateFriendly(nextDate),
-      lastText: `Darrer reg: fa ${diffDaysPassed} ${diffDaysPassed === 1 ? 'dia' : 'dies'} (${formatDateFriendly(lastDate)})`,
-      daysLeft
+      lastText: isToday ? `Darrer reg: Avui (${formatDateFriendly(lastDate)})` : `Darrer reg: fa ${diffDaysPassed} ${diffDaysPassed === 1 ? 'dia' : 'dies'} (${formatDateFriendly(lastDate)})`,
+      daysLeft,
+      isToday
     };
   }
 
@@ -2170,14 +2395,16 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
         status: "winter", statusClass: "status-winter", badgeText: "❄️ En repòs d'hivern",
         nextText: "Reprendre a la primavera",
         lastText: lastFertIso ? `Darrer adob: ${formatDateFriendly(lastFertIso)}` : "Sense adob previ",
-        canFertilize: false
+        canFertilize: false,
+        isToday: false
       };
     }
 
     if (!lastFertIso) {
       return {
         status: "none", statusClass: "status-none", badgeText: "⚪ Sense registre d'adob",
-        nextText: "Pendent d'adobar", lastText: "Mai registrat", canFertilize: true
+        nextText: "Pendent d'adobar", lastText: "Mai registrat", canFertilize: true,
+        isToday: false
       };
     }
 
@@ -2191,6 +2418,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     nextDate.setDate(nextDate.getDate() + plant.fertilizerDays);
 
     const daysLeft = plant.fertilizerDays - diffDaysPassed;
+    const isToday = (diffDaysPassed === 0);
 
     let status = "ok";
     let statusClass = "status-ok";
@@ -2207,13 +2435,14 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       badgeText = `🟡 Adobar aviat (d'aquí a ${daysLeft} dies)`;
     } else {
       status = "ok"; statusClass = "status-ok";
-      badgeText = `🟢 Adob al dia (${daysLeft} dies)`;
+      badgeText = isToday ? `🟢 Abonat avui (${daysLeft} dies)` : `🟢 Adob al dia (${daysLeft} dies)`;
     }
 
     return {
       status, statusClass, badgeText, nextText: formatDateFriendly(nextDate),
-      lastText: `Darrer adob: fa ${diffDaysPassed} dies (${formatDateFriendly(lastDate)})`,
-      canFertilize: true
+      lastText: isToday ? `Darrer adob: Avui (${formatDateFriendly(lastDate)})` : `Darrer adob: fa ${diffDaysPassed} dies (${formatDateFriendly(lastDate)})`,
+      canFertilize: true,
+      isToday
     };
   }
 
@@ -2324,7 +2553,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const isCardAlert = (ws.status === 'overdue');
 
       return `
-        <div class="plant-card ${isCardAlert ? 'alert-water' : ''}">
+        <div class="plant-card ${isCardAlert ? 'alert-water' : ''}" id="plant-card-${plant.id}">
           <div class="card-image-wrap" onclick="openPlantModal('${plant.id}')">
             <img src="${plant.photo}" alt="${plant.name}" loading="lazy">
             <div class="card-badges">
@@ -2358,15 +2587,15 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             </div>
 
             <div class="tracker-section">
-              <div class="tracker-card ${ws.statusClass}">
+              <div class="tracker-card ${ws.statusClass}" id="plant-water-box-${plant.id}">
                 <div class="tracker-info">
-                  <span class="tracker-title">💧 Reg: ${ws.badgeText}</span>
-                  <span class="tracker-next-date">📅 Proper: <strong>${ws.nextText}</strong></span>
-                  <span class="tracker-last-date">${ws.lastText}</span>
+                  <span class="tracker-title" id="plant-water-title-${plant.id}">💧 Reg: ${ws.badgeText}</span>
+                  <span class="tracker-next-date" id="plant-water-next-${plant.id}">📅 Proper: <strong>${ws.nextText}</strong></span>
+                  <span class="tracker-last-date" id="plant-water-last-${plant.id}">${ws.lastText}</span>
                 </div>
                 <div class="tracker-btn-group">
-                  <button class="btn-action btn-water-action" onclick="recordAction('${plant.id}', 'water')">
-                    💧 Regar avui
+                  <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
+                    ${ws.isToday ? '✅ Regat avui' : '💧 Regar avui'}
                   </button>
                   <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')">
                     📜 Històric
@@ -2374,15 +2603,15 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                 </div>
               </div>
 
-              <div class="tracker-card ${fs.statusClass}">
+              <div class="tracker-card ${fs.statusClass}" id="plant-fert-box-${plant.id}">
                 <div class="tracker-info">
-                  <span class="tracker-title">🧪 Adob: ${fs.badgeText}</span>
-                  <span class="tracker-next-date">📅 Proper: <strong>${fs.nextText}</strong></span>
-                  <span class="tracker-last-date">${fs.lastText}</span>
+                  <span class="tracker-title" id="plant-fert-title-${plant.id}">🧪 Adob: ${fs.badgeText}</span>
+                  <span class="tracker-next-date" id="plant-fert-next-${plant.id}">📅 Proper: <strong>${fs.nextText}</strong></span>
+                  <span class="tracker-last-date" id="plant-fert-last-${plant.id}">${fs.lastText}</span>
                 </div>
                 <div class="tracker-btn-group">
-                  <button class="btn-action btn-fert-action" onclick="recordAction('${plant.id}', 'fert')">
-                    🧪 Abonar avui
+                  <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-fert-btn-${plant.id}" onclick="recordAction('${plant.id}', 'fert', event)">
+                    ${fs.isToday ? '✅ Abonat avui' : '🧪 Abonar avui'}
                   </button>
                 </div>
               </div>
@@ -2397,7 +2626,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const fs = computeFertStatus(plant);
 
       return `
-        <tr>
+        <tr id="plant-row-${plant.id}">
           <td>
             <img class="table-img" src="${plant.photo}" alt="${plant.name}" onclick="openPlantModal('${plant.id}')">
           </td>
@@ -2405,24 +2634,24 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             <strong>${plant.name}</strong><br>
             <span style="font-size:0.75rem; color:var(--text-muted); font-style:italic;">${plant.scientific}</span>
           </td>
-          <td>
+          <td id="plant-row-water-badge-${plant.id}">
             <span class="badge" style="background:${getBadgeColor(ws.status)}; color:${getBadgeTextColor(ws.status)};">
               ${ws.badgeText}
             </span>
           </td>
-          <td><strong>${ws.nextText}</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">${ws.lastText}</span></td>
-          <td>
+          <td id="plant-row-water-dates-${plant.id}"><strong>${ws.nextText}</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">${ws.lastText}</span></td>
+          <td id="plant-row-fert-badge-${plant.id}">
             <span class="badge" style="background:${getBadgeColor(fs.status)}; color:${getBadgeTextColor(fs.status)};">
               ${fs.badgeText}
             </span>
           </td>
-          <td><strong>${fs.nextText}</strong></td>
+          <td id="plant-row-fert-dates-${plant.id}"><strong>${fs.nextText}</strong></td>
           <td><span class="badge ${plant.difficultyClass}">${plant.difficultyLabel}</span></td>
           <td>${plant.zoneLabel}</td>
           <td>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn-action btn-water-action" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'water')">💧 Regat</button>
-              <button class="btn-action btn-fert-action" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'fert')">🧪 Abonat</button>
+              <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-row-water-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'water', event)">${ws.isToday ? '✅ Regat' : '💧 Regat'}</button>
+              <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-row-fert-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'fert', event)">${fs.isToday ? '✅ Abonat' : '🧪 Abonat'}</button>
               <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')">📜</button>
             </div>
           </td>
@@ -2451,6 +2680,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const plant = plantsCatalog.find(p => p.id === plantId);
     if (!plant) return;
 
+    currentModalPlantId = plantId;
+
     document.getElementById("modalImg").src = plant.photo;
     document.getElementById("modalTitle").innerText = plant.name;
     document.getElementById("modalScientific").innerText = plant.scientific;
@@ -2470,6 +2701,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     `;
 
     document.getElementById("modalDeletePlantBtn").onclick = () => deletePlant(plant.id);
+
+    updateModalTracker(plantId);
 
     document.getElementById("plantModal").classList.add("active");
   }
@@ -2525,17 +2758,20 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   function closeModal(modalId) {
+    if (modalId === 'plantModal') currentModalPlantId = null;
     document.getElementById(modalId).classList.remove("active");
   }
 
   window.onclick = function(e) {
     if (e.target.classList.contains('modal-overlay')) {
+      if (e.target.id === 'plantModal') currentModalPlantId = null;
       e.target.classList.remove('active');
     }
   };
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
+      currentModalPlantId = null;
       document.querySelectorAll(".modal-overlay").forEach(m => m.classList.remove("active"));
     }
   });
