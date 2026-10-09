@@ -1142,7 +1142,10 @@
             <h2 id="modalTitle" style="font-size: 1.6rem; color: var(--text-main); margin-bottom: 2px;"></h2>
             <p id="modalScientific" style="font-style: italic; color: var(--text-muted);"></p>
           </div>
-          <div style="display:flex; gap:8px;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button id="modalEditPlantBtn" style="background:#eaf6ec; color:#1e582e; border:1px solid #c4ecc9; padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:4px;">
+              ✏️ Editar
+            </button>
             <button id="modalHistoryBtn" style="background:var(--bg-tertiary); color:var(--text-main); border:1px solid var(--border-subtle); padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:4px;">
               📜 Històric
             </button>
@@ -1209,6 +1212,161 @@
       </div>
 
       <div class="tip-box" id="modalTip"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR PLANTA -->
+<div class="modal-overlay" id="editPlantModal">
+  <div class="modal-card" style="max-width: 580px; max-height: 88vh; overflow-y: auto;">
+    <button class="modal-close" onclick="closeModal('editPlantModal')" aria-label="Tancar finestra">&times;</button>
+    <div class="modal-content" style="padding: 24px;">
+      <h2 style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
+        ✏️ Editar Planta
+      </h2>
+      <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 18px;">
+        Modifica qualsevol dada de la fitxa o substitueix la fotografia de la planta.
+      </p>
+
+      <form id="editPlantForm" onsubmit="saveEditedPlant(event)">
+        <!-- FOTO I CANVI DE FOTO -->
+        <div style="margin-bottom: 18px; background: var(--bg-primary); padding: 14px; border-radius: 12px; border: 1px solid var(--border-subtle); display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+          <div style="width: 86px; height: 86px; border-radius: 10px; overflow: hidden; background: #e8eee6; flex-shrink: 0; box-shadow: var(--shadow-sm);">
+            <img id="editPlantPhotoPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;" alt="Vista prèvia foto">
+          </div>
+          <div style="flex: 1; min-width: 200px;">
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 6px;">Fotografia de la Planta:</label>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn-action" style="background: #256a38; color: white; padding: 6px 12px; font-size: 0.78rem;" onclick="document.getElementById('editPhotoCameraInput').click()">
+                <input type="file" id="editPhotoCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleEditPhotoFile(event)">
+                📸 Fer foto
+              </button>
+              <button type="button" class="btn-action" style="background: var(--bg-tertiary); color: var(--text-main); border: 1px solid var(--border-subtle); padding: 6px 12px; font-size: 0.78rem;" onclick="document.getElementById('editPhotoGalleryInput').click()">
+                <input type="file" id="editPhotoGalleryInput" accept="image/*" style="display:none;" onchange="handleEditPhotoFile(event)">
+                🖼️ Triar galeria
+              </button>
+            </div>
+            <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Pots canviar la foto capturant-ne una de nova o des de la galeria.</span>
+          </div>
+        </div>
+
+        <!-- DADES BÀSIQUES -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editPlantName">Nom Comú:</label>
+            <input type="text" id="editPlantName" class="form-control" required style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editPlantScientific">Nom Científic:</label>
+            <input type="text" id="editPlantScientific" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px; font-style: italic;">
+          </div>
+        </div>
+
+        <!-- ZONA I DIFICULTAT -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editPlantZone">Ubicació / Zona:</label>
+            <select id="editPlantZone" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+              <option value="interior">🏠 Interior</option>
+              <option value="exterior">☀️ Balcó / Exterior</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editPlantDifficulty">Dificultat:</label>
+            <select id="editPlantDifficulty" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+              <option value="molt_facil">🟢 Molt fàcil</option>
+              <option value="facil">🔵 Fàcil</option>
+              <option value="mitjana">🟡 Mitjana</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- REG -->
+        <div style="background: #f7faf8; padding: 12px; border-radius: 8px; border: 1px solid #d2e4d3; margin-bottom: 12px;">
+          <div style="font-size: 0.80rem; font-weight: 700; color: #1e582e; text-transform: uppercase; margin-bottom: 8px;">💧 Pauta de Reg</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="editPlantWaterSummer">Freqüència Estiu (dies):</label>
+              <input type="number" id="editPlantWaterSummer" min="1" max="90" required class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="editPlantWaterWinter">Freqüència Hivern (dies):</label>
+              <input type="number" id="editPlantWaterWinter" min="1" max="90" required class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editPlantWaterDetail">Consell / Detall de reg:</label>
+            <textarea id="editPlantWaterDetail" rows="2" class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.84rem; border: 1px solid var(--border-subtle); border-radius: 6px; resize: vertical;"></textarea>
+          </div>
+        </div>
+
+        <!-- ADOB -->
+        <div style="background: #f5f9fc; padding: 12px; border-radius: 8px; border: 1px solid #cde0ed; margin-bottom: 12px;">
+          <div style="font-size: 0.80rem; font-weight: 700; color: #0369a1; text-transform: uppercase; margin-bottom: 8px;">🧪 Pauta d'Abonament</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="editPlantFertType">Tipus d'Adob:</label>
+              <input type="text" id="editPlantFertType" class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="editPlantFertDays">Freqüència (dies):</label>
+              <input type="number" id="editPlantFertDays" min="1" max="180" class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="editPlantFertSeason">Temporada activa:</label>
+              <input type="text" id="editPlantFertSeason" class="form-control" placeholder="ex: Primavera i Estiu" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="editPlantFertNotes">Notes d'abonament:</label>
+              <input type="text" id="editPlantFertNotes" class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- LLUM I SUBSTRAT -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editPlantLight">☀️ Llum i Ubicació:</label>
+            <input type="text" id="editPlantLight" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editPlantSubstrate">🪴 Substrat Recomanat:</label>
+            <input type="text" id="editPlantSubstrate" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+          </div>
+        </div>
+
+        <!-- TOXICITAT I CONSELL -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editPlantToxic">🐾 Toxicitat Mascotes:</label>
+            <select id="editPlantToxic" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;" onchange="updateEditToxicityLabel(this.value)">
+              <option value="false">🟢 Segura per a mascotes</option>
+              <option value="true">🔴 Tòxica per a mascotes</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editPlantToxicityDetail">Detall Toxicitat:</label>
+            <input type="text" id="editPlantToxicityDetail" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label for="editPlantTip">💡 Consell Clau de Cultiu:</label>
+          <textarea id="editPlantTip" rows="2" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.84rem; border: 1px solid var(--border-subtle); border-radius: 6px; resize: vertical;"></textarea>
+        </div>
+
+        <!-- BOTONS ACCIÓ -->
+        <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+          <button type="button" class="btn-action" style="background: #e5e7eb; color: #374151;" onclick="closeModal('editPlantModal')">
+            Cancel·lar
+          </button>
+          <button type="submit" class="btn-action" style="background: #256a38; color: white; padding: 9px 20px; font-size: 0.90rem;">
+            💾 Desar Canvis
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -2911,10 +3069,148 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (modalHistBtn) {
       modalHistBtn.onclick = () => openHistoryModal(plant.id);
     }
+    const modalEditBtn = document.getElementById("modalEditPlantBtn");
+    if (modalEditBtn) {
+      modalEditBtn.onclick = () => openEditPlantModal(plant.id);
+    }
 
     updateModalTracker(plantId);
 
     document.getElementById("plantModal").classList.add("active");
+  }
+
+  // -------------------------------------------------------------
+  // EDICIÓ COMPLETA DE PLANTA (Dades + Substitució de Fotografia)
+  // -------------------------------------------------------------
+  let currentEditingPlantId = null;
+  let currentEditingPhotoBase64 = null;
+
+  function openEditPlantModal(plantId) {
+    const plant = plantsCatalog.find(p => p.id === plantId);
+    if (!plant) return;
+
+    currentEditingPlantId = plantId;
+    currentEditingPhotoBase64 = plant.photo;
+
+    document.getElementById("editPlantPhotoPreview").src = plant.photo;
+    document.getElementById("editPlantName").value = plant.name || "";
+    document.getElementById("editPlantScientific").value = plant.scientific || "";
+    document.getElementById("editPlantZone").value = plant.zone || "interior";
+    document.getElementById("editPlantDifficulty").value = plant.difficulty || "facil";
+    
+    document.getElementById("editPlantWaterSummer").value = plant.waterDaysSummer || 7;
+    document.getElementById("editPlantWaterWinter").value = plant.waterDaysWinter || 14;
+    document.getElementById("editPlantWaterDetail").value = plant.waterDetail || "";
+
+    document.getElementById("editPlantFertType").value = plant.fertilizerType || "";
+    document.getElementById("editPlantFertDays").value = plant.fertilizerDays || 20;
+    document.getElementById("editPlantFertSeason").value = plant.fertilizerSeason || "Primavera i Estiu";
+    document.getElementById("editPlantFertNotes").value = plant.fertilizerNotes || "";
+
+    document.getElementById("editPlantLight").value = plant.light || "";
+    document.getElementById("editPlantSubstrate").value = plant.substrate || "";
+    
+    document.getElementById("editPlantToxic").value = plant.toxic ? "true" : "false";
+    document.getElementById("editPlantToxicityDetail").value = plant.toxicityDetail || (plant.toxic ? "🔴 Tòxica per a mascotes." : "🟢 Segura per mascotes.");
+    document.getElementById("editPlantTip").value = plant.tip || "";
+
+    document.getElementById("editPlantModal").classList.add("active");
+  }
+
+  function updateEditToxicityLabel(val) {
+    const isToxic = (val === "true");
+    const detailInp = document.getElementById("editPlantToxicityDetail");
+    if (isToxic && (!detailInp.value || detailInp.value.includes("Segura"))) {
+      detailInp.value = "🔴 Tòxica en cas d'ingesta per mascotes.";
+    } else if (!isToxic && (!detailInp.value || detailInp.value.includes("Tòxica"))) {
+      detailInp.value = "🟢 Segura per mascotes.";
+    }
+  }
+
+  async function handleEditPhotoFile(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    try {
+      const base64 = await compressImageFile(file);
+      currentEditingPhotoBase64 = base64;
+      document.getElementById("editPlantPhotoPreview").src = base64;
+      showToast("Nova fotografia seleccionada!", "📸");
+    } catch (err) {
+      console.error("Error processant foto d'edició:", err);
+      alert("No s'ha pogut processar la fotografia. Torna-ho a provar.");
+    }
+  }
+
+  async function saveEditedPlant(event) {
+    if (event && event.preventDefault) event.preventDefault();
+    if (!currentEditingPlantId) return;
+
+    const plantIndex = plantsCatalog.findIndex(p => p.id === currentEditingPlantId);
+    if (plantIndex === -1) return;
+
+    const diffVal = document.getElementById("editPlantDifficulty").value;
+    const diffLabel = diffVal === 'molt_facil' ? 'Molt fàcil' : (diffVal === 'facil' ? 'Fàcil' : 'Mitjana');
+    const diffCls = diffVal === 'molt_facil' ? 'badge-diff-very-easy' : (diffVal === 'facil' ? 'badge-diff-easy' : 'badge-diff-medium');
+
+    const zoneVal = document.getElementById("editPlantZone").value;
+    const zoneLabel = (zoneVal === "exterior") ? "☀️ Balcó / Exterior" : "🏠 Interior";
+
+    const isToxic = (document.getElementById("editPlantToxic").value === "true");
+    const toxicDetail = document.getElementById("editPlantToxicityDetail").value.trim() || 
+                        (isToxic ? "🔴 Tòxica en cas d'ingesta per mascotes." : "🟢 Segura per mascotes.");
+
+    const waterSummer = parseInt(document.getElementById("editPlantWaterSummer").value) || 7;
+    const waterWinter = parseInt(document.getElementById("editPlantWaterWinter").value) || 14;
+    const fertDays = parseInt(document.getElementById("editPlantFertDays").value) || 20;
+
+    const updated = {
+      ...plantsCatalog[plantIndex],
+      name: document.getElementById("editPlantName").value.trim(),
+      scientific: document.getElementById("editPlantScientific").value.trim(),
+      photo: currentEditingPhotoBase64 || plantsCatalog[plantIndex].photo,
+      zone: zoneVal,
+      zoneLabel: zoneLabel,
+      difficulty: diffVal,
+      difficultyLabel: diffLabel,
+      difficultyClass: diffCls,
+      waterDaysSummer: waterSummer,
+      waterDaysWinter: waterWinter,
+      waterSummerText: "Cada " + waterSummer + " dies",
+      waterWinterText: "Cada " + waterWinter + " dies",
+      waterDetail: document.getElementById("editPlantWaterDetail").value.trim(),
+      fertilizerType: document.getElementById("editPlantFertType").value.trim(),
+      fertilizerDays: fertDays,
+      fertilizerFreq: "Cada " + fertDays + " dies",
+      fertilizerSeason: document.getElementById("editPlantFertSeason").value.trim() || "Primavera i Estiu",
+      fertilizerNotes: document.getElementById("editPlantFertNotes").value.trim(),
+      light: document.getElementById("editPlantLight").value.trim(),
+      substrate: document.getElementById("editPlantSubstrate").value.trim(),
+      toxic: isToxic,
+      toxicityDetail: toxicDetail,
+      tip: document.getElementById("editPlantTip").value.trim()
+    };
+
+    plantsCatalog[plantIndex] = updated;
+
+    // 1. Guardar a memòria i localStorage
+    saveLocalCatalog(plantsCatalog);
+
+    // 2. Tancar el modal d'edició
+    closeModal("editPlantModal");
+
+    // 3. Re-renderitzar la graella principal
+    renderPlants();
+
+    // 4. Actualitzar la fitxa de detall si està oberta
+    if (currentModalPlantId === currentEditingPlantId) {
+      openPlantModal(currentEditingPlantId);
+    }
+
+    showToast(`Planta "${updated.name}" actualitzada amb èxit!`, "✏️");
+
+    // 5. Sincronitzar amb el núvol (Supabase) en segon pla
+    await syncCatalogToCloud();
   }
 
   function openHistoryModal(plantId) {
@@ -2969,12 +3265,14 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
   function closeModal(modalId) {
     if (modalId === 'plantModal') currentModalPlantId = null;
+    if (modalId === 'editPlantModal') currentEditingPlantId = null;
     document.getElementById(modalId).classList.remove("active");
   }
 
   window.onclick = function(e) {
     if (e.target.classList.contains('modal-overlay')) {
       if (e.target.id === 'plantModal') currentModalPlantId = null;
+      if (e.target.id === 'editPlantModal') currentEditingPlantId = null;
       e.target.classList.remove('active');
     }
   };
@@ -2982,6 +3280,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       currentModalPlantId = null;
+      currentEditingPlantId = null;
       document.querySelectorAll(".modal-overlay").forEach(m => m.classList.remove("active"));
     }
   });
