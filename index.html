@@ -10,49 +10,62 @@
   <link rel="alternate icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
   <link rel="apple-touch-icon" href="favicon.svg">
   <meta name="theme-color" content="#256a38">
+
+  <!-- Fonts Botàniques Editorials: Fraunces (titulars botànics) + Plus Jakarta Sans (interfície neta i humana) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- Supabase JS Client via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
-      --bg-primary: #f4f7f3;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+      --bg-primary: #f6f8f5;
       --bg-surface: #ffffff;
       --bg-card: #ffffff;
-      --border-subtle: #e1e7de;
-      --border-strong: #c2d1bf;
-      --text-main: #182319;
-      --text-muted: #576858;
-      --accent: #256a38;
-      --accent-hover: #1c522b;
-      --accent-light: #eaf3ec;
+      --border-subtle: #e2e8df;
+      --border-strong: #c4d3c1;
+      --text-main: #19281c;
+      --text-muted: #536655;
+      --accent: #275d36;
+      --accent-hover: #1c4627;
+      --accent-light: #edf5ee;
 
-      /* Alertes d'estat de reg i adob */
-      --status-overdue-bg: #fee2e2;
-      --status-overdue-text: #991b1b;
-      --status-overdue-border: #f87171;
+      /* Estats botànics càlids i serens (sense alarmes vermelles punitives) */
+      --status-overdue-bg: #fdf3ed;
+      --status-overdue-text: #8c3b1a;
+      --status-overdue-border: #f0cfc0;
 
-      --status-due-soon-bg: #fef3c7;
-      --status-due-soon-text: #92400e;
-      --status-due-soon-border: #fcd34d;
+      --status-due-soon-bg: #faf5ea;
+      --status-due-soon-text: #7c5a14;
+      --status-due-soon-border: #ede1bd;
 
-      --status-ok-bg: #dcfce7;
-      --status-ok-text: #166534;
-      --status-ok-border: #86efac;
+      --status-ok-bg: #ecf6ee;
+      --status-ok-text: #1b542a;
+      --status-ok-border: #bfe5c6;
 
-      --status-none-bg: #f1f5f0;
-      --status-none-text: #647466;
-      --status-none-border: #d4ded3;
+      --status-none-bg: #f3f6f3;
+      --status-none-text: #536454;
+      --status-none-border: #d7ded7;
 
-      --status-winter-bg: #e0f2fe;
-      --status-winter-text: #075985;
-      --status-winter-border: #bae6fd;
+      --status-winter-bg: #edf5f9;
+      --status-winter-text: #1d536e;
+      --status-winter-border: #c8e0ee;
 
-      --shadow-sm: 0 2px 8px rgba(24, 35, 25, 0.05);
-      --shadow-md: 0 8px 24px rgba(24, 35, 25, 0.08);
-      --radius-sm: 8px;
-      --radius-md: 14px;
-      --radius-lg: 20px;
+      --shadow-sm: 0 2px 10px rgba(25, 40, 28, 0.04);
+      --shadow-md: 0 10px 28px rgba(25, 40, 28, 0.08);
+      --radius-sm: 9px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+    }
+
+    ::selection {
+      background: #c3e5c7;
+      color: #19281c;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -63,7 +76,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: var(--font-sans);
       background-color: var(--bg-primary);
       color: var(--text-main);
       line-height: 1.5;
@@ -71,11 +84,17 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Scrollbar Botànica */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: #c4d3c1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #a2b79e; }
+
     .container { max-width: 1320px; margin: 0 auto; width: 100%; }
 
     /* HEADER */
     header {
-      background: linear-gradient(135deg, #15341f 0%, #295736 100%);
+      background: linear-gradient(135deg, #13311c 0%, #255331 100%);
       color: white;
       padding: 32px 30px;
       border-radius: var(--radius-lg);
@@ -91,7 +110,7 @@
       right: 20px;
       bottom: -25px;
       font-size: 140px;
-      opacity: 0.12;
+      opacity: 0.10;
       pointer-events: none;
     }
 
@@ -106,15 +125,17 @@
     }
 
     h1 {
-      font-size: 2.1rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
       margin-bottom: 4px;
+      line-height: 1.2;
     }
 
     .header-subtitle {
-      font-size: 0.95rem;
-      color: #cfe2d3;
+      font-size: 0.96rem;
+      color: #d1e5d5;
       max-width: 680px;
     }
 
@@ -129,18 +150,19 @@
       color: white;
       border: 1px solid rgba(255, 255, 255, 0.35);
       backdrop-filter: blur(8px);
-      padding: 8px 13px;
+      padding: 8px 14px;
       border-radius: var(--radius-sm);
       font-size: 0.83rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       transition: all 0.2s ease;
+      font-family: inherit;
     }
 
-    .btn-header:hover { background: rgba(255, 255, 255, 0.3); }
+    .btn-header:hover { background: rgba(255, 255, 255, 0.28); }
 
     .btn-header.btn-add-plant {
       background: #22c55e;
@@ -148,7 +170,7 @@
       color: #0b2e13;
       font-weight: 700;
     }
-    .btn-header.btn-add-plant:hover { background: #16a34a; color: white; }
+    .btn-header.btn-add-plant:hover { background: #15803d; color: #ffffff; }
 
     .btn-header.supabase-connected {
       background: #059669;
@@ -164,19 +186,24 @@
 
     .stat-pill {
       background: rgba(255, 255, 255, 0.14);
-      padding: 6px 12px;
+      padding: 6px 13px;
       border-radius: 999px;
       font-size: 0.82rem;
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.22);
     }
 
     .stat-pill.alert {
-      background: rgba(239, 68, 68, 0.3);
-      border-color: rgba(239, 68, 68, 0.6);
-      font-weight: 700;
+      background: rgba(200, 122, 88, 0.32);
+      border-color: rgba(240, 185, 155, 0.65);
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .stat-pill-soon {
+      background: rgba(245, 158, 11, 0.22);
+      border-color: rgba(245, 158, 11, 0.45);
     }
 
     /* CONTROLS */
@@ -276,7 +303,7 @@
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.2s;
       position: relative;
     }
 
@@ -286,14 +313,16 @@
       border-color: var(--border-strong);
     }
 
+    /* Targeta en estat de revisió: to botànic càlid subtil, mai border-left gruixut */
     .plant-card.alert-water {
-      border-left: 5px solid var(--status-overdue-border);
+      border-color: var(--status-overdue-border);
+      background: linear-gradient(180deg, #fffcfb 0%, #ffffff 100%);
     }
 
     .card-image-wrap {
       position: relative;
       width: 100%;
-      height: 250px;
+      height: 230px;
       background: #e8eee6;
       overflow: hidden;
       cursor: pointer;
@@ -303,7 +332,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s ease;
+      transition: transform 0.35s ease;
     }
 
     .plant-card:hover .card-image-wrap img { transform: scale(1.03); }
@@ -322,90 +351,73 @@
     .badge {
       font-size: 0.72rem;
       font-weight: 600;
-      padding: 4px 8px;
+      padding: 4px 9px;
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
     }
 
-    .badge-safe { background: #e6f6eb; color: #16642e; border: 1px solid #c2e9c8; }
-    .badge-toxic { background: #fde8e8; color: #9f1c1c; border: 1px solid #f8b4b4; }
-    .badge-zone { background: rgba(255, 255, 255, 0.94); color: #273829; }
-    .badge-diff-very-easy { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-    .badge-diff-easy { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-    .badge-diff-medium { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+    .badge-safe { background: #eaf6ec; color: #155d28; border: 1px solid #c4ecc9; }
+    .badge-toxic { background: #fdf2ed; color: #8c3b1a; border: 1px solid #f0cfc0; }
+    .badge-zone { background: rgba(255, 255, 255, 0.95); color: #223524; border: 1px solid rgba(0,0,0,0.06); }
+    .badge-diff-very-easy { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .badge-diff-easy { background: #e0f2fe; color: #075985; border: 1px solid #bae6fd; }
+    .badge-diff-medium { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
 
     .card-body {
-      padding: 18px 20px 20px;
+      padding: 16px 18px 16px;
       display: flex;
       flex-direction: column;
       flex: 1;
+      gap: 12px;
     }
 
     .card-header {
-      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
     }
 
     .plant-name {
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-family: var(--font-display);
+      font-size: 1.30rem;
+      font-weight: 600;
       color: var(--text-main);
       margin-bottom: 2px;
-      line-height: 1.25;
+      line-height: 1.24;
+      letter-spacing: -0.01em;
     }
 
     .plant-scientific {
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-style: italic;
       color: var(--text-muted);
     }
 
-    .specs-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      background: var(--bg-primary);
-      border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      margin-bottom: 12px;
-    }
-
-    .spec-item { display: flex; flex-direction: column; }
-    .spec-label {
-      font-size: 0.70rem;
-      text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--text-muted);
-      margin-bottom: 2px;
-    }
-    .spec-val { font-size: 0.84rem; font-weight: 600; color: var(--text-main); }
-
-    /* TRACKER BOXES */
-    .tracker-section {
+    /* CAPSULA DE CURA DESTIL·LADA (0 Fatiga Visual) */
+    .care-capsule {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: auto;
-      padding-top: 12px;
-      border-top: 1px solid var(--border-subtle);
+      gap: 8px;
+      background: var(--bg-primary);
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
     }
 
     .tracker-card {
-      border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 8px 11px;
+      border: 1px solid var(--border-subtle);
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      background: #ffffff;
     }
 
     .tracker-card.status-overdue {
@@ -434,39 +446,84 @@
       color: var(--status-winter-text);
     }
 
-    .tracker-info { flex: 1; font-size: 0.82rem; line-height: 1.35; }
-    .tracker-title { font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 5px; }
-    .tracker-next-date { font-weight: 600; display: block; margin-top: 2px; }
-    .tracker-last-date { font-size: 0.76rem; opacity: 0.85; display: block; }
+    .tracker-info { flex: 1; font-size: 0.81rem; line-height: 1.32; }
+    .tracker-title { font-weight: 600; font-size: 0.83rem; display: flex; align-items: center; gap: 4px; }
+    .tracker-next-date { font-weight: 500; display: block; margin-top: 1px; color: var(--text-muted); font-size: 0.77rem; }
+    .tracker-last-date { font-size: 0.74rem; opacity: 0.82; display: block; }
+
+    .card-footer-links {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 4px;
+      font-size: 0.80rem;
+    }
+
+    .btn-detail-link {
+      background: transparent;
+      border: none;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.80rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 0;
+      transition: color 0.15s ease;
+      font-family: inherit;
+    }
+    .btn-detail-link:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    .btn-history-link {
+      background: transparent;
+      border: none;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.15s ease;
+      font-family: inherit;
+    }
+    .btn-history-link:hover {
+      background: var(--bg-primary);
+      color: var(--text-main);
+    }
 
     .tracker-btn-group { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
 
     .btn-action {
       border: none;
-      padding: 6px 11px;
-      border-radius: 6px;
+      padding: 6px 12px;
+      border-radius: 7px;
       font-size: 0.80rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      transition: transform 0.1s ease;
+      transition: transform 0.1s ease, background 0.15s ease;
       white-space: nowrap;
+      font-family: inherit;
     }
     .btn-action:active { transform: scale(0.96); }
-    .btn-water-action { background: #256a38; color: #ffffff; }
-    .btn-water-action:hover { background: #1c522b; }
-    .btn-fert-action { background: #0284c7; color: #ffffff; }
-    .btn-fert-action:hover { background: #0369a1; }
+    .btn-water-action { background: #245831; color: #ffffff; }
+    .btn-water-action:hover { background: #183e22; color: #ffffff; }
+    .btn-fert-action { background: #0369a1; color: #ffffff; }
+    .btn-fert-action:hover { background: #075985; color: #ffffff; }
     .btn-done-today {
-      background: #15803d !important;
+      background: #1e592f !important;
       color: #ffffff !important;
-      border: 1px solid #166534 !important;
-      box-shadow: 0 1px 3px rgba(22, 101, 52, 0.25);
+      border: 1px solid #164624 !important;
+      box-shadow: 0 1px 3px rgba(22, 70, 36, 0.2);
     }
     .btn-done-today:hover {
-      background: #166534 !important;
+      background: #164624 !important;
+      color: #ffffff !important;
     }
     @keyframes successPulse {
       0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45); }
@@ -475,15 +532,6 @@
     }
     .action-success-pulse {
       animation: successPulse 0.55s ease;
-    }
-    .btn-history-link {
-      background: transparent;
-      border: none;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      cursor: pointer;
-      text-decoration: underline;
-      padding: 0;
     }
 
     /* TABLE */
@@ -494,6 +542,7 @@
       overflow-x: auto;
       box-shadow: var(--shadow-sm);
       display: none;
+      padding: 2px;
     }
 
     table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
@@ -795,7 +844,7 @@
     <div class="filters-row">
       <select id="statusFilter">
         <option value="all">Tots els estats</option>
-        <option value="overdue">🔴 ALERTA: Toca regar avui / vençut</option>
+        <option value="overdue">🏺 Toca revisar reg (avui / pendent)</option>
         <option value="due_soon">🟡 Avis: Toca aviat (1-2 dies)</option>
         <option value="ok">🟢 Al dia</option>
         <option value="none">⚪ Sense registre inicial</option>
@@ -851,7 +900,7 @@
   </div>
 
   <div class="empty-state" id="emptyState">
-    <h3>No s'ha trobat cap planta</h3>
+    <h2 style="font-size: 1.25rem; font-family: var(--font-display); font-weight: 600; color: var(--text-main); margin-bottom: 4px;">No s'ha trobat cap planta</h2>
     <p>Prova de canviar els filtres de cerca.</p>
   </div>
 
@@ -905,7 +954,7 @@
       <!-- SECCIÓ DE TRIA RÀPIDA / RESILIENT SI LA IA NECESSITA CONFIRMACIÓ -->
       <div id="aiFallbackPickerSection" style="display: none;">
         <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 14px; background: #f8faf8; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px;">
-          <img id="aiFallbackPreviewImg" src="" style="width: 64px; height: 64px; border-radius: 8px; object-fit: cover;" alt="Foto capturada">
+          <img id="aiFallbackPreviewImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 64px; height: 64px; border-radius: 8px; object-fit: cover;" alt="Foto capturada">
           <div>
             <div style="font-size: 0.76rem; font-weight: 700; color: #256a38; text-transform: uppercase;">📸 Foto capturada amb èxit</div>
             <p style="font-size: 0.84rem; color: var(--text-main); margin: 2px 0; font-weight: 600;">Quina planta és?</p>
@@ -931,7 +980,7 @@
       <!-- ESTAT DE CÀRREGA / ESCANEIG IA -->
       <div id="aiScanningSection" style="display: none; text-align: center; padding: 24px 10px;">
         <div style="width: 140px; height: 140px; margin: 0 auto 16px; position: relative; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-md);">
-          <img id="aiScanningPreviewImg" src="" style="width: 100%; height: 100%; object-fit: cover;" alt="Planta">
+          <img id="aiScanningPreviewImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;" alt="Planta">
           <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(34,197,94,0) 0%, rgba(34,197,94,0.4) 50%, rgba(34,197,94,0) 100%); animation: scanAnim 1.8s infinite ease-in-out;"></div>
         </div>
         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 6px;">🔍 Identificant la planta amb IA...</h3>
@@ -943,7 +992,7 @@
       <!-- RESULTAT DE LA IDENTIFICACIÓ -->
       <div id="aiResultSection" style="display: none;">
         <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 16px; background: #f8faf8; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 12px;">
-          <img id="aiResultImg" src="" style="width: 74px; height: 74px; border-radius: 8px; object-fit: cover;" alt="Foto">
+          <img id="aiResultImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 74px; height: 74px; border-radius: 8px; object-fit: cover;" alt="Foto">
           <div>
             <div style="font-size: 0.76rem; font-weight: 700; color: #16a34a; text-transform: uppercase; letter-spacing: 0.04em;">✨ Planta Identificada</div>
             <h3 id="aiResultCommonName" style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 2px 0;"></h3>
@@ -995,18 +1044,23 @@
   <div class="modal-card">
     <button class="modal-close" onclick="closeModal('plantModal')">&times;</button>
     <div class="modal-image-wrap">
-      <img id="modalImg" src="" alt="">
+      <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta">
     </div>
     <div class="modal-content">
       <div class="modal-header">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap: 12px; flex-wrap: wrap;">
           <div>
-            <h2 id="modalTitle" style="font-size: 1.55rem; color: var(--text-main); margin-bottom: 2px;"></h2>
+            <h2 id="modalTitle" style="font-size: 1.6rem; color: var(--text-main); margin-bottom: 2px;"></h2>
             <p id="modalScientific" style="font-style: italic; color: var(--text-muted);"></p>
           </div>
-          <button id="modalDeletePlantBtn" style="background:#fee2e2; color:#991b1b; border:none; padding:6px 10px; border-radius:6px; font-size:0.78rem; cursor:pointer; font-weight:600;">
-            🗑️ Eliminar Planta
-          </button>
+          <div style="display:flex; gap:8px;">
+            <button id="modalHistoryBtn" style="background:var(--bg-tertiary); color:var(--text-main); border:1px solid var(--border-subtle); padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:4px;">
+              📜 Històric
+            </button>
+            <button id="modalDeletePlantBtn" style="background:rgba(180, 83, 9, 0.08); color:var(--status-overdue-text); border:1px solid rgba(180, 83, 9, 0.2); padding:6px 10px; border-radius:6px; font-size:0.78rem; cursor:pointer; font-weight:600;">
+              🗑️ Eliminar
+            </button>
+          </div>
         </div>
         <div id="modalBadges" style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;"></div>
         
@@ -2405,13 +2459,13 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (daysLeft < 0) {
       status = "overdue"; statusClass = "status-overdue";
       const absDays = Math.abs(daysLeft);
-      badgeText = `🔴 TOCA REGAR! (${absDays} ${absDays === 1 ? 'dia de retard' : 'dies de retard'})`;
+      badgeText = `🏺 Comprovar terra (${absDays} ${absDays === 1 ? 'dia' : 'dies'})`;
     } else if (daysLeft === 0) {
       status = "overdue"; statusClass = "status-overdue";
-      badgeText = "🔴 TOCA REGAR AVUI!";
+      badgeText = "💧 Toca regar avui";
     } else if (daysLeft <= 2) {
       status = "due_soon"; statusClass = "status-due-soon";
-      badgeText = `🟡 Toca aviat (d'aquí a ${daysLeft} ${daysLeft === 1 ? 'dia' : 'dies'})`;
+      badgeText = `🟡 Aviat (${daysLeft} ${daysLeft === 1 ? 'dia' : 'dies'})`;
     } else {
       status = "ok"; statusClass = "status-ok";
       badgeText = isToday ? `🟢 Regat avui (${daysLeft} dies)` : `🟢 Al dia (${daysLeft} dies)`;
@@ -2469,13 +2523,13 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     if (daysLeft < 0) {
       status = "overdue"; statusClass = "status-overdue";
-      badgeText = `🔴 TOCA ADOBAR! (${Math.abs(daysLeft)} dies vençut)`;
+      badgeText = `🧪 Toca adobar (${Math.abs(daysLeft)} dies)`;
     } else if (daysLeft === 0) {
       status = "overdue"; statusClass = "status-overdue";
-      badgeText = "🔴 TOCA ADOBAR AVUI!";
+      badgeText = "🧪 Toca adobar avui";
     } else if (daysLeft <= 4) {
       status = "due_soon"; statusClass = "status-due-soon";
-      badgeText = `🟡 Adobar aviat (d'aquí a ${daysLeft} dies)`;
+      badgeText = `🟡 Adobar aviat (${daysLeft} dies)`;
     } else {
       status = "ok"; statusClass = "status-ok";
       badgeText = isToday ? `🟢 Abonat avui (${daysLeft} dies)` : `🟢 Adob al dia (${daysLeft} dies)`;
@@ -2512,9 +2566,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     document.getElementById("statsBar").innerHTML = `
       <div class="stat-pill">🌿 <strong>${plantsCatalog.length}</strong> Plantes registrades</div>
       <div class="stat-pill ${overdueCount > 0 ? 'alert' : ''}">
-        ${overdueCount > 0 ? `🚨 <strong>${overdueCount}</strong> per regar!` : `✅ Totes al dia`}
+        ${overdueCount > 0 ? `🪴 <strong>${overdueCount}</strong> per revisar reg` : `✅ Totes al dia`}
       </div>
-      ${dueSoonCount > 0 ? `<div class="stat-pill" style="background:rgba(245, 158, 11, 0.25); border-color:rgba(245, 158, 11, 0.5);">🟡 <strong>${dueSoonCount}</strong> tocaran aviat</div>` : ''}
+      ${dueSoonCount > 0 ? `<div class="stat-pill" style="background:rgba(217, 119, 6, 0.12); border-color:rgba(217, 119, 6, 0.35); color:#78350f;">🟡 <strong>${dueSoonCount}</strong> tocaran aviat</div>` : ''}
       <div class="stat-pill">${seasonText}</div>
     `;
   }
@@ -2608,7 +2662,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           </div>
 
           <div class="card-body">
-            <div class="card-header">
+            <div class="card-header" onclick="openPlantModal('${plant.id}')" style="cursor:pointer;">
               <div>
                 <h2 class="plant-name">${plant.name}</h2>
                 <p class="plant-scientific">${plant.scientific}</p>
@@ -2616,17 +2670,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
               <span class="badge ${plant.difficultyClass}">
                 ${plant.difficultyLabel}
               </span>
-            </div>
-
-            <div class="specs-grid">
-              <div class="spec-item">
-                <span class="spec-label">☀️ Llum</span>
-                <span class="spec-val">${plant.light.split('(')[0].trim()}</span>
-              </div>
-              <div class="spec-item">
-                <span class="spec-label">💧 Freq. Actual</span>
-                <span class="spec-val">${isSummerSeason() ? plant.waterSummerText : plant.waterWinterText}</span>
-              </div>
             </div>
 
             <div class="tracker-section">
@@ -2639,9 +2682,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                 <div class="tracker-btn-group">
                   <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
                     ${ws.isToday ? '✅ Regat avui' : '💧 Regar avui'}
-                  </button>
-                  <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')">
-                    📜 Històric
                   </button>
                 </div>
               </div>
@@ -2658,6 +2698,15 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                   </button>
                 </div>
               </div>
+            </div>
+
+            <div class="card-footer-links">
+              <button class="btn-detail-link" onclick="openPlantModal('${plant.id}')">
+                Veure cures completes →
+              </button>
+              <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')">
+                📜 Històric
+              </button>
             </div>
           </div>
         </div>
@@ -2744,6 +2793,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     `;
 
     document.getElementById("modalDeletePlantBtn").onclick = () => deletePlant(plant.id);
+    const modalHistBtn = document.getElementById("modalHistoryBtn");
+    if (modalHistBtn) {
+      modalHistBtn.onclick = () => openHistoryModal(plant.id);
+    }
 
     updateModalTracker(plantId);
 
