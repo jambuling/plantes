@@ -513,6 +513,31 @@
 
     .tracker-btn-group { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
 
+    /* Tracker a la fitxa detallada modal: botons per sota del text, alineats a la dreta */
+    #modalTrackerSection .tracker-card {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    #modalTrackerSection .tracker-info {
+      width: 100%;
+    }
+
+    #modalTrackerSection .tracker-btn-group {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    #modalTrackerSection .tracker-btn-group .btn-action {
+      width: auto !important;
+      padding: 6px 14px;
+    }
+
     .btn-action {
       border: none;
       padding: 6px 12px;
@@ -1090,8 +1115,8 @@
               <span class="tracker-next-date" id="modalWaterNext">📅 Proper:</span>
               <span class="tracker-last-date" id="modalWaterLast"></span>
             </div>
-            <div class="tracker-btn-group" style="margin-top: 8px;">
-              <button class="btn-action btn-water-action" id="modalWaterBtn" style="width:100%; justify-content:center; padding: 7px 10px;">
+            <div class="tracker-btn-group">
+              <button class="btn-action btn-water-action" id="modalWaterBtn">
                 💧 Regar avui
               </button>
             </div>
@@ -1103,8 +1128,8 @@
               <span class="tracker-next-date" id="modalFertNext">📅 Proper:</span>
               <span class="tracker-last-date" id="modalFertLast"></span>
             </div>
-            <div class="tracker-btn-group" style="margin-top: 8px;">
-              <button class="btn-action btn-fert-action" id="modalFertBtn" style="width:100%; justify-content:center; padding: 7px 10px;">
+            <div class="tracker-btn-group">
+              <button class="btn-action btn-fert-action" id="modalFertBtn">
                 🧪 Abonar avui
               </button>
             </div>
