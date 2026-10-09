@@ -604,9 +604,10 @@
     }
     .modal-box-highlight p { margin-bottom: 4px; }
     .tip-box {
-      background: #fdf6e7; border-left: 4px solid #d49c24;
-      padding: 10px 14px; border-radius: 0 8px 8px 0;
+      background: #fdfaf3; border: 1px solid #ebdcb5;
+      padding: 12px 14px; border-radius: var(--radius-sm);
       font-size: 0.85rem; color: #634304; margin-top: 14px;
+      line-height: 1.45;
     }
 
     /* FORMULARI NOVA PLANTA */
@@ -909,7 +910,7 @@
 <!-- MODAL AFEGIR NOVA PLANTA AMB IA -->
 <div class="modal-overlay" id="addPlantModal">
   <div class="modal-card" style="max-width: 540px;">
-    <button class="modal-close" onclick="closeModal('addPlantModal')">&times;</button>
+    <button class="modal-close" onclick="closeModal('addPlantModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 24px;">
       <h2 style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px;">📸 Afegir Planta amb IA</h2>
       <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px;">
@@ -1042,7 +1043,7 @@
 <!-- MODAL DETALL PLANTA -->
 <div class="modal-overlay" id="plantModal">
   <div class="modal-card">
-    <button class="modal-close" onclick="closeModal('plantModal')">&times;</button>
+    <button class="modal-close" onclick="closeModal('plantModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-image-wrap">
       <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta">
     </div>
@@ -1127,7 +1128,7 @@
 <!-- MODAL HISTÒRIC -->
 <div class="modal-overlay" id="historyModal">
   <div class="modal-card" style="max-width: 520px;">
-    <button class="modal-close" onclick="closeModal('historyModal')">&times;</button>
+    <button class="modal-close" onclick="closeModal('historyModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 24px;">
       <h2 id="historyPlantTitle" style="font-size: 1.35rem; color: var(--text-main); margin-bottom: 4px;"></h2>
       <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px;">Registre complet de regs i adobs.</p>
@@ -1945,6 +1946,29 @@
       event.stopPropagation();
     }
     const pHist = getPlantHistory(plantId);
+    const key = (actionType === 'water') ? 'waters' : 'ferts';
+    const lastIso = pHist[key] && pHist[key][0];
+
+    // Comprovació si ja s'ha registrat avui per evitar duplicats accidentals
+    if (lastIso) {
+      const lastDate = new Date(lastIso);
+      const now = new Date();
+      const isAlreadyToday = (lastDate.getFullYear() === now.getFullYear() &&
+                              lastDate.getMonth() === now.getMonth() &&
+                              lastDate.getDate() === now.getDate());
+
+      if (isAlreadyToday) {
+        const plant = plantsCatalog.find(p => p.id === plantId);
+        const plantName = plant ? plant.name : "aquesta planta";
+        const actionLabel = (actionType === 'water') ? "el reg" : "l'abonament";
+        if (confirm(`Ja has anotat ${actionLabel} de "${plantName}" avui.\nVols DESFER aquest registre?`)) {
+          await deleteHistoryEntry(plantId, actionType, lastIso, 0, event);
+          showToast(`Registre de ${actionLabel} desfet`, "↩️");
+        }
+        return;
+      }
+    }
+
     const nowIso = new Date().toISOString();
 
     if (actionType === 'water') {
@@ -2744,7 +2768,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
               <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-row-water-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'water', event)">${ws.isToday ? '✅ Regat' : '💧 Regat'}</button>
               <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-row-fert-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'fert', event)">${fs.isToday ? '✅ Abonat' : '🧪 Abonat'}</button>
-              <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')">📜</button>
+              <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')" aria-label="Veure històric de ${plant.name}" title="Històric de cures">📜</button>
             </div>
           </td>
         </tr>
