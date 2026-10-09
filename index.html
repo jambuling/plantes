@@ -463,10 +463,36 @@
       color: var(--status-winter-text);
     }
 
-    .tracker-info { flex: 1; font-size: 0.81rem; line-height: 1.32; }
-    .tracker-title { font-weight: 600; font-size: 0.83rem; display: flex; align-items: center; gap: 4px; }
-    .tracker-next-date { font-weight: 500; display: block; margin-top: 1px; color: var(--text-muted); font-size: 0.77rem; }
-    .tracker-last-date { font-size: 0.74rem; opacity: 0.82; display: block; }
+    .tracker-info {
+      flex: 1;
+      font-size: 0.81rem;
+      line-height: 1.55;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .tracker-title {
+      font-weight: 600;
+      font-size: 0.84rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      line-height: 1.45;
+    }
+    .tracker-next-date {
+      font-weight: 500;
+      display: block;
+      margin-top: 0;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+    .tracker-last-date {
+      font-size: 0.74rem;
+      opacity: 0.85;
+      display: block;
+      line-height: 1.4;
+    }
 
     .card-footer-links {
       display: flex;
@@ -523,6 +549,26 @@
 
     #modalTrackerSection .tracker-info {
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      line-height: 1.6;
+    }
+
+    #modalTrackerSection .tracker-title {
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    #modalTrackerSection .tracker-next-date {
+      font-size: 0.82rem;
+      line-height: 1.45;
+      margin-top: 0;
+    }
+
+    #modalTrackerSection .tracker-last-date {
+      font-size: 0.77rem;
+      line-height: 1.4;
     }
 
     #modalTrackerSection .tracker-btn-group {
