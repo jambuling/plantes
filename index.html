@@ -1278,7 +1278,11 @@
 
       <div class="modal-section">
         <div class="modal-section-title">💧 Pauta de Reg</div>
-        <p id="modalWaterDetail"></p>
+        <div class="modal-box-highlight">
+          <p><strong>☀️ Estiu:</strong> <span id="modalWaterSummer"></span></p>
+          <p><strong>❄️ Hivern:</strong> <span id="modalWaterWinter"></span></p>
+          <p style="font-size: 0.84rem; color: var(--text-muted); margin-top: 4px;" id="modalWaterDetail"></p>
+        </div>
       </div>
 
       <div class="modal-section">
@@ -3134,7 +3138,37 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     document.getElementById("modalFertSeason").innerText = plant.fertilizerSeason;
     document.getElementById("modalFertNotes").innerText = plant.fertilizerNotes || "";
     document.getElementById("modalLight").innerText = plant.light;
-    document.getElementById("modalWaterDetail").innerText = plant.waterDetail;
+
+    const summerDays = plant.waterDaysSummer;
+    const summerText = plant.waterSummerText;
+    let summerDisplay = "-";
+    if (summerDays) {
+      summerDisplay = `Cada ${summerDays} dies`;
+      if (summerText && !summerText.toLowerCase().includes(`${summerDays} dies`)) {
+        summerDisplay += ` (${summerText})`;
+      }
+    } else if (summerText) {
+      summerDisplay = summerText;
+    }
+
+    const winterDays = plant.waterDaysWinter;
+    const winterText = plant.waterWinterText;
+    let winterDisplay = "-";
+    if (winterDays) {
+      winterDisplay = `Cada ${winterDays} dies`;
+      if (winterText && !winterText.toLowerCase().includes(`${winterDays} dies`)) {
+        winterDisplay += ` (${winterText})`;
+      }
+    } else if (winterText) {
+      winterDisplay = winterText;
+    }
+
+    const elWaterSummer = document.getElementById("modalWaterSummer");
+    if (elWaterSummer) elWaterSummer.innerText = summerDisplay;
+    const elWaterWinter = document.getElementById("modalWaterWinter");
+    if (elWaterWinter) elWaterWinter.innerText = winterDisplay;
+
+    document.getElementById("modalWaterDetail").innerText = plant.waterDetail || "";
     document.getElementById("modalSubstrate").innerText = plant.substrate;
     document.getElementById("modalTip").innerHTML = `💡 <strong>Consell clau:</strong> ${plant.tip}`;
 
