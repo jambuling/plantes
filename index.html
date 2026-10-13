@@ -1016,7 +1016,7 @@
         <option value="overdue">🏺 Toca revisar reg (avui / pendent)</option>
         <option value="due_soon">🟡 Avis: Toca aviat (1-2 dies)</option>
         <option value="ok">🟢 Al dia</option>
-        <option value="none">⚪ Sense registre inicial</option>
+        <option value="none">⚪ Sense registre de reg</option>
       </select>
 
       <select id="zoneFilter">
@@ -2946,7 +2946,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       
       let matchStatus = true;
       if (statusVal !== "all") {
-        matchStatus = (ws.status === statusVal) || (fs.status === statusVal);
+        matchStatus = (ws.status === statusVal);
       }
 
       return matchSearch && matchZone && matchDiff && matchStatus;
