@@ -2521,15 +2521,15 @@
     <button class="modal-close" onclick="closeModal('historyModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 24px;">
       <h2 id="historyPlantTitle" style="font-size: 1.35rem; color: var(--text-main); margin-bottom: 4px;"></h2>
-      <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px;">Registre complet de regs, adobs, trasplantaments i podes. Tria la data per anotar accions d'avui o de dies passats:</p>
+      <p id="historyModalSubtitle" style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px;">Registre complet de regs, adobs, trasplantaments i podes. Tria la data per anotar accions d'avui o de dies passats:</p>
 
       <div style="background: #f6f9f6; border: 1px solid var(--border-subtle); border-radius: 9px; padding: 10px 12px; margin-bottom: 12px;">
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
-          <label for="historyDateInput" style="font-size: 0.80rem; font-weight: 700; color: var(--text-main);">📅 Data del registre:</label>
+          <label for="historyDateInput" id="historyDateInputLabel" style="font-size: 0.80rem; font-weight: 700; color: var(--text-main);">📅 Data del registre:</label>
           <input type="date" id="historyDateInput" style="padding: 5px 8px; border: 1px solid var(--border-strong); border-radius: 6px; font-size: 0.82rem; font-family: inherit;">
-          <button type="button" class="preset-chip-btn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(0)">Avui</button>
-          <button type="button" class="preset-chip-btn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(-1)">Ahir</button>
-          <button type="button" class="preset-chip-btn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(-2)">Fa 2 dies</button>
+          <button type="button" class="preset-chip-btn" id="histPresetTodayBtn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(0)">Avui</button>
+          <button type="button" class="preset-chip-btn" id="histPresetYesterdayBtn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(-1)">Ahir</button>
+          <button type="button" class="preset-chip-btn" id="histPreset2DaysBtn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(-2)">Fa 2 dies</button>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
           <button class="btn-action btn-water-action" id="btnHistoryAddWater" style="justify-content:center;">
@@ -2550,7 +2550,7 @@
       <ul class="history-list" id="historyListContainer"></ul>
 
       <div style="margin-top:14px; text-align:right;">
-        <button class="btn-action" style="background:#e5e7eb; color:#374151;" onclick="closeModal('historyModal')">
+        <button class="btn-action" id="historyModalCloseBtn" style="background:#e5e7eb; color:#374151;" onclick="closeModal('historyModal')">
           Tancar
         </button>
       </div>
@@ -2567,30 +2567,30 @@
       <p id="quickDateModalSubtitle" style="font-size: 0.83rem; color: var(--text-muted); margin-bottom: 14px;"></p>
 
       <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
-        <button type="button" class="preset-chip-btn" onclick="setQuickModalDateOffset(0)">Avui</button>
-        <button type="button" class="preset-chip-btn" onclick="setQuickModalDateOffset(-1)">Ahir</button>
-        <button type="button" class="preset-chip-btn" onclick="setQuickModalDateOffset(-2)">Fa 2 dies</button>
-        <button type="button" class="preset-chip-btn" onclick="setQuickModalDateOffset(-3)">Fa 3 dies</button>
-        <button type="button" class="preset-chip-btn" onclick="setQuickModalDateOffset(-7)">Fa 1 setmana</button>
+        <button type="button" class="preset-chip-btn" id="quickDatePresetToday" onclick="setQuickModalDateOffset(0)">Avui</button>
+        <button type="button" class="preset-chip-btn" id="quickDatePresetYesterday" onclick="setQuickModalDateOffset(-1)">Ahir</button>
+        <button type="button" class="preset-chip-btn" id="quickDatePreset2Days" onclick="setQuickModalDateOffset(-2)">Fa 2 dies</button>
+        <button type="button" class="preset-chip-btn" id="quickDatePreset3Days" onclick="setQuickModalDateOffset(-3)">Fa 3 dies</button>
+        <button type="button" class="preset-chip-btn" id="quickDatePreset1Week" onclick="setQuickModalDateOffset(-7)">Fa 1 setmana</button>
       </div>
 
       <div class="form-group">
-        <label for="quickActionDatePicker">Data exacta:</label>
+        <label for="quickActionDatePicker" id="quickActionDateLabel">Data exacta:</label>
         <input type="date" id="quickActionDatePicker" class="form-control">
       </div>
 
       <div class="form-group" id="quickActionPotGroup" style="display:none;">
-        <label for="quickActionPotInput">🏺 Nova mida o tipus de test (opcional):</label>
+        <label for="quickActionPotInput" id="quickActionPotLabel">🏺 Nova mida o tipus de test (opcional):</label>
         <input type="text" id="quickActionPotInput" class="form-control" placeholder="ex: Test terracota 18 cm">
       </div>
 
       <div class="form-group" id="quickActionNoteGroup" style="display:none;">
-        <label for="quickActionNoteInput">📝 Nota o detall (opcional):</label>
+        <label for="quickActionNoteInput" id="quickActionNoteLabel">📝 Nota o detall (opcional):</label>
         <input type="text" id="quickActionNoteInput" class="form-control" placeholder="ex: Substrat universal + perlita / Poda de fulles seques">
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top: 16px;">
-        <button type="button" class="btn-action" style="background:#e5e7eb; color:#374151;" onclick="closeModal('quickActionDateModal')">Cancel·lar</button>
+        <button type="button" class="btn-action" id="quickActionCancelBtn" style="background:#e5e7eb; color:#374151;" onclick="closeModal('quickActionDateModal')">Cancel·lar</button>
         <button type="button" class="btn-action btn-water-action" id="quickActionConfirmBtn" onclick="confirmQuickActionDate()">💾 Guardar registre</button>
       </div>
     </div>
@@ -2627,9 +2627,9 @@
       <div class="pref-section">
         <span class="pref-section-label" id="prefLangSectionLabel">🌐 Idioma / Language</span>
         <select class="pref-select" id="prefLangSelect" onchange="setLanguagePreference(this.value)">
-          <option value="ca">🌿 Català</option>
-          <option value="es">🌱 Español</option>
-          <option value="en">🍃 English</option>
+          <option value="ca">🏴󠁥󠁳󠁣󠁴󠁿 Català</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="en">🇬🇧 English</option>
         </select>
       </div>
 
@@ -3557,10 +3557,10 @@
       if (waterBox) waterBox.className = `tracker-card ${ws.statusClass}`;
 
       const waterTitle = document.getElementById(`plant-water-title-${plantId}`);
-      if (waterTitle) waterTitle.innerText = `💧 ${t('Reg', 'Riego')}: ${ws.badgeText}`;
+      if (waterTitle) waterTitle.innerText = `💧 ${t('Reg', 'Riego', 'Water')}: ${ws.badgeText}`;
 
       const waterNext = document.getElementById(`plant-water-next-${plantId}`);
-      if (waterNext) waterNext.innerHTML = `📅 ${t('Proper', 'Próximo')}: <strong>${ws.nextText}</strong>`;
+      if (waterNext) waterNext.innerHTML = `📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${ws.nextText}</strong>`;
 
       const waterLast = document.getElementById(`plant-water-last-${plantId}`);
       if (waterLast) waterLast.innerText = ws.lastText;
@@ -3568,7 +3568,7 @@
       const waterBtn = document.getElementById(`plant-water-btn-${plantId}`);
       if (waterBtn) {
         waterBtn.className = `btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}`;
-        waterBtn.innerText = ws.isToday ? t('✅ Regat avui', '✅ Regado hoy') : t('💧 Regar avui', '💧 Regar hoy');
+        waterBtn.innerText = ws.isToday ? t('✅ Regat avui', '✅ Regado hoy', '✅ Watered today') : t('💧 Regar avui', '💧 Regar hoy', '💧 Water today');
       }
 
       // Caixa d'Adob
@@ -3576,10 +3576,10 @@
       if (fertBox) fertBox.className = `tracker-card ${fs.statusClass}`;
 
       const fertTitle = document.getElementById(`plant-fert-title-${plantId}`);
-      if (fertTitle) fertTitle.innerText = `🧪 ${t('Adob', 'Abono')}: ${fs.badgeText}`;
+      if (fertTitle) fertTitle.innerText = `🧪 ${t('Adob', 'Abono', 'Fertilizer')}: ${fs.badgeText}`;
 
       const fertNext = document.getElementById(`plant-fert-next-${plantId}`);
-      if (fertNext) fertNext.innerHTML = `📅 ${t('Proper', 'Próximo')}: <strong>${fs.nextText}</strong>`;
+      if (fertNext) fertNext.innerHTML = `📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${fs.nextText}</strong>`;
 
       const fertLast = document.getElementById(`plant-fert-last-${plantId}`);
       if (fertLast) fertLast.innerText = fs.lastText;
@@ -3587,7 +3587,7 @@
       const fertBtn = document.getElementById(`plant-fert-btn-${plantId}`);
       if (fertBtn) {
         fertBtn.className = `btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}`;
-        fertBtn.innerText = fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy') : t('🧪 Abonar avui', '🧪 Abonar hoy');
+        fertBtn.innerText = ws.isToday ? t('✅ Abonat avui', '✅ Abonado hoy', '✅ Fertilized today') : t('🧪 Abonar avui', '🧪 Abonar hoy', '🧪 Fertilize today');
       }
 
       // Micro-animació de confirmació visual immediata
@@ -3608,7 +3608,7 @@
     const rowWaterBtn = document.getElementById(`plant-row-water-btn-${plantId}`);
     if (rowWaterBtn) {
       rowWaterBtn.className = `btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}`;
-      rowWaterBtn.innerText = ws.isToday ? t('✅ Regat', '✅ Regado') : t('💧 Regat', '💧 Regado');
+      rowWaterBtn.innerText = ws.isToday ? t('✅ Regat', '✅ Regado', '✅ Watered') : t('💧 Regat', '💧 Regado', '💧 Water');
     }
 
     const rowFertBadge = document.getElementById(`plant-row-fert-badge-${plantId}`);
@@ -3622,7 +3622,7 @@
     const rowFertBtn = document.getElementById(`plant-row-fert-btn-${plantId}`);
     if (rowFertBtn) {
       rowFertBtn.className = `btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}`;
-      rowFertBtn.innerText = fs.isToday ? t('✅ Abonat', '✅ Abonado') : t('🧪 Abonat', '🧪 Abonado');
+      rowFertBtn.innerText = fs.isToday ? t('✅ Abonat', '✅ Abonado', '✅ Fertilized') : t('🧪 Abonat', '🧪 Abonado', '🧪 Fertilize');
     }
 
     renderCalendar();
@@ -3637,13 +3637,13 @@
     const transplantInfoEl = document.getElementById("modalTransplantInfo");
     if (transplantInfoEl) {
       const lastT = pHist.transplants && pHist.transplants[0];
-      const potText = plant.potSize ? `<br>🏺 ${t('Test actual', 'Maceta actual')}: <strong>${plant.potSize}</strong>` : "";
+      const potText = plant.potSize ? `<br>🏺 ${t('Test actual', 'Maceta actual', 'Current pot')}: <strong>${plant.potSize}</strong>` : "";
       if (lastT) {
         const dStr = formatGalleryDateShort(typeof lastT === 'string' ? lastT : lastT.date);
         const noteStr = (typeof lastT === 'object' && lastT.note) ? `<br>📝 <em>${lastT.note}</em>` : "";
-        transplantInfoEl.innerHTML = `${t('Últim', 'Último')}: <strong>${dStr}</strong>${potText}${noteStr}`;
+        transplantInfoEl.innerHTML = `${t('Últim', 'Último', 'Last')}: <strong>${dStr}</strong>${potText}${noteStr}`;
       } else {
-        transplantInfoEl.innerHTML = `${t('Últim', 'Último')}: <strong>${t('Cap registrat', 'Ninguno registrado')}</strong>${potText}`;
+        transplantInfoEl.innerHTML = `${t('Últim', 'Último', 'Last')}: <strong>${t('Cap registrat', 'Ninguno registrado', 'None recorded')}</strong>${potText}`;
       }
     }
 
@@ -3653,21 +3653,21 @@
       if (lastP) {
         const dStr = formatGalleryDateShort(typeof lastP === 'string' ? lastP : lastP.date);
         const noteStr = (typeof lastP === 'object' && lastP.note) ? `<br>📝 <em>${lastP.note}</em>` : "";
-        pruningInfoEl.innerHTML = `${t('Última', 'Última')}: <strong>${dStr}</strong>${noteStr}`;
+        pruningInfoEl.innerHTML = `${t('Última', 'Última', 'Last')}: <strong>${dStr}</strong>${noteStr}`;
       } else {
-        pruningInfoEl.innerHTML = `${t('Última', 'Última')}: <strong>${t('Cap registrada', 'Ninguna registrada')}</strong>`;
+        pruningInfoEl.innerHTML = `${t('Última', 'Última', 'Last')}: <strong>${t('Cap registrada', 'Ninguna registrada', 'None recorded')}</strong>`;
       }
     }
 
     const btnAddT = document.getElementById("modalAddTransplantBtn");
     if (btnAddT) {
-      btnAddT.innerText = t("🪴 Registrar trasplantament", "🪴 Registrar trasplante");
+      btnAddT.innerText = t("🪴 Registrar trasplantament", "🪴 Registrar trasplante", "🪴 Log repotting");
       btnAddT.onclick = (e) => openQuickDateModal(plantId, 'transplant', e);
     }
 
     const btnAddP = document.getElementById("modalAddPruningBtn");
     if (btnAddP) {
-      btnAddP.innerText = t("✂️ Registrar poda / neteja", "✂️ Registrar poda / limpieza");
+      btnAddP.innerText = t("✂️ Registrar poda / neteja", "✂️ Registrar poda / limpieza", "✂️ Log pruning / cleaning");
       btnAddP.onclick = (e) => openQuickDateModal(plantId, 'pruning', e);
     }
   }
@@ -3690,19 +3690,19 @@
 
     if (modalWaterBox) {
       modalWaterBox.className = `tracker-card ${ws.statusClass}`;
-      if (modalWaterTitle) modalWaterTitle.innerText = `💧 ${t('Reg', 'Riego')}: ${ws.badgeText}`;
-      if (modalWaterNext) modalWaterNext.innerHTML = `📅 ${t('Proper', 'Próximo')}: <strong>${ws.nextText}</strong>`;
+      if (modalWaterTitle) modalWaterTitle.innerText = `💧 ${t('Reg', 'Riego', 'Water')}: ${ws.badgeText}`;
+      if (modalWaterNext) modalWaterNext.innerHTML = `📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${ws.nextText}</strong>`;
       if (modalWaterLast) modalWaterLast.innerText = ws.lastText;
       if (modalWaterBtn) {
         modalWaterBtn.className = `btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}`;
-        modalWaterBtn.innerText = ws.isToday ? t('✅ Regat avui', '✅ Regado hoy') : t('💧 Regar avui', '💧 Regar hoy');
+        modalWaterBtn.innerText = ws.isToday ? t('✅ Regat avui', '✅ Regado hoy', '✅ Watered today') : t('💧 Regar avui', '💧 Regar hoy', '💧 Water today');
         modalWaterBtn.onclick = (e) => recordAction(plantId, 'water', e);
       }
       if (modalSnoozeBtn) {
         modalSnoozeBtn.onclick = (e) => snoozeWater(plantId, 1, e);
       }
       if (modalWaterPastBtn) {
-        modalWaterPastBtn.innerText = t("📅 Data", "📅 Fecha");
+        modalWaterPastBtn.innerText = t("📅 Data", "📅 Fecha", "📅 Date");
         modalWaterPastBtn.onclick = (e) => openQuickDateModal(plantId, 'water', e);
       }
     }
@@ -3716,16 +3716,16 @@
 
     if (modalFertBox) {
       modalFertBox.className = `tracker-card ${fs.statusClass}`;
-      if (modalFertTitle) modalFertTitle.innerText = `🧪 ${t('Adob', 'Abono')}: ${fs.badgeText}`;
-      if (modalFertNext) modalFertNext.innerHTML = `📅 ${t('Proper', 'Próximo')}: <strong>${fs.nextText}</strong>`;
+      if (modalFertTitle) modalFertTitle.innerText = `🧪 ${t('Adob', 'Abono', 'Fertilizer')}: ${fs.badgeText}`;
+      if (modalFertNext) modalFertNext.innerHTML = `📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${fs.nextText}</strong>`;
       if (modalFertLast) modalFertLast.innerText = fs.lastText;
       if (modalFertBtn) {
         modalFertBtn.className = `btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}`;
-        modalFertBtn.innerText = fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy') : t('🧪 Abonar avui', '🧪 Abonar hoy');
+        modalFertBtn.innerText = fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy', '✅ Fertilized today') : t('🧪 Abonar avui', '🧪 Abonar hoy', '🧪 Fertilize today');
         modalFertBtn.onclick = (e) => recordAction(plantId, 'fert', e);
       }
       if (modalFertPastBtn) {
-        modalFertPastBtn.innerText = t("📅 Data", "📅 Fecha");
+        modalFertPastBtn.innerText = t("📅 Data", "📅 Fecha", "📅 Date");
         modalFertPastBtn.onclick = (e) => openQuickDateModal(plantId, 'fert', e);
       }
     }
@@ -3813,26 +3813,26 @@
     if (noteInp) noteInp.value = "";
 
     if (actionType === 'water') {
-      titleEl.innerText = `💧 Registrar Reg amb Data`;
-      subEl.innerText = `Tria quin dia vas regar "${plant.name}":`;
+      titleEl.innerText = t("💧 Registrar Reg amb Data", "💧 Registrar Riego con Fecha", "💧 Log Watering with Date");
+      subEl.innerText = t(`Tria quin dia vas regar "${plant.name}":`, `Elige qué día regaste "${plant.name}":`, `Choose which day you watered "${plant.name}":`);
       potGroup.style.display = "none";
       noteGroup.style.display = "none";
       setQuickModalDateOffset(-1); // Per defecte Ahir
     } else if (actionType === 'fert') {
-      titleEl.innerText = `🧪 Registrar Adob amb Data`;
-      subEl.innerText = `Tria quin dia vas adobar "${plant.name}":`;
+      titleEl.innerText = t("🧪 Registrar Adob amb Data", "🧪 Registrar Abono con Fecha", "🧪 Log Fertilizer with Date");
+      subEl.innerText = t(`Tria quin dia vas adobar "${plant.name}":`, `Elige qué día abonaste "${plant.name}":`, `Choose which day you fertilized "${plant.name}":`);
       potGroup.style.display = "none";
       noteGroup.style.display = "none";
       setQuickModalDateOffset(-1);
     } else if (actionType === 'transplant') {
-      titleEl.innerText = `🪴 Registrar Trasplantament`;
-      subEl.innerText = `Anota el canvi de test o substrat de "${plant.name}":`;
+      titleEl.innerText = t("🪴 Registrar Trasplantament", "🪴 Registrar Trasplante", "🪴 Log Repotting");
+      subEl.innerText = t(`Anota el canvi de test o substrat de "${plant.name}":`, `Anota el cambio de maceta o sustrato de "${plant.name}":`, `Note pot or soil change for "${plant.name}":`);
       potGroup.style.display = "block";
       noteGroup.style.display = "block";
       setQuickModalDateOffset(0); // Per defecte Avui
     } else if (actionType === 'pruning') {
-      titleEl.innerText = `✂️ Registrar Poda / Neteja`;
-      subEl.innerText = `Anota el manteniment de fulles o tiges de "${plant.name}":`;
+      titleEl.innerText = t("✂️ Registrar Poda / Neteja", "✂️ Registrar Poda / Limpieza", "✂️ Log Pruning / Cleaning");
+      subEl.innerText = t(`Anota el manteniment de fulles o tiges de "${plant.name}":`, `Anota el mantenimiento de hojas o tallos de "${plant.name}":`, `Note leaf maintenance or pruning for "${plant.name}":`);
       potGroup.style.display = "none";
       noteGroup.style.display = "block";
       setQuickModalDateOffset(0);
@@ -3847,7 +3847,7 @@
 
     const dateVal = document.getElementById("quickActionDatePicker").value;
     if (!dateVal) {
-      alert("Selecciona una data vàlida.");
+      alert(t("Selecciona una data vàlida.", "Selecciona una fecha válida.", "Please select a valid date."));
       return;
     }
 
@@ -3930,11 +3930,16 @@
 
       if (isAlreadyToday) {
         const plant = plantsCatalog.find(p => p.id === plantId);
-        const plantName = plant ? plant.name : "aquesta planta";
-        const actionLabel = (actionType === 'water') ? "el reg" : "l'abonament";
-        if (confirm(`Ja has anotat ${actionLabel} de "${plantName}" avui.\nVols DESFER aquest registre?`)) {
+        const plantName = plant ? plant.name : (t("aquesta planta", "esta planta", "this plant"));
+        const actionLabel = (actionType === 'water') ? t("el reg", "el riego", "watering") : t("l'abonament", "el abono", "fertilizing");
+        const confirmMsg = t(
+          `Ja has anotat ${actionLabel} de "${plantName}" avui.\nVols DESFER aquest registre?`,
+          `Ya has anotado ${actionLabel} de "${plantName}" hoy.\n¿Quieres DESHACER este registro?`,
+          `You already logged ${actionLabel} for "${plantName}" today.\nDo you want to UNDO this entry?`
+        );
+        if (confirm(confirmMsg)) {
           await deleteHistoryEntry(plantId, actionType, lastIso, 0, event);
-          showToast(`Registre de ${actionLabel} desfet`, "↩️");
+          showToast(t(`Registre de ${actionLabel} desfet`, `Registro de ${actionLabel} deshecho`, `${actionLabel} entry undone`), "↩️");
         }
         return;
       }
@@ -3978,7 +3983,7 @@
     }
     renderHistoryModal(plantId);
     renderStats();
-    showToast("Registre eliminat amb èxit", "🗑️");
+    showToast(t("Registre eliminat amb èxit", "Registro eliminado con éxito", "Record deleted successfully"), "🗑️");
     await syncHistoryToCloud();
   }
 
@@ -4493,8 +4498,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     if (!lastWaterIso && !history.snoozeUntil) {
       return {
-        status: "none", statusClass: "status-none", badgeText: t("⚪ Sense registre", "⚪ Sin registro"),
-        nextText: t("Pendent de primer reg", "Pendiente de primer riego"), lastText: t("Mai registrat", "Nunca registrado"), daysLeft: null,
+        status: "none", statusClass: "status-none", badgeText: t("⚪ Sense registre", "⚪ Sin registro", "⚪ No record"),
+        nextText: t("Pendent de primer reg", "Pendiente de primer riego", "Pending first watering"), lastText: t("Mai registrat", "Nunca registrado", "Never recorded"), daysLeft: null,
         isToday: false, nextDateObj: null, intervalDays
       };
     }
@@ -4528,32 +4533,32 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     let status = "ok";
     let statusClass = "status-ok";
-    let badgeText = t("🟢 Al dia", "🟢 Al día");
+    let badgeText = t("🟢 Al dia", "🟢 Al día", "🟢 Up to date");
 
     if (daysLeft < 0) {
       status = "overdue"; statusClass = "status-overdue";
       const absDays = Math.abs(daysLeft);
-      const dWord = absDays === 1 ? t('dia', 'día') : t('dies', 'días');
-      badgeText = `🏺 ${t('Comprovar terra', 'Comprobar tierra')} (${absDays} ${dWord})`;
+      const dWord = absDays === 1 ? t('dia', 'día', 'day') : t('dies', 'días', 'days');
+      badgeText = `🏺 ${t('Comprovar terra', 'Comprobar tierra', 'Check soil')} (${absDays} ${dWord})`;
     } else if (daysLeft === 0) {
       status = "overdue"; statusClass = "status-overdue";
-      badgeText = t("💧 Toca regar avui", "💧 Toca regar hoy");
+      badgeText = t("💧 Toca regar avui", "💧 Toca regar hoy", "💧 Water today");
     } else if (daysLeft <= 2) {
       status = "due_soon"; statusClass = "status-due-soon";
-      const dWord = daysLeft === 1 ? t('dia', 'día') : t('dies', 'días');
+      const dWord = daysLeft === 1 ? t('dia', 'día', 'day') : t('dies', 'días', 'days');
       badgeText = isSnoozed
-        ? `⏳ ${t('Posposat', 'Pospuesto')} (${daysLeft} ${dWord})`
-        : `🟡 ${t('Aviat', 'Pronto')} (${daysLeft} ${dWord})`;
+        ? `⏳ ${t('Posposat', 'Pospuesto', 'Postponed')} (${daysLeft} ${dWord})`
+        : `🟡 ${t('Aviat', 'Pronto', 'Due soon')} (${daysLeft} ${dWord})`;
     } else {
       status = "ok"; statusClass = "status-ok";
-      const dWord = t('dies', 'días');
-      badgeText = isToday ? `🟢 ${t('Regat avui', 'Regado hoy')} (${daysLeft} ${dWord})` : `🟢 ${t('Al dia', 'Al día')} (${daysLeft} ${dWord})`;
+      const dWord = t('dies', 'días', 'days');
+      badgeText = isToday ? `🟢 ${t('Regat avui', 'Regado hoy', 'Watered today')} (${daysLeft} ${dWord})` : `🟢 ${t('Al dia', 'Al día', 'Up to date')} (${daysLeft} ${dWord})`;
     }
 
-    const dPassedWord = diffDaysPassed === 1 ? t('dia', 'día') : t('dies', 'días');
+    const dPassedWord = diffDaysPassed === 1 ? t('dia', 'día', 'day') : t('dies', 'días', 'days');
     const lastTextStr = lastDate
-      ? (isToday ? `${t('Darrer reg: Avui', 'Último riego: Hoy')} (${formatDateFriendly(lastDate)})` : `${t('Darrer reg: fa', 'Último riego: hace')} ${diffDaysPassed} ${dPassedWord} (${formatDateFriendly(lastDate)})`)
-      : t("Mai registrat (posposat)", "Nunca registrado (pospuesto)");
+      ? (isToday ? `${t('Darrer reg: Avui', 'Último riego: Hoy', 'Last watered: Today')} (${formatDateFriendly(lastDate)})` : `${t('Darrer reg: fa', 'Último riego: hace', 'Last watered:')} ${diffDaysPassed} ${dPassedWord} (${formatDateFriendly(lastDate)})`)
+      : t("Mai registrat (posposat)", "Nunca registrado (pospuesto)", "Never recorded (postponed)");
 
     return {
       status, statusClass, badgeText,
@@ -4576,9 +4581,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     if (!isSeasonActive) {
       return {
-        status: "winter", statusClass: "status-winter", badgeText: t("❄️ En repòs d'hivern", "❄️ En reposo invernal"),
-        nextText: t("Reprendre a la primavera", "Retomar en primavera"),
-        lastText: lastFertIso ? `${t('Darrer adob', 'Último abono')}: ${formatDateFriendly(lastFertIso)}` : t("Sense adob previ", "Sin abono previo"),
+        status: "winter", statusClass: "status-winter", badgeText: t("❄️ En repòs d'hivern", "❄️ En reposo invernal", "❄️ Winter dormancy"),
+        nextText: t("Reprendre a la primavera", "Retomar en primavera", "Resume in spring"),
+        lastText: lastFertIso ? `${t('Darrer adob', 'Último abono', 'Last fertilized')}: ${formatDateFriendly(lastFertIso)}` : t("Sense adob previ", "Sin abono previo", "No previous fertilizing"),
         canFertilize: false,
         isToday: false,
         nextDateObj: null
@@ -4587,8 +4592,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     if (!lastFertIso) {
       return {
-        status: "none", statusClass: "status-none", badgeText: t("⚪ Sense registre d'adob", "⚪ Sin registro de abono"),
-        nextText: t("Pendent d'adobar", "Pendiente de abonar"), lastText: t("Mai registrat", "Nunca registrado"), canFertilize: true,
+        status: "none", statusClass: "status-none", badgeText: t("⚪ Sense registre d'adob", "⚪ Sin registro de abono", "⚪ No fertilizer record"),
+        nextText: t("Pendent d'adobar", "Pendiente de abonar", "Pending fertilizing"), lastText: t("Mai registrat", "Nunca registrado", "Never recorded"), canFertilize: true,
         isToday: false,
         nextDateObj: null
       };
@@ -4608,26 +4613,26 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     let status = "ok";
     let statusClass = "status-ok";
-    let badgeText = t("🟢 Adob al dia", "🟢 Abono al día");
-    const dWord = t('dies', 'días');
+    let badgeText = t("🟢 Adob al dia", "🟢 Abono al día", "🟢 Fertilizing up to date");
+    const dWord = t('dies', 'días', 'days');
 
     if (daysLeft < 0) {
       status = "overdue"; statusClass = "status-overdue";
-      badgeText = `🧪 ${t('Toca adobar', 'Toca abonar')} (${Math.abs(daysLeft)} ${dWord})`;
+      badgeText = `🧪 ${t('Toca adobar', 'Toca abonar', 'Fertilize due')} (${Math.abs(daysLeft)} ${dWord})`;
     } else if (daysLeft === 0) {
       status = "overdue"; statusClass = "status-overdue";
-      badgeText = t("🧪 Toca adobar avui", "🧪 Toca abonar hoy");
+      badgeText = t("🧪 Toca adobar avui", "🧪 Toca abonar hoy", "🧪 Fertilize today");
     } else if (daysLeft <= 4) {
       status = "due_soon"; statusClass = "status-due-soon";
-      badgeText = `🟡 ${t('Adobar aviat', 'Abonar pronto')} (${daysLeft} ${dWord})`;
+      badgeText = `🟡 ${t('Adobar aviat', 'Abonar pronto', 'Fertilize soon')} (${daysLeft} ${dWord})`;
     } else {
       status = "ok"; statusClass = "status-ok";
-      badgeText = isToday ? `🟢 ${t('Abonat avui', 'Abonado hoy')} (${daysLeft} ${dWord})` : `🟢 ${t('Adob al dia', 'Abono al día')} (${daysLeft} ${dWord})`;
+      badgeText = isToday ? `🟢 ${t('Abonat avui', 'Abonado hoy', 'Fertilized today')} (${daysLeft} ${dWord})` : `🟢 ${t('Adob al dia', 'Abono al día', 'Fertilizing up to date')} (${daysLeft} ${dWord})`;
     }
 
     return {
       status, statusClass, badgeText, nextText: formatDateFriendly(nextDate),
-      lastText: isToday ? `${t('Darrer adob: Avui', 'Último abono: Hoy')} (${formatDateFriendly(lastDate)})` : `${t('Darrer adob: fa', 'Último abono: hace')} ${diffDaysPassed} ${dWord} (${formatDateFriendly(lastDate)})`,
+      lastText: isToday ? `${t('Darrer adob: Avui', 'Último abono: Hoy', 'Last fertilized: Today')} (${formatDateFriendly(lastDate)})` : `${t('Darrer adob: fa', 'Último abono: hace', 'Last fertilized:')} ${diffDaysPassed} ${dWord} (${formatDateFriendly(lastDate)})`,
       canFertilize: true,
       isToday,
       nextDateObj: nextDate
@@ -4652,14 +4657,14 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     });
 
     const isSummer = isSummerSeason();
-    const seasonText = isSummer ? t("☀️ Temporada càlida", "☀️ Temporada cálida") : t("🍂 Tardor/Hivern", "🍂 Otoño/Invierno");
+    const seasonText = isSummer ? t("☀️ Temporada càlida", "☀️ Temporada cálida", "☀️ Warm season") : t("🍂 Tardor/Hivern", "🍂 Otoño/Invierno", "🍂 Autumn/Winter");
 
     document.getElementById("statsBar").innerHTML = `
-      <div class="stat-pill">🌿 <strong>${plantsCatalog.length}</strong> ${t('Plantes registrades', 'Plantas registradas')}</div>
+      <div class="stat-pill">🌿 <strong>${plantsCatalog.length}</strong> ${t('Plantes registrades', 'Plantas registradas', 'Registered plants')}</div>
       <div class="stat-pill ${overdueCount > 0 ? 'alert' : ''}">
-        ${overdueCount > 0 ? `🪴 <strong>${overdueCount}</strong> ${t('per revisar reg', 'por revisar riego')}` : `✅ ${t('Totes al dia', 'Todas al día')}`}
+        ${overdueCount > 0 ? `🪴 <strong>${overdueCount}</strong> ${t('per revisar reg', 'por revisar riego', 'to check water')}` : `✅ ${t('Totes al dia', 'Todas al día', 'All up to date')}`}
       </div>
-      ${dueSoonCount > 0 ? `<div class="stat-pill stat-pill-soon">🟡 <strong>${dueSoonCount}</strong> ${t('tocaran aviat', 'tocarán pronto')}</div>` : ''}
+      ${dueSoonCount > 0 ? `<div class="stat-pill stat-pill-soon">🟡 <strong>${dueSoonCount}</strong> ${t('tocaran aviat', 'tocarán pronto', 'due soon')}</div>` : ''}
       <div class="stat-pill">${seasonText}</div>
     `;
   }
@@ -4745,7 +4750,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             <img src="${plant.photo}" alt="${plant.name}" loading="lazy">
             <div class="card-badges">
               <span class="badge ${plant.toxic ? 'badge-toxic' : 'badge-safe'}">
-                ${plant.toxic ? t('🔴 Tòxica', '🔴 Tóxica') : t('🟢 Segura', '🟢 Segura')}
+                ${plant.toxic ? t('🔴 Tòxica', '🔴 Tóxica', '🔴 Toxic') : t('🟢 Segura', '🟢 Segura', '🟢 Safe')}
               </span>
               <span class="badge badge-zone">${trText(plant.zoneLabel)}</span>
             </div>
@@ -4767,29 +4772,29 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             <div class="tracker-section">
               <div class="tracker-card ${ws.statusClass}" id="plant-water-box-${plant.id}">
                 <div class="tracker-info">
-                  <span class="tracker-title" id="plant-water-title-${plant.id}">💧 ${t('Reg', 'Riego')}: ${ws.badgeText}</span>
-                  <span class="tracker-next-date" id="plant-water-next-${plant.id}">📅 ${t('Proper', 'Próximo')}: <strong>${ws.nextText}</strong></span>
+                  <span class="tracker-title" id="plant-water-title-${plant.id}">💧 ${t('Reg', 'Riego', 'Water')}: ${ws.badgeText}</span>
+                  <span class="tracker-next-date" id="plant-water-next-${plant.id}">📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${ws.nextText}</strong></span>
                   <span class="tracker-last-date" id="plant-water-last-${plant.id}">${ws.lastText}</span>
                 </div>
                 <div class="tracker-btn-group">
-                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Registrar reg amb una altra data', 'Registrar riego con otra fecha')}">📅</button>
-                  <button class="btn-action btn-snooze-action" onclick="snoozeWater('${plant.id}', 1, event)" title="${t('Posposar reg 1 dia (encara humida)', 'Posponer riego 1 día (aún húmeda)')}">⏳ +1d</button>
+                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Registrar reg amb una altra data', 'Registrar riego con otra fecha', 'Log watering with custom date')}">📅</button>
+                  <button class="btn-action btn-snooze-action" onclick="snoozeWater('${plant.id}', 1, event)" title="${t('Posposar reg 1 dia (encara humida)', 'Posponer riego 1 día (aún húmeda)', 'Postpone watering 1 day (still moist)')}">⏳ +1d</button>
                   <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
-                    ${ws.isToday ? t('✅ Regat avui', '✅ Regado hoy') : t('💧 Regar avui', '💧 Regar hoy')}
+                    ${ws.isToday ? t('✅ Regat avui', '✅ Regado hoy', '✅ Watered today') : t('💧 Regar avui', '💧 Regar hoy', '💧 Water today')}
                   </button>
                 </div>
               </div>
 
               <div class="tracker-card ${fs.statusClass}" id="plant-fert-box-${plant.id}">
                 <div class="tracker-info">
-                  <span class="tracker-title" id="plant-fert-title-${plant.id}">🧪 ${t('Adob', 'Abono')}: ${fs.badgeText}</span>
-                  <span class="tracker-next-date" id="plant-fert-next-${plant.id}">📅 ${t('Proper', 'Próximo')}: <strong>${fs.nextText}</strong></span>
+                  <span class="tracker-title" id="plant-fert-title-${plant.id}">🧪 ${t('Adob', 'Abono', 'Fertilizer')}: ${fs.badgeText}</span>
+                  <span class="tracker-next-date" id="plant-fert-next-${plant.id}">📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${fs.nextText}</strong></span>
                   <span class="tracker-last-date" id="plant-fert-last-${plant.id}">${fs.lastText}</span>
                 </div>
                 <div class="tracker-btn-group">
-                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Registrar adob amb una altra data', 'Registrar abono con otra fecha')}">📅</button>
+                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Registrar adob amb una altra data', 'Registrar abono con otra fecha', 'Log fertilizing with custom date')}">📅</button>
                   <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-fert-btn-${plant.id}" onclick="recordAction('${plant.id}', 'fert', event)">
-                    ${fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy') : t('🧪 Abonar avui', '🧪 Abonar hoy')}
+                    ${fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy', '✅ Fertilized today') : t('🧪 Abonar avui', '🧪 Abonar hoy', '🧪 Fertilize today')}
                   </button>
                 </div>
               </div>
@@ -4797,10 +4802,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
             <div class="card-footer-links">
               <button class="btn-detail-link" onclick="openPlantModal('${plant.id}')">
-                ${t('Veure cures completes →', 'Ver cuidados completos →')}
+                ${t('Veure cures completes →', 'Ver cuidados completos →', 'View full care guide →')}
               </button>
               <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')">
-                ${t('📜 Històric', '📜 Historial')}
+                ${t('📜 Històric', '📜 Historial', '📜 History')}
               </button>
             </div>
           </div>
@@ -4837,10 +4842,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           <td>${trText(plant.zoneLabel)}</td>
           <td>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-row-water-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'water', event)">${ws.isToday ? t('✅ Regat', '✅ Regado') : t('💧 Regat', '💧 Regado')}</button>
-              <button class="btn-action btn-snooze-action" style="padding:4px 7px; font-size:0.72rem;" onclick="snoozeWater('${plant.id}', 1, event)" title="${t('Posposar reg 1 dia', 'Posponer riego 1 día')}">⏳+1d</button>
-              <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-row-fert-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'fert', event)">${fs.isToday ? t('✅ Abonat', '✅ Abonado') : t('🧪 Abonat', '🧪 Abonado')}</button>
-              <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')" aria-label="${t('Veure històric de', 'Ver historial de')} ${plant.name}" title="${t('Històric de cures', 'Historial de cuidados')}">📜</button>
+              <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-row-water-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'water', event)">${ws.isToday ? t('✅ Regat', '✅ Regado', '✅ Watered') : t('💧 Regat', '💧 Regado', '💧 Water')}</button>
+              <button class="btn-action btn-snooze-action" style="padding:4px 7px; font-size:0.72rem;" onclick="snoozeWater('${plant.id}', 1, event)" title="${t('Posposar reg 1 dia', 'Posponer riego 1 día', 'Postpone watering 1 day')}">⏳+1d</button>
+              <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-row-fert-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'fert', event)">${fs.isToday ? t('✅ Abonat', '✅ Abonado', '✅ Fertilized') : t('🧪 Abonat', '🧪 Abonado', '🧪 Fertilize')}</button>
+              <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')" aria-label="${t('Veure històric de', 'Ver historial de', 'View history of')} ${plant.name}" title="${t('Històric de cures', 'Historial de cuidados', 'Care history')}">📜</button>
             </div>
           </td>
         </tr>
@@ -4895,9 +4900,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   function formatGalleryDateShort(isoStr) {
-    if (!isoStr) return "Foto inicial";
+    if (!isoStr) return t("Foto inicial", "Foto inicial", "Initial photo");
     const d = new Date(isoStr);
-    if (isNaN(d.getTime())) return "Foto inicial";
+    if (isNaN(d.getTime())) return t("Foto inicial", "Foto inicial", "Initial photo");
     return d.toLocaleDateString(getLocale(), { day: "numeric", month: "short", year: "numeric" });
   }
 
@@ -4934,7 +4939,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const countEl = document.getElementById("modalGalleryCount");
     if (countEl) {
-      countEl.innerText = `${gallery.length} ${gallery.length === 1 ? "foto" : "fotos"}`;
+      const photoWord = gallery.length === 1 ? t("foto", "foto", "photo") : t("fotos", "fotos", "photos");
+      countEl.innerText = `${gallery.length} ${photoWord}`;
     }
 
     const gridEl = document.getElementById("modalGalleryGrid");
@@ -5007,15 +5013,15 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
       showToast(
         files.length > 1
-          ? t(`📸 ${files.length} noves fotos afegides a l'evolució!`, `📸 ¡${files.length} nuevas fotos añadidas a la evolución!`)
-          : t("📸 Nova foto d'evolució pujada com a destacada!", "📸 ¡Nueva foto de evolución subida como destacada!"),
+          ? t(`📸 ${files.length} noves fotos afegides a l'evolució!`, `📸 ¡${files.length} nuevas fotos añadidas a la evolución!`, `📸 ${files.length} new growth photos added!`)
+          : t("📸 Nova foto d'evolució pujada com a destacada!", "📸 ¡Nueva foto de evolución subida como destacada!", "📸 New growth photo uploaded as primary!"),
         "🌿"
       );
 
       await syncCatalogToCloud();
     } catch (err) {
       console.error("Error pujant foto a la galeria:", err);
-      alert(t("No s'ha pogut processar la fotografia. Torna-ho a provar.", "No se ha podido procesar la fotografía. Inténtalo de nuevo."));
+      alert(t("No s'ha pogut processar la fotografia. Torna-ho a provar.", "No se ha podido procesar la fotografía. Inténtalo de nuevo.", "Could not process photo. Please try again."));
     }
   }
 
@@ -5027,11 +5033,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const gallery = getPlantGallery(plant);
     if (gallery.length <= 1) {
-      alert(t("La fitxa ha de conservar com a mínim una fotografia.", "La ficha debe conservar como mínimo una fotografía."));
+      alert(t("La fitxa ha de conservar com a mínim una fotografia.", "La ficha debe conservar como mínimo una fotografía.", "The plant entry must keep at least one photo."));
       return;
     }
 
-    if (!confirm(t("Vols eliminar aquesta fotografia de la galeria d'evolució?", "¿Quieres eliminar esta fotografía de la galería de evolución?"))) return;
+    if (!confirm(t("Vols eliminar aquesta fotografia de la galeria d'evolució?", "¿Quieres eliminar esta fotografía de la galería de evolución?", "Do you want to delete this photo from the growth gallery?"))) return;
 
     plant.gallery = gallery.filter(item => item.id !== photoId);
     getPlantGallery(plant);
@@ -5040,7 +5046,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     saveLocalCatalog(plantsCatalog);
     renderPlants();
     renderModalGallery(plant);
-    showToast(t("Fotografia eliminada de la galeria", "Fotografía eliminada de la galería"), "🗑️");
+    showToast(t("Fotografia eliminada de la galeria", "Fotografía eliminada de la galería", "Photo deleted from gallery"), "🗑️");
 
     await syncCatalogToCloud();
   }
@@ -5064,9 +5070,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const summerDays = plant.waterDaysSummer;
     const summerText = plant.waterSummerText;
     let summerDisplay = "-";
-    const dWord = t("dies", "días");
+    const dWord = t("dies", "días", "days");
     if (summerDays) {
-      summerDisplay = `Cada ${summerDays} ${dWord}`;
+      summerDisplay = currentLang === "en" ? `Every ${summerDays} days` : `Cada ${summerDays} ${dWord}`;
       if (summerText && !summerText.toLowerCase().includes(`${summerDays} dies`) && !summerText.toLowerCase().includes(`${summerDays} días`)) {
         summerDisplay += ` (${trText(summerText)})`;
       }
@@ -5078,7 +5084,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const winterText = plant.waterWinterText;
     let winterDisplay = "-";
     if (winterDays) {
-      winterDisplay = `Cada ${winterDays} ${dWord}`;
+      winterDisplay = currentLang === "en" ? `Every ${winterDays} days` : `Cada ${winterDays} ${dWord}`;
       if (winterText && !winterText.toLowerCase().includes(`${winterDays} dies`) && !winterText.toLowerCase().includes(`${winterDays} días`)) {
         winterDisplay += ` (${trText(winterText)})`;
       }
@@ -5093,7 +5099,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     document.getElementById("modalWaterDetail").innerText = plant.waterDetail || "";
     document.getElementById("modalSubstrate").innerText = plant.substrate;
-    document.getElementById("modalTip").innerHTML = `💡 <strong>${t('Consell clau:', 'Consejo clave:')}</strong> ${plant.tip}`;
+    document.getElementById("modalTip").innerHTML = `💡 <strong>${t('Consell clau:', 'Consejo clave:', 'Key tip:')}</strong> ${plant.tip}`;
 
     document.getElementById("modalBadges").innerHTML = `
       <span class="badge ${plant.difficultyClass}">${trText(plant.difficultyLabel)}</span>
@@ -5174,10 +5180,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const base64 = await compressImageFile(file);
       currentEditingPhotoBase64 = base64;
       document.getElementById("editPlantPhotoPreview").src = base64;
-      showToast(t("Nova fotografia seleccionada!", "¡Nueva fotografía seleccionada!"), "📸");
+      showToast(t("Nova fotografia seleccionada!", "¡Nueva fotografía seleccionada!", "New photo selected!"), "📸");
     } catch (err) {
       console.error("Error processant foto d'edició:", err);
-      alert(t("No s'ha pogut processar la fotografia. Torna-ho a provar.", "No se ha podido procesar la fotografía. Inténtalo de nuevo."));
+      alert(t("No s'ha pogut processar la fotografia. Torna-ho a provar.", "No se ha podido procesar la fotografía. Inténtalo de nuevo.", "Could not process photo. Please try again."));
     }
   }
 
@@ -5258,7 +5264,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       openPlantModal(currentEditingPlantId);
     }
 
-    showToast(t(`Planta "${updated.name}" actualitzada amb èxit!`, `¡Planta "${updated.name}" actualizada con éxito!`), "✏️");
+    showToast(t(`Planta "${updated.name}" actualitzada amb èxit!`, `¡Planta "${updated.name}" actualizada con éxito!`, `Plant "${updated.name}" updated successfully!`), "✏️");
     await syncCatalogToCloud();
   }
 
@@ -5267,7 +5273,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (!plant) return;
 
     currentHistoryPlantId = plantId;
-    document.getElementById("historyPlantTitle").innerText = `${t('Històric', 'Historial')}: ${plant.name}`;
+    document.getElementById("historyPlantTitle").innerText = `${t('Històric', 'Historial', 'History')}: ${plant.name}`;
     setHistoryDateOffset(0);
 
     const getSelectedHistoryDateIso = () => {
@@ -5286,7 +5292,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const btnTransplant = document.getElementById("btnHistoryAddTransplant");
     if (btnTransplant) {
       btnTransplant.onclick = () => {
-        const potNote = prompt(t("Mida del nou test o nota del trasplantament (opcional):", "Tamaño de la nueva maceta o nota del trasplante (opcional):"), plant.potSize || "");
+        const potNote = prompt(t("Mida del nou test o nota del trasplantament (opcional):", "Tamaño de la nueva maceta o nota del trasplante (opcional):", "New pot size or repotting note (optional):"), plant.potSize || "");
         if (potNote === null) return;
         recordActionWithDate(plantId, 'transplant', getSelectedHistoryDateIso(), potNote.trim(), potNote.trim());
         renderHistoryModal(plantId);
@@ -5295,7 +5301,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const btnPruning = document.getElementById("btnHistoryAddPruning");
     if (btnPruning) {
       btnPruning.onclick = () => {
-        const note = prompt(t("Nota sobre la poda o neteja de fulles (opcional):", "Nota sobre la poda o limpieza de hojas (opcional):"), "");
+        const note = prompt(t("Nota sobre la poda o neteja de fulles (opcional):", "Nota sobre la poda o limpieza de hojas (opcional):", "Note on pruning or leaf cleaning (optional):"), "");
         if (note === null) return;
         recordActionWithDate(plantId, 'pruning', getSelectedHistoryDateIso(), note.trim());
         renderHistoryModal(plantId);
@@ -5327,15 +5333,15 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     combined.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     if (combined.length === 0) {
-      container.innerHTML = `<div class="history-empty">${t('Encara no hi ha cap registre anotat.', 'Todavía no hay ningún registro anotado.')}</div>`;
+      container.innerHTML = `<div class="history-empty">${t('Encara no hi ha cap registre anotat.', 'Todavía no hay ningún registro anotado.', 'No care records logged yet.')}</div>`;
       return;
     }
 
     const typeLabels = {
-      water: t('💧 Reg', '💧 Riego'),
-      fert: t('🧪 Abonament', '🧪 Abonado'),
-      transplant: t('🪴 Trasplantament', '🪴 Trasplante'),
-      pruning: t('✂️ Poda / Neteja', '✂️ Poda / Limpieza')
+      water: t('💧 Reg', '💧 Riego', '💧 Watering'),
+      fert: t('🧪 Abonament', '🧪 Abonado', '🧪 Fertilizing'),
+      transplant: t('🪴 Trasplantament', '🪴 Trasplante', '🪴 Repotting'),
+      pruning: t('✂️ Poda / Neteja', '✂️ Poda / Limpieza', '✂️ Pruning / Cleaning')
     };
 
     container.innerHTML = combined.map(item => {
@@ -5348,7 +5354,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             ${item.note ? `<div style="font-size:0.78rem; color:var(--green-mid); margin-top:2px;">📝 ${item.note}</div>` : ''}
           </div>
           <button class="history-delete-btn" onclick="deleteHistoryEntry('${plantId}', '${item.type}', '${item.date}', ${item.originalIndex}, event)">
-            🗑️ ${t('Esborrar', 'Borrar')}
+            🗑️ ${t('Esborrar', 'Borrar', 'Delete')}
           </button>
         </li>
       `;
@@ -5437,12 +5443,16 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const now = new Date();
     const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const dayNamesShort = currentLang === "es"
-      ? ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
-      : ["Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds"];
-    const monthNames = currentLang === "es"
-      ? ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-      : ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
+    const dayNamesShort = currentLang === "en"
+      ? ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+      : (currentLang === "es"
+          ? ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+          : ["Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds"]);
+    const monthNames = currentLang === "en"
+      ? ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      : (currentLang === "es"
+          ? ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+          : ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"]);
 
     // 1. Renderitzar Previsió Setmanal (Propers 7 dies)
     const weekCardsHtml = [];
@@ -5450,7 +5460,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const d = new Date(todayMidnight);
       d.setDate(d.getDate() + i);
       const events = getProjectedEventsForDate(d);
-      const dayLabel = i === 0 ? t("Avui", "Hoy") : (i === 1 ? t("Demà", "Mañana") : dayNamesShort[d.getDay()]);
+      const dayLabel = i === 0 ? t("Avui", "Hoy", "Today") : (i === 1 ? t("Demà", "Mañana", "Tomorrow") : dayNamesShort[d.getDay()]);
       const dateStr = d.toLocaleDateString(getLocale(), { day: "numeric", month: "short" });
 
       weekCardsHtml.push(`
@@ -5461,7 +5471,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           </div>
           <div class="cal-events-list">
             ${events.length === 0
-              ? `<span class="cal-empty-day">${t('Cap tasca prevista', 'Sin tareas previstas')}</span>`
+              ? `<span class="cal-empty-day">${t('Cap tasca prevista', 'Sin tareas previstas', 'No tasks scheduled')}</span>`
               : events.map(ev => `
                   <span class="cal-event-chip ${ev.urgent ? 'overdue-water' : ev.type}" onclick="openPlantModal('${ev.plant.id}')" title="${ev.plant.name}">
                     ${ev.label}
@@ -5505,7 +5515,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       cellsHtml.push(`
         <div class="month-day-cell ${isToday ? 'today' : ''} ${events.length === 0 ? 'no-events' : ''}">
           <div class="month-day-number">
-            <span><span class="mobile-weekday">${weekdayShort}</span>${day}${isToday ? ` <span class="mobile-weekday" style="color:#1e582e; font-weight:800;">· ${t('Avui', 'Hoy')}</span>` : ''}</span>
+            <span><span class="mobile-weekday">${weekdayShort}</span>${day}${isToday ? ` <span class="mobile-weekday" style="color:#1e582e; font-weight:800;">· ${t('Avui', 'Hoy', 'Today')}</span>` : ''}</span>
             ${events.length > 0 ? `<span style="font-size:0.68rem; color:var(--text-muted); font-weight:600;">${events.length}</span>` : ''}
           </div>
           ${events.length > 0 ? `
@@ -5515,7 +5525,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                 ${ev.label}
               </span>
             `).join('')}
-            ${events.length > 4 ? `<span style="font-size:0.68rem; color:var(--text-muted); padding-left:4px;">+${events.length - 4} ${t('més', 'más')}</span>` : ''}
+            ${events.length > 4 ? `<span style="font-size:0.68rem; color:var(--text-muted); padding-left:4px;">+${events.length - 4} ${t('més', 'más', 'more')}</span>` : ''}
           </div>
           ` : ''}
         </div>
@@ -5867,6 +5877,30 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("modalGalleryTitleText", t("📸 Galeria d'Evolució", "📸 Galería de Evolución", "📸 Growth Gallery"));
     setElText("modalGalleryCameraBtn", t("📸 Fer foto", "📸 Hacer foto", "📸 Take Photo"));
     setElText("modalGalleryUploadBtn", t("➕ Pujar foto", "➕ Subir foto", "➕ Upload Photo"));
+
+    // Modal d'Històric
+    setElText("historyModalSubtitle", t("Registre complet de regs, adobs, trasplantaments i podes. Tria la data per anotar accions d'avui o de dies passats:", "Registro completo de riegos, abonos, trasplantes y podas. Elige la fecha para anotar acciones de hoy o días pasados:", "Full log of watering, fertilizing, repotting, and pruning. Choose a date to record today's or past tasks:"));
+    setElText("historyDateInputLabel", t("📅 Data del registre:", "📅 Fecha del registro:", "📅 Record date:"));
+    setElText("histPresetTodayBtn", t("Avui", "Hoy", "Today"));
+    setElText("histPresetYesterdayBtn", t("Ahir", "Ayer", "Yesterday"));
+    setElText("histPreset2DaysBtn", t("Fa 2 dies", "Hace 2 días", "2 days ago"));
+    setElText("btnHistoryAddWater", t("💧 Registrar Reg", "💧 Registrar Riego", "💧 Log Watering"));
+    setElText("btnHistoryAddFert", t("🧪 Registrar Adob", "🧪 Registrar Abono", "🧪 Log Fertilizer"));
+    setElText("btnHistoryAddTransplant", t("🪴 Trasplantament", "🪴 Trasplante", "🪴 Repotting"));
+    setElText("btnHistoryAddPruning", t("✂️ Poda / Neteja", "✂️ Poda / Limpieza", "✂️ Pruning / Cleaning"));
+    setElText("historyModalCloseBtn", t("Tancar", "Cerrar", "Close"));
+
+    // Modal de Data Ràpida Passada
+    setElText("quickDatePresetToday", t("Avui", "Hoy", "Today"));
+    setElText("quickDatePresetYesterday", t("Ahir", "Ayer", "Yesterday"));
+    setElText("quickDatePreset2Days", t("Fa 2 dies", "Hace 2 días", "2 days ago"));
+    setElText("quickDatePreset3Days", t("Fa 3 dies", "Hace 3 días", "3 days ago"));
+    setElText("quickDatePreset1Week", t("Fa 1 setmana", "Hace 1 semana", "1 week ago"));
+    setElText("quickActionDateLabel", t("Data exacta:", "Fecha exacta:", "Exact date:"));
+    setElText("quickActionPotLabel", t("🏺 Nova mida o tipus de test (opcional):", "🏺 Nuevo tamaño o tipo de maceta (opcional):", "🏺 New pot size or type (optional):"));
+    setElText("quickActionNoteLabel", t("📝 Nota o detall (opcional):", "📝 Nota o detalle (opcional):", "📝 Note or details (optional):"));
+    setElText("quickActionCancelBtn", t("Cancel·lar", "Cancelar", "Cancel"));
+    setElText("quickActionConfirmBtn", t("💾 Guardar registre", "💾 Guardar registro", "💾 Save record"));
   }
 
   // -------------------------------------------------------------
