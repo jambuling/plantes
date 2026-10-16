@@ -924,6 +924,294 @@
       border-top: 1px solid var(--border-subtle);
     }
 
+    /* BOTONS EXTRA DE REG / ADOB (SNOOZE +1D I DATA PASSADA) */
+    .tracker-btn-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    .btn-snooze-action {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fcd34d;
+      padding: 6px 10px;
+      border-radius: 7px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.15s ease;
+    }
+    .btn-snooze-action:hover {
+      background: #fde68a;
+      color: #78350f;
+    }
+    .btn-date-action {
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--text-main);
+      border: 1px solid var(--border-strong);
+      padding: 6px 9px;
+      border-radius: 7px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.15s ease;
+    }
+    .btn-date-action:hover {
+      background: #ffffff;
+      border-color: var(--accent);
+    }
+
+    /* SECCIÓ MANTENIMENT (TRASPLANTAMENT I PODA) */
+    .maint-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .maint-card {
+      background: #f8faf8;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .maint-card-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .maint-card-info {
+      font-size: 0.80rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .maint-card-info strong {
+      color: var(--text-main);
+    }
+    .btn-maint-action {
+      background: #edf5ee;
+      color: #1e582e;
+      border: 1px solid #c3dfc7;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background 0.15s ease;
+    }
+    .btn-maint-action:hover {
+      background: #dcece0;
+    }
+    .history-item.transplant { background: #fef9f3; }
+    .history-item.pruning { background: #f3f8f4; }
+
+    /* VISTA DE CALENDARI SETMANAL I MENSUAL */
+    .calendar-container {
+      display: none;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .calendar-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .calendar-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .calendar-panel-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .week-strip-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+    .week-day-card {
+      background: #f9fbf9;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 10px;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .week-day-card.is-today {
+      background: #f0f9f2;
+      border: 2px solid #245831;
+      box-shadow: 0 3px 10px rgba(36, 88, 49, 0.1);
+    }
+    .week-day-header {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 5px;
+    }
+    .week-day-card.is-today .week-day-header {
+      color: #1e582e;
+    }
+    .week-day-num {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .month-nav-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-cal-nav {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .btn-cal-nav:hover {
+      background: #e6efe7;
+    }
+    .month-weekdays-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .month-calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+    .month-day-cell {
+      background: #fafcfa;
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      min-height: 98px;
+      padding: 7px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .month-day-cell.empty {
+      background: transparent;
+      border-color: transparent;
+      min-height: 40px;
+    }
+    .month-day-cell.is-today {
+      background: #f0f9f2;
+      border: 2px solid #245831;
+    }
+    .month-day-number {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .month-day-cell.is-today .month-day-number {
+      color: #1e582e;
+    }
+    .cal-event-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #e5f3e8;
+      color: #184925;
+      border: 1px solid #c3e2c9;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: transform 0.1s ease;
+    }
+    .cal-event-chip:hover {
+      transform: scale(1.02);
+    }
+    .cal-event-chip.overdue {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #fcd34d;
+    }
+    .cal-event-chip.done {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #86efac;
+    }
+    .cal-event-chip img {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    @media (max-width: 768px) {
+      .maint-grid {
+        grid-template-columns: 1fr;
+      }
+      .week-strip-grid {
+        grid-template-columns: 1fr;
+      }
+      .week-day-card {
+        min-height: auto;
+      }
+      .month-weekdays-row {
+        display: none;
+      }
+      .month-calendar-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .month-day-cell.empty {
+        display: none;
+      }
+    }
+
     /* FORMULARI NOVA PLANTA */
     .form-group {
       margin-bottom: 14px;
@@ -1219,6 +1507,7 @@
       <div class="view-toggle">
         <button id="viewGridBtn" class="active" title="Vista de Targetes">▦ Targetes</button>
         <button id="viewTableBtn" title="Vista de Taula">▤ Taula</button>
+        <button id="viewCalendarBtn" title="Vista de Calendari Setmanal i Mensual">📅 Calendari</button>
       </div>
     </div>
   </div>
@@ -1244,6 +1533,34 @@
       </thead>
       <tbody id="plantsTableBody"></tbody>
     </table>
+  </div>
+
+  <!-- CALENDAR VIEW (SETMANAL + MENSUAL) -->
+  <div class="calendar-container" id="plantsCalendarContainer">
+    <!-- PREVISIÓ SETMANAL (7 DIES) -->
+    <div class="calendar-panel">
+      <div class="calendar-panel-header">
+        <div class="calendar-panel-title">🗓️ Previsió Setmanal (Propers 7 dies)</div>
+        <span style="font-size: 0.80rem; color: var(--text-muted);">Fes clic a qualsevol planta per obrir la seva fitxa</span>
+      </div>
+      <div class="week-strip-grid" id="weeklyCalendarGrid"></div>
+    </div>
+
+    <!-- CALENDARI MENSUAL -->
+    <div class="calendar-panel">
+      <div class="calendar-panel-header">
+        <div class="calendar-panel-title" id="monthlyCalendarTitle">📅 Calendari Mensual</div>
+        <div class="month-nav-group">
+          <button type="button" class="btn-cal-nav" onclick="changeCalendarMonth(-1)">‹ Mes anterior</button>
+          <button type="button" class="btn-cal-nav" onclick="resetCalendarToToday()">Avui</button>
+          <button type="button" class="btn-cal-nav" onclick="changeCalendarMonth(1)">Mes següent ›</button>
+        </div>
+      </div>
+      <div class="month-weekdays-row">
+        <div>Dl</div><div>Dt</div><div>Dc</div><div>Dj</div><div>Dv</div><div>Ds</div><div>Dg</div>
+      </div>
+      <div class="month-calendar-grid" id="monthlyCalendarGrid"></div>
+    </div>
   </div>
 
   <div class="empty-state" id="emptyState">
@@ -1431,6 +1748,12 @@
               <button class="btn-action btn-water-action" id="modalWaterBtn">
                 💧 Regar avui
               </button>
+              <button type="button" class="btn-snooze-action" id="modalSnoozeBtn" title="Terra encara humida: posposar el reg 1 dia">
+                ⏳ +1d
+              </button>
+              <button type="button" class="btn-date-action" id="modalWaterPastBtn" title="Registrar reg en una data passada">
+                📅 Data
+              </button>
             </div>
           </div>
 
@@ -1443,6 +1766,9 @@
             <div class="tracker-btn-group">
               <button class="btn-action btn-fert-action" id="modalFertBtn">
                 🧪 Abonar avui
+              </button>
+              <button type="button" class="btn-date-action" id="modalFertPastBtn" title="Registrar adob en una data passada">
+                📅 Data
               </button>
             </div>
           </div>
@@ -1468,6 +1794,31 @@
           </div>
         </div>
         <div class="plant-gallery-grid" id="modalGalleryGrid"></div>
+      </div>
+
+      <!-- MANTENIMENT: TRASPLANTAMENT I PODA -->
+      <div class="modal-section">
+        <div class="modal-section-title">🛠️ Manteniment: Trasplantament i Poda</div>
+        <div class="maint-grid">
+          <div class="maint-card">
+            <div>
+              <div class="maint-card-title">🪴 Trasplantament i Test</div>
+              <div class="maint-card-info" id="modalTransplantInfo">Últim: Cap registrat</div>
+            </div>
+            <button type="button" class="btn-maint-action" id="modalAddTransplantBtn">
+              🪴 Registrar trasplantament
+            </button>
+          </div>
+          <div class="maint-card">
+            <div>
+              <div class="maint-card-title">✂️ Poda i Neteja</div>
+              <div class="maint-card-info" id="modalPruningInfo">Última: Cap registrada</div>
+            </div>
+            <button type="button" class="btn-maint-action" id="modalAddPruningBtn">
+              ✂️ Registrar poda / neteja
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="modal-section">
@@ -1613,7 +1964,7 @@
           </div>
         </div>
 
-        <!-- LLUM I SUBSTRAT -->
+        <!-- LLUM, SUBSTRAT I TEST -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
           <div class="form-group" style="margin-bottom: 0;">
             <label for="editPlantLight">☀️ Llum i Ubicació:</label>
@@ -1623,6 +1974,11 @@
             <label for="editPlantSubstrate">🪴 Substrat Recomanat:</label>
             <input type="text" id="editPlantSubstrate" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
           </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label for="editPlantPotSize">🏺 Mida / Tipus de Test Actual (opcional):</label>
+          <input type="text" id="editPlantPotSize" class="form-control" placeholder="ex: Test terracota 18 cm" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
         </div>
 
         <!-- TOXICITAT I CONSELL -->
@@ -1661,19 +2017,34 @@
 
 <!-- MODAL HISTÒRIC -->
 <div class="modal-overlay" id="historyModal">
-  <div class="modal-card" style="max-width: 520px;">
+  <div class="modal-card" style="max-width: 560px;">
     <button class="modal-close" onclick="closeModal('historyModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 24px;">
       <h2 id="historyPlantTitle" style="font-size: 1.35rem; color: var(--text-main); margin-bottom: 4px;"></h2>
-      <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px;">Registre complet de regs i adobs.</p>
+      <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px;">Registre complet de regs, adobs, trasplantaments i podes. Tria la data per anotar accions d'avui o de dies passats:</p>
 
-      <div style="display:flex; gap:10px; margin-bottom:14px;">
-        <button class="btn-action btn-water-action" id="btnHistoryAddWater" style="flex:1; justify-content:center;">
-          💧 Regar avui
-        </button>
-        <button class="btn-action btn-fert-action" id="btnHistoryAddFert" style="flex:1; justify-content:center;">
-          🧪 Abonar avui
-        </button>
+      <div style="background: #f6f9f6; border: 1px solid var(--border-subtle); border-radius: 9px; padding: 10px 12px; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+          <label for="historyDateInput" style="font-size: 0.80rem; font-weight: 700; color: var(--text-main);">📅 Data del registre:</label>
+          <input type="date" id="historyDateInput" style="padding: 5px 8px; border: 1px solid var(--border-strong); border-radius: 6px; font-size: 0.82rem; font-family: inherit;">
+          <button type="button" class="preset-chip-btn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(0)">Avui</button>
+          <button type="button" class="preset-chip-btn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(-1)">Ahir</button>
+          <button type="button" class="preset-chip-btn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(-2)">Fa 2 dies</button>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <button class="btn-action btn-water-action" id="btnHistoryAddWater" style="justify-content:center;">
+            💧 Registrar Reg
+          </button>
+          <button class="btn-action btn-fert-action" id="btnHistoryAddFert" style="justify-content:center;">
+            🧪 Registrar Adob
+          </button>
+          <button class="btn-action" id="btnHistoryAddTransplant" style="background:#78350f; color:#fff; justify-content:center;">
+            🪴 Trasplantament
+          </button>
+          <button class="btn-action" id="btnHistoryAddPruning" style="background:#3f6212; color:#fff; justify-content:center;">
+            ✂️ Poda / Neteja
+          </button>
+        </div>
       </div>
 
       <ul class="history-list" id="historyListContainer"></ul>
@@ -1682,6 +2053,45 @@
         <button class="btn-action" style="background:#e5e7eb; color:#374151;" onclick="closeModal('historyModal')">
           Tancar
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RÀPID DE DATA PASSADA / MANTENIMENT -->
+<div class="modal-overlay" id="quickActionDateModal">
+  <div class="modal-card" style="max-width: 430px;">
+    <button class="modal-close" onclick="closeModal('quickActionDateModal')" aria-label="Tancar finestra">&times;</button>
+    <div class="modal-content" style="padding: 22px 24px;">
+      <h3 id="quickDateModalTitle" style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">📅 Registrar amb data</h3>
+      <p id="quickDateModalSubtitle" style="font-size: 0.83rem; color: var(--text-muted); margin-bottom: 14px;"></p>
+
+      <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+        <button type="button" class="preset-chip-btn" onclick="setQuickModalDateOffset(0)">Avui</button>
+        <button type="button" class="preset-chip-btn" onclick="setQuickModalDateOffset(-1)">Ahir</button>
+        <button type="button" class="preset-chip-btn" onclick="setQuickModalDateOffset(-2)">Fa 2 dies</button>
+        <button type="button" class="preset-chip-btn" onclick="setQuickModalDateOffset(-3)">Fa 3 dies</button>
+        <button type="button" class="preset-chip-btn" onclick="setQuickModalDateOffset(-7)">Fa 1 setmana</button>
+      </div>
+
+      <div class="form-group">
+        <label for="quickActionDatePicker">Data exacta:</label>
+        <input type="date" id="quickActionDatePicker" class="form-control">
+      </div>
+
+      <div class="form-group" id="quickActionPotGroup" style="display:none;">
+        <label for="quickActionPotInput">🏺 Nova mida o tipus de test (opcional):</label>
+        <input type="text" id="quickActionPotInput" class="form-control" placeholder="ex: Test terracota 18 cm">
+      </div>
+
+      <div class="form-group" id="quickActionNoteGroup" style="display:none;">
+        <label for="quickActionNoteInput">📝 Nota o detall (opcional):</label>
+        <input type="text" id="quickActionNoteInput" class="form-control" placeholder="ex: Substrat universal + perlita / Poda de fulles seques">
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top: 16px;">
+        <button type="button" class="btn-action" style="background:#e5e7eb; color:#374151;" onclick="closeModal('quickActionDateModal')">Cancel·lar</button>
+        <button type="button" class="btn-action btn-water-action" id="quickActionConfirmBtn" onclick="confirmQuickActionDate()">💾 Guardar registre</button>
       </div>
     </div>
   </div>
@@ -2191,6 +2601,130 @@
   let supabaseClient = null;
   let isCloudConnected = false;
 
+  // -------------------------------------------------------------
+  // MOTOR D'EMMAGATZEMATGE D'IMATGES (SUPABASE STORAGE + INDEXEDDB)
+  // Evita el límit de 5 MB de localStorage i puja a Supabase Storage si està actiu
+  // -------------------------------------------------------------
+  const IDB_NAME = "registre_plantes_media_db";
+  const IDB_STORE = "photos";
+  const SUPABASE_STORAGE_BUCKET = "plantes";
+  const inMemoryPhotoCache = {};
+
+  function openPhotoIDB() {
+    return new Promise((resolve, reject) => {
+      if (!window.indexedDB) return resolve(null);
+      const req = indexedDB.open(IDB_NAME, 1);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(IDB_STORE)) {
+          db.createObjectStore(IDB_STORE);
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => resolve(null);
+    });
+  }
+
+  async function savePhotoToIDB(photoId, dataUrl) {
+    if (!photoId || !dataUrl) return;
+    inMemoryPhotoCache[photoId] = dataUrl;
+    try {
+      const db = await openPhotoIDB();
+      if (!db) return;
+      await new Promise((resolve) => {
+        const tx = db.transaction(IDB_STORE, "readwrite");
+        tx.objectStore(IDB_STORE).put(dataUrl, photoId);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => resolve();
+      });
+    } catch (e) {}
+  }
+
+  async function getPhotoFromIDB(photoId) {
+    if (inMemoryPhotoCache[photoId]) return inMemoryPhotoCache[photoId];
+    try {
+      const db = await openPhotoIDB();
+      if (!db) return null;
+      return await new Promise((resolve) => {
+        const tx = db.transaction(IDB_STORE, "readonly");
+        const req = tx.objectStore(IDB_STORE).get(photoId);
+        req.onsuccess = () => {
+          if (req.result) inMemoryPhotoCache[photoId] = req.result;
+          resolve(req.result || null);
+        };
+        req.onerror = () => resolve(null);
+      });
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function base64ToBlob(dataURI) {
+    const split = dataURI.split(",");
+    const byteString = atob(split[1]);
+    const mimeString = split[0].split(":")[1].split(";")[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  }
+
+  // Puja la imatge a Supabase Storage (si el bucket 'plantes' existeix) i la guarda sempre a IndexedDB local
+  async function storeUploadedPhoto(photoId, base64DataUrl) {
+    await savePhotoToIDB(photoId, base64DataUrl);
+
+    if (supabaseClient && isCloudConnected && base64DataUrl.startsWith("data:image/")) {
+      try {
+        const blob = base64ToBlob(base64DataUrl);
+        const filePath = `gallery/${photoId}.jpg`;
+        const { data, error } = await supabaseClient.storage
+          .from(SUPABASE_STORAGE_BUCKET)
+          .upload(filePath, blob, { contentType: "image/jpeg", upsert: true });
+
+        if (!error && data) {
+          const { data: pubData } = supabaseClient.storage
+            .from(SUPABASE_STORAGE_BUCKET)
+            .getPublicUrl(filePath);
+          if (pubData && pubData.publicUrl) {
+            return pubData.publicUrl;
+          }
+        }
+      } catch (e) {
+        // Si el bucket de Supabase Storage no està creat, continua amb IndexedDB + sincronització JSON
+      }
+    }
+    return base64DataUrl;
+  }
+
+  // Hidrata referències idb:// des d'IndexedDB en carregar el catàleg local
+  async function hydrateCatalogFromIDB(catalog) {
+    if (!Array.isArray(catalog)) return catalog;
+    for (const plant of catalog) {
+      if (plant.photo && plant.photo.startsWith("idb:")) {
+        const pid = plant.photo.slice(4);
+        const cached = await getPhotoFromIDB(pid);
+        if (cached) plant.photo = cached;
+      }
+      if (Array.isArray(plant.gallery)) {
+        for (const item of plant.gallery) {
+          if (item.url && item.url.startsWith("idb:")) {
+            const pid = item.url.slice(4);
+            const cached = await getPhotoFromIDB(pid);
+            if (cached) item.url = cached;
+          } else if (item.id && item.url && item.url.startsWith("data:image/")) {
+            savePhotoToIDB(item.id, item.url);
+          }
+        }
+        if (plant.gallery[0] && plant.gallery[0].url && !plant.gallery[0].url.startsWith("idb:")) {
+          plant.photo = plant.gallery[0].url;
+        }
+      }
+    }
+    return catalog;
+  }
+
   function loadLocalCatalog() {
     try {
       const saved = localStorage.getItem(STORAGE_CATALOG_KEY);
@@ -2199,11 +2733,33 @@
     return initialDefaultPlants;
   }
 
+  // Guarda el catàleg a localStorage alleugerint les fotos Base64 cap a IndexedDB per no superar mai els 5 MB
   function saveLocalCatalog(catalog) {
     plantsCatalog = catalog;
     try {
-      localStorage.setItem(STORAGE_CATALOG_KEY, JSON.stringify(catalog));
-    } catch(e) {}
+      const lightweightCatalog = catalog.map(plant => {
+        const pCopy = { ...plant };
+        if (Array.isArray(plant.gallery)) {
+          pCopy.gallery = plant.gallery.map(item => {
+            if (item.url && item.url.startsWith("data:image/")) {
+              const pid = item.id || ("photo_" + plant.id);
+              savePhotoToIDB(pid, item.url);
+              return { ...item, id: pid, url: "idb:" + pid };
+            }
+            return item;
+          });
+        }
+        if (pCopy.photo && pCopy.photo.startsWith("data:image/")) {
+          const leadId = (Array.isArray(plant.gallery) && plant.gallery[0] && plant.gallery[0].id) || ("lead_" + plant.id);
+          savePhotoToIDB(leadId, pCopy.photo);
+          pCopy.photo = "idb:" + leadId;
+        }
+        return pCopy;
+      });
+      localStorage.setItem(STORAGE_CATALOG_KEY, JSON.stringify(lightweightCatalog));
+    } catch(e) {
+      console.warn("Avís en desar a localStorage (usant IndexedDB):", e);
+    }
   }
 
   function loadLocalHistory() {
@@ -2223,9 +2779,10 @@
 
   // Inicialització Supabase & Catàleg
   async function initSupabase() {
-    // 1. Carreguem d'immediat del disc local per mostrar les targetes instantàniament
+    // 1. Carreguem d'immediat del disc local i hidratem les fotos des d'IndexedDB
     plantsCatalog = loadLocalCatalog();
     inMemoryHistory = loadLocalHistory();
+    await hydrateCatalogFromIDB(plantsCatalog);
     renderPlants();
 
     try {
@@ -2243,6 +2800,7 @@
         if (catData && catData.data) {
           const parsedCat = typeof catData.data === 'string' ? JSON.parse(catData.data) : catData.data;
           if (Array.isArray(parsedCat) && parsedCat.length > 0) {
+            await hydrateCatalogFromIDB(parsedCat);
             plantsCatalog = parsedCat;
             saveLocalCatalog(plantsCatalog);
           }
@@ -2253,7 +2811,7 @@
             .upsert({ id: 'plants_catalog', data: plantsCatalog, updated_at: new Date().toISOString() });
         }
 
-        // 3. Carregar historial de regs i adobs
+        // 3. Carregar historial de regs, adobs, trasplantaments i podes
         const { data: histData } = await supabaseClient
           .from('plantes_history')
           .select('data')
@@ -2287,9 +2845,10 @@
         // 4. Subscripció en temps real (multi-dispositiu)
         supabaseClient
           .channel('public:plantes_history')
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'plantes_history' }, payload => {
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'plantes_history' }, async payload => {
             if (payload.new && payload.new.id === 'plants_catalog' && payload.new.data) {
               const data = typeof payload.new.data === 'string' ? JSON.parse(payload.new.data) : payload.new.data;
+              await hydrateCatalogFromIDB(data);
               plantsCatalog = data;
               saveLocalCatalog(plantsCatalog);
               renderPlants();
@@ -2330,10 +2889,25 @@
     }
   }
 
-  // Obtenir històric per planta
+  // Obtenir històric per planta (inclou regs, adobs, trasplantaments, podes i snooze)
   function getPlantHistory(plantId) {
-    if (!inMemoryHistory[plantId]) inMemoryHistory[plantId] = { waters: [], ferts: [] };
-    return inMemoryHistory[plantId];
+    if (!inMemoryHistory[plantId]) {
+      inMemoryHistory[plantId] = { waters: [], ferts: [], transplants: [], prunings: [], snoozeUntil: null };
+    }
+    const h = inMemoryHistory[plantId];
+    if (!Array.isArray(h.waters)) h.waters = [];
+    if (!Array.isArray(h.ferts)) h.ferts = [];
+    if (!Array.isArray(h.transplants)) h.transplants = [];
+    if (!Array.isArray(h.prunings)) h.prunings = [];
+    return h;
+  }
+
+  function sortIsoArrayDesc(arr) {
+    arr.sort((a, b) => {
+      const da = typeof a === "string" ? new Date(a) : new Date(a.date);
+      const db = typeof b === "string" ? new Date(b) : new Date(b.date);
+      return db - da;
+    });
   }
 
   let currentModalPlantId = null;
@@ -2395,7 +2969,7 @@
 
       // Micro-animació de confirmació visual immediata
       cardEl.classList.remove('action-success-pulse');
-      void cardEl.offsetWidth; // Força el reflow per rellançar l'animació CSS
+      void cardEl.offsetWidth;
       cardEl.classList.add('action-success-pulse');
     }
 
@@ -2427,6 +3001,46 @@
       rowFertBtn.className = `btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}`;
       rowFertBtn.innerText = fs.isToday ? '✅ Abonat' : '🧪 Abonat';
     }
+
+    renderCalendar();
+  }
+
+  // Actualització de la secció de Manteniment (Trasplantament i Poda) dins la fitxa modal
+  function updateModalMaintenance(plantId) {
+    const plant = plantsCatalog.find(p => p.id === plantId);
+    if (!plant) return;
+    const pHist = getPlantHistory(plantId);
+
+    const transplantInfoEl = document.getElementById("modalTransplantInfo");
+    if (transplantInfoEl) {
+      const lastT = pHist.transplants && pHist.transplants[0];
+      const potText = plant.potSize ? `<br>🏺 Test actual: <strong>${plant.potSize}</strong>` : "";
+      if (lastT) {
+        const dStr = formatGalleryDateShort(typeof lastT === 'string' ? lastT : lastT.date);
+        const noteStr = (typeof lastT === 'object' && lastT.note) ? `<br>📝 <em>${lastT.note}</em>` : "";
+        transplantInfoEl.innerHTML = `Últim: <strong>${dStr}</strong>${potText}${noteStr}`;
+      } else {
+        transplantInfoEl.innerHTML = `Últim: <strong>Cap registrat</strong>${potText}`;
+      }
+    }
+
+    const pruningInfoEl = document.getElementById("modalPruningInfo");
+    if (pruningInfoEl) {
+      const lastP = pHist.prunings && pHist.prunings[0];
+      if (lastP) {
+        const dStr = formatGalleryDateShort(typeof lastP === 'string' ? lastP : lastP.date);
+        const noteStr = (typeof lastP === 'object' && lastP.note) ? `<br>📝 <em>${lastP.note}</em>` : "";
+        pruningInfoEl.innerHTML = `Última: <strong>${dStr}</strong>${noteStr}`;
+      } else {
+        pruningInfoEl.innerHTML = `Última: <strong>Cap registrada</strong>`;
+      }
+    }
+
+    const btnAddT = document.getElementById("modalAddTransplantBtn");
+    if (btnAddT) btnAddT.onclick = (e) => openQuickDateModal(plantId, 'transplant', e);
+
+    const btnAddP = document.getElementById("modalAddPruningBtn");
+    if (btnAddP) btnAddP.onclick = (e) => openQuickDateModal(plantId, 'pruning', e);
   }
 
   // Actualització del panell d'acció ràpida dins la fitxa modal
@@ -2442,6 +3056,8 @@
     const modalWaterNext = document.getElementById("modalWaterNext");
     const modalWaterLast = document.getElementById("modalWaterLast");
     const modalWaterBtn = document.getElementById("modalWaterBtn");
+    const modalSnoozeBtn = document.getElementById("modalSnoozeBtn");
+    const modalWaterPastBtn = document.getElementById("modalWaterPastBtn");
 
     if (modalWaterBox) {
       modalWaterBox.className = `tracker-card ${ws.statusClass}`;
@@ -2453,6 +3069,12 @@
         modalWaterBtn.innerText = ws.isToday ? '✅ Regat avui' : '💧 Regar avui';
         modalWaterBtn.onclick = (e) => recordAction(plantId, 'water', e);
       }
+      if (modalSnoozeBtn) {
+        modalSnoozeBtn.onclick = (e) => snoozeWater(plantId, 1, e);
+      }
+      if (modalWaterPastBtn) {
+        modalWaterPastBtn.onclick = (e) => openQuickDateModal(plantId, 'water', e);
+      }
     }
 
     const modalFertBox = document.getElementById("modalFertBox");
@@ -2460,6 +3082,7 @@
     const modalFertNext = document.getElementById("modalFertNext");
     const modalFertLast = document.getElementById("modalFertLast");
     const modalFertBtn = document.getElementById("modalFertBtn");
+    const modalFertPastBtn = document.getElementById("modalFertPastBtn");
 
     if (modalFertBox) {
       modalFertBox.className = `tracker-card ${fs.statusClass}`;
@@ -2471,10 +3094,187 @@
         modalFertBtn.innerText = fs.isToday ? '✅ Abonat avui' : '🧪 Abonar avui';
         modalFertBtn.onclick = (e) => recordAction(plantId, 'fert', e);
       }
+      if (modalFertPastBtn) {
+        modalFertPastBtn.onclick = (e) => openQuickDateModal(plantId, 'fert', e);
+      }
     }
+
+    updateModalMaintenance(plantId);
   }
 
-  // Registre instantani (Optimistic UI - 0 ms de latència)
+  // Posposar reg (Snooze +1 dia) quan la terra encara està humida
+  async function snoozeWater(plantId, days = 1, event) {
+    if (event && event.stopPropagation) event.stopPropagation();
+    const plant = plantsCatalog.find(p => p.id === plantId);
+    if (!plant) return;
+
+    const pHist = getPlantHistory(plantId);
+    const ws = computeWaterStatus(plant);
+
+    const now = new Date();
+    const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    let baseDate = nowMidnight;
+    if (ws.nextDateObj && ws.nextDateObj > nowMidnight) {
+      baseDate = new Date(ws.nextDateObj.getFullYear(), ws.nextDateObj.getMonth(), ws.nextDateObj.getDate());
+    }
+
+    const targetDate = new Date(baseDate);
+    targetDate.setDate(targetDate.getDate() + days);
+    pHist.snoozeUntil = targetDate.toISOString();
+
+    saveLocalHistory(inMemoryHistory);
+    updatePlantCardDOM(plantId);
+    if (currentModalPlantId === plantId) {
+      updateModalTracker(plantId);
+    }
+    renderStats();
+    showToast(`⏳ Reg de "${plant.name}" posposat +${days} dia (fins ${formatDateFriendly(targetDate)})`, "⏳");
+
+    syncHistoryToCloud().catch(err => console.warn("Sync error:", err));
+  }
+
+  // Modal ràpid per escollir data passada o registrar trasplantament / poda
+  let quickModalContext = { plantId: null, actionType: null };
+
+  function toInputDateString(dateObj) {
+    const y = dateObj.getFullYear();
+    const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const d = String(dateObj.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+
+  function setQuickModalDateOffset(offsetDays) {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    const inp = document.getElementById("quickActionDatePicker");
+    if (inp) inp.value = toInputDateString(d);
+  }
+
+  function setHistoryDateOffset(offsetDays) {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    const inp = document.getElementById("historyDateInput");
+    if (inp) inp.value = toInputDateString(d);
+  }
+
+  function openQuickDateModal(plantId, actionType, event) {
+    if (event && event.stopPropagation) event.stopPropagation();
+    const plant = plantsCatalog.find(p => p.id === plantId);
+    if (!plant) return;
+
+    quickModalContext = { plantId, actionType };
+
+    const titleEl = document.getElementById("quickDateModalTitle");
+    const subEl = document.getElementById("quickDateModalSubtitle");
+    const potGroup = document.getElementById("quickActionPotGroup");
+    const noteGroup = document.getElementById("quickActionNoteGroup");
+    const potInp = document.getElementById("quickActionPotInput");
+    const noteInp = document.getElementById("quickActionNoteInput");
+
+    if (potInp) potInp.value = plant.potSize || "";
+    if (noteInp) noteInp.value = "";
+
+    if (actionType === 'water') {
+      titleEl.innerText = `💧 Registrar Reg amb Data`;
+      subEl.innerText = `Tria quin dia vas regar "${plant.name}":`;
+      potGroup.style.display = "none";
+      noteGroup.style.display = "none";
+      setQuickModalDateOffset(-1); // Per defecte Ahir
+    } else if (actionType === 'fert') {
+      titleEl.innerText = `🧪 Registrar Adob amb Data`;
+      subEl.innerText = `Tria quin dia vas adobar "${plant.name}":`;
+      potGroup.style.display = "none";
+      noteGroup.style.display = "none";
+      setQuickModalDateOffset(-1);
+    } else if (actionType === 'transplant') {
+      titleEl.innerText = `🪴 Registrar Trasplantament`;
+      subEl.innerText = `Anota el canvi de test o substrat de "${plant.name}":`;
+      potGroup.style.display = "block";
+      noteGroup.style.display = "block";
+      setQuickModalDateOffset(0); // Per defecte Avui
+    } else if (actionType === 'pruning') {
+      titleEl.innerText = `✂️ Registrar Poda / Neteja`;
+      subEl.innerText = `Anota el manteniment de fulles o tiges de "${plant.name}":`;
+      potGroup.style.display = "none";
+      noteGroup.style.display = "block";
+      setQuickModalDateOffset(0);
+    }
+
+    document.getElementById("quickActionDateModal").classList.add("active");
+  }
+
+  async function confirmQuickActionDate() {
+    const { plantId, actionType } = quickModalContext;
+    if (!plantId || !actionType) return;
+
+    const dateVal = document.getElementById("quickActionDatePicker").value;
+    if (!dateVal) {
+      alert("Selecciona una data vàlida.");
+      return;
+    }
+
+    const parts = dateVal.split("-");
+    const now = new Date();
+    const chosenDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), now.getHours(), now.getMinutes());
+    const isoStr = chosenDate.toISOString();
+
+    const potVal = document.getElementById("quickActionPotInput").value.trim();
+    const noteVal = document.getElementById("quickActionNoteInput").value.trim();
+
+    closeModal("quickActionDateModal");
+    await recordActionWithDate(plantId, actionType, isoStr, { potSize: potVal, note: noteVal });
+  }
+
+  async function recordActionWithDate(plantId, actionType, customIsoDate, extra = {}) {
+    const pHist = getPlantHistory(plantId);
+    const plant = plantsCatalog.find(p => p.id === plantId);
+    const isoToUse = customIsoDate || new Date().toISOString();
+
+    if (actionType === 'water') {
+      pHist.waters.push(isoToUse);
+      sortIsoArrayDesc(pHist.waters);
+      pHist.snoozeUntil = null;
+      showToast(`💧 Reg registrat (${formatDateFriendly(isoToUse)})!`, "🌱");
+    } else if (actionType === 'fert') {
+      pHist.ferts.push(isoToUse);
+      sortIsoArrayDesc(pHist.ferts);
+      showToast(`🧪 Abonament registrat (${formatDateFriendly(isoToUse)})!`, "✨");
+    } else if (actionType === 'transplant') {
+      let noteText = extra.note || "";
+      if (extra.potSize && plant) {
+        plant.potSize = extra.potSize;
+        if (!noteText.includes(extra.potSize)) {
+          noteText = noteText ? `${extra.potSize} · ${noteText}` : `Test: ${extra.potSize}`;
+        }
+        saveLocalCatalog(plantsCatalog);
+        syncCatalogToCloud().catch(() => {});
+      }
+      pHist.transplants.push({ date: isoToUse, note: noteText });
+      sortIsoArrayDesc(pHist.transplants);
+      showToast(`🪴 Trasplantament registrat (${formatDateFriendly(isoToUse)})!`, "🪴");
+    } else if (actionType === 'pruning') {
+      pHist.prunings.push({ date: isoToUse, note: extra.note || "" });
+      sortIsoArrayDesc(pHist.prunings);
+      showToast(`✂️ Poda / neteja registrada (${formatDateFriendly(isoToUse)})!`, "✂️");
+    }
+
+    saveLocalHistory(inMemoryHistory);
+    updatePlantCardDOM(plantId);
+    if (currentModalPlantId === plantId) {
+      updateModalTracker(plantId);
+    }
+    renderStats();
+
+    const histModal = document.getElementById("historyModal");
+    if (histModal && histModal.classList.contains("active")) {
+      renderHistoryModal(plantId);
+    }
+
+    syncHistoryToCloud().catch(err => console.warn("Cloud sync error:", err));
+  }
+
+  // Registre instantani d'avui (Optimistic UI - 0 ms de latència)
   async function recordAction(plantId, actionType, event) {
     if (event) {
       event.stopPropagation();
@@ -2503,38 +3303,7 @@
       }
     }
 
-    const nowIso = new Date().toISOString();
-
-    if (actionType === 'water') {
-      pHist.waters.unshift(nowIso);
-      showToast("💧 Reg registrat avui amb èxit!", "🌱");
-    } else if (actionType === 'fert') {
-      pHist.ferts.unshift(nowIso);
-      showToast("🧪 Abonament registrat avui amb èxit!", "✨");
-    }
-
-    // 1. Guardem al disc local de forma immediata
-    saveLocalHistory(inMemoryHistory);
-
-    // 2. Actualitzem directament el DOM in-situ de la targeta i la fitxa modal
-    updatePlantCardDOM(plantId);
-    if (currentModalPlantId === plantId) {
-      updateModalTracker(plantId);
-    }
-
-    // 3. Actualitzem la barra d'estadístiques
-    renderStats();
-
-    // 4. Si el modal d'històric detallat està obert, actualitzar la llista
-    const histModal = document.getElementById("historyModal");
-    if (histModal && histModal.classList.contains("active")) {
-      renderHistoryModal(plantId);
-    }
-
-    // 5. Sincronització asíncrona amb el núvol (Supabase) en segon pla
-    syncHistoryToCloud().catch(err => {
-      console.warn("Background cloud sync error:", err);
-    });
+    await recordActionWithDate(plantId, actionType, new Date().toISOString());
   }
 
   async function deleteHistoryEntry(plantId, actionType, targetDate, fallbackIndex, event) {
@@ -2542,12 +3311,16 @@
       event.stopPropagation();
     }
     const pHist = getPlantHistory(plantId);
-    const key = (actionType === 'water' || actionType === 'waters') ? 'waters' : 'ferts';
+    let key = 'waters';
+    if (actionType === 'fert' || actionType === 'ferts') key = 'ferts';
+    else if (actionType === 'transplant' || actionType === 'transplants') key = 'transplants';
+    else if (actionType === 'pruning' || actionType === 'prunings') key = 'prunings';
+
     if (!pHist[key] || !Array.isArray(pHist[key])) return;
 
     let removed = false;
     if (typeof targetDate === 'string' && targetDate.length > 5) {
-      const idx = pHist[key].indexOf(targetDate);
+      const idx = pHist[key].findIndex(item => (typeof item === 'string' ? item : item.date) === targetDate);
       if (idx !== -1) {
         pHist[key].splice(idx, 1);
         removed = true;
@@ -2559,29 +3332,16 @@
       removed = true;
     }
 
-    if (!removed) {
-      console.warn("No s'ha trobat el registre a esborrar:", plantId, actionType, targetDate, fallbackIndex);
-      return;
-    }
+    if (!removed) return;
 
-    // 1. Desar localment a memòria i localStorage
     saveLocalHistory(inMemoryHistory);
-
-    // 2. Actualitzar el DOM de la targeta in-situ i el modal si està obert
     updatePlantCardDOM(plantId);
     if (currentModalPlantId === plantId) {
       updateModalTracker(plantId);
     }
-
-    // 3. Re-renderitzar la llista del modal d'històric
     renderHistoryModal(plantId);
-
-    // 4. Actualitzar comptadors de la barra superior d'estadístiques
     renderStats();
-
     showToast("Registre eliminat amb èxit", "🗑️");
-
-    // 5. Sincronitzar canvis a Supabase en segon pla
     await syncHistoryToCloud();
   }
 
@@ -2917,13 +3677,16 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const diffCls = p.difficulty === 'molt_facil' ? 'badge-diff-very-easy' : (p.difficulty === 'facil' ? 'badge-diff-easy' : 'badge-diff-medium');
 
     const nowIso = new Date().toISOString();
+    const photoId = "photo_" + Date.now();
+    const storedUrl = await storeUploadedPhoto(photoId, currentAIPhotoBase64);
+
     const newPlantObj = {
       id: "planta_" + Date.now(),
       name: p.name,
       scientific: p.scientific,
-      photo: currentAIPhotoBase64,
+      photo: storedUrl,
       gallery: [
-        { id: "photo_" + Date.now(), url: currentAIPhotoBase64, date: nowIso }
+        { id: photoId, url: storedUrl, date: nowIso }
       ],
       difficulty: p.difficulty || "facil",
       difficultyLabel: p.difficultyLabel || "Fàcil",
@@ -2943,12 +3706,14 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       fertilizerNotes: p.fertilizerNotes || "Adobar regularment en temps de creixement actiu.",
       light: p.light || "Llum indirecta moderada",
       substrate: p.substrate || "Universal ben drenat",
+      potSize: "",
       toxic: !!p.toxic,
       toxicityDetail: p.toxic ? "🔴 Tòxica en cas d'ingesta per mascotes." : "🟢 Segura per mascotes.",
       tip: p.tip || "Vigilar l'excés d'aigua per no podrir les arrels."
     };
 
     plantsCatalog.unshift(newPlantObj);
+    saveLocalCatalog(plantsCatalog);
     closeModal("addPlantModal");
     showToast("Planta \"" + p.name + "\" afegida amb èxit!", "🌿");
     renderPlants();
@@ -2992,27 +3757,45 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const history = getPlantHistory(plant.id);
     const lastWaterIso = history.waters[0];
     const isSummer = isSummerSeason();
-    const intervalDays = isSummer ? plant.waterDaysSummer : plant.waterDaysWinter;
+    const intervalDays = (isSummer ? plant.waterDaysSummer : plant.waterDaysWinter) || 7;
 
-    if (!lastWaterIso) {
+    const now = new Date();
+    const nowDayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    if (!lastWaterIso && !history.snoozeUntil) {
       return {
         status: "none", statusClass: "status-none", badgeText: "⚪ Sense registre",
         nextText: "Pendent de primer reg", lastText: "Mai registrat", daysLeft: null,
-        isToday: false
+        isToday: false, nextDateObj: null, intervalDays
       };
     }
 
-    const lastDate = new Date(lastWaterIso);
-    const now = new Date();
-    const lastDayMidnight = new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate());
-    const nowDayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let nextDate;
+    let lastDate = lastWaterIso ? new Date(lastWaterIso) : null;
+    let diffDaysPassed = null;
+    let isToday = false;
 
-    const diffDaysPassed = Math.round((nowDayMidnight - lastDayMidnight) / (1000 * 60 * 60 * 24));
-    const nextDate = new Date(lastDayMidnight);
-    nextDate.setDate(nextDate.getDate() + intervalDays);
+    if (lastDate) {
+      const lastDayMidnight = new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate());
+      diffDaysPassed = Math.round((nowDayMidnight - lastDayMidnight) / (1000 * 60 * 60 * 24));
+      nextDate = new Date(lastDayMidnight);
+      nextDate.setDate(nextDate.getDate() + intervalDays);
+      isToday = (diffDaysPassed === 0);
+    } else {
+      nextDate = new Date(nowDayMidnight);
+    }
 
-    const daysLeft = intervalDays - diffDaysPassed;
-    const isToday = (diffDaysPassed === 0);
+    let isSnoozed = false;
+    if (history.snoozeUntil) {
+      const snoozeD = new Date(history.snoozeUntil);
+      const snoozeMidnight = new Date(snoozeD.getFullYear(), snoozeD.getMonth(), snoozeD.getDate());
+      if (snoozeMidnight > nextDate || !lastDate) {
+        nextDate = snoozeMidnight;
+        isSnoozed = true;
+      }
+    }
+
+    const daysLeft = Math.round((nextDate - nowDayMidnight) / (1000 * 60 * 60 * 24));
 
     let status = "ok";
     let statusClass = "status-ok";
@@ -3027,17 +3810,26 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       badgeText = "💧 Toca regar avui";
     } else if (daysLeft <= 2) {
       status = "due_soon"; statusClass = "status-due-soon";
-      badgeText = `🟡 Aviat (${daysLeft} ${daysLeft === 1 ? 'dia' : 'dies'})`;
+      badgeText = isSnoozed
+        ? `⏳ Posposat (${daysLeft} ${daysLeft === 1 ? 'dia' : 'dies'})`
+        : `🟡 Aviat (${daysLeft} ${daysLeft === 1 ? 'dia' : 'dies'})`;
     } else {
       status = "ok"; statusClass = "status-ok";
       badgeText = isToday ? `🟢 Regat avui (${daysLeft} dies)` : `🟢 Al dia (${daysLeft} dies)`;
     }
 
+    const lastTextStr = lastDate
+      ? (isToday ? `Darrer reg: Avui (${formatDateFriendly(lastDate)})` : `Darrer reg: fa ${diffDaysPassed} ${diffDaysPassed === 1 ? 'dia' : 'dies'} (${formatDateFriendly(lastDate)})`)
+      : "Mai registrat (posposat)";
+
     return {
-      status, statusClass, badgeText, nextText: formatDateFriendly(nextDate),
-      lastText: isToday ? `Darrer reg: Avui (${formatDateFriendly(lastDate)})` : `Darrer reg: fa ${diffDaysPassed} ${diffDaysPassed === 1 ? 'dia' : 'dies'} (${formatDateFriendly(lastDate)})`,
+      status, statusClass, badgeText,
+      nextText: formatDateFriendly(nextDate) + (isSnoozed ? " (⏳)" : ""),
+      lastText: lastTextStr,
       daysLeft,
-      isToday
+      isToday,
+      nextDateObj: nextDate,
+      intervalDays
     };
   }
 
@@ -3055,7 +3847,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
         nextText: "Reprendre a la primavera",
         lastText: lastFertIso ? `Darrer adob: ${formatDateFriendly(lastFertIso)}` : "Sense adob previ",
         canFertilize: false,
-        isToday: false
+        isToday: false,
+        nextDateObj: null
       };
     }
 
@@ -3063,7 +3856,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       return {
         status: "none", statusClass: "status-none", badgeText: "⚪ Sense registre d'adob",
         nextText: "Pendent d'adobar", lastText: "Mai registrat", canFertilize: true,
-        isToday: false
+        isToday: false,
+        nextDateObj: null
       };
     }
 
@@ -3074,9 +3868,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const diffDaysPassed = Math.round((nowDayMidnight - lastDayMidnight) / (1000 * 60 * 60 * 24));
     const nextDate = new Date(lastDayMidnight);
-    nextDate.setDate(nextDate.getDate() + plant.fertilizerDays);
+    nextDate.setDate(nextDate.getDate() + (plant.fertilizerDays || 20));
 
-    const daysLeft = plant.fertilizerDays - diffDaysPassed;
+    const daysLeft = (plant.fertilizerDays || 20) - diffDaysPassed;
     const isToday = (diffDaysPassed === 0);
 
     let status = "ok";
@@ -3101,7 +3895,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       status, statusClass, badgeText, nextText: formatDateFriendly(nextDate),
       lastText: isToday ? `Darrer adob: Avui (${formatDateFriendly(lastDate)})` : `Darrer adob: fa ${diffDaysPassed} dies (${formatDateFriendly(lastDate)})`,
       canFertilize: true,
-      isToday
+      isToday,
+      nextDateObj: nextDate
     };
   }
 
@@ -3137,6 +3932,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
   function renderPlants() {
     renderStats();
+    renderCalendar();
 
     const searchVal = document.getElementById("searchInput").value.toLowerCase().trim();
     const statusVal = document.getElementById("statusFilter").value;
@@ -3145,7 +3941,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const filtered = plantsCatalog.filter(plant => {
       const ws = computeWaterStatus(plant);
-      const fs = computeFertStatus(plant);
 
       const matchSearch = plant.name.toLowerCase().includes(searchVal) || 
                           plant.scientific.toLowerCase().includes(searchVal);
@@ -3245,6 +4040,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                   <span class="tracker-last-date" id="plant-water-last-${plant.id}">${ws.lastText}</span>
                 </div>
                 <div class="tracker-btn-group">
+                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="Registrar reg amb una altra data">📅</button>
+                  <button class="btn-action btn-snooze-action" onclick="snoozeWater('${plant.id}', 1, event)" title="Posposar reg 1 dia (encara humida)">⏳ +1d</button>
                   <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
                     ${ws.isToday ? '✅ Regat avui' : '💧 Regar avui'}
                   </button>
@@ -3258,6 +4055,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                   <span class="tracker-last-date" id="plant-fert-last-${plant.id}">${fs.lastText}</span>
                 </div>
                 <div class="tracker-btn-group">
+                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="Registrar adob amb una altra data">📅</button>
                   <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-fert-btn-${plant.id}" onclick="recordAction('${plant.id}', 'fert', event)">
                     ${fs.isToday ? '✅ Abonat avui' : '🧪 Abonar avui'}
                   </button>
@@ -3308,6 +4106,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           <td>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
               <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-row-water-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'water', event)">${ws.isToday ? '✅ Regat' : '💧 Regat'}</button>
+              <button class="btn-action btn-snooze-action" style="padding:4px 7px; font-size:0.72rem;" onclick="snoozeWater('${plant.id}', 1, event)" title="Posposar reg 1 dia">⏳+1d</button>
               <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-row-fert-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'fert', event)">${fs.isToday ? '✅ Abonat' : '🧪 Abonat'}</button>
               <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')" aria-label="Veure històric de ${plant.name}" title="Històric de cures">📜</button>
             </div>
@@ -3465,11 +4264,13 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     try {
       for (let i = 0; i < files.length; i++) {
         const base64 = await compressImageFile(files[i]);
+        const photoId = "photo_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6);
+        const storedUrl = await storeUploadedPhoto(photoId, base64);
         // Afegim un petit offset de mil·lisegons si se'n pugen diverses alhora per mantenir l'ordre
         const dateIso = new Date(Date.now() + i).toISOString();
         gallery.unshift({
-          id: "photo_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
-          url: base64,
+          id: photoId,
+          url: storedUrl,
           date: dateIso
         });
       }
@@ -3627,6 +4428,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     document.getElementById("editPlantLight").value = plant.light || "";
     document.getElementById("editPlantSubstrate").value = plant.substrate || "";
+    const potInp = document.getElementById("editPlantPotSize");
+    if (potInp) potInp.value = plant.potSize || "";
     
     document.getElementById("editPlantToxic").value = plant.toxic ? "true" : "false";
     document.getElementById("editPlantToxicityDetail").value = plant.toxicityDetail || (plant.toxic ? "🔴 Tòxica per a mascotes." : "🟢 Segura per mascotes.");
@@ -3669,10 +4472,12 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const existingPlant = plantsCatalog[plantIndex];
     const gallery = getPlantGallery(existingPlant);
-    const newPhoto = currentEditingPhotoBase64 || existingPlant.photo;
+    let newPhoto = currentEditingPhotoBase64 || existingPlant.photo;
     if (newPhoto && newPhoto !== existingPlant.photo) {
+      const photoId = "photo_" + Date.now();
+      newPhoto = await storeUploadedPhoto(photoId, newPhoto);
       gallery.unshift({
-        id: "photo_" + Date.now(),
+        id: photoId,
         url: newPhoto,
         date: new Date().toISOString()
       });
@@ -3692,6 +4497,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const waterSummer = parseInt(document.getElementById("editPlantWaterSummer").value) || 7;
     const waterWinter = parseInt(document.getElementById("editPlantWaterWinter").value) || 14;
     const fertDays = parseInt(document.getElementById("editPlantFertDays").value) || 20;
+    const potInp = document.getElementById("editPlantPotSize");
+    const potSizeVal = potInp ? potInp.value.trim() : (existingPlant.potSize || "");
 
     const updated = {
       ...existingPlant,
@@ -3716,6 +4523,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       fertilizerNotes: document.getElementById("editPlantFertNotes").value.trim(),
       light: document.getElementById("editPlantLight").value.trim(),
       substrate: document.getElementById("editPlantSubstrate").value.trim(),
+      potSize: potSizeVal,
       toxic: isToxic,
       toxicityDetail: toxicDetail,
       tip: document.getElementById("editPlantTip").value.trim()
@@ -3748,16 +4556,41 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const plant = plantsCatalog.find(p => p.id === plantId);
     if (!plant) return;
 
+    currentHistoryPlantId = plantId;
     document.getElementById("historyPlantTitle").innerText = `Històric: ${plant.name}`;
+    setHistoryDateOffset(0);
+
+    const getSelectedHistoryDateIso = () => {
+      const dateInp = document.getElementById("historyDateInput");
+      return dateInp && dateInp.value ? buildIsoForSelectedDate(dateInp.value) : new Date().toISOString();
+    };
     
     document.getElementById("btnHistoryAddWater").onclick = () => {
-      recordAction(plantId, 'water');
+      recordActionWithDate(plantId, 'water', getSelectedHistoryDateIso());
       renderHistoryModal(plantId);
     };
     document.getElementById("btnHistoryAddFert").onclick = () => {
-      recordAction(plantId, 'fert');
+      recordActionWithDate(plantId, 'fert', getSelectedHistoryDateIso());
       renderHistoryModal(plantId);
     };
+    const btnTransplant = document.getElementById("btnHistoryAddTransplant");
+    if (btnTransplant) {
+      btnTransplant.onclick = () => {
+        const potNote = prompt("Mida del nou test o nota del trasplantament (opcional):", plant.potSize || "");
+        if (potNote === null) return;
+        recordActionWithDate(plantId, 'transplant', getSelectedHistoryDateIso(), potNote.trim(), potNote.trim());
+        renderHistoryModal(plantId);
+      };
+    }
+    const btnPruning = document.getElementById("btnHistoryAddPruning");
+    if (btnPruning) {
+      btnPruning.onclick = () => {
+        const note = prompt("Nota sobre la poda o neteja de fulles (opcional):", "");
+        if (note === null) return;
+        recordActionWithDate(plantId, 'pruning', getSelectedHistoryDateIso(), note.trim());
+        renderHistoryModal(plantId);
+      };
+    }
 
     renderHistoryModal(plantId);
     document.getElementById("historyModal").classList.add("active");
@@ -3768,8 +4601,18 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const container = document.getElementById("historyListContainer");
 
     const combined = [];
-    history.waters.forEach((wIso, index) => combined.push({ type: 'water', date: wIso, originalIndex: index }));
-    history.ferts.forEach((fIso, index) => combined.push({ type: 'fert', date: fIso, originalIndex: index }));
+    history.waters.forEach((wIso, index) => combined.push({ type: 'water', date: wIso, note: '', originalIndex: index }));
+    history.ferts.forEach((fIso, index) => combined.push({ type: 'fert', date: fIso, note: '', originalIndex: index }));
+    (history.transplants || []).forEach((tItem, index) => {
+      const d = typeof tItem === 'string' ? tItem : tItem.date;
+      const n = typeof tItem === 'object' && tItem.note ? tItem.note : '';
+      combined.push({ type: 'transplant', date: d, note: n, originalIndex: index });
+    });
+    (history.prunings || []).forEach((pItem, index) => {
+      const d = typeof pItem === 'string' ? pItem : pItem.date;
+      const n = typeof pItem === 'object' && pItem.note ? pItem.note : '';
+      combined.push({ type: 'pruning', date: d, note: n, originalIndex: index });
+    });
 
     combined.sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -3778,13 +4621,21 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       return;
     }
 
+    const typeLabels = {
+      water: '💧 Reg',
+      fert: '🧪 Abonament',
+      transplant: '🪴 Trasplantament',
+      pruning: '✂️ Poda / Neteja'
+    };
+
     container.innerHTML = combined.map(item => {
-      const isWater = item.type === 'water';
+      const label = typeLabels[item.type] || item.type;
       return `
         <li class="history-item ${item.type}">
           <div>
-            <strong>${isWater ? '💧 Reg' : '🧪 Abonament'}</strong>
+            <strong>${label}</strong>
             <span style="margin-left:8px; color:var(--text-muted);">${formatDateTimeFriendly(item.date)}</span>
+            ${item.note ? `<div style="font-size:0.78rem; color:var(--green-mid); margin-top:2px;">📝 ${item.note}</div>` : ''}
           </div>
           <button class="history-delete-btn" onclick="deleteHistoryEntry('${plantId}', '${item.type}', '${item.date}', ${item.originalIndex}, event)">
             🗑️ Esborrar
@@ -3792,6 +4643,186 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
         </li>
       `;
     }).join('');
+  }
+
+  // -------------------------------------------------------------
+  // VISTA DE CALENDARI SETMANAL I MENSUAL (Punt 10)
+  // -------------------------------------------------------------
+  let currentCalendarYear = new Date().getFullYear();
+  let currentCalendarMonth = new Date().getMonth();
+
+  function changeCalendarMonth(delta) {
+    currentCalendarMonth += delta;
+    if (currentCalendarMonth > 11) {
+      currentCalendarMonth = 0;
+      currentCalendarYear++;
+    } else if (currentCalendarMonth < 0) {
+      currentCalendarMonth = 11;
+      currentCalendarYear--;
+    }
+    renderCalendar();
+  }
+
+  function resetCalendarToToday() {
+    const now = new Date();
+    currentCalendarYear = now.getFullYear();
+    currentCalendarMonth = now.getMonth();
+    renderCalendar();
+  }
+
+  function getProjectedEventsForDate(targetDateMidnight) {
+    const events = [];
+    const now = new Date();
+    const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const isTargetToday = (targetDateMidnight.getTime() === todayMidnight.getTime());
+
+    plantsCatalog.forEach(plant => {
+      const ws = computeWaterStatus(plant);
+      const fs = computeFertStatus(plant);
+
+      // Esdeveniments de Reg
+      if (ws.nextDateObj) {
+        const nextW = new Date(ws.nextDateObj.getFullYear(), ws.nextDateObj.getMonth(), ws.nextDateObj.getDate());
+        const interval = ws.intervalDays || 7;
+        if (nextW < todayMidnight) {
+          // Si està vençut, el mostrem avui com a urgent i projectem cicles futurs des d'avui
+          if (isTargetToday) {
+            events.push({ plant, type: 'water', urgent: true, label: `💧 ${plant.name}` });
+          } else if (targetDateMidnight > todayMidnight) {
+            const diffFromToday = Math.round((targetDateMidnight - todayMidnight) / (1000 * 60 * 60 * 24));
+            if (diffFromToday > 0 && diffFromToday % interval === 0) {
+              events.push({ plant, type: 'water', urgent: false, label: `💧 ${plant.name}` });
+            }
+          }
+        } else {
+          const diff = Math.round((targetDateMidnight - nextW) / (1000 * 60 * 60 * 24));
+          if (diff === 0 || (diff > 0 && diff % interval === 0)) {
+            events.push({ plant, type: 'water', urgent: (diff === 0 && isTargetToday), label: `💧 ${plant.name}` });
+          }
+        }
+      }
+
+      // Esdeveniments d'Adob
+      if (fs.canFertilize && fs.nextDateObj) {
+        const nextF = new Date(fs.nextDateObj.getFullYear(), fs.nextDateObj.getMonth(), fs.nextDateObj.getDate());
+        const fertInterval = plant.fertilizerDays || 20;
+        if (nextF < todayMidnight) {
+          if (isTargetToday) {
+            events.push({ plant, type: 'fert', urgent: true, label: `🧪 ${plant.name}` });
+          }
+        } else {
+          const diffF = Math.round((targetDateMidnight - nextF) / (1000 * 60 * 60 * 24));
+          if (diffF === 0 || (diffF > 0 && diffF % fertInterval === 0)) {
+            events.push({ plant, type: 'fert', urgent: false, label: `🧪 ${plant.name}` });
+          }
+        }
+      }
+    });
+
+    return events;
+  }
+
+  function renderCalendar() {
+    const weekGrid = document.getElementById("weeklyCalendarGrid");
+    const monthGrid = document.getElementById("monthlyCalendarGrid");
+    const monthTitle = document.getElementById("calendarMonthTitle");
+    if (!weekGrid || !monthGrid) return;
+
+    const now = new Date();
+    const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dayNamesShort = ["Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds"];
+    const monthNames = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
+
+    // 1. Renderitzar Previsió Setmanal (Propers 7 dies)
+    const weekCardsHtml = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(todayMidnight);
+      d.setDate(d.getDate() + i);
+      const events = getProjectedEventsForDate(d);
+      const dayLabel = i === 0 ? "Avui" : (i === 1 ? "Demà" : dayNamesShort[d.getDay()]);
+      const dateStr = d.toLocaleDateString("ca-ES", { day: "numeric", month: "short" });
+
+      weekCardsHtml.push(`
+        <div class="week-day-card ${i === 0 ? 'today' : ''}">
+          <div class="week-day-header">
+            <span class="week-day-name">${dayLabel}</span>
+            <span class="week-day-num">${dateStr}</span>
+          </div>
+          <div class="cal-events-list">
+            ${events.length === 0
+              ? `<span class="cal-empty-day">Cap tasca prevista</span>`
+              : events.map(ev => `
+                  <span class="cal-event-chip ${ev.urgent ? 'overdue-water' : ev.type}" onclick="openPlantModal('${ev.plant.id}')" title="${ev.plant.name}">
+                    ${ev.label}
+                  </span>
+                `).join('')
+            }
+          </div>
+        </div>
+      `);
+    }
+    weekGrid.innerHTML = weekCardsHtml.join('');
+
+    // 2. Renderitzar Calendari Mensual
+    if (monthTitle) {
+      monthTitle.innerText = `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
+    }
+
+    const firstDayOfMonth = new Date(currentCalendarYear, currentCalendarMonth, 1);
+    const lastDayOfMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
+    // Dilluns = 0 ... Diumenge = 6
+    const startOffset = (firstDayOfMonth.getDay() + 6) % 7;
+    const totalDays = lastDayOfMonth.getDate();
+
+    const cellsHtml = [];
+
+    // Dies del mes anterior per omplir la primera setmana
+    const prevMonthLastDay = new Date(currentCalendarYear, currentCalendarMonth, 0).getDate();
+    for (let i = startOffset - 1; i >= 0; i--) {
+      const dayNum = prevMonthLastDay - i;
+      cellsHtml.push(`
+        <div class="month-day-cell other-month">
+          <div class="month-day-number">${dayNum}</div>
+        </div>
+      `);
+    }
+
+    // Dies del mes actual
+    for (let day = 1; day <= totalDays; day++) {
+      const cellDate = new Date(currentCalendarYear, currentCalendarMonth, day);
+      const isToday = (cellDate.getTime() === todayMidnight.getTime());
+      const events = getProjectedEventsForDate(cellDate);
+
+      cellsHtml.push(`
+        <div class="month-day-cell ${isToday ? 'today' : ''}">
+          <div class="month-day-number">
+            <span>${day}</span>
+            ${events.length > 0 ? `<span style="font-size:0.68rem; color:var(--text-muted); font-weight:600;">${events.length}</span>` : ''}
+          </div>
+          <div class="cal-events-list">
+            ${events.slice(0, 4).map(ev => `
+              <span class="cal-event-chip ${ev.urgent ? 'overdue-water' : ev.type}" onclick="openPlantModal('${ev.plant.id}')" title="${ev.plant.name}">
+                ${ev.label}
+              </span>
+            `).join('')}
+            ${events.length > 4 ? `<span style="font-size:0.68rem; color:var(--text-muted); padding-left:4px;">+${events.length - 4} més</span>` : ''}
+          </div>
+        </div>
+      `);
+    }
+
+    // Omplir final de graella fins a múltiple de 7
+    const totalCellsSoFar = startOffset + totalDays;
+    const trailingDays = (7 - (totalCellsSoFar % 7)) % 7;
+    for (let i = 1; i <= trailingDays; i++) {
+      cellsHtml.push(`
+        <div class="month-day-cell other-month">
+          <div class="month-day-number">${i}</div>
+        </div>
+      `);
+    }
+
+    monthGrid.innerHTML = cellsHtml.join('');
   }
 
   function closeModal(modalId) {
@@ -3845,22 +4876,42 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
   const gridBtn = document.getElementById("viewGridBtn");
   const tableBtn = document.getElementById("viewTableBtn");
+  const calendarBtn = document.getElementById("viewCalendarBtn");
   const gridView = document.getElementById("plantsGrid");
   const tableView = document.getElementById("plantsTableContainer");
+  const calendarView = document.getElementById("plantsCalendarContainer");
 
   gridBtn.addEventListener("click", () => {
     gridBtn.classList.add("active");
     tableBtn.classList.remove("active");
+    if (calendarBtn) calendarBtn.classList.remove("active");
     gridView.style.display = "grid";
     tableView.style.display = "none";
+    if (calendarView) calendarView.classList.remove("active");
   });
 
   tableBtn.addEventListener("click", () => {
     tableBtn.classList.add("active");
     gridBtn.classList.remove("active");
+    if (calendarBtn) calendarBtn.classList.remove("active");
     gridView.style.display = "none";
     tableView.style.display = "block";
+    if (calendarView) calendarView.classList.remove("active");
   });
+
+  if (calendarBtn) {
+    calendarBtn.addEventListener("click", () => {
+      calendarBtn.classList.add("active");
+      gridBtn.classList.remove("active");
+      tableBtn.classList.remove("active");
+      gridView.style.display = "none";
+      tableView.style.display = "none";
+      if (calendarView) {
+        calendarView.classList.add("active");
+        renderCalendar();
+      }
+    });
+  }
 
   // Inicialització
   initSupabase();
