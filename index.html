@@ -1929,6 +1929,103 @@
     .app-footer-link:hover {
       color: var(--accent);
     }
+
+    /* BOTÓ D'ACCIÓ EN BLOC PER REGAR */
+    .btn-bulk-water {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: var(--radius-sm);
+      padding: 9px 15px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .btn-bulk-water:hover {
+      background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
+    }
+    .btn-bulk-water:active {
+      transform: translateY(0);
+    }
+    body.dark-mode .btn-bulk-water {
+      background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+      border-color: #38bdf8;
+    }
+
+    /* BADGE D'UBICACIÓ / HABITACIÓ */
+    .badge-room {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    body.dark-mode .badge-room {
+      background: #1e293b;
+      color: #cbd5e1;
+      border-color: #334155;
+    }
+
+    /* BOTONS I ENLLAÇOS D'AFILIACIÓ AMAZON */
+    .affiliate-recommend-wrap {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .affiliate-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      background: #fff7ed;
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .affiliate-link-btn:hover {
+      background: #ffedd5;
+      border-color: #fdba74;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.15);
+    }
+    .affiliate-link-btn .amz-tag {
+      background: #ea580c;
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    body.dark-mode .affiliate-link-btn {
+      background: rgba(154, 52, 18, 0.22);
+      color: #fdba74;
+      border-color: rgba(251, 146, 60, 0.35);
+    }
+    body.dark-mode .affiliate-link-btn:hover {
+      background: rgba(154, 52, 18, 0.35);
+      border-color: #fb923c;
+    }
+    .affiliate-notice-badge {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -1978,6 +2075,16 @@
         <option value="all">Totes les zones</option>
         <option value="interior">🏠 Interior</option>
         <option value="exterior">☀️ Balcó / Exterior</option>
+      </select>
+
+      <select id="roomFilter">
+        <option value="all">📍 Totes les habitacions</option>
+        <option value="salo">🛋️ Saló</option>
+        <option value="cuina">🍳 Cuina</option>
+        <option value="dormitori">🛏️ Dormitori</option>
+        <option value="bany">🚿 Bany</option>
+        <option value="terrassa">🪴 Terrassa / Balcó</option>
+        <option value="altres">📦 Altres</option>
       </select>
 
       <select id="difficultyFilter">
@@ -2181,9 +2288,20 @@
             <span style="color: var(--text-muted);">🐾 Toxicitat mascotes:</span>
             <span id="aiResultToxicBadge" class="badge"></span>
           </div>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
             <span style="color: var(--text-muted);">📊 Nivell de dificultat:</span>
             <span id="aiResultDiffBadge" class="badge"></span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 2px;">
+            <label for="aiResultRoomSelect" style="color: var(--text-muted); font-weight: 600;">📍 Habitació / Racó:</label>
+            <select id="aiResultRoomSelect" class="form-control" style="padding: 4px 8px; font-size: 0.82rem; border-radius: 6px; border: 1px solid var(--border-strong);">
+              <option value="salo">🛋️ Saló</option>
+              <option value="cuina">🍳 Cuina</option>
+              <option value="dormitori">🛏️ Dormitori</option>
+              <option value="bany">🚿 Bany</option>
+              <option value="terrassa">🪴 Terrassa / Balcó</option>
+              <option value="altres">📦 Altres</option>
+            </select>
           </div>
         </div>
 
@@ -2287,6 +2405,11 @@
             <button type="button" class="btn-maint-action" id="modalAddTransplantBtn">
               🪴 Registrar trasplantament
             </button>
+            <div class="affiliate-recommend-wrap" id="affiliateTransplantWrap">
+              <a href="#" class="affiliate-link-btn" id="amzTransplantLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a productes recomanats a Amazon (afiliat)...', '🛒');">
+                <span class="amz-tag">Amazon</span> 🪴 <span id="amzTransplantText">Veure testos de fang i auto-reg recomanats ↗</span>
+              </a>
+            </div>
           </div>
           <div class="maint-card">
             <div>
@@ -2307,6 +2430,11 @@
           <p><strong id="modalFertFreqLabel">Freqüència:</strong> <span id="modalFertFreq"></span></p>
           <p><strong id="modalFertSeasonLabel">Temporada activa:</strong> <span id="modalFertSeason"></span></p>
           <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;" id="modalFertNotes"></p>
+          <div class="affiliate-recommend-wrap" id="affiliateFertWrap">
+            <a href="#" class="affiliate-link-btn" id="amzFertLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a adobs i nutrients a Amazon (afiliat)...', '🛒');">
+              <span class="amz-tag">Amazon</span> 🧪 <span id="amzFertText">Comprar aquest tipus d'adob a Amazon ↗</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -2316,6 +2444,11 @@
           <p><strong id="modalWaterSummerLabel">☀️ Estiu:</strong> <span id="modalWaterSummer"></span></p>
           <p><strong id="modalWaterWinterLabel">❄️ Hivern:</strong> <span id="modalWaterWinter"></span></p>
           <p style="font-size: 0.84rem; color: var(--text-muted); margin-top: 4px;" id="modalWaterDetail"></p>
+          <div class="affiliate-recommend-wrap" id="affiliateWaterMeterWrap">
+            <a href="#" class="affiliate-link-btn" id="amzWaterMeterLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a mesuradors d\'humitat a Amazon (afiliat)...', '🛒');">
+              <span class="amz-tag">Amazon</span> 💧 <span id="amzWaterMeterText">Mesurador d'humitat per no fallar mai el reg ↗</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -2327,6 +2460,14 @@
       <div class="modal-section">
         <div class="modal-section-title" id="modalSubstrateSectionTitle">🪴 Substrat Recomanat</div>
         <p id="modalSubstrate"></p>
+        <div class="affiliate-recommend-wrap" id="affiliateSubstrateWrap">
+          <a href="#" class="affiliate-link-btn" id="amzSubstrateLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a substrats i perlita a Amazon (afiliat)...', '🛒');">
+            <span class="amz-tag">Amazon</span> 🪴 <span id="amzSubstrateText">Comprar substrat i perlita recomanats ↗</span>
+          </a>
+        </div>
+        <div class="affiliate-notice-badge" id="affiliateDisclaimerText">
+          * Recomanacions amb enllaços d'afiliat d'Amazon. Com a afiliats, podem percebre ingressos per compres adscrites sense cap cost extra per a tu.
+        </div>
       </div>
 
       <div class="tip-box" id="modalTip"></div>
@@ -2401,17 +2542,31 @@
           </div>
         </div>
 
-        <!-- ZONA I DIFICULTAT -->
+        <!-- ZONA, HABITACIÓ I DIFICULTAT -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
           <div class="form-group" style="margin-bottom: 0;">
-            <label for="editPlantZone">Ubicació / Zona:</label>
+            <label for="editPlantZone" id="editPlantZoneLabel">Ubicació / Zona:</label>
             <select id="editPlantZone" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
               <option value="interior">🏠 Interior</option>
               <option value="exterior">☀️ Balcó / Exterior</option>
             </select>
           </div>
           <div class="form-group" style="margin-bottom: 0;">
-            <label for="editPlantDifficulty">Dificultat:</label>
+            <label for="editPlantRoom" id="editPlantRoomLabel">📍 Habitació / Racó:</label>
+            <select id="editPlantRoom" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+              <option value="salo">🛋️ Saló</option>
+              <option value="cuina">🍳 Cuina</option>
+              <option value="dormitori">🛏️ Dormitori</option>
+              <option value="bany">🚿 Bany</option>
+              <option value="terrassa">🪴 Terrassa / Balcó</option>
+              <option value="altres">📦 Altres</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editPlantDifficulty" id="editPlantDifficultyLabel">Dificultat:</label>
             <select id="editPlantDifficulty" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
               <option value="molt_facil">🟢 Molt fàcil</option>
               <option value="facil">🔵 Fàcil</option>
@@ -4322,6 +4477,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const photoId = "photo_" + Date.now();
     const storedUrl = await storeUploadedPhoto(photoId, currentAIPhotoBase64);
 
+    const roomVal = document.getElementById("aiResultRoomSelect") ? document.getElementById("aiResultRoomSelect").value : (p.zone === "exterior" ? "terrassa" : "salo");
+
     const newPlantObj = {
       id: "planta_" + Date.now(),
       name: p.name,
@@ -4330,6 +4487,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       gallery: [
         { id: photoId, url: storedUrl, date: nowIso }
       ],
+      room: roomVal,
       difficulty: p.difficulty || "facil",
       difficultyLabel: p.difficultyLabel || "Fàcil",
       difficultyClass: diffCls,
@@ -4427,6 +4585,23 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     "light_low_tolerant": { ca: "Molt adaptable: tolera espais foscos o amb poca llum", es: "Muy adaptable: tolera poca luz", en: "Very adaptable: tolerates low light" },
     "light_direct_sun": { ca: "Sol directe abundant", es: "Sol directo abundante", en: "Full direct sun" }
   };
+
+  const roomVocabulary = {
+    "salo": { ca: "🛋️ Saló", es: "🛋️ Salón", en: "🛋️ Living Room" },
+    "cuina": { ca: "🍳 Cuina", es: "🍳 Cocina", en: "🍳 Kitchen" },
+    "dormitori": { ca: "🛏️ Dormitori", es: "🛏️ Dormitorio", en: "🛏️ Bedroom" },
+    "bany": { ca: "🚿 Bany", es: "🚿 Baño", en: "🚿 Bathroom" },
+    "terrassa": { ca: "🪴 Terrassa / Balcó", es: "🪴 Terraza / Balcón", en: "🪴 Terrace / Balcony" },
+    "altres": { ca: "📦 Altres", es: "📦 Otros", en: "📦 Other" }
+  };
+
+  function getRoomLabel(roomKey) {
+    const key = roomKey || "salo";
+    if (roomVocabulary[key] && roomVocabulary[key][currentLang]) {
+      return roomVocabulary[key][currentLang];
+    }
+    return roomVocabulary["salo"][currentLang] || "🛋️ Saló";
+  }
 
   function trKey(key, fallback = "") {
     if (plantVocabulary[key] && plantVocabulary[key][currentLang]) {
@@ -4646,6 +4821,45 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   const tableBodyEl = document.getElementById("plantsTableBody");
   const emptyStateEl = document.getElementById("emptyState");
 
+  function bulkWaterAllDueToday() {
+    const overduePlants = plantsCatalog.filter(p => computeWaterStatus(p).status === 'overdue');
+    if (overduePlants.length === 0) {
+      showToast(t("No hi ha cap planta amb reg pendent avui!", "¡No hay ninguna planta con riego pendiente hoy!", "No plants with overdue watering today!"), "✅");
+      return;
+    }
+
+    const plantNames = overduePlants.map(p => `• ${p.name}`).join("\n");
+    const confirmMsg = t(
+      `Vols marcar com a regades avui totes les ${overduePlants.length} plantes pendents?\n\n${plantNames}`,
+      `¿Quieres marcar como regadas hoy todas las ${overduePlants.length} plantas pendientes?\n\n${plantNames}`,
+      `Do you want to mark all ${overduePlants.length} due plants as watered today?\n\n${plantNames}`
+    );
+
+    if (!confirm(confirmMsg)) return;
+
+    const todayIso = new Date().toISOString();
+    overduePlants.forEach(p => {
+      const pHist = getPlantHistory(p.id);
+      pHist.waters.push(todayIso);
+      sortIsoArrayDesc(pHist.waters);
+      pHist.snoozeUntil = null;
+    });
+
+    saveLocalHistory(inMemoryHistory);
+    renderPlants();
+    if (currentModalPlantId) {
+      updateModalTracker(currentModalPlantId);
+    }
+
+    const successMsg = t(
+      `💧 S'han regat ${overduePlants.length} plantes amb èxit!`,
+      `💧 ¡Se han regado ${overduePlants.length} plantas con éxito!`,
+      `💧 Successfully watered ${overduePlants.length} plants!`
+    );
+    showToast(successMsg, "💧");
+    syncHistoryToCloud().catch(err => console.warn("Cloud sync error:", err));
+  }
+
   function renderStats() {
     let overdueCount = 0;
     let dueSoonCount = 0;
@@ -4666,6 +4880,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       </div>
       ${dueSoonCount > 0 ? `<div class="stat-pill stat-pill-soon">🟡 <strong>${dueSoonCount}</strong> ${t('tocaran aviat', 'tocarán pronto', 'due soon')}</div>` : ''}
       <div class="stat-pill">${seasonText}</div>
+      ${overdueCount > 0 ? `
+        <button type="button" class="btn-bulk-water" onclick="bulkWaterAllDueToday()" title="${t('Regar totes les plantes que tenen reg pendent d\'un sol cop', 'Regar todas las plantas que tienen riego pendiente de una sola vez', 'Water all plants that are due today in one click')}">
+          💧 ${t('Regar totes les pendents', 'Regar todas las pendientes', 'Water all due')} (${overdueCount})
+        </button>
+      ` : ''}
     `;
   }
 
@@ -4676,6 +4895,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const searchVal = document.getElementById("searchInput").value.toLowerCase().trim();
     const statusVal = document.getElementById("statusFilter").value;
     const zoneVal = document.getElementById("zoneFilter").value;
+    const roomVal = document.getElementById("roomFilter") ? document.getElementById("roomFilter").value : "all";
     const diffVal = document.getElementById("difficultyFilter").value;
 
     const filtered = plantsCatalog.filter(plant => {
@@ -4684,6 +4904,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const matchSearch = plant.name.toLowerCase().includes(searchVal) || 
                           plant.scientific.toLowerCase().includes(searchVal);
       const matchZone = (zoneVal === "all") || (plant.zone === zoneVal);
+      const plantRoom = plant.room || (plant.zone === "exterior" ? "terrassa" : "salo");
+      const matchRoom = (roomVal === "all") || (plantRoom === roomVal);
       const matchDiff = (diffVal === "all") || (plant.difficulty === diffVal);
       
       let matchStatus = true;
@@ -4691,7 +4913,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
         matchStatus = (ws.status === statusVal);
       }
 
-      return matchSearch && matchZone && matchDiff && matchStatus;
+      return matchSearch && matchZone && matchRoom && matchDiff && matchStatus;
     });
 
     // Ordenació: per estat de reg (més urgent primer) o alfabètica
@@ -4753,6 +4975,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                 ${plant.toxic ? t('🔴 Tòxica', '🔴 Tóxica', '🔴 Toxic') : t('🟢 Segura', '🟢 Segura', '🟢 Safe')}
               </span>
               <span class="badge badge-zone">${trText(plant.zoneLabel)}</span>
+              <span class="badge badge-room">${getRoomLabel(plant.room || (plant.zone === 'exterior' ? 'terrassa' : 'salo'))}</span>
             </div>
             <div class="card-badges-bottom">
               <span class="badge ${plant.difficultyClass}">
@@ -4839,7 +5062,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           </td>
           <td id="plant-row-fert-dates-${plant.id}"><strong>${fs.nextText}</strong></td>
           <td><span class="badge ${plant.difficultyClass}">${trText(plant.difficultyLabel)}</span></td>
-          <td>${trText(plant.zoneLabel)}</td>
+          <td>${trText(plant.zoneLabel)}<br><span style="font-size:0.75rem; color:var(--text-muted);">${getRoomLabel(plant.room || (plant.zone === 'exterior' ? 'terrassa' : 'salo'))}</span></td>
           <td>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
               <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-row-water-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'water', event)">${ws.isToday ? t('✅ Regat', '✅ Regado', '✅ Watered') : t('💧 Regat', '💧 Regado', '💧 Water')}</button>
@@ -5105,6 +5328,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       <span class="badge ${plant.difficultyClass}">${trText(plant.difficultyLabel)}</span>
       <span class="badge ${plant.toxic ? 'badge-toxic' : 'badge-safe'}">${trText(plant.toxicityDetail)}</span>
       <span class="badge badge-zone">${trText(plant.zoneLabel)}</span>
+      <span class="badge badge-room">${getRoomLabel(plant.room || (plant.zone === 'exterior' ? 'terrassa' : 'salo'))}</span>
     `;
 
     document.getElementById("modalDeletePlantBtn").onclick = () => deletePlant(plant.id);
@@ -5139,6 +5363,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     document.getElementById("editPlantName").value = plant.name || "";
     document.getElementById("editPlantScientific").value = plant.scientific || "";
     document.getElementById("editPlantZone").value = plant.zone || "interior";
+    const editRoomEl = document.getElementById("editPlantRoom");
+    if (editRoomEl) {
+      editRoomEl.value = plant.room || (plant.zone === "exterior" ? "terrassa" : "salo");
+    }
     document.getElementById("editPlantDifficulty").value = plant.difficulty || "facil";
     
     document.getElementById("editPlantWaterSummer").value = plant.waterDaysSummer || 7;
@@ -5213,6 +5441,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const zoneVal = document.getElementById("editPlantZone").value;
     const zoneLabel = (zoneVal === "exterior") ? "☀️ Balcó / Exterior" : "🏠 Interior";
+    const editRoomInput = document.getElementById("editPlantRoom");
+    const roomVal = editRoomInput ? editRoomInput.value : (zoneVal === "exterior" ? "terrassa" : "salo");
 
     const isToxic = (document.getElementById("editPlantToxic").value === "true");
     const toxicDetail = document.getElementById("editPlantToxicityDetail").value.trim() || 
@@ -5232,6 +5462,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       gallery: gallery,
       zone: zoneVal,
       zoneLabel: zoneLabel,
+      room: roomVal,
       difficulty: diffVal,
       difficultyLabel: diffLabel,
       difficultyClass: diffCls,
@@ -5781,6 +6012,17 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       zoneSel.options[2].text = t("☀️ Exterior / Balcó", "☀️ Exterior / Balcón", "☀️ Outdoor / Balcony");
     }
 
+    const roomSel = document.getElementById("roomFilter");
+    if (roomSel && roomSel.options.length >= 7) {
+      roomSel.options[0].text = t("📍 Totes les habitacions", "📍 Todas las habitaciones", "📍 All Rooms / Spots");
+      roomSel.options[1].text = t("🛋️ Saló", "🛋️ Salón", "🛋️ Living Room");
+      roomSel.options[2].text = t("🍳 Cuina", "🍳 Cocina", "🍳 Kitchen");
+      roomSel.options[3].text = t("🛏️ Dormitori", "🛏️ Dormitorio", "🛏️ Bedroom");
+      roomSel.options[4].text = t("🚿 Bany", "🚿 Baño", "🚿 Bathroom");
+      roomSel.options[5].text = t("🪴 Terrassa / Balcó", "🪴 Terraza / Balcón", "🪴 Terrace / Balcony");
+      roomSel.options[6].text = t("📦 Altres", "📦 Otros", "📦 Other");
+    }
+
     const diffSel = document.getElementById("difficultyFilter");
     if (diffSel && diffSel.options.length >= 4) {
       diffSel.options[0].text = t("⭐ Dificultat: Totes", "⭐ Dificultad: Todas", "⭐ Difficulty: All");
@@ -5877,6 +6119,22 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("modalGalleryTitleText", t("📸 Galeria d'Evolució", "📸 Galería de Evolución", "📸 Growth Gallery"));
     setElText("modalGalleryCameraBtn", t("📸 Fer foto", "📸 Hacer foto", "📸 Take Photo"));
     setElText("modalGalleryUploadBtn", t("➕ Pujar foto", "➕ Subir foto", "➕ Upload Photo"));
+
+    // Enllaços d'afiliació Amazon
+    setElText("amzTransplantText", t("Veure testos de fang i auto-reg recomanats ↗", "Ver macetas de barro y autorriego recomendadas ↗", "Recommended terracotta & self-watering pots ↗"));
+    setElText("amzFertText", t("Comprar aquest tipus d'adob a Amazon ↗", "Comprar este tipo de abono en Amazon ↗", "Find recommended fertilizer on Amazon ↗"));
+    setElText("amzWaterMeterText", t("Mesurador d'humitat per no fallar mai el reg ↗", "Medidor de humedad para no fallar el riego ↗", "Soil moisture meter to water with confidence ↗"));
+    setElText("amzSubstrateText", t("Comprar substrat i perlita recomanats ↗", "Comprar sustrato y perlita recomendados ↗", "Find recommended soil mix & perlite ↗"));
+    setElText("affiliateDisclaimerText", t(
+      "* Recomanacions amb enllaços d'afiliat d'Amazon. Com a afiliats, podem percebre ingressos per compres adscrites sense cap cost extra per a tu.",
+      "* Recomendaciones con enlaces de afiliado de Amazon. Como afiliados, podemos obtener ingresos por compras adscritas sin ningún coste extra para ti.",
+      "* Recommendations with Amazon affiliate links. As an associate, we may earn from qualifying purchases at no extra cost to you."
+    ));
+
+    // Formulari d'edició
+    setElText("editPlantZoneLabel", t("Ubicació / Zona:", "Ubicación / Zona:", "Location / Zone:"));
+    setElText("editPlantRoomLabel", t("📍 Habitació / Racó:", "📍 Habitación / Rincón:", "📍 Room / Spot:"));
+    setElText("editPlantDifficultyLabel", t("Dificultat:", "Dificultad:", "Difficulty:"));
 
     // Modal d'Històric
     setElText("historyModalSubtitle", t("Registre complet de regs, adobs, trasplantaments i podes. Tria la data per anotar accions d'avui o de dies passats:", "Registro completo de riegos, abonos, trasplantes y podas. Elige la fecha para anotar acciones de hoy o días pasados:", "Full log of watering, fertilizing, repotting, and pruning. Choose a date to record today's or past tasks:"));
@@ -6029,18 +6287,21 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           <p><strong>2. Informational Botanical Guidance:</strong> Watering intervals, soil recommendations, and toxicity details are provided for informational and educational purposes. Ambient conditions (humidity, sunlight, temperature) vary greatly; always verify soil moisture manually before watering.</p>
           <p><strong>3. Toxicity & Safety:</strong> Pet and child toxicity indicators are general guidelines. If you suspect plant ingestion or poisoning, immediately contact a veterinary or medical professional.</p>
           <p><strong>4. Intellectual Property:</strong> Application layout, visual theme, and source code are protected. Photos uploaded by the user remain their exclusive property.</p>
+          <p><strong>5. Affiliate Disclosure:</strong> As an Amazon Associate, we earn from qualifying purchases resulting from affiliate links at no additional cost to you.</p>
         ` : (currentLang === 'es' ? `
           <h3 style="font-size:1.05rem; margin-bottom:8px; color:var(--text-main);">Aviso Legal y Condiciones de Uso</h3>
           <p><strong>1. Finalidad de la Aplicación:</strong> Esta herramienta está diseñada como una agenda botánica personal para organizar rutinas de riego, abonado, trasplantes y seguimiento de plantas domésticas.</p>
           <p><strong>2. Pautas Botánicas Informativas:</strong> Las frecuencias de riego, luz y sustrato son recomendaciones generales de referencia. Los factores ambientales de cada hogar varían; comprueba siempre la humedad del sustrato antes de regar.</p>
           <p><strong>3. Toxicidad y Seguridad:</strong> Las indicaciones de toxicidad para mascotas son orientativas. Ante cualquier sospecha de ingesta o intoxicación, acude de inmediato a un centro veterinario o médico.</p>
           <p><strong>4. Propiedad:</strong> El diseño, código fuente y estructura pertenecen a su desarrollador. Las fotografías que añadas permanecen siempre bajo tu exclusiva propiedad.</p>
+          <p><strong>5. Divulgación de Afiliación:</strong> En calidad de Afiliado de Amazon, obtenemos ingresos por las compras adscritas que cumplen los requisitos aplicables, sin ningún coste adicional para el usuario.</p>
         ` : `
           <h3 style="font-size:1.05rem; margin-bottom:8px; color:var(--text-main);">Avís Legal i Condicions d'Ús</h3>
           <p><strong>1. Finalitat de l'Aplicació:</strong> Aquesta eina està pensada com una agenda botànica personal per a organitzar el reg, adobs, trasplantaments i evolució de les plantes de la llar.</p>
           <p><strong>2. Pautes Botàniques Informatives:</strong> Els consells de reg, llum i substrat són orientatius. Cada habitatge té condicions de llum i humitat particulars; comprova sempre l'estat del substrat abans de regar.</p>
           <p><strong>3. Toxicitat i Seguretat:</strong> Les indicacions de toxicitat per a mascotes són una guia preventiva. Davant qualsevol sospita d'ingesta, consulta immediatament un veterinari o metge.</p>
           <p><strong>4. Propietat:</strong> El disseny i codi pertanyen al seu desenvolupador. Les fotografies que registris són teves i es guarden al teu dispositiu.</p>
+          <p><strong>5. Declaració d'Afiliació:</strong> Com a participants del Programa d'Afiliats d'Amazon, obtenim ingressos per les compres adscrites que compleixen els requisits aplicables, sense cap recàrrec ni cost extra per a tu.</p>
         `);
       }
     } else {
@@ -6142,6 +6403,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   document.getElementById("searchInput").addEventListener("input", renderPlants);
   document.getElementById("statusFilter").addEventListener("change", renderPlants);
   document.getElementById("zoneFilter").addEventListener("change", renderPlants);
+  const roomFilterEl = document.getElementById("roomFilter");
+  if (roomFilterEl) roomFilterEl.addEventListener("change", renderPlants);
   document.getElementById("difficultyFilter").addEventListener("change", renderPlants);
   
   const sortSelect = document.getElementById("sortFilter");
