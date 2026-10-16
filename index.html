@@ -1805,6 +1805,50 @@
     body.dark-mode tr:hover td {
       background: #1a2e20;
     }
+
+    /* MODAL PREFERÈNCIES */
+    .pref-section {
+      margin-bottom: 18px;
+    }
+    .pref-section-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .pref-options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .pref-option-btn {
+      background: var(--bg-primary);
+      border: 2px solid var(--border-subtle);
+      color: var(--text-main);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .pref-option-btn:hover {
+      border-color: var(--accent);
+    }
+    .pref-option-btn.active {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--text-main);
+      box-shadow: 0 2px 8px rgba(39, 93, 54, 0.15);
+    }
   </style>
 </head>
 <body>
@@ -1816,15 +1860,15 @@
     <div class="header-content">
       <div class="header-top">
         <div>
-          <h1>🌱 El Meu Registre de Plantes</h1>
-          <p class="header-subtitle">Seguiment de reg, abonament i cures de les plantes domèstiques.</p>
+          <h1 id="appMainTitle">🌱 El Meu Registre de Plantes</h1>
+          <p class="header-subtitle" id="appMainSubtitle">Seguiment de reg, abonament i cures de les plantes domèstiques.</p>
         </div>
 
         <div class="header-actions">
-          <button type="button" class="btn-header" id="darkModeToggleBtn" onclick="toggleDarkMode()" title="Canviar entre mode clar i mode fosc">
-            🌙 Mode Fosc
+          <button type="button" class="btn-header" id="preferencesBtn" onclick="openPreferencesModal()" title="Preferències">
+            ⚙️ <span id="prefHeaderBtnLabel">Preferències</span>
           </button>
-          <button class="btn-header btn-add-plant" onclick="openAddPlantModal()">
+          <button class="btn-header btn-add-plant" id="addPlantHeaderBtn" onclick="openAddPlantModal()">
             ➕ Afegir Nova Planta
           </button>
         </div>
@@ -1884,7 +1928,7 @@
   <div class="table-container" id="plantsTableContainer">
     <table>
       <thead>
-        <tr>
+        <tr id="tableHeaderRow">
           <th>Foto</th>
           <th>Nom Comú</th>
           <th>Estat Reg</th>
@@ -1905,8 +1949,8 @@
     <!-- PREVISIÓ SETMANAL (7 DIES) -->
     <div class="calendar-panel">
       <div class="calendar-panel-header">
-        <div class="calendar-panel-title">🗓️ Previsió Setmanal (Propers 7 dies)</div>
-        <span style="font-size: 0.80rem; color: var(--text-muted);">Fes clic a qualsevol planta per obrir la seva fitxa</span>
+        <div class="calendar-panel-title" id="weeklyCalendarTitle">🗓️ Previsió Setmanal (Propers 7 dies)</div>
+        <span id="weeklyCalendarHint" style="font-size: 0.80rem; color: var(--text-muted);">Fes clic a qualsevol planta per obrir la seva fitxa</span>
       </div>
       <div class="week-strip-grid" id="weeklyCalendarGrid"></div>
     </div>
@@ -1914,14 +1958,14 @@
     <!-- CALENDARI MENSUAL -->
     <div class="calendar-panel">
       <div class="calendar-panel-header">
-        <div class="calendar-panel-title" id="monthlyCalendarTitle">📅 Calendari Mensual</div>
+        <div class="calendar-panel-title" id="calendarMonthTitle">📅 Calendari Mensual</div>
         <div class="month-nav-group">
-          <button type="button" class="btn-cal-nav" onclick="changeCalendarMonth(-1)">‹ Mes anterior</button>
-          <button type="button" class="btn-cal-nav" onclick="resetCalendarToToday()">Avui</button>
-          <button type="button" class="btn-cal-nav" onclick="changeCalendarMonth(1)">Mes següent ›</button>
+          <button type="button" class="btn-cal-nav" id="calPrevMonthBtn" onclick="changeCalendarMonth(-1)">‹ Mes anterior</button>
+          <button type="button" class="btn-cal-nav" id="calTodayBtn" onclick="resetCalendarToToday()">Avui</button>
+          <button type="button" class="btn-cal-nav" id="calNextMonthBtn" onclick="changeCalendarMonth(1)">Mes següent ›</button>
         </div>
       </div>
-      <div class="month-weekdays-row">
+      <div class="month-weekdays-row" id="monthWeekdaysRow">
         <div>Dl</div><div>Dt</div><div>Dc</div><div>Dj</div><div>Dv</div><div>Ds</div><div>Dg</div>
       </div>
       <div class="month-calendar-grid" id="monthlyCalendarGrid"></div>
@@ -1929,8 +1973,8 @@
   </div>
 
   <div class="empty-state" id="emptyState">
-    <h2 style="font-size: 1.25rem; font-family: var(--font-display); font-weight: 600; color: var(--text-main); margin-bottom: 4px;">No s'ha trobat cap planta</h2>
-    <p>Prova de canviar els filtres de cerca.</p>
+    <h2 id="emptyStateTitle" style="font-size: 1.25rem; font-family: var(--font-display); font-weight: 600; color: var(--text-main); margin-bottom: 4px;">No s'ha trobat cap planta</h2>
+    <p id="emptyStateDesc">Prova de canviar els filtres de cerca.</p>
   </div>
 
 </div>
@@ -2073,7 +2117,7 @@
   <div class="modal-card">
     <button class="modal-close" onclick="closeModal('plantModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-image-wrap">
-      <button type="button" class="modal-zoom-hint-btn" onclick="openPhotoLightbox()" title="Obrir foto a pantalla completa amb zoom">🔍 Ampliar</button>
+      <button type="button" class="modal-zoom-hint-btn" id="modalZoomHintBtn" onclick="openPhotoLightbox()" title="Obrir foto a pantalla completa amb zoom">🔍 Ampliar</button>
       <button type="button" class="modal-photo-nav-btn prev" id="modalPhotoPrevBtn" onclick="stepModalGalleryPhoto(-1)" style="display:none;" aria-label="Foto anterior">&#8249;</button>
       <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta" onclick="openPhotoLightbox()" title="Fes clic per ampliar a pantalla completa">
       <button type="button" class="modal-photo-nav-btn next" id="modalPhotoNextBtn" onclick="stepModalGalleryPhoto(1)" style="display:none;" aria-label="Foto següent">&#8250;</button>
@@ -2143,11 +2187,11 @@
 
       <!-- MANTENIMENT: TRASPLANTAMENT I PODA -->
       <div class="modal-section">
-        <div class="modal-section-title">🛠️ Manteniment: Trasplantament i Poda</div>
+        <div class="modal-section-title" id="modalMaintSectionTitle">🛠️ Manteniment: Trasplantament i Poda</div>
         <div class="maint-grid">
           <div class="maint-card">
             <div>
-              <div class="maint-card-title">🪴 Trasplantament i Test</div>
+              <div class="maint-card-title" id="modalTransplantCardTitle">🪴 Trasplantament i Test</div>
               <div class="maint-card-info" id="modalTransplantInfo">Últim: Cap registrat</div>
             </div>
             <button type="button" class="btn-maint-action" id="modalAddTransplantBtn">
@@ -2156,7 +2200,7 @@
           </div>
           <div class="maint-card">
             <div>
-              <div class="maint-card-title">✂️ Poda i Neteja</div>
+              <div class="maint-card-title" id="modalPruningCardTitle">✂️ Poda i Neteja</div>
               <div class="maint-card-info" id="modalPruningInfo">Última: Cap registrada</div>
             </div>
             <button type="button" class="btn-maint-action" id="modalAddPruningBtn">
@@ -2167,31 +2211,31 @@
       </div>
 
       <div class="modal-section">
-        <div class="modal-section-title">🧪 Pauta d'Abonament</div>
+        <div class="modal-section-title" id="modalFertSectionTitle">🧪 Pauta d'Abonament</div>
         <div class="modal-box-highlight">
-          <p><strong>Tipus:</strong> <span id="modalFertType"></span></p>
-          <p><strong>Freqüència:</strong> <span id="modalFertFreq"></span></p>
-          <p><strong>Temporada activa:</strong> <span id="modalFertSeason"></span></p>
+          <p><strong id="modalFertTypeLabel">Tipus:</strong> <span id="modalFertType"></span></p>
+          <p><strong id="modalFertFreqLabel">Freqüència:</strong> <span id="modalFertFreq"></span></p>
+          <p><strong id="modalFertSeasonLabel">Temporada activa:</strong> <span id="modalFertSeason"></span></p>
           <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;" id="modalFertNotes"></p>
         </div>
       </div>
 
       <div class="modal-section">
-        <div class="modal-section-title">💧 Pauta de Reg</div>
+        <div class="modal-section-title" id="modalWaterSectionTitle">💧 Pauta de Reg</div>
         <div class="modal-box-highlight">
-          <p><strong>☀️ Estiu:</strong> <span id="modalWaterSummer"></span></p>
-          <p><strong>❄️ Hivern:</strong> <span id="modalWaterWinter"></span></p>
+          <p><strong id="modalWaterSummerLabel">☀️ Estiu:</strong> <span id="modalWaterSummer"></span></p>
+          <p><strong id="modalWaterWinterLabel">❄️ Hivern:</strong> <span id="modalWaterWinter"></span></p>
           <p style="font-size: 0.84rem; color: var(--text-muted); margin-top: 4px;" id="modalWaterDetail"></p>
         </div>
       </div>
 
       <div class="modal-section">
-        <div class="modal-section-title">☀️ Llum i Ubicació</div>
+        <div class="modal-section-title" id="modalLightSectionTitle">☀️ Llum i Ubicació</div>
         <p id="modalLight"></p>
       </div>
 
       <div class="modal-section">
-        <div class="modal-section-title">🪴 Substrat Recomanat</div>
+        <div class="modal-section-title" id="modalSubstrateSectionTitle">🪴 Substrat Recomanat</div>
         <p id="modalSubstrate"></p>
       </div>
 
@@ -2201,16 +2245,16 @@
       <div class="modal-section" style="margin-top: 22px; margin-bottom: 0; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
         <div class="gallery-header-row">
           <div class="modal-section-title" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-            📸 Galeria d'Evolució
+            <span id="modalGalleryTitleText">📸 Galeria d'Evolució</span>
             <span id="modalGalleryCount" style="background: #e3efe5; color: #1e582e; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; text-transform: none;">1 foto</span>
           </div>
           <div class="gallery-upload-btns">
             <input type="file" id="galleryCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleGalleryPhotoUpload(event)">
             <input type="file" id="galleryFileInput" accept="image/*" multiple style="display:none;" onchange="handleGalleryPhotoUpload(event)">
-            <button type="button" class="btn-gallery-upload" onclick="document.getElementById('galleryCameraInput').click()">
+            <button type="button" class="btn-gallery-upload" id="modalGalleryCameraBtn" onclick="document.getElementById('galleryCameraInput').click()">
               📸 Fer foto
             </button>
-            <button type="button" class="btn-gallery-upload secondary" onclick="document.getElementById('galleryFileInput').click()">
+            <button type="button" class="btn-gallery-upload secondary" id="modalGalleryUploadBtn" onclick="document.getElementById('galleryFileInput').click()">
               ➕ Pujar foto
             </button>
           </div>
@@ -2463,6 +2507,51 @@
   </div>
 </div>
 
+
+<!-- MODAL PREFERÈNCIES (TEMA CLAR/FOSC I IDIOMA) -->
+<div class="modal-overlay" id="preferencesModal">
+  <div class="modal-card" style="max-width: 440px;">
+    <button class="modal-close" onclick="closeModal('preferencesModal')" aria-label="Tancar finestra">&times;</button>
+    <div class="modal-content" style="padding: 24px;">
+      <h2 id="prefModalTitle" style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
+        ⚙️ Preferències
+      </h2>
+      <p id="prefModalSubtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+        Personalitza l'aparença visual i l'idioma de l'aplicació.
+      </p>
+
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefThemeSectionLabel">🎨 Aparença / Tema</span>
+        <div class="pref-options-grid">
+          <button type="button" class="pref-option-btn active" id="prefThemeLightBtn" onclick="setThemePreference('light')">
+            ☀️ <span id="prefThemeLightText">Mode Clar</span>
+          </button>
+          <button type="button" class="pref-option-btn" id="prefThemeDarkBtn" onclick="setThemePreference('dark')">
+            🌙 <span id="prefThemeDarkText">Mode Fosc</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pref-section" style="margin-bottom: 22px;">
+        <span class="pref-section-label" id="prefLangSectionLabel">🌐 Idioma</span>
+        <div class="pref-options-grid">
+          <button type="button" class="pref-option-btn active" id="prefLangCaBtn" onclick="setLanguagePreference('ca')">
+            🌿 Català
+          </button>
+          <button type="button" class="pref-option-btn" id="prefLangEsBtn" onclick="setLanguagePreference('es')">
+            🌱 Español
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
+        <button type="button" class="btn-action" id="prefCloseBtn" style="background: #256a38; color: white; padding: 8px 20px;" onclick="closeModal('preferencesModal')">
+          Fet
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- LIGHTBOX PANTALLA COMPLETA AMB ZOOM (PUNT 9) -->
 <div class="lightbox-overlay" id="photoLightboxModal">
@@ -3318,10 +3407,10 @@
       if (waterBox) waterBox.className = `tracker-card ${ws.statusClass}`;
 
       const waterTitle = document.getElementById(`plant-water-title-${plantId}`);
-      if (waterTitle) waterTitle.innerText = `💧 Reg: ${ws.badgeText}`;
+      if (waterTitle) waterTitle.innerText = `💧 ${t('Reg', 'Riego')}: ${ws.badgeText}`;
 
       const waterNext = document.getElementById(`plant-water-next-${plantId}`);
-      if (waterNext) waterNext.innerHTML = `📅 Proper: <strong>${ws.nextText}</strong>`;
+      if (waterNext) waterNext.innerHTML = `📅 ${t('Proper', 'Próximo')}: <strong>${ws.nextText}</strong>`;
 
       const waterLast = document.getElementById(`plant-water-last-${plantId}`);
       if (waterLast) waterLast.innerText = ws.lastText;
@@ -3329,7 +3418,7 @@
       const waterBtn = document.getElementById(`plant-water-btn-${plantId}`);
       if (waterBtn) {
         waterBtn.className = `btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}`;
-        waterBtn.innerText = ws.isToday ? '✅ Regat avui' : '💧 Regar avui';
+        waterBtn.innerText = ws.isToday ? t('✅ Regat avui', '✅ Regado hoy') : t('💧 Regar avui', '💧 Regar hoy');
       }
 
       // Caixa d'Adob
@@ -3337,10 +3426,10 @@
       if (fertBox) fertBox.className = `tracker-card ${fs.statusClass}`;
 
       const fertTitle = document.getElementById(`plant-fert-title-${plantId}`);
-      if (fertTitle) fertTitle.innerText = `🧪 Adob: ${fs.badgeText}`;
+      if (fertTitle) fertTitle.innerText = `🧪 ${t('Adob', 'Abono')}: ${fs.badgeText}`;
 
       const fertNext = document.getElementById(`plant-fert-next-${plantId}`);
-      if (fertNext) fertNext.innerHTML = `📅 Proper: <strong>${fs.nextText}</strong>`;
+      if (fertNext) fertNext.innerHTML = `📅 ${t('Proper', 'Próximo')}: <strong>${fs.nextText}</strong>`;
 
       const fertLast = document.getElementById(`plant-fert-last-${plantId}`);
       if (fertLast) fertLast.innerText = fs.lastText;
@@ -3348,7 +3437,7 @@
       const fertBtn = document.getElementById(`plant-fert-btn-${plantId}`);
       if (fertBtn) {
         fertBtn.className = `btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}`;
-        fertBtn.innerText = fs.isToday ? '✅ Abonat avui' : '🧪 Abonar avui';
+        fertBtn.innerText = fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy') : t('🧪 Abonar avui', '🧪 Abonar hoy');
       }
 
       // Micro-animació de confirmació visual immediata
@@ -3369,7 +3458,7 @@
     const rowWaterBtn = document.getElementById(`plant-row-water-btn-${plantId}`);
     if (rowWaterBtn) {
       rowWaterBtn.className = `btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}`;
-      rowWaterBtn.innerText = ws.isToday ? '✅ Regat' : '💧 Regat';
+      rowWaterBtn.innerText = ws.isToday ? t('✅ Regat', '✅ Regado') : t('💧 Regat', '💧 Regado');
     }
 
     const rowFertBadge = document.getElementById(`plant-row-fert-badge-${plantId}`);
@@ -3383,7 +3472,7 @@
     const rowFertBtn = document.getElementById(`plant-row-fert-btn-${plantId}`);
     if (rowFertBtn) {
       rowFertBtn.className = `btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}`;
-      rowFertBtn.innerText = fs.isToday ? '✅ Abonat' : '🧪 Abonat';
+      rowFertBtn.innerText = fs.isToday ? t('✅ Abonat', '✅ Abonado') : t('🧪 Abonat', '🧪 Abonado');
     }
 
     renderCalendar();
@@ -3398,13 +3487,13 @@
     const transplantInfoEl = document.getElementById("modalTransplantInfo");
     if (transplantInfoEl) {
       const lastT = pHist.transplants && pHist.transplants[0];
-      const potText = plant.potSize ? `<br>🏺 Test actual: <strong>${plant.potSize}</strong>` : "";
+      const potText = plant.potSize ? `<br>🏺 ${t('Test actual', 'Maceta actual')}: <strong>${plant.potSize}</strong>` : "";
       if (lastT) {
         const dStr = formatGalleryDateShort(typeof lastT === 'string' ? lastT : lastT.date);
         const noteStr = (typeof lastT === 'object' && lastT.note) ? `<br>📝 <em>${lastT.note}</em>` : "";
-        transplantInfoEl.innerHTML = `Últim: <strong>${dStr}</strong>${potText}${noteStr}`;
+        transplantInfoEl.innerHTML = `${t('Últim', 'Último')}: <strong>${dStr}</strong>${potText}${noteStr}`;
       } else {
-        transplantInfoEl.innerHTML = `Últim: <strong>Cap registrat</strong>${potText}`;
+        transplantInfoEl.innerHTML = `${t('Últim', 'Último')}: <strong>${t('Cap registrat', 'Ninguno registrado')}</strong>${potText}`;
       }
     }
 
@@ -3414,17 +3503,23 @@
       if (lastP) {
         const dStr = formatGalleryDateShort(typeof lastP === 'string' ? lastP : lastP.date);
         const noteStr = (typeof lastP === 'object' && lastP.note) ? `<br>📝 <em>${lastP.note}</em>` : "";
-        pruningInfoEl.innerHTML = `Última: <strong>${dStr}</strong>${noteStr}`;
+        pruningInfoEl.innerHTML = `${t('Última', 'Última')}: <strong>${dStr}</strong>${noteStr}`;
       } else {
-        pruningInfoEl.innerHTML = `Última: <strong>Cap registrada</strong>`;
+        pruningInfoEl.innerHTML = `${t('Última', 'Última')}: <strong>${t('Cap registrada', 'Ninguna registrada')}</strong>`;
       }
     }
 
     const btnAddT = document.getElementById("modalAddTransplantBtn");
-    if (btnAddT) btnAddT.onclick = (e) => openQuickDateModal(plantId, 'transplant', e);
+    if (btnAddT) {
+      btnAddT.innerText = t("🪴 Registrar trasplantament", "🪴 Registrar trasplante");
+      btnAddT.onclick = (e) => openQuickDateModal(plantId, 'transplant', e);
+    }
 
     const btnAddP = document.getElementById("modalAddPruningBtn");
-    if (btnAddP) btnAddP.onclick = (e) => openQuickDateModal(plantId, 'pruning', e);
+    if (btnAddP) {
+      btnAddP.innerText = t("✂️ Registrar poda / neteja", "✂️ Registrar poda / limpieza");
+      btnAddP.onclick = (e) => openQuickDateModal(plantId, 'pruning', e);
+    }
   }
 
   // Actualització del panell d'acció ràpida dins la fitxa modal
@@ -3445,18 +3540,19 @@
 
     if (modalWaterBox) {
       modalWaterBox.className = `tracker-card ${ws.statusClass}`;
-      if (modalWaterTitle) modalWaterTitle.innerText = `💧 Reg: ${ws.badgeText}`;
-      if (modalWaterNext) modalWaterNext.innerHTML = `📅 Proper: <strong>${ws.nextText}</strong>`;
+      if (modalWaterTitle) modalWaterTitle.innerText = `💧 ${t('Reg', 'Riego')}: ${ws.badgeText}`;
+      if (modalWaterNext) modalWaterNext.innerHTML = `📅 ${t('Proper', 'Próximo')}: <strong>${ws.nextText}</strong>`;
       if (modalWaterLast) modalWaterLast.innerText = ws.lastText;
       if (modalWaterBtn) {
         modalWaterBtn.className = `btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}`;
-        modalWaterBtn.innerText = ws.isToday ? '✅ Regat avui' : '💧 Regar avui';
+        modalWaterBtn.innerText = ws.isToday ? t('✅ Regat avui', '✅ Regado hoy') : t('💧 Regar avui', '💧 Regar hoy');
         modalWaterBtn.onclick = (e) => recordAction(plantId, 'water', e);
       }
       if (modalSnoozeBtn) {
         modalSnoozeBtn.onclick = (e) => snoozeWater(plantId, 1, e);
       }
       if (modalWaterPastBtn) {
+        modalWaterPastBtn.innerText = t("📅 Data", "📅 Fecha");
         modalWaterPastBtn.onclick = (e) => openQuickDateModal(plantId, 'water', e);
       }
     }
@@ -3470,15 +3566,16 @@
 
     if (modalFertBox) {
       modalFertBox.className = `tracker-card ${fs.statusClass}`;
-      if (modalFertTitle) modalFertTitle.innerText = `🧪 Adob: ${fs.badgeText}`;
-      if (modalFertNext) modalFertNext.innerHTML = `📅 Proper: <strong>${fs.nextText}</strong>`;
+      if (modalFertTitle) modalFertTitle.innerText = `🧪 ${t('Adob', 'Abono')}: ${fs.badgeText}`;
+      if (modalFertNext) modalFertNext.innerHTML = `📅 ${t('Proper', 'Próximo')}: <strong>${fs.nextText}</strong>`;
       if (modalFertLast) modalFertLast.innerText = fs.lastText;
       if (modalFertBtn) {
         modalFertBtn.className = `btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}`;
-        modalFertBtn.innerText = fs.isToday ? '✅ Abonat avui' : '🧪 Abonar avui';
+        modalFertBtn.innerText = fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy') : t('🧪 Abonar avui', '🧪 Abonar hoy');
         modalFertBtn.onclick = (e) => recordAction(plantId, 'fert', e);
       }
       if (modalFertPastBtn) {
+        modalFertPastBtn.innerText = t("📅 Data", "📅 Fecha");
         modalFertPastBtn.onclick = (e) => openQuickDateModal(plantId, 'fert', e);
       }
     }
@@ -3513,7 +3610,13 @@
       updateModalTracker(plantId);
     }
     renderStats();
-    showToast(`⏳ Reg de "${plant.name}" posposat +${days} dia (fins ${formatDateFriendly(targetDate)})`, "⏳");
+    showToast(
+      t(
+        `⏳ Reg de "${plant.name}" posposat +${days} dia (fins ${formatDateFriendly(targetDate)})`,
+        `⏳ Riego de "${plant.name}" pospuesto +${days} día (hasta ${formatDateFriendly(targetDate)})`
+      ),
+      "⏳"
+    );
 
     syncHistoryToCloud().catch(err => console.warn("Sync error:", err));
   }
@@ -4127,14 +4230,55 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     return month >= 4 && month <= 8;
   }
 
+  // -------------------------------------------------------------
+  // IDIOMA I TRADUCCIÓ (CA / ES)
+  // -------------------------------------------------------------
+  let currentLang = "ca";
+  try {
+    const savedLang = localStorage.getItem("registre_plantes_lang");
+    if (savedLang === "es" || savedLang === "ca") currentLang = savedLang;
+  } catch (e) {}
+
+  function t(ca, es) {
+    return currentLang === "es" ? es : ca;
+  }
+
+  function getLocale() {
+    return currentLang === "es" ? "es-ES" : "ca-ES";
+  }
+
+  function trText(str) {
+    if (!str || currentLang !== "es") return str;
+    let s = String(str);
+    const exactMap = {
+      "🏠 Interior": "🏠 Interior",
+      "☀️ Balcó / Exterior": "☀️ Balcón / Exterior",
+      "Molt fàcil": "Muy fácil",
+      "Fàcil": "Fácil",
+      "Mitjana": "Media",
+      "🟢 Segura per mascotes.": "🟢 Segura para mascotas.",
+      "🔴 Tòxica per a mascotes.": "🔴 Tóxica para mascotas.",
+      "🔴 Tòxica en cas d'ingesta per mascotes.": "🔴 Tóxica en caso de ingesta por mascotas.",
+      "Primavera i Estiu": "Primavera y Verano",
+      "Primavera i estiu": "Primavera y verano"
+    };
+    if (exactMap[s]) return exactMap[s];
+    s = s.replace(/\bCada (\d+) dies\b/gi, "Cada $1 días");
+    s = s.replace(/\bBalcó\b/g, "Balcón");
+    s = s.replace(/\bMolt fàcil\b/g, "Muy fácil");
+    s = s.replace(/\bFàcil\b/g, "Fácil");
+    s = s.replace(/\bMitjana\b/g, "Media");
+    return s;
+  }
+
   function formatDateFriendly(dateObj) {
     const d = new Date(dateObj);
-    return d.toLocaleDateString("ca-ES", { day: "numeric", month: "short" });
+    return d.toLocaleDateString(getLocale(), { day: "numeric", month: "short" });
   }
 
   function formatDateTimeFriendly(dateObj) {
     const d = new Date(dateObj);
-    return d.toLocaleDateString("ca-ES", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+    return d.toLocaleDateString(getLocale(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   }
 
   function computeWaterStatus(plant) {
@@ -4148,8 +4292,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     if (!lastWaterIso && !history.snoozeUntil) {
       return {
-        status: "none", statusClass: "status-none", badgeText: "⚪ Sense registre",
-        nextText: "Pendent de primer reg", lastText: "Mai registrat", daysLeft: null,
+        status: "none", statusClass: "status-none", badgeText: t("⚪ Sense registre", "⚪ Sin registro"),
+        nextText: t("Pendent de primer reg", "Pendiente de primer riego"), lastText: t("Mai registrat", "Nunca registrado"), daysLeft: null,
         isToday: false, nextDateObj: null, intervalDays
       };
     }
@@ -4183,28 +4327,32 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     let status = "ok";
     let statusClass = "status-ok";
-    let badgeText = "🟢 Al dia";
+    let badgeText = t("🟢 Al dia", "🟢 Al día");
 
     if (daysLeft < 0) {
       status = "overdue"; statusClass = "status-overdue";
       const absDays = Math.abs(daysLeft);
-      badgeText = `🏺 Comprovar terra (${absDays} ${absDays === 1 ? 'dia' : 'dies'})`;
+      const dWord = absDays === 1 ? t('dia', 'día') : t('dies', 'días');
+      badgeText = `🏺 ${t('Comprovar terra', 'Comprobar tierra')} (${absDays} ${dWord})`;
     } else if (daysLeft === 0) {
       status = "overdue"; statusClass = "status-overdue";
-      badgeText = "💧 Toca regar avui";
+      badgeText = t("💧 Toca regar avui", "💧 Toca regar hoy");
     } else if (daysLeft <= 2) {
       status = "due_soon"; statusClass = "status-due-soon";
+      const dWord = daysLeft === 1 ? t('dia', 'día') : t('dies', 'días');
       badgeText = isSnoozed
-        ? `⏳ Posposat (${daysLeft} ${daysLeft === 1 ? 'dia' : 'dies'})`
-        : `🟡 Aviat (${daysLeft} ${daysLeft === 1 ? 'dia' : 'dies'})`;
+        ? `⏳ ${t('Posposat', 'Pospuesto')} (${daysLeft} ${dWord})`
+        : `🟡 ${t('Aviat', 'Pronto')} (${daysLeft} ${dWord})`;
     } else {
       status = "ok"; statusClass = "status-ok";
-      badgeText = isToday ? `🟢 Regat avui (${daysLeft} dies)` : `🟢 Al dia (${daysLeft} dies)`;
+      const dWord = t('dies', 'días');
+      badgeText = isToday ? `🟢 ${t('Regat avui', 'Regado hoy')} (${daysLeft} ${dWord})` : `🟢 ${t('Al dia', 'Al día')} (${daysLeft} ${dWord})`;
     }
 
+    const dPassedWord = diffDaysPassed === 1 ? t('dia', 'día') : t('dies', 'días');
     const lastTextStr = lastDate
-      ? (isToday ? `Darrer reg: Avui (${formatDateFriendly(lastDate)})` : `Darrer reg: fa ${diffDaysPassed} ${diffDaysPassed === 1 ? 'dia' : 'dies'} (${formatDateFriendly(lastDate)})`)
-      : "Mai registrat (posposat)";
+      ? (isToday ? `${t('Darrer reg: Avui', 'Último riego: Hoy')} (${formatDateFriendly(lastDate)})` : `${t('Darrer reg: fa', 'Último riego: hace')} ${diffDaysPassed} ${dPassedWord} (${formatDateFriendly(lastDate)})`)
+      : t("Mai registrat (posposat)", "Nunca registrado (pospuesto)");
 
     return {
       status, statusClass, badgeText,
@@ -4227,9 +4375,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     if (!isSeasonActive) {
       return {
-        status: "winter", statusClass: "status-winter", badgeText: "❄️ En repòs d'hivern",
-        nextText: "Reprendre a la primavera",
-        lastText: lastFertIso ? `Darrer adob: ${formatDateFriendly(lastFertIso)}` : "Sense adob previ",
+        status: "winter", statusClass: "status-winter", badgeText: t("❄️ En repòs d'hivern", "❄️ En reposo invernal"),
+        nextText: t("Reprendre a la primavera", "Retomar en primavera"),
+        lastText: lastFertIso ? `${t('Darrer adob', 'Último abono')}: ${formatDateFriendly(lastFertIso)}` : t("Sense adob previ", "Sin abono previo"),
         canFertilize: false,
         isToday: false,
         nextDateObj: null
@@ -4238,8 +4386,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     if (!lastFertIso) {
       return {
-        status: "none", statusClass: "status-none", badgeText: "⚪ Sense registre d'adob",
-        nextText: "Pendent d'adobar", lastText: "Mai registrat", canFertilize: true,
+        status: "none", statusClass: "status-none", badgeText: t("⚪ Sense registre d'adob", "⚪ Sin registro de abono"),
+        nextText: t("Pendent d'adobar", "Pendiente de abonar"), lastText: t("Mai registrat", "Nunca registrado"), canFertilize: true,
         isToday: false,
         nextDateObj: null
       };
@@ -4259,25 +4407,26 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     let status = "ok";
     let statusClass = "status-ok";
-    let badgeText = "🟢 Adob al dia";
+    let badgeText = t("🟢 Adob al dia", "🟢 Abono al día");
+    const dWord = t('dies', 'días');
 
     if (daysLeft < 0) {
       status = "overdue"; statusClass = "status-overdue";
-      badgeText = `🧪 Toca adobar (${Math.abs(daysLeft)} dies)`;
+      badgeText = `🧪 ${t('Toca adobar', 'Toca abonar')} (${Math.abs(daysLeft)} ${dWord})`;
     } else if (daysLeft === 0) {
       status = "overdue"; statusClass = "status-overdue";
-      badgeText = "🧪 Toca adobar avui";
+      badgeText = t("🧪 Toca adobar avui", "🧪 Toca abonar hoy");
     } else if (daysLeft <= 4) {
       status = "due_soon"; statusClass = "status-due-soon";
-      badgeText = `🟡 Adobar aviat (${daysLeft} dies)`;
+      badgeText = `🟡 ${t('Adobar aviat', 'Abonar pronto')} (${daysLeft} ${dWord})`;
     } else {
       status = "ok"; statusClass = "status-ok";
-      badgeText = isToday ? `🟢 Abonat avui (${daysLeft} dies)` : `🟢 Adob al dia (${daysLeft} dies)`;
+      badgeText = isToday ? `🟢 ${t('Abonat avui', 'Abonado hoy')} (${daysLeft} ${dWord})` : `🟢 ${t('Adob al dia', 'Abono al día')} (${daysLeft} ${dWord})`;
     }
 
     return {
       status, statusClass, badgeText, nextText: formatDateFriendly(nextDate),
-      lastText: isToday ? `Darrer adob: Avui (${formatDateFriendly(lastDate)})` : `Darrer adob: fa ${diffDaysPassed} dies (${formatDateFriendly(lastDate)})`,
+      lastText: isToday ? `${t('Darrer adob: Avui', 'Último abono: Hoy')} (${formatDateFriendly(lastDate)})` : `${t('Darrer adob: fa', 'Último abono: hace')} ${diffDaysPassed} ${dWord} (${formatDateFriendly(lastDate)})`,
       canFertilize: true,
       isToday,
       nextDateObj: nextDate
@@ -4302,14 +4451,14 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     });
 
     const isSummer = isSummerSeason();
-    const seasonText = isSummer ? "☀️ Temporada càlida" : "🍂 Tardor/Hivern";
+    const seasonText = isSummer ? t("☀️ Temporada càlida", "☀️ Temporada cálida") : t("🍂 Tardor/Hivern", "🍂 Otoño/Invierno");
 
     document.getElementById("statsBar").innerHTML = `
-      <div class="stat-pill">🌿 <strong>${plantsCatalog.length}</strong> Plantes registrades</div>
+      <div class="stat-pill">🌿 <strong>${plantsCatalog.length}</strong> ${t('Plantes registrades', 'Plantas registradas')}</div>
       <div class="stat-pill ${overdueCount > 0 ? 'alert' : ''}">
-        ${overdueCount > 0 ? `🪴 <strong>${overdueCount}</strong> per revisar reg` : `✅ Totes al dia`}
+        ${overdueCount > 0 ? `🪴 <strong>${overdueCount}</strong> ${t('per revisar reg', 'por revisar riego')}` : `✅ ${t('Totes al dia', 'Todas al día')}`}
       </div>
-      ${dueSoonCount > 0 ? `<div class="stat-pill stat-pill-soon">🟡 <strong>${dueSoonCount}</strong> tocaran aviat</div>` : ''}
+      ${dueSoonCount > 0 ? `<div class="stat-pill stat-pill-soon">🟡 <strong>${dueSoonCount}</strong> ${t('tocaran aviat', 'tocarán pronto')}</div>` : ''}
       <div class="stat-pill">${seasonText}</div>
     `;
   }
@@ -4344,21 +4493,20 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     filtered.sort((a, b) => {
       if (sortVal === "name_asc") {
-        return a.name.localeCompare(b.name, "ca", { sensitivity: "base" });
+        return a.name.localeCompare(b.name, currentLang, { sensitivity: "base" });
       }
       if (sortVal === "name_desc") {
-        return b.name.localeCompare(a.name, "ca", { sensitivity: "base" });
+        return b.name.localeCompare(a.name, currentLang, { sensitivity: "base" });
       }
 
-      // Per defecte 'urgency': de les que toca regar més aviat a les que ja han estat regades
       const wsA = computeWaterStatus(a);
       const wsB = computeWaterStatus(b);
 
       function getUrgencyRank(ws) {
-        if (ws.status === 'overdue') return 0;   // 1r: alertes vençudes / regar avui
-        if (ws.status === 'none') return 1;      // 2n: pendents de primer reg
-        if (ws.status === 'due_soon') return 2;  // 3r: avisos (1-2 dies)
-        return 3;                                // 4t: al dia (3+ dies)
+        if (ws.status === 'overdue') return 0;
+        if (ws.status === 'none') return 1;
+        if (ws.status === 'due_soon') return 2;
+        return 3;
       }
 
       const rankA = getUrgencyRank(wsA);
@@ -4368,12 +4516,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
         return rankA - rankB;
       }
 
-      // Dins del mateix grup d'urgència: com més petit daysLeft, més proper és el reg
       if (wsA.daysLeft !== null && wsB.daysLeft !== null) {
         return wsA.daysLeft - wsB.daysLeft;
       }
 
-      return a.name.localeCompare(b.name, "ca", { sensitivity: "base" });
+      return a.name.localeCompare(b.name, currentLang, { sensitivity: "base" });
     });
 
     if (filtered.length === 0) {
@@ -4397,13 +4544,13 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             <img src="${plant.photo}" alt="${plant.name}" loading="lazy">
             <div class="card-badges">
               <span class="badge ${plant.toxic ? 'badge-toxic' : 'badge-safe'}">
-                ${plant.toxic ? '🔴 Tòxica' : '🟢 Segura'}
+                ${plant.toxic ? t('🔴 Tòxica', '🔴 Tóxica') : t('🟢 Segura', '🟢 Segura')}
               </span>
-              <span class="badge badge-zone">${plant.zoneLabel}</span>
+              <span class="badge badge-zone">${trText(plant.zoneLabel)}</span>
             </div>
             <div class="card-badges-bottom">
               <span class="badge ${plant.difficultyClass}">
-                ${plant.difficultyLabel}
+                ${trText(plant.difficultyLabel)}
               </span>
             </div>
           </div>
@@ -4419,29 +4566,29 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             <div class="tracker-section">
               <div class="tracker-card ${ws.statusClass}" id="plant-water-box-${plant.id}">
                 <div class="tracker-info">
-                  <span class="tracker-title" id="plant-water-title-${plant.id}">💧 Reg: ${ws.badgeText}</span>
-                  <span class="tracker-next-date" id="plant-water-next-${plant.id}">📅 Proper: <strong>${ws.nextText}</strong></span>
+                  <span class="tracker-title" id="plant-water-title-${plant.id}">💧 ${t('Reg', 'Riego')}: ${ws.badgeText}</span>
+                  <span class="tracker-next-date" id="plant-water-next-${plant.id}">📅 ${t('Proper', 'Próximo')}: <strong>${ws.nextText}</strong></span>
                   <span class="tracker-last-date" id="plant-water-last-${plant.id}">${ws.lastText}</span>
                 </div>
                 <div class="tracker-btn-group">
-                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="Registrar reg amb una altra data">📅</button>
-                  <button class="btn-action btn-snooze-action" onclick="snoozeWater('${plant.id}', 1, event)" title="Posposar reg 1 dia (encara humida)">⏳ +1d</button>
+                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Registrar reg amb una altra data', 'Registrar riego con otra fecha')}">📅</button>
+                  <button class="btn-action btn-snooze-action" onclick="snoozeWater('${plant.id}', 1, event)" title="${t('Posposar reg 1 dia (encara humida)', 'Posponer riego 1 día (aún húmeda)')}">⏳ +1d</button>
                   <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
-                    ${ws.isToday ? '✅ Regat avui' : '💧 Regar avui'}
+                    ${ws.isToday ? t('✅ Regat avui', '✅ Regado hoy') : t('💧 Regar avui', '💧 Regar hoy')}
                   </button>
                 </div>
               </div>
 
               <div class="tracker-card ${fs.statusClass}" id="plant-fert-box-${plant.id}">
                 <div class="tracker-info">
-                  <span class="tracker-title" id="plant-fert-title-${plant.id}">🧪 Adob: ${fs.badgeText}</span>
-                  <span class="tracker-next-date" id="plant-fert-next-${plant.id}">📅 Proper: <strong>${fs.nextText}</strong></span>
+                  <span class="tracker-title" id="plant-fert-title-${plant.id}">🧪 ${t('Adob', 'Abono')}: ${fs.badgeText}</span>
+                  <span class="tracker-next-date" id="plant-fert-next-${plant.id}">📅 ${t('Proper', 'Próximo')}: <strong>${fs.nextText}</strong></span>
                   <span class="tracker-last-date" id="plant-fert-last-${plant.id}">${fs.lastText}</span>
                 </div>
                 <div class="tracker-btn-group">
-                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="Registrar adob amb una altra data">📅</button>
+                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Registrar adob amb una altra data', 'Registrar abono con otra fecha')}">📅</button>
                   <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-fert-btn-${plant.id}" onclick="recordAction('${plant.id}', 'fert', event)">
-                    ${fs.isToday ? '✅ Abonat avui' : '🧪 Abonar avui'}
+                    ${fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy') : t('🧪 Abonar avui', '🧪 Abonar hoy')}
                   </button>
                 </div>
               </div>
@@ -4449,10 +4596,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
             <div class="card-footer-links">
               <button class="btn-detail-link" onclick="openPlantModal('${plant.id}')">
-                Veure cures completes →
+                ${t('Veure cures completes →', 'Ver cuidados completos →')}
               </button>
               <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')">
-                📜 Històric
+                ${t('📜 Històric', '📜 Historial')}
               </button>
             </div>
           </div>
@@ -4485,14 +4632,14 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             </span>
           </td>
           <td id="plant-row-fert-dates-${plant.id}"><strong>${fs.nextText}</strong></td>
-          <td><span class="badge ${plant.difficultyClass}">${plant.difficultyLabel}</span></td>
-          <td>${plant.zoneLabel}</td>
+          <td><span class="badge ${plant.difficultyClass}">${trText(plant.difficultyLabel)}</span></td>
+          <td>${trText(plant.zoneLabel)}</td>
           <td>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-row-water-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'water', event)">${ws.isToday ? '✅ Regat' : '💧 Regat'}</button>
-              <button class="btn-action btn-snooze-action" style="padding:4px 7px; font-size:0.72rem;" onclick="snoozeWater('${plant.id}', 1, event)" title="Posposar reg 1 dia">⏳+1d</button>
-              <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-row-fert-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'fert', event)">${fs.isToday ? '✅ Abonat' : '🧪 Abonat'}</button>
-              <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')" aria-label="Veure històric de ${plant.name}" title="Històric de cures">📜</button>
+              <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-row-water-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'water', event)">${ws.isToday ? t('✅ Regat', '✅ Regado') : t('💧 Regat', '💧 Regado')}</button>
+              <button class="btn-action btn-snooze-action" style="padding:4px 7px; font-size:0.72rem;" onclick="snoozeWater('${plant.id}', 1, event)" title="${t('Posposar reg 1 dia', 'Posponer riego 1 día')}">⏳+1d</button>
+              <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-row-fert-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'fert', event)">${fs.isToday ? t('✅ Abonat', '✅ Abonado') : t('🧪 Abonat', '🧪 Abonado')}</button>
+              <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')" aria-label="${t('Veure històric de', 'Ver historial de')} ${plant.name}" title="${t('Històric de cures', 'Historial de cuidados')}">📜</button>
             </div>
           </td>
         </tr>
@@ -4532,7 +4679,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       });
     }
 
-    // Ordenar sempre per data: la més recent primer (les que no tenen data específica queden com a foto inicial al final)
     plant.gallery.sort((a, b) => {
       if (a.date && b.date) return new Date(b.date) - new Date(a.date);
       if (a.date && !b.date) return -1;
@@ -4540,7 +4686,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       return 0;
     });
 
-    // Garantir que la foto destacada de la planta sigui sempre l'última pujada (la primera de la galeria)
     if (plant.gallery[0] && plant.gallery[0].url) {
       plant.photo = plant.gallery[0].url;
     }
@@ -4552,7 +4697,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (!isoStr) return "Foto inicial";
     const d = new Date(isoStr);
     if (isNaN(d.getTime())) return "Foto inicial";
-    return d.toLocaleDateString("ca-ES", { day: "numeric", month: "short", year: "numeric" });
+    return d.toLocaleDateString(getLocale(), { day: "numeric", month: "short", year: "numeric" });
   }
 
   function renderModalGallery(plant) {
@@ -4643,7 +4788,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
         const base64 = await compressImageFile(files[i]);
         const photoId = "photo_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6);
         const storedUrl = await storeUploadedPhoto(photoId, base64);
-        // Afegim un petit offset de mil·lisegons si se'n pugen diverses alhora per mantenir l'ordre
         const dateIso = new Date(Date.now() + i).toISOString();
         gallery.unshift({
           id: photoId,
@@ -4652,29 +4796,25 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
         });
       }
 
-      // Reordenem per data (la més recent primer) i actualitzem la foto destacada
       getPlantGallery(plant);
       currentModalGalleryIndex = 0;
-
-      // Netegem els inputs de fitxer
       event.target.value = "";
 
-      // Guardem i actualitzem la vista principal i el modal
       saveLocalCatalog(plantsCatalog);
       renderPlants();
       renderModalGallery(plant);
 
       showToast(
         files.length > 1
-          ? `📸 ${files.length} noves fotos afegides a l'evolució!`
-          : "📸 Nova foto d'evolució pujada com a destacada!",
+          ? t(`📸 ${files.length} noves fotos afegides a l'evolució!`, `📸 ¡${files.length} nuevas fotos añadidas a la evolución!`)
+          : t("📸 Nova foto d'evolució pujada com a destacada!", "📸 ¡Nueva foto de evolución subida como destacada!"),
         "🌿"
       );
 
       await syncCatalogToCloud();
     } catch (err) {
       console.error("Error pujant foto a la galeria:", err);
-      alert("No s'ha pogut processar la fotografia. Torna-ho a provar.");
+      alert(t("No s'ha pogut processar la fotografia. Torna-ho a provar.", "No se ha podido procesar la fotografía. Inténtalo de nuevo."));
     }
   }
 
@@ -4686,21 +4826,20 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const gallery = getPlantGallery(plant);
     if (gallery.length <= 1) {
-      alert("La fitxa ha de conservar com a mínim una fotografia.");
+      alert(t("La fitxa ha de conservar com a mínim una fotografia.", "La ficha debe conservar como mínimo una fotografía."));
       return;
     }
 
-    if (!confirm("Vols eliminar aquesta fotografia de la galeria d'evolució?")) return;
+    if (!confirm(t("Vols eliminar aquesta fotografia de la galeria d'evolució?", "¿Quieres eliminar esta fotografía de la galería de evolución?"))) return;
 
     plant.gallery = gallery.filter(item => item.id !== photoId);
-    // Actualitza la foto destacada amb la més recent restant
     getPlantGallery(plant);
     currentModalGalleryIndex = 0;
 
     saveLocalCatalog(plantsCatalog);
     renderPlants();
     renderModalGallery(plant);
-    showToast("Fotografia eliminada de la galeria", "🗑️");
+    showToast(t("Fotografia eliminada de la galeria", "Fotografía eliminada de la galería"), "🗑️");
 
     await syncCatalogToCloud();
   }
@@ -4716,33 +4855,34 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     document.getElementById("modalTitle").innerText = plant.name;
     document.getElementById("modalScientific").innerText = plant.scientific;
     document.getElementById("modalFertType").innerText = plant.fertilizerType;
-    document.getElementById("modalFertFreq").innerText = plant.fertilizerFreq;
-    document.getElementById("modalFertSeason").innerText = plant.fertilizerSeason;
+    document.getElementById("modalFertFreq").innerText = trText(plant.fertilizerFreq);
+    document.getElementById("modalFertSeason").innerText = trText(plant.fertilizerSeason);
     document.getElementById("modalFertNotes").innerText = plant.fertilizerNotes || "";
     document.getElementById("modalLight").innerText = plant.light;
 
     const summerDays = plant.waterDaysSummer;
     const summerText = plant.waterSummerText;
     let summerDisplay = "-";
+    const dWord = t("dies", "días");
     if (summerDays) {
-      summerDisplay = `Cada ${summerDays} dies`;
-      if (summerText && !summerText.toLowerCase().includes(`${summerDays} dies`)) {
-        summerDisplay += ` (${summerText})`;
+      summerDisplay = `Cada ${summerDays} ${dWord}`;
+      if (summerText && !summerText.toLowerCase().includes(`${summerDays} dies`) && !summerText.toLowerCase().includes(`${summerDays} días`)) {
+        summerDisplay += ` (${trText(summerText)})`;
       }
     } else if (summerText) {
-      summerDisplay = summerText;
+      summerDisplay = trText(summerText);
     }
 
     const winterDays = plant.waterDaysWinter;
     const winterText = plant.waterWinterText;
     let winterDisplay = "-";
     if (winterDays) {
-      winterDisplay = `Cada ${winterDays} dies`;
-      if (winterText && !winterText.toLowerCase().includes(`${winterDays} dies`)) {
-        winterDisplay += ` (${winterText})`;
+      winterDisplay = `Cada ${winterDays} ${dWord}`;
+      if (winterText && !winterText.toLowerCase().includes(`${winterDays} dies`) && !winterText.toLowerCase().includes(`${winterDays} días`)) {
+        winterDisplay += ` (${trText(winterText)})`;
       }
     } else if (winterText) {
-      winterDisplay = winterText;
+      winterDisplay = trText(winterText);
     }
 
     const elWaterSummer = document.getElementById("modalWaterSummer");
@@ -4752,12 +4892,12 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     document.getElementById("modalWaterDetail").innerText = plant.waterDetail || "";
     document.getElementById("modalSubstrate").innerText = plant.substrate;
-    document.getElementById("modalTip").innerHTML = `💡 <strong>Consell clau:</strong> ${plant.tip}`;
+    document.getElementById("modalTip").innerHTML = `💡 <strong>${t('Consell clau:', 'Consejo clave:')}</strong> ${plant.tip}`;
 
     document.getElementById("modalBadges").innerHTML = `
-      <span class="badge ${plant.difficultyClass}">${plant.difficultyLabel}</span>
-      <span class="badge ${plant.toxic ? 'badge-toxic' : 'badge-safe'}">${plant.toxicityDetail}</span>
-      <span class="badge badge-zone">${plant.zoneLabel}</span>
+      <span class="badge ${plant.difficultyClass}">${trText(plant.difficultyLabel)}</span>
+      <span class="badge ${plant.toxic ? 'badge-toxic' : 'badge-safe'}">${trText(plant.toxicityDetail)}</span>
+      <span class="badge badge-zone">${trText(plant.zoneLabel)}</span>
     `;
 
     document.getElementById("modalDeletePlantBtn").onclick = () => deletePlant(plant.id);
@@ -4833,10 +4973,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const base64 = await compressImageFile(file);
       currentEditingPhotoBase64 = base64;
       document.getElementById("editPlantPhotoPreview").src = base64;
-      showToast("Nova fotografia seleccionada!", "📸");
+      showToast(t("Nova fotografia seleccionada!", "¡Nueva fotografía seleccionada!"), "📸");
     } catch (err) {
       console.error("Error processant foto d'edició:", err);
-      alert("No s'ha pogut processar la fotografia. Torna-ho a provar.");
+      alert(t("No s'ha pogut processar la fotografia. Torna-ho a provar.", "No se ha podido procesar la fotografía. Inténtalo de nuevo."));
     }
   }
 
@@ -4909,23 +5049,15 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     getPlantGallery(updated);
     plantsCatalog[plantIndex] = updated;
 
-    // 1. Guardar a memòria i localStorage
     saveLocalCatalog(plantsCatalog);
-
-    // 2. Tancar el modal d'edició
     closeModal("editPlantModal");
-
-    // 3. Re-renderitzar la graella principal
     renderPlants();
 
-    // 4. Actualitzar la fitxa de detall si està oberta
     if (currentModalPlantId === currentEditingPlantId) {
       openPlantModal(currentEditingPlantId);
     }
 
-    showToast(`Planta "${updated.name}" actualitzada amb èxit!`, "✏️");
-
-    // 5. Sincronitzar amb el núvol (Supabase) en segon pla
+    showToast(t(`Planta "${updated.name}" actualitzada amb èxit!`, `¡Planta "${updated.name}" actualizada con éxito!`), "✏️");
     await syncCatalogToCloud();
   }
 
@@ -4934,7 +5066,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (!plant) return;
 
     currentHistoryPlantId = plantId;
-    document.getElementById("historyPlantTitle").innerText = `Històric: ${plant.name}`;
+    document.getElementById("historyPlantTitle").innerText = `${t('Històric', 'Historial')}: ${plant.name}`;
     setHistoryDateOffset(0);
 
     const getSelectedHistoryDateIso = () => {
@@ -4953,7 +5085,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const btnTransplant = document.getElementById("btnHistoryAddTransplant");
     if (btnTransplant) {
       btnTransplant.onclick = () => {
-        const potNote = prompt("Mida del nou test o nota del trasplantament (opcional):", plant.potSize || "");
+        const potNote = prompt(t("Mida del nou test o nota del trasplantament (opcional):", "Tamaño de la nueva maceta o nota del trasplante (opcional):"), plant.potSize || "");
         if (potNote === null) return;
         recordActionWithDate(plantId, 'transplant', getSelectedHistoryDateIso(), potNote.trim(), potNote.trim());
         renderHistoryModal(plantId);
@@ -4962,7 +5094,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const btnPruning = document.getElementById("btnHistoryAddPruning");
     if (btnPruning) {
       btnPruning.onclick = () => {
-        const note = prompt("Nota sobre la poda o neteja de fulles (opcional):", "");
+        const note = prompt(t("Nota sobre la poda o neteja de fulles (opcional):", "Nota sobre la poda o limpieza de hojas (opcional):"), "");
         if (note === null) return;
         recordActionWithDate(plantId, 'pruning', getSelectedHistoryDateIso(), note.trim());
         renderHistoryModal(plantId);
@@ -4994,15 +5126,15 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     combined.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     if (combined.length === 0) {
-      container.innerHTML = `<div class="history-empty">Encara no hi ha cap registre anotat.</div>`;
+      container.innerHTML = `<div class="history-empty">${t('Encara no hi ha cap registre anotat.', 'Todavía no hay ningún registro anotado.')}</div>`;
       return;
     }
 
     const typeLabels = {
-      water: '💧 Reg',
-      fert: '🧪 Abonament',
-      transplant: '🪴 Trasplantament',
-      pruning: '✂️ Poda / Neteja'
+      water: t('💧 Reg', '💧 Riego'),
+      fert: t('🧪 Abonament', '🧪 Abonado'),
+      transplant: t('🪴 Trasplantament', '🪴 Trasplante'),
+      pruning: t('✂️ Poda / Neteja', '✂️ Poda / Limpieza')
     };
 
     container.innerHTML = combined.map(item => {
@@ -5015,7 +5147,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             ${item.note ? `<div style="font-size:0.78rem; color:var(--green-mid); margin-top:2px;">📝 ${item.note}</div>` : ''}
           </div>
           <button class="history-delete-btn" onclick="deleteHistoryEntry('${plantId}', '${item.type}', '${item.date}', ${item.originalIndex}, event)">
-            🗑️ Esborrar
+            🗑️ ${t('Esborrar', 'Borrar')}
           </button>
         </li>
       `;
@@ -5057,12 +5189,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const ws = computeWaterStatus(plant);
       const fs = computeFertStatus(plant);
 
-      // Esdeveniments de Reg
       if (ws.nextDateObj) {
         const nextW = new Date(ws.nextDateObj.getFullYear(), ws.nextDateObj.getMonth(), ws.nextDateObj.getDate());
         const interval = ws.intervalDays || 7;
         if (nextW < todayMidnight) {
-          // Si està vençut, el mostrem avui com a urgent i projectem cicles futurs des d'avui
           if (isTargetToday) {
             events.push({ plant, type: 'water', urgent: true, label: `💧 ${plant.name}` });
           } else if (targetDateMidnight > todayMidnight) {
@@ -5079,7 +5209,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
         }
       }
 
-      // Esdeveniments d'Adob
       if (fs.canFertilize && fs.nextDateObj) {
         const nextF = new Date(fs.nextDateObj.getFullYear(), fs.nextDateObj.getMonth(), fs.nextDateObj.getDate());
         const fertInterval = plant.fertilizerDays || 20;
@@ -5107,8 +5236,12 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const now = new Date();
     const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const dayNamesShort = ["Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds"];
-    const monthNames = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
+    const dayNamesShort = currentLang === "es"
+      ? ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+      : ["Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds"];
+    const monthNames = currentLang === "es"
+      ? ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+      : ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
 
     // 1. Renderitzar Previsió Setmanal (Propers 7 dies)
     const weekCardsHtml = [];
@@ -5116,8 +5249,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const d = new Date(todayMidnight);
       d.setDate(d.getDate() + i);
       const events = getProjectedEventsForDate(d);
-      const dayLabel = i === 0 ? "Avui" : (i === 1 ? "Demà" : dayNamesShort[d.getDay()]);
-      const dateStr = d.toLocaleDateString("ca-ES", { day: "numeric", month: "short" });
+      const dayLabel = i === 0 ? t("Avui", "Hoy") : (i === 1 ? t("Demà", "Mañana") : dayNamesShort[d.getDay()]);
+      const dateStr = d.toLocaleDateString(getLocale(), { day: "numeric", month: "short" });
 
       weekCardsHtml.push(`
         <div class="week-day-card ${i === 0 ? 'today' : ''}">
@@ -5127,7 +5260,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           </div>
           <div class="cal-events-list">
             ${events.length === 0
-              ? `<span class="cal-empty-day">Cap tasca prevista</span>`
+              ? `<span class="cal-empty-day">${t('Cap tasca prevista', 'Sin tareas previstas')}</span>`
               : events.map(ev => `
                   <span class="cal-event-chip ${ev.urgent ? 'overdue-water' : ev.type}" onclick="openPlantModal('${ev.plant.id}')" title="${ev.plant.name}">
                     ${ev.label}
@@ -5147,13 +5280,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const firstDayOfMonth = new Date(currentCalendarYear, currentCalendarMonth, 1);
     const lastDayOfMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
-    // Dilluns = 0 ... Diumenge = 6
     const startOffset = (firstDayOfMonth.getDay() + 6) % 7;
     const totalDays = lastDayOfMonth.getDate();
 
     const cellsHtml = [];
 
-    // Dies del mes anterior per omplir la primera setmana
     const prevMonthLastDay = new Date(currentCalendarYear, currentCalendarMonth, 0).getDate();
     for (let i = startOffset - 1; i >= 0; i--) {
       const dayNum = prevMonthLastDay - i;
@@ -5164,7 +5295,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       `);
     }
 
-    // Dies del mes actual
     for (let day = 1; day <= totalDays; day++) {
       const cellDate = new Date(currentCalendarYear, currentCalendarMonth, day);
       const isToday = (cellDate.getTime() === todayMidnight.getTime());
@@ -5174,7 +5304,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       cellsHtml.push(`
         <div class="month-day-cell ${isToday ? 'today' : ''} ${events.length === 0 ? 'no-events' : ''}">
           <div class="month-day-number">
-            <span><span class="mobile-weekday">${weekdayShort}</span>${day}${isToday ? ' <span class="mobile-weekday" style="color:#1e582e; font-weight:800;">· Avui</span>' : ''}</span>
+            <span><span class="mobile-weekday">${weekdayShort}</span>${day}${isToday ? ` <span class="mobile-weekday" style="color:#1e582e; font-weight:800;">· ${t('Avui', 'Hoy')}</span>` : ''}</span>
             ${events.length > 0 ? `<span style="font-size:0.68rem; color:var(--text-muted); font-weight:600;">${events.length}</span>` : ''}
           </div>
           ${events.length > 0 ? `
@@ -5184,14 +5314,13 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                 ${ev.label}
               </span>
             `).join('')}
-            ${events.length > 4 ? `<span style="font-size:0.68rem; color:var(--text-muted); padding-left:4px;">+${events.length - 4} més</span>` : ''}
+            ${events.length > 4 ? `<span style="font-size:0.68rem; color:var(--text-muted); padding-left:4px;">+${events.length - 4} ${t('més', 'más')}</span>` : ''}
           </div>
           ` : ''}
         </div>
       `);
     }
 
-    // Omplir final de graella fins a múltiple de 7
     const totalCellsSoFar = startOffset + totalDays;
     const trailingDays = (7 - (totalCellsSoFar % 7)) % 7;
     for (let i = 1; i <= trailingDays; i++) {
@@ -5358,35 +5487,180 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   })();
 
   // -------------------------------------------------------------
-  // PUNT 13: MODE FOSC BOTÀNIC (DARK MODE)
+  // PREFERÈNCIES: MODE CLAR/FOSC I IDIOMA (CATALÀ / ESPAÑOL)
   // -------------------------------------------------------------
-  function applyDarkModeState(isDark) {
+  function openPreferencesModal() {
+    updatePreferencesButtonsState();
+    const m = document.getElementById("preferencesModal");
+    if (m) m.classList.add("active");
+  }
+
+  function updatePreferencesButtonsState() {
+    const isDark = document.body.classList.contains("dark-mode");
+    const lightBtn = document.getElementById("prefThemeLightBtn");
+    const darkBtn = document.getElementById("prefThemeDarkBtn");
+    if (lightBtn) lightBtn.classList.toggle("active", !isDark);
+    if (darkBtn) darkBtn.classList.toggle("active", isDark);
+
+    const caBtn = document.getElementById("prefLangCaBtn");
+    const esBtn = document.getElementById("prefLangEsBtn");
+    if (caBtn) caBtn.classList.toggle("active", currentLang === "ca");
+    if (esBtn) esBtn.classList.toggle("active", currentLang === "es");
+  }
+
+  function setThemePreference(mode) {
+    const isDark = (mode === "dark");
     if (isDark) {
       document.body.classList.add("dark-mode");
     } else {
       document.body.classList.remove("dark-mode");
     }
-    const btn = document.getElementById("darkModeToggleBtn");
-    if (btn) {
-      btn.innerHTML = isDark ? "☀️ Mode Clar" : "🌙 Mode Fosc";
+    try {
+      localStorage.setItem("registre_plantes_dark_mode", isDark ? "1" : "0");
+    } catch (e) {}
+    updatePreferencesButtonsState();
+  }
+
+  function setLanguagePreference(lang) {
+    if (lang !== "ca" && lang !== "es") return;
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    try {
+      localStorage.setItem("registre_plantes_lang", lang);
+    } catch (e) {}
+    applyStaticTranslations();
+    updatePreferencesButtonsState();
+    renderPlants();
+    if (currentModalPlantId) {
+      openPlantModal(currentModalPlantId);
     }
   }
 
-  function toggleDarkMode() {
-    const isNowDark = !document.body.classList.contains("dark-mode");
-    applyDarkModeState(isNowDark);
-    try {
-      localStorage.setItem("registre_plantes_dark_mode", isNowDark ? "1" : "0");
-    } catch (e) {}
+  function applyStaticTranslations() {
+    document.title = t("🌱 Guia i Registre de Cures de Plantes", "🌱 Guía y Registro de Cuidados de Plantas");
+
+    const setElText = (id, text) => {
+      const el = document.getElementById(id);
+      if (el) el.innerText = text;
+    };
+
+    setElText("appMainTitle", t("🌱 Les Meves Plantes i Seguiment de Reg", "🌱 Mis Plantas y Seguimiento de Riego"));
+    setElText("appMainSubtitle", t("Guia botànica personal amb control intel·ligent de reg, adob i avisos per temporada.", "Guía botánica personal con control inteligente de riego, abono y avisos por temporada."));
+    setElText("addPlantHeaderBtn", t("➕ Afegir Planta", "➕ Añadir Planta"));
+    setElText("prefHeaderBtnLabel", t("Preferències", "Preferencias"));
+
+    const searchInp = document.getElementById("searchInput");
+    if (searchInp) searchInp.placeholder = t("Cerca per nom comú o científic...", "Buscar por nombre común o científico...");
+
+    const statusSel = document.getElementById("statusFilter");
+    if (statusSel && statusSel.options.length >= 4) {
+      statusSel.options[0].text = t("💧 Estat de reg: Tots", "💧 Estado de riego: Todos");
+      statusSel.options[1].text = t("🪴 Per revisar reg (terra seca?)", "🪴 Por revisar riego (¿tierra seca?)");
+      statusSel.options[2].text = t("🟡 Tocarà regar aviat (1-2 dies)", "🟡 Tocará regar pronto (1-2 días)");
+      statusSel.options[3].text = t("🟢 Reg al dia", "🟢 Riego al día");
+    }
+
+    const zoneSel = document.getElementById("zoneFilter");
+    if (zoneSel && zoneSel.options.length >= 3) {
+      zoneSel.options[0].text = t("📍 Ubicació: Totes", "📍 Ubicación: Todas");
+      zoneSel.options[1].text = t("🏠 Interior", "🏠 Interior");
+      zoneSel.options[2].text = t("☀️ Exterior / Balcó", "☀️ Exterior / Balcón");
+    }
+
+    const diffSel = document.getElementById("difficultyFilter");
+    if (diffSel && diffSel.options.length >= 4) {
+      diffSel.options[0].text = t("⭐ Dificultat: Totes", "⭐ Dificultad: Todas");
+      diffSel.options[1].text = t("Molt fàcil", "Muy fácil");
+      diffSel.options[2].text = t("Fàcil", "Fácil");
+      diffSel.options[3].text = t("Mitjana", "Media");
+    }
+
+    const sortSel = document.getElementById("sortFilter");
+    if (sortSel && sortSel.options.length >= 3) {
+      sortSel.options[0].text = t("🚨 Ordenar: Reg més urgent primer", "🚨 Ordenar: Riego más urgente primero");
+      sortSel.options[1].text = t("🔤 Ordenar: Alfabètic (A → Z)", "🔤 Ordenar: Alfabético (A → Z)");
+      sortSel.options[2].text = t("🔤 Ordenar: Alfabètic (Z → A)", "🔤 Ordenar: Alfabético (Z → A)");
+    }
+
+    setElText("viewGridBtn", t("🗂️ Targetes", "🗂️ Tarjetas"));
+    setElText("viewTableBtn", t("📊 Taula", "📊 Tabla"));
+    setElText("viewCalendarBtn", t("📅 Calendari", "📅 Calendario"));
+
+    const thRow = document.getElementById("tableHeaderRow");
+    if (thRow && thRow.children.length >= 9) {
+      thRow.children[0].innerText = t("Planta", "Planta");
+      thRow.children[1].innerText = t("Nom / Científic", "Nombre / Científico");
+      thRow.children[2].innerText = t("Estat Reg", "Estado Riego");
+      thRow.children[3].innerText = t("Proper Reg / Darrer", "Próximo Riego / Último");
+      thRow.children[4].innerText = t("Estat Adob", "Estado Abono");
+      thRow.children[5].innerText = t("Proper Adob", "Próximo Abono");
+      thRow.children[6].innerText = t("Dificultat", "Dificultad");
+      thRow.children[7].innerText = t("Ubicació", "Ubicación");
+      thRow.children[8].innerText = t("Accions ràpides", "Acciones rápidas");
+    }
+
+    setElText("weeklyCalendarTitle", t("🗓️ Previsió Setmanal (Propers 7 dies)", "🗓️ Previsión Semanal (Próximos 7 días)"));
+    setElText("weeklyCalendarHint", t("Clica una planta per obrir la fitxa", "Haz clic en una planta para abrir la ficha"));
+    setElText("calPrevMonthBtn", t("◀ Anterior", "◀ Anterior"));
+    setElText("calTodayBtn", t("Avui", "Hoy"));
+    setElText("calNextMonthBtn", t("Següent ▶", "Siguiente ▶"));
+
+    const wkRow = document.getElementById("monthWeekdaysRow");
+    if (wkRow && wkRow.children.length === 7) {
+      const days = currentLang === "es"
+        ? ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
+        : ["Dl", "Dt", "Dc", "Dj", "Dv", "Ds", "Dg"];
+      for (let i = 0; i < 7; i++) wkRow.children[i].innerText = days[i];
+    }
+
+    setElText("emptyStateTitle", t("No s'ha trobat cap planta", "No se ha encontrado ninguna planta"));
+    setElText("emptyStateDesc", t("Prova de canviar els filtres o el text de cerca.", "Prueba a cambiar los filtros o el texto de búsqueda."));
+
+    // Modal de Preferències
+    setElText("prefModalTitle", t("⚙️ Preferències", "⚙️ Preferencias"));
+    setElText("prefModalSubtitle", t("Personalitza l'aparença i l'idioma de l'aplicació.", "Personaliza la apariencia y el idioma de la aplicación."));
+    setElText("prefThemeLabel", t("🎨 Aparença (Tema)", "🎨 Apariencia (Tema)"));
+    setElText("prefThemeLightText", t("Mode Clar", "Modo Claro"));
+    setElText("prefThemeDarkText", t("Mode Fosc", "Modo Oscuro"));
+    setElText("prefLangLabel", t("🌐 Idioma", "🌐 Idioma"));
+    setElText("prefCloseBtn", t("Fet", "Listo"));
+
+    // Botons i etiquetes de la fitxa de planta (#plantModal)
+    setElText("modalZoomHintBtn", t("🔍 Ampliar", "🔍 Ampliar"));
+    setElText("modalEditPlantBtn", t("✏️ Editar", "✏️ Editar"));
+    setElText("modalHistoryBtn", t("📜 Històric", "📜 Historial"));
+    setElText("modalDeletePlantBtn", t("🗑️ Eliminar", "🗑️ Eliminar"));
+    setElText("modalWaterPastBtn", t("📅 Data", "📅 Fecha"));
+    setElText("modalFertPastBtn", t("📅 Data", "📅 Fecha"));
+    setElText("modalMaintSectionTitle", t("🛠️ Manteniment: Trasplantament i Poda", "🛠️ Mantenimiento: Trasplante y Poda"));
+    setElText("modalTransplantCardTitle", t("🪴 Trasplantament i Test", "🪴 Trasplante y Maceta"));
+    setElText("modalAddTransplantBtn", t("🪴 Registrar trasplantament", "🪴 Registrar trasplante"));
+    setElText("modalPruningCardTitle", t("✂️ Poda i Neteja", "✂️ Poda y Limpieza"));
+    setElText("modalAddPruningBtn", t("✂️ Registrar poda / neteja", "✂️ Registrar poda / limpieza"));
+    setElText("modalFertSectionTitle", t("🧪 Pauta d'Abonament", "🧪 Pauta de Abonado"));
+    setElText("modalFertTypeLabel", t("Tipus:", "Tipo:"));
+    setElText("modalFertFreqLabel", t("Freqüència:", "Frecuencia:"));
+    setElText("modalFertSeasonLabel", t("Temporada activa:", "Temporada activa:"));
+    setElText("modalWaterSectionTitle", t("💧 Pauta de Reg", "💧 Pauta de Riego"));
+    setElText("modalWaterSummerLabel", t("☀️ Estiu:", "☀️ Verano:"));
+    setElText("modalWaterWinterLabel", t("❄️ Hivern:", "❄️ Invierno:"));
+    setElText("modalLightSectionTitle", t("☀️ Llum i Ubicació", "☀️ Luz y Ubicación"));
+    setElText("modalSubstrateSectionTitle", t("🪴 Substrat Recomanat", "🪴 Sustrato Recomendado"));
+    setElText("modalGalleryTitleText", t("📸 Galeria d'Evolució", "📸 Galería de Evolución"));
+    setElText("modalGalleryCameraBtn", t("📸 Fer foto", "📸 Hacer foto"));
+    setElText("modalGalleryUploadBtn", t("➕ Pujar foto", "➕ Subir foto"));
   }
 
-  function initDarkMode() {
+  function initPreferences() {
     try {
-      const saved = localStorage.getItem("registre_plantes_dark_mode");
-      if (saved === "1") {
-        applyDarkModeState(true);
+      const savedDark = localStorage.getItem("registre_plantes_dark_mode");
+      if (savedDark === "1") {
+        document.body.classList.add("dark-mode");
       }
     } catch (e) {}
+    document.documentElement.lang = currentLang;
+    applyStaticTranslations();
+    updatePreferencesButtonsState();
   }
 
   function closeModal(modalId) {
@@ -5503,7 +5777,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   // Inicialització
-  initDarkMode();
+  initPreferences();
   initSupabase();
 </script>
 
