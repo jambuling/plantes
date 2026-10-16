@@ -1505,6 +1505,306 @@
         padding: 20px 18px 28px;
       }
     }
+
+    /* =============================================================
+       PUNT 9: ZOOM A PANTALLA COMPLETA (LIGHTBOX)
+       ============================================================= */
+    #modalImg {
+      cursor: zoom-in;
+    }
+    .modal-zoom-hint-btn {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(18, 36, 22, 0.72);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(6px);
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 6;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+    .modal-zoom-hint-btn:hover {
+      background: rgba(18, 36, 22, 0.92);
+      transform: scale(1.04);
+    }
+
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 14, 10, 0.94);
+      backdrop-filter: blur(8px);
+      z-index: 2500;
+      display: none;
+      flex-direction: column;
+      user-select: none;
+    }
+    .lightbox-overlay.active {
+      display: flex;
+    }
+    .lightbox-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.35);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      z-index: 10;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .lightbox-caption {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #e2f1e5;
+    }
+    .lightbox-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lightbox-btn {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .lightbox-btn:hover {
+      background: rgba(255, 255, 255, 0.26);
+    }
+    .lightbox-stage {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+    }
+    .lightbox-stage img {
+      max-width: 92vw;
+      max-height: 82vh;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: transform 0.18s ease;
+      cursor: zoom-in;
+      transform-origin: center center;
+    }
+    .lightbox-stage img.zoomed {
+      cursor: grab;
+      transition: none;
+    }
+    .lightbox-stage img.zoomed:active {
+      cursor: grabbing;
+    }
+    .lightbox-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.15s ease;
+    }
+    .lightbox-nav-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    .lightbox-nav-btn.prev { left: 18px; }
+    .lightbox-nav-btn.next { right: 18px; }
+
+    /* =============================================================
+       PUNT 13: MODE FOSC BOTÀNIC (DARK MODE)
+       ============================================================= */
+    body.dark-mode {
+      --bg-primary: #0d1610;
+      --bg-surface: #142218;
+      --bg-card: #16261b;
+      --border-subtle: #253d2c;
+      --border-strong: #35563e;
+      --text-main: #eaf4ec;
+      --text-muted: #9cb5a1;
+      --accent: #38a156;
+      --accent-hover: #2f8b49;
+      --accent-light: #1c3323;
+
+      --status-overdue-bg: rgba(180, 83, 9, 0.22);
+      --status-overdue-text: #fdba74;
+      --status-overdue-border: rgba(251, 146, 60, 0.4);
+
+      --status-due-soon-bg: rgba(202, 138, 4, 0.20);
+      --status-due-soon-text: #fde047;
+      --status-due-soon-border: rgba(250, 204, 21, 0.38);
+
+      --status-ok-bg: rgba(22, 163, 74, 0.18);
+      --status-ok-text: #86efac;
+      --status-ok-border: rgba(74, 222, 128, 0.35);
+
+      --status-none-bg: rgba(148, 163, 184, 0.14);
+      --status-none-text: #cbd5e1;
+      --status-none-border: rgba(148, 163, 184, 0.28);
+
+      --status-winter-bg: rgba(14, 116, 144, 0.22);
+      --status-winter-text: #7dd3fc;
+      --status-winter-border: rgba(56, 189, 248, 0.38);
+
+      --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.32);
+      --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    body.dark-mode header {
+      background: linear-gradient(135deg, #091d10 0%, #163820 100%);
+      border: 1px solid #253d2c;
+    }
+
+    body.dark-mode .search-box input:focus,
+    body.dark-mode select:focus,
+    body.dark-mode .form-control:focus {
+      background: #1b2f21;
+      color: var(--text-main);
+    }
+
+    body.dark-mode select,
+    body.dark-mode .form-control,
+    body.dark-mode input[type="date"] {
+      background: #101c13;
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+      color-scheme: dark;
+    }
+
+    body.dark-mode .view-toggle {
+      background: #101c13;
+      border-color: var(--border-subtle);
+    }
+    body.dark-mode .view-toggle button {
+      color: var(--text-muted);
+    }
+    body.dark-mode .view-toggle button.active {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    body.dark-mode .badge-zone {
+      background: rgba(20, 34, 24, 0.92);
+      color: #e2f1e5;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    body.dark-mode .badge-safe {
+      background: rgba(22, 101, 52, 0.88);
+      color: #dcfce7;
+      border-color: #22c55e;
+    }
+    body.dark-mode .badge-toxic {
+      background: rgba(154, 52, 18, 0.88);
+      color: #ffedd5;
+      border-color: #fb923c;
+    }
+    body.dark-mode .badge-diff-very-easy {
+      background: rgba(22, 101, 52, 0.88);
+      color: #dcfce7;
+      border-color: #4ade80;
+    }
+    body.dark-mode .badge-diff-easy {
+      background: rgba(7, 89, 133, 0.88);
+      color: #e0f2fe;
+      border-color: #38bdf8;
+    }
+    body.dark-mode .badge-diff-medium {
+      background: rgba(146, 64, 14, 0.88);
+      color: #fef3c7;
+      border-color: #fbbf24;
+    }
+
+    body.dark-mode .modal-card,
+    body.dark-mode .modal-content {
+      background: var(--bg-surface);
+      color: var(--text-main);
+    }
+    body.dark-mode .modal-box-highlight,
+    body.dark-mode .maint-card,
+    body.dark-mode .week-day-card,
+    body.dark-mode .month-day-cell,
+    body.dark-mode .gallery-item-card,
+    body.dark-mode .history-item {
+      background: #192b1e !important;
+      border-color: var(--border-subtle) !important;
+      color: var(--text-main);
+    }
+    body.dark-mode .week-day-card.today,
+    body.dark-mode .month-day-cell.today {
+      background: #1f3a27 !important;
+      border-color: #4ade80 !important;
+    }
+    body.dark-mode .week-day-card.today .week-day-header,
+    body.dark-mode .month-day-cell.today .month-day-number {
+      color: #86efac !important;
+    }
+    body.dark-mode .month-day-cell.no-events:not(.today) {
+      background: #122016 !important;
+    }
+    body.dark-mode .tip-box {
+      background: rgba(202, 138, 4, 0.16);
+      border-color: rgba(250, 204, 21, 0.35);
+      color: #fef08a;
+    }
+    body.dark-mode .cal-event-chip {
+      background: #203d28;
+      color: #bbf7d0;
+      border-color: #2f5c3b;
+    }
+    body.dark-mode .cal-event-chip.overdue-water {
+      background: rgba(180, 83, 9, 0.35);
+      color: #fed7aa;
+      border-color: rgba(251, 146, 60, 0.5);
+    }
+    body.dark-mode .cal-event-chip.fert {
+      background: rgba(107, 33, 168, 0.35);
+      color: #e9d5ff;
+      border-color: rgba(192, 132, 252, 0.45);
+    }
+    body.dark-mode .btn-snooze-action {
+      background: rgba(202, 138, 4, 0.22);
+      color: #fde047;
+      border-color: rgba(250, 204, 21, 0.4);
+    }
+    body.dark-mode .btn-date-action,
+    body.dark-mode .btn-maint-action,
+    body.dark-mode .btn-history-link,
+    body.dark-mode .preset-chip-btn {
+      background: #1e3324;
+      color: #d1e5d5;
+      border-color: var(--border-strong);
+    }
+    body.dark-mode th {
+      background: #192b1e;
+      color: var(--text-main);
+    }
+    body.dark-mode tr:hover td {
+      background: #1a2e20;
+    }
   </style>
 </head>
 <body>
@@ -1521,6 +1821,9 @@
         </div>
 
         <div class="header-actions">
+          <button type="button" class="btn-header" id="darkModeToggleBtn" onclick="toggleDarkMode()" title="Canviar entre mode clar i mode fosc">
+            🌙 Mode Fosc
+          </button>
           <button class="btn-header btn-add-plant" onclick="openAddPlantModal()">
             ➕ Afegir Nova Planta
           </button>
@@ -1770,8 +2073,9 @@
   <div class="modal-card">
     <button class="modal-close" onclick="closeModal('plantModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-image-wrap">
+      <button type="button" class="modal-zoom-hint-btn" onclick="openPhotoLightbox()" title="Obrir foto a pantalla completa amb zoom">🔍 Ampliar</button>
       <button type="button" class="modal-photo-nav-btn prev" id="modalPhotoPrevBtn" onclick="stepModalGalleryPhoto(-1)" style="display:none;" aria-label="Foto anterior">&#8249;</button>
-      <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta">
+      <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta" onclick="openPhotoLightbox()" title="Fes clic per ampliar a pantalla completa">
       <button type="button" class="modal-photo-nav-btn next" id="modalPhotoNextBtn" onclick="stepModalGalleryPhoto(1)" style="display:none;" aria-label="Foto següent">&#8250;</button>
       <div class="modal-photo-caption-badge">
         <span class="modal-photo-date-pill" id="modalPhotoDatePill" style="display:none;"></span>
@@ -2159,6 +2463,24 @@
   </div>
 </div>
 
+
+<!-- LIGHTBOX PANTALLA COMPLETA AMB ZOOM (PUNT 9) -->
+<div class="lightbox-overlay" id="photoLightboxModal">
+  <div class="lightbox-topbar">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+    <div class="lightbox-controls">
+      <button type="button" class="lightbox-btn" onclick="adjustLightboxZoom(-0.5)" title="Reduir zoom">➖</button>
+      <button type="button" class="lightbox-btn" id="lightboxZoomLevelBtn" onclick="resetLightboxZoom()" title="Restablir zoom">100%</button>
+      <button type="button" class="lightbox-btn" onclick="adjustLightboxZoom(0.5)" title="Ampliar zoom">➕</button>
+      <button type="button" class="lightbox-btn" style="background:rgba(220, 38, 38, 0.35); border-color:rgba(248, 113, 113, 0.5);" onclick="closePhotoLightbox()">✕ Tancar</button>
+    </div>
+  </div>
+  <div class="lightbox-stage" id="lightboxStage" onclick="handleLightboxStageClick(event)">
+    <button type="button" class="lightbox-nav-btn prev" id="lightboxPrevBtn" onclick="stepLightboxPhoto(-1, event)" style="display:none;" aria-label="Foto anterior">&#8249;</button>
+    <img id="lightboxImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto ampliada">
+    <button type="button" class="lightbox-nav-btn next" id="lightboxNextBtn" onclick="stepLightboxPhoto(1, event)" style="display:none;" aria-label="Foto següent">&#8250;</button>
+  </div>
+</div>
 
 <!-- TOAST -->
 <div class="toast-notification" id="toastNotification">
@@ -4883,6 +5205,190 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     monthGrid.innerHTML = cellsHtml.join('');
   }
 
+  // -------------------------------------------------------------
+  // PUNT 9: LIGHTBOX A PANTALLA COMPLETA AMB ZOOM I DESPLAÇAMENT
+  // -------------------------------------------------------------
+  let lightboxZoom = 1;
+  let lightboxPanX = 0;
+  let lightboxPanY = 0;
+  let isLightboxDragging = false;
+  let lightboxDragStartX = 0;
+  let lightboxDragStartY = 0;
+  let lightboxHasDragged = false;
+
+  function openPhotoLightbox() {
+    if (!currentModalPlantId) return;
+    const plant = plantsCatalog.find(p => p.id === currentModalPlantId);
+    if (!plant) return;
+
+    resetLightboxZoom();
+    updateLightboxView(plant);
+    document.getElementById("photoLightboxModal").classList.add("active");
+  }
+
+  function closePhotoLightbox() {
+    const lb = document.getElementById("photoLightboxModal");
+    if (lb) lb.classList.remove("active");
+    resetLightboxZoom();
+  }
+
+  function updateLightboxView(plant) {
+    const gallery = getPlantGallery(plant);
+    if (currentModalGalleryIndex < 0 || currentModalGalleryIndex >= gallery.length) {
+      currentModalGalleryIndex = 0;
+    }
+    const activePhoto = gallery[currentModalGalleryIndex];
+    const lbImg = document.getElementById("lightboxImg");
+    if (lbImg && activePhoto) {
+      lbImg.src = activePhoto.url;
+    }
+
+    const capEl = document.getElementById("lightboxCaption");
+    if (capEl && activePhoto) {
+      const datePart = activePhoto.date ? ` · ${formatGalleryDateShort(activePhoto.date)}` : "";
+      const indexPart = gallery.length > 1 ? ` (${currentModalGalleryIndex + 1}/${gallery.length})` : "";
+      capEl.innerText = `${plant.name}${datePart}${indexPart}`;
+    }
+
+    const prevBtn = document.getElementById("lightboxPrevBtn");
+    const nextBtn = document.getElementById("lightboxNextBtn");
+    if (prevBtn && nextBtn) {
+      const showNav = gallery.length > 1;
+      prevBtn.style.display = showNav ? "flex" : "none";
+      nextBtn.style.display = showNav ? "flex" : "none";
+    }
+  }
+
+  function stepLightboxPhoto(delta, event) {
+    if (event && event.stopPropagation) event.stopPropagation();
+    if (!currentModalPlantId) return;
+    const plant = plantsCatalog.find(p => p.id === currentModalPlantId);
+    if (!plant) return;
+    const gallery = getPlantGallery(plant);
+    if (gallery.length <= 1) return;
+
+    currentModalGalleryIndex = (currentModalGalleryIndex + delta + gallery.length) % gallery.length;
+    resetLightboxZoom();
+    renderModalGallery(plant);
+    updateLightboxView(plant);
+  }
+
+  function applyLightboxTransform() {
+    const lbImg = document.getElementById("lightboxImg");
+    const zoomBtn = document.getElementById("lightboxZoomLevelBtn");
+    if (!lbImg) return;
+
+    lbImg.style.transform = `translate(${lightboxPanX}px, ${lightboxPanY}px) scale(${lightboxZoom})`;
+    if (lightboxZoom > 1) {
+      lbImg.classList.add("zoomed");
+    } else {
+      lbImg.classList.remove("zoomed");
+    }
+    if (zoomBtn) {
+      zoomBtn.innerText = `${Math.round(lightboxZoom * 100)}%`;
+    }
+  }
+
+  function adjustLightboxZoom(delta) {
+    lightboxZoom = Math.min(4, Math.max(1, +(lightboxZoom + delta).toFixed(2)));
+    if (lightboxZoom === 1) {
+      lightboxPanX = 0;
+      lightboxPanY = 0;
+    }
+    applyLightboxTransform();
+  }
+
+  function resetLightboxZoom() {
+    lightboxZoom = 1;
+    lightboxPanX = 0;
+    lightboxPanY = 0;
+    applyLightboxTransform();
+  }
+
+  function handleLightboxStageClick(event) {
+    if (lightboxHasDragged) {
+      lightboxHasDragged = false;
+      return;
+    }
+    if (event.target.id === "lightboxStage") {
+      closePhotoLightbox();
+    } else if (event.target.id === "lightboxImg") {
+      if (lightboxZoom === 1) {
+        lightboxZoom = 2.2;
+      } else {
+        lightboxZoom = 1;
+        lightboxPanX = 0;
+        lightboxPanY = 0;
+      }
+      applyLightboxTransform();
+    }
+  }
+
+  (function setupLightboxInteractions() {
+    const stage = document.getElementById("lightboxStage");
+    const lbImg = document.getElementById("lightboxImg");
+    if (!stage || !lbImg) return;
+
+    stage.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? 0.25 : -0.25;
+      adjustLightboxZoom(delta);
+    }, { passive: false });
+
+    lbImg.addEventListener("mousedown", (e) => {
+      if (lightboxZoom <= 1) return;
+      e.preventDefault();
+      isLightboxDragging = true;
+      lightboxHasDragged = false;
+      lightboxDragStartX = e.clientX - lightboxPanX;
+      lightboxDragStartY = e.clientY - lightboxPanY;
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (!isLightboxDragging) return;
+      lightboxHasDragged = true;
+      lightboxPanX = e.clientX - lightboxDragStartX;
+      lightboxPanY = e.clientY - lightboxDragStartY;
+      applyLightboxTransform();
+    });
+
+    window.addEventListener("mouseup", () => {
+      isLightboxDragging = false;
+    });
+  })();
+
+  // -------------------------------------------------------------
+  // PUNT 13: MODE FOSC BOTÀNIC (DARK MODE)
+  // -------------------------------------------------------------
+  function applyDarkModeState(isDark) {
+    if (isDark) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+    const btn = document.getElementById("darkModeToggleBtn");
+    if (btn) {
+      btn.innerHTML = isDark ? "☀️ Mode Clar" : "🌙 Mode Fosc";
+    }
+  }
+
+  function toggleDarkMode() {
+    const isNowDark = !document.body.classList.contains("dark-mode");
+    applyDarkModeState(isNowDark);
+    try {
+      localStorage.setItem("registre_plantes_dark_mode", isNowDark ? "1" : "0");
+    } catch (e) {}
+  }
+
+  function initDarkMode() {
+    try {
+      const saved = localStorage.getItem("registre_plantes_dark_mode");
+      if (saved === "1") {
+        applyDarkModeState(true);
+      }
+    } catch (e) {}
+  }
+
   function closeModal(modalId) {
     if (modalId === 'plantModal') currentModalPlantId = null;
     if (modalId === 'editPlantModal') currentEditingPlantId = null;
@@ -4898,6 +5404,21 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   };
 
   document.addEventListener("keydown", (e) => {
+    const lb = document.getElementById("photoLightboxModal");
+    if (lb && lb.classList.contains("active")) {
+      if (e.key === "Escape") {
+        closePhotoLightbox();
+        return;
+      }
+      if (e.key === "ArrowLeft") {
+        stepLightboxPhoto(-1);
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        stepLightboxPhoto(1);
+        return;
+      }
+    }
     if (e.key === "Escape") {
       currentModalPlantId = null;
       currentEditingPlantId = null;
@@ -4982,6 +5503,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   // Inicialització
+  initDarkMode();
   initSupabase();
 </script>
 
