@@ -1056,7 +1056,7 @@
     }
     .week-strip-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 10px;
     }
     .week-day-card {
@@ -1065,6 +1065,8 @@
       border-radius: 10px;
       padding: 10px;
       min-height: 120px;
+      min-width: 0;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -1117,7 +1119,7 @@
     }
     .month-weekdays-row {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 8px;
       text-align: center;
@@ -1128,7 +1130,7 @@
     }
     .month-calendar-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 8px;
     }
     .month-day-cell {
@@ -1136,6 +1138,8 @@
       border: 1px solid var(--border-subtle);
       border-radius: 9px;
       min-height: 98px;
+      min-width: 0;
+      overflow: hidden;
       padding: 7px;
       display: flex;
       flex-direction: column;
@@ -1166,10 +1170,14 @@
     .month-day-cell.is-today .month-day-number {
       color: #1e582e;
     }
+    .mobile-weekday {
+      display: none;
+    }
     .cal-events-list {
       display: flex;
       flex-direction: column;
       gap: 4px;
+      min-width: 0;
     }
     .cal-empty-day {
       font-size: 0.73rem;
@@ -1178,9 +1186,9 @@
       padding-top: 4px;
     }
     .cal-event-chip {
-      display: flex;
-      align-items: center;
-      gap: 5px;
+      display: block;
+      max-width: 100%;
+      min-width: 0;
       padding: 4px 6px;
       border-radius: 6px;
       font-size: 0.72rem;
@@ -1224,6 +1232,9 @@
       .maint-grid {
         grid-template-columns: 1fr;
       }
+      .calendar-panel {
+        padding: 14px 12px;
+      }
       .week-strip-grid {
         grid-template-columns: 1fr;
       }
@@ -1234,7 +1245,27 @@
         display: none;
       }
       .month-calendar-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .month-day-cell {
+        min-height: auto;
+        padding: 8px 10px;
+      }
+      .month-day-cell.no-events:not(.today) {
+        padding: 6px 10px;
+        background: #f6f9f6;
+        opacity: 0.72;
+      }
+      .month-day-cell.no-events:not(.today) .month-day-number {
+        margin-bottom: 0;
+      }
+      .mobile-weekday {
+        display: inline;
+        text-transform: uppercase;
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        margin-right: 4px;
       }
       .month-day-cell.other-month,
       .month-day-cell.empty {
@@ -4815,13 +4846,15 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const cellDate = new Date(currentCalendarYear, currentCalendarMonth, day);
       const isToday = (cellDate.getTime() === todayMidnight.getTime());
       const events = getProjectedEventsForDate(cellDate);
+      const weekdayShort = dayNamesShort[cellDate.getDay()];
 
       cellsHtml.push(`
-        <div class="month-day-cell ${isToday ? 'today' : ''}">
+        <div class="month-day-cell ${isToday ? 'today' : ''} ${events.length === 0 ? 'no-events' : ''}">
           <div class="month-day-number">
-            <span>${day}</span>
+            <span><span class="mobile-weekday">${weekdayShort}</span>${day}${isToday ? ' <span class="mobile-weekday" style="color:#1e582e; font-weight:800;">· Avui</span>' : ''}</span>
             ${events.length > 0 ? `<span style="font-size:0.68rem; color:var(--text-muted); font-weight:600;">${events.length}</span>` : ''}
           </div>
+          ${events.length > 0 ? `
           <div class="cal-events-list">
             ${events.slice(0, 4).map(ev => `
               <span class="cal-event-chip ${ev.urgent ? 'overdue-water' : ev.type}" onclick="openPlantModal('${ev.plant.id}')" title="${ev.plant.name}">
@@ -4830,6 +4863,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             `).join('')}
             ${events.length > 4 ? `<span style="font-size:0.68rem; color:var(--text-muted); padding-left:4px;">+${events.length - 4} més</span>` : ''}
           </div>
+          ` : ''}
         </div>
       `);
     }
