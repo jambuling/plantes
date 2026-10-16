@@ -202,8 +202,10 @@
       font-weight: 600;
     }
     .stat-pill-soon {
-      background: rgba(245, 158, 11, 0.22);
-      border-color: rgba(245, 158, 11, 0.45);
+      background: rgba(245, 158, 11, 0.28);
+      border-color: rgba(253, 224, 71, 0.65);
+      color: #fef9c3;
+      font-weight: 600;
     }
 
     /* CONTROLS */
@@ -1025,6 +1027,9 @@
       flex-direction: column;
       gap: 22px;
     }
+    .calendar-container.active {
+      display: flex;
+    }
     .calendar-panel {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -1064,6 +1069,7 @@
       flex-direction: column;
       gap: 6px;
     }
+    .week-day-card.today,
     .week-day-card.is-today {
       background: #f0f9f2;
       border: 2px solid #245831;
@@ -1080,13 +1086,15 @@
       border-bottom: 1px solid var(--border-subtle);
       padding-bottom: 5px;
     }
+    .week-day-card.today .week-day-header,
     .week-day-card.is-today .week-day-header {
       color: #1e582e;
     }
     .week-day-num {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 800;
       color: var(--text-main);
+      text-transform: none;
     }
     .month-nav-group {
       display: flex;
@@ -1133,11 +1141,14 @@
       flex-direction: column;
       gap: 4px;
     }
+    .month-day-cell.other-month,
     .month-day-cell.empty {
-      background: transparent;
-      border-color: transparent;
-      min-height: 40px;
+      background: #f4f7f4;
+      border-color: rgba(30, 88, 46, 0.06);
+      opacity: 0.45;
+      min-height: 60px;
     }
+    .month-day-cell.today,
     .month-day-cell.is-today {
       background: #f0f9f2;
       border: 2px solid #245831;
@@ -1151,8 +1162,20 @@
       justify-content: space-between;
       align-items: center;
     }
+    .month-day-cell.today .month-day-number,
     .month-day-cell.is-today .month-day-number {
       color: #1e582e;
+    }
+    .cal-events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cal-empty-day {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      font-style: italic;
+      padding-top: 4px;
     }
     .cal-event-chip {
       display: flex;
@@ -1174,10 +1197,16 @@
     .cal-event-chip:hover {
       transform: scale(1.02);
     }
-    .cal-event-chip.overdue {
+    .cal-event-chip.overdue,
+    .cal-event-chip.overdue-water {
       background: #fef3c7;
       color: #92400e;
       border-color: #fcd34d;
+    }
+    .cal-event-chip.fert {
+      background: #f3e8ff;
+      color: #6b21a8;
+      border-color: #d8b4fe;
     }
     .cal-event-chip.done {
       background: #dcfce7;
@@ -1207,6 +1236,7 @@
       .month-calendar-grid {
         grid-template-columns: repeat(2, 1fr);
       }
+      .month-day-cell.other-month,
       .month-day-cell.empty {
         display: none;
       }
@@ -3925,7 +3955,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       <div class="stat-pill ${overdueCount > 0 ? 'alert' : ''}">
         ${overdueCount > 0 ? `🪴 <strong>${overdueCount}</strong> per revisar reg` : `✅ Totes al dia`}
       </div>
-      ${dueSoonCount > 0 ? `<div class="stat-pill" style="background:rgba(217, 119, 6, 0.12); border-color:rgba(217, 119, 6, 0.35); color:#78350f;">🟡 <strong>${dueSoonCount}</strong> tocaran aviat</div>` : ''}
+      ${dueSoonCount > 0 ? `<div class="stat-pill stat-pill-soon">🟡 <strong>${dueSoonCount}</strong> tocaran aviat</div>` : ''}
       <div class="stat-pill">${seasonText}</div>
     `;
   }
@@ -4880,7 +4910,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (calendarBtn) calendarBtn.classList.remove("active");
     gridView.style.display = "grid";
     tableView.style.display = "none";
-    if (calendarView) calendarView.classList.remove("active");
+    if (calendarView) {
+      calendarView.classList.remove("active");
+      calendarView.style.display = "none";
+    }
+    renderPlants();
   });
 
   tableBtn.addEventListener("click", () => {
@@ -4889,7 +4923,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (calendarBtn) calendarBtn.classList.remove("active");
     gridView.style.display = "none";
     tableView.style.display = "block";
-    if (calendarView) calendarView.classList.remove("active");
+    if (calendarView) {
+      calendarView.classList.remove("active");
+      calendarView.style.display = "none";
+    }
+    renderPlants();
   });
 
   if (calendarBtn) {
@@ -4899,8 +4937,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       tableBtn.classList.remove("active");
       gridView.style.display = "none";
       tableView.style.display = "none";
+      if (emptyStateEl) emptyStateEl.style.display = "none";
       if (calendarView) {
         calendarView.classList.add("active");
+        calendarView.style.display = "flex";
         renderCalendar();
       }
     });
