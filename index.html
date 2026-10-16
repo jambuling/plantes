@@ -402,16 +402,17 @@
 
     .plant-name {
       font-family: var(--font-display);
-      font-size: 1.30rem;
+      font-size: 2.2rem;
       font-weight: 600;
       color: var(--text-main);
       margin-bottom: 2px;
-      line-height: 1.24;
+      line-height: 1.1;
       letter-spacing: -0.01em;
     }
 
     .plant-scientific {
-      font-size: 0.82rem;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
       font-style: italic;
       color: var(--text-muted);
     }
@@ -1780,8 +1781,8 @@
       <div class="modal-header">
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap: 12px; flex-wrap: wrap;">
           <div>
-            <h2 id="modalTitle" style="font-size: 1.6rem; color: var(--text-main); margin-bottom: 2px;"></h2>
-            <p id="modalScientific" style="font-style: italic; color: var(--text-muted);"></p>
+            <h2 id="modalTitle" class="plant-name" style="font-size: 2.2rem; line-height: 1.1; color: var(--text-main); margin-bottom: 4px;"></h2>
+            <p id="modalScientific" class="plant-scientific"></p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
             <button id="modalEditPlantBtn" style="background:#eaf6ec; color:#1e582e; border:1px solid #c4ecc9; padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:4px;">
