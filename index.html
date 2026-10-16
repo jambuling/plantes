@@ -1855,14 +1855,79 @@
       transition: all 0.15s ease;
       font-family: inherit;
     }
-    .pref-option-btn:hover {
+    .pref-select {
+      width: 100%;
+      background: var(--bg-primary);
+      border: 2px solid var(--border-subtle);
+      color: var(--text-main);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .pref-select:focus {
       border-color: var(--accent);
     }
-    .pref-option-btn.active {
-      background: var(--accent-light);
-      border-color: var(--accent);
+    .pref-backup-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .btn-pref-backup {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
       color: var(--text-main);
-      box-shadow: 0 2px 8px rgba(39, 93, 54, 0.15);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .btn-pref-backup:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent);
+    }
+    .app-footer {
+      margin-top: 45px;
+      padding: 22px 10px;
+      text-align: center;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .app-footer-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .app-footer-link {
+      color: var(--text-muted);
+      text-decoration: underline;
+      cursor: pointer;
+      transition: color 0.15s ease;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 0.82rem;
+      padding: 0;
+    }
+    .app-footer-link:hover {
+      color: var(--accent);
     }
   </style>
 </head>
@@ -1991,6 +2056,16 @@
     <h2 id="emptyStateTitle" style="font-size: 1.25rem; font-family: var(--font-display); font-weight: 600; color: var(--text-main); margin-bottom: 4px;">No s'ha trobat cap planta</h2>
     <p id="emptyStateDesc">Prova de canviar els filtres de cerca.</p>
   </div>
+
+  <!-- FOOTER AMB ENLLAÇOS LEGALS -->
+  <footer class="app-footer">
+    <div class="app-footer-links">
+      <button type="button" class="app-footer-link" id="footerLegalBtn" onclick="openLegalModal('terms')">⚖️ Avís Legal i Condicions</button>
+      <span>•</span>
+      <button type="button" class="app-footer-link" id="footerPrivacyBtn" onclick="openLegalModal('privacy')">🔒 Política de Privacitat</button>
+    </div>
+    <div id="footerCopyText">© 2026 El Meu Registre de Plantes · Cures botàniques locals i privades</div>
+  </footer>
 
 </div>
 
@@ -2523,18 +2598,19 @@
 </div>
 
 
-<!-- MODAL PREFERÈNCIES (TEMA CLAR/FOSC I IDIOMA) -->
+<!-- MODAL PREFERÈNCIES (TEMA, IDIOMA I DADES) -->
 <div class="modal-overlay" id="preferencesModal">
-  <div class="modal-card" style="max-width: 440px;">
+  <div class="modal-card" style="max-width: 460px; max-height: 90vh; overflow-y: auto;">
     <button class="modal-close" onclick="closeModal('preferencesModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 24px;">
       <h2 id="prefModalTitle" style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
         ⚙️ Preferències
       </h2>
-      <p id="prefModalSubtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
-        Personalitza l'aparença visual i l'idioma de l'aplicació.
+      <p id="prefModalSubtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
+        Personalitza l'aparença visual, l'idioma i gestiona les teves dades.
       </p>
 
+      <!-- TEMA -->
       <div class="pref-section">
         <span class="pref-section-label" id="prefThemeSectionLabel">🎨 Aparença / Tema</span>
         <div class="pref-options-grid">
@@ -2547,14 +2623,43 @@
         </div>
       </div>
 
-      <div class="pref-section" style="margin-bottom: 22px;">
-        <span class="pref-section-label" id="prefLangSectionLabel">🌐 Idioma</span>
-        <div class="pref-options-grid">
-          <button type="button" class="pref-option-btn active" id="prefLangCaBtn" onclick="setLanguagePreference('ca')">
-            🌿 Català
+      <!-- IDIOMA (DESPLEGABLE EXTENSIBLE) -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefLangSectionLabel">🌐 Idioma / Language</span>
+        <select class="pref-select" id="prefLangSelect" onchange="setLanguagePreference(this.value)">
+          <option value="ca">🌿 Català</option>
+          <option value="es">🌱 Español</option>
+          <option value="en">🍃 English</option>
+        </select>
+      </div>
+
+      <!-- GESTIÓ DE DADES I COPIES DE SEGURETAT -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefBackupSectionLabel">💾 Còpia de Seguretat / Dades</span>
+        <div class="pref-backup-grid">
+          <button type="button" class="btn-pref-backup" onclick="exportDataBackup()" id="prefExportBtn" title="Descarrega una còpia de seguretat en fitxer JSON">
+            📥 <span id="prefExportText">Exportar Còpia</span>
           </button>
-          <button type="button" class="pref-option-btn" id="prefLangEsBtn" onclick="setLanguagePreference('es')">
-            🌱 Español
+          <button type="button" class="btn-pref-backup" onclick="document.getElementById('importBackupFileInput').click()" id="prefImportBtn" title="Restaura una còpia de seguretat prèvia">
+            📤 <span id="prefImportText">Restaurar Còpia</span>
+          </button>
+          <input type="file" id="importBackupFileInput" accept=".json,application/json" style="display:none;" onchange="handleImportBackupFile(event)">
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefBackupHint">
+          Guarda totes les teves plantes, històric i fotos en un fitxer segur al teu ordinador o mòbil.
+        </p>
+      </div>
+
+      <!-- ENLLAÇOS LEGALS DES DE PREFERÈNCIES -->
+      <div class="pref-section" style="margin-bottom: 22px;">
+        <span class="pref-section-label" id="prefLegalSectionLabel">⚖️ Legalitat i Privacitat</span>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="app-footer-link" id="prefLegalTermsBtn" onclick="openLegalModal('terms')" style="font-size:0.83rem;">
+            📄 <span id="prefLegalTermsText">Avís Legal i Condicions</span>
+          </button>
+          <span style="color:var(--text-muted);">•</span>
+          <button type="button" class="app-footer-link" id="prefLegalPrivacyBtn" onclick="openLegalModal('privacy')" style="font-size:0.83rem;">
+            🔒 <span id="prefLegalPrivacyText">Política de Privacitat</span>
           </button>
         </div>
       </div>
@@ -2562,6 +2667,36 @@
       <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
         <button type="button" class="btn-action" id="prefCloseBtn" style="background: #256a38; color: white; padding: 8px 20px;" onclick="closeModal('preferencesModal')">
           Fet
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOTES LEGALS I POLÍTICA DE PRIVACITAT -->
+<div class="modal-overlay" id="legalModal">
+  <div class="modal-card" style="max-width: 620px; max-height: 88vh; overflow-y: auto;">
+    <button class="modal-close" onclick="closeModal('legalModal')" aria-label="Tancar finestra">&times;</button>
+    <div class="modal-content" style="padding: 26px;">
+      <h2 id="legalModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 6px; font-family: var(--font-display);">
+        ⚖️ Informació Legal i Privacitat
+      </h2>
+      <div style="display:flex; gap:8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px;">
+        <button type="button" class="btn-action" id="legalTabTermsBtn" style="background:var(--accent-light); color:var(--text-main); border:1px solid var(--accent); padding:5px 12px; font-size:0.82rem;" onclick="switchLegalTab('terms')">
+          Condicions d'Ús
+        </button>
+        <button type="button" class="btn-action" id="legalTabPrivacyBtn" style="background:var(--bg-tertiary); color:var(--text-muted); border:1px solid var(--border-subtle); padding:5px 12px; font-size:0.82rem;" onclick="switchLegalTab('privacy')">
+          Privacitat de Dades
+        </button>
+      </div>
+
+      <div id="legalModalBody" style="font-size: 0.88rem; color: var(--text-main); line-height: 1.6; max-height: 52vh; overflow-y: auto; padding-right: 6px;">
+        <!-- El contingut legal s'injecta dinàmicament en l'idioma seleccionat -->
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border-subtle); padding-top: 14px; margin-top: 16px;">
+        <button type="button" class="btn-action" style="background: #256a38; color: white; padding: 8px 18px;" onclick="closeModal('legalModal')" id="legalModalCloseBtn">
+          Entès
         </button>
       </div>
     </div>
@@ -4246,43 +4381,94 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   // -------------------------------------------------------------
-  // IDIOMA I TRADUCCIÓ (CA / ES)
+  // IDIOMA I TRADUCCIÓ (CA / ES / EN) I ARQUITECTURA DE CLAVS
   // -------------------------------------------------------------
   let currentLang = "ca";
   try {
     const savedLang = localStorage.getItem("registre_plantes_lang");
-    if (savedLang === "es" || savedLang === "ca") currentLang = savedLang;
+    if (savedLang === "es" || savedLang === "ca" || savedLang === "en") currentLang = savedLang;
   } catch (e) {}
 
-  function t(ca, es) {
-    return currentLang === "es" ? es : ca;
+  function t(ca, es, en) {
+    if (currentLang === "en") return en || es || ca;
+    if (currentLang === "es") return es || ca;
+    return ca;
   }
 
   function getLocale() {
-    return currentLang === "es" ? "es-ES" : "ca-ES";
+    if (currentLang === "en") return "en-US";
+    if (currentLang === "es") return "es-ES";
+    return "ca-ES";
+  }
+
+  // Diccionari de traducció per claus i textos de contingut botànic
+  const plantVocabulary = {
+    // Ubicacions
+    "interior": { ca: "🏠 Interior", es: "🏠 Interior", en: "🏠 Indoor" },
+    "exterior": { ca: "☀️ Balcó / Exterior", es: "☀️ Balcón / Exterior", en: "☀️ Balcony / Outdoor" },
+    // Dificultats
+    "molt_facil": { ca: "Molt fàcil", es: "Muy fácil", en: "Very easy" },
+    "facil": { ca: "Fàcil", es: "Fácil", en: "Easy" },
+    "mitjana": { ca: "Mitjana", es: "Media", en: "Moderate" },
+    // Toxicitat
+    "safe": { ca: "🟢 Segura per mascotes.", es: "🟢 Segura para mascotas.", en: "🟢 Pet friendly." },
+    "toxic": { ca: "🔴 Tòxica en cas d'ingesta per mascotes.", es: "🔴 Tóxica en caso de ingesta por mascotas.", en: "🔴 Toxic if ingested by pets." },
+    // Temporades d'adob
+    "spring_summer": { ca: "Primavera i Estiu", es: "Primavera y Verano", en: "Spring and Summer" },
+    "all_year": { ca: "Tot l'any", es: "Todo el año", en: "All year round" },
+    // Llums típics
+    "light_indirect_bright": { ca: "Llum indirecta molt brillant", es: "Luz indirecta muy brillante", en: "Very bright indirect light" },
+    "light_indirect_moderate": { ca: "Llum indirecta moderada", es: "Luz indirecta moderada", en: "Moderate indirect light" },
+    "light_low_tolerant": { ca: "Molt adaptable: tolera espais foscos o amb poca llum", es: "Muy adaptable: tolera poca luz", en: "Very adaptable: tolerates low light" },
+    "light_direct_sun": { ca: "Sol directe abundant", es: "Sol directo abundante", en: "Full direct sun" }
+  };
+
+  function trKey(key, fallback = "") {
+    if (plantVocabulary[key] && plantVocabulary[key][currentLang]) {
+      return plantVocabulary[key][currentLang];
+    }
+    return fallback || key;
   }
 
   function trText(str) {
-    if (!str || currentLang !== "es") return str;
+    if (!str) return str;
     let s = String(str);
+
+    // Mapeig exacte de cadenes històriques en català
     const exactMap = {
-      "🏠 Interior": "🏠 Interior",
-      "☀️ Balcó / Exterior": "☀️ Balcón / Exterior",
-      "Molt fàcil": "Muy fácil",
-      "Fàcil": "Fácil",
-      "Mitjana": "Media",
-      "🟢 Segura per mascotes.": "🟢 Segura para mascotas.",
-      "🔴 Tòxica per a mascotes.": "🔴 Tóxica para mascotas.",
-      "🔴 Tòxica en cas d'ingesta per mascotes.": "🔴 Tóxica en caso de ingesta por mascotas.",
-      "Primavera i Estiu": "Primavera y Verano",
-      "Primavera i estiu": "Primavera y verano"
+      "🏠 Interior": { ca: "🏠 Interior", es: "🏠 Interior", en: "🏠 Indoor" },
+      "☀️ Balcó / Exterior": { ca: "☀️ Balcó / Exterior", es: "☀️ Balcón / Exterior", en: "☀️ Balcony / Outdoor" },
+      "Molt fàcil": { ca: "Molt fàcil", es: "Muy fácil", en: "Very easy" },
+      "Fàcil": { ca: "Fàcil", es: "Fácil", en: "Easy" },
+      "Mitjana": { ca: "Mitjana", es: "Media", en: "Moderate" },
+      "🟢 Segura per mascotes.": { ca: "🟢 Segura per mascotes.", es: "🟢 Segura para mascotas.", en: "🟢 Safe for pets." },
+      "🔴 Tòxica per a mascotes.": { ca: "🔴 Tòxica per a mascotes.", es: "🔴 Tóxica para mascotas.", en: "🔴 Toxic for pets." },
+      "🔴 Tòxica en cas d'ingesta per mascotes.": { ca: "🔴 Tòxica en cas d'ingesta per mascotes.", es: "🔴 Tóxica en caso de ingesta por mascotas.", en: "🔴 Toxic if ingested by pets." },
+      "Primavera i Estiu": { ca: "Primavera i Estiu", es: "Primavera y Verano", en: "Spring and Summer" },
+      "Primavera i estiu": { ca: "Primavera i estiu", es: "Primavera y verano", en: "Spring and summer" }
     };
-    if (exactMap[s]) return exactMap[s];
-    s = s.replace(/\bCada (\d+) dies\b/gi, "Cada $1 días");
-    s = s.replace(/\bBalcó\b/g, "Balcón");
-    s = s.replace(/\bMolt fàcil\b/g, "Muy fácil");
-    s = s.replace(/\bFàcil\b/g, "Fácil");
-    s = s.replace(/\bMitjana\b/g, "Media");
+
+    if (exactMap[s] && exactMap[s][currentLang]) {
+      return exactMap[s][currentLang];
+    }
+
+    if (currentLang === "en") {
+      s = s.replace(/\bCada (\d+) dies\b/gi, "Every $1 days");
+      s = s.replace(/\bBalcó\b/g, "Balcony");
+      s = s.replace(/\bMolt fàcil\b/g, "Very easy");
+      s = s.replace(/\bFàcil\b/g, "Easy");
+      s = s.replace(/\bMitjana\b/g, "Moderate");
+      s = s.replace(/\bLlum indirecta moderada\b/gi, "Moderate indirect light");
+      s = s.replace(/\bLlum indirecta molt brillant\b/gi, "Bright indirect light");
+      s = s.replace(/\bUniversal ben drenat\b/gi, "Well-draining potting mix");
+      s = s.replace(/\bLíquid plantes verdes\b/gi, "Liquid foliage fertilizer");
+    } else if (currentLang === "es") {
+      s = s.replace(/\bCada (\d+) dies\b/gi, "Cada $1 días");
+      s = s.replace(/\bBalcó\b/g, "Balcón");
+      s = s.replace(/\bMolt fàcil\b/g, "Muy fácil");
+      s = s.replace(/\bFàcil\b/g, "Fácil");
+      s = s.replace(/\bMitjana\b/g, "Media");
+    }
     return s;
   }
 
@@ -5517,10 +5703,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (lightBtn) lightBtn.classList.toggle("active", !isDark);
     if (darkBtn) darkBtn.classList.toggle("active", isDark);
 
-    const caBtn = document.getElementById("prefLangCaBtn");
-    const esBtn = document.getElementById("prefLangEsBtn");
-    if (caBtn) caBtn.classList.toggle("active", currentLang === "ca");
-    if (esBtn) esBtn.classList.toggle("active", currentLang === "es");
+    const sel = document.getElementById("prefLangSelect");
+    if (sel) sel.value = currentLang;
   }
 
   function setThemePreference(mode) {
@@ -5537,12 +5721,17 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   function setLanguagePreference(lang) {
-    if (lang !== "ca" && lang !== "es") return;
+    if (lang !== "ca" && lang !== "es" && lang !== "en") return;
     currentLang = lang;
     document.documentElement.lang = lang;
     try {
       localStorage.setItem("registre_plantes_lang", lang);
     } catch (e) {}
+
+    // Sincronitza el desplegable si s'ha canviat per codi
+    const sel = document.getElementById("prefLangSelect");
+    if (sel && sel.value !== lang) sel.value = lang;
+
     applyStaticTranslations();
     updatePreferencesButtonsState();
     renderPlants();
@@ -5552,118 +5741,307 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   function applyStaticTranslations() {
-    document.title = t("🌱 Guia i Registre de Cures de Plantes", "🌱 Guía y Registro de Cuidados de Plantas");
+    document.title = t("🌱 Guia i Registre de Cures de Plantes", "🌱 Guía y Registro de Cuidados de Plantas", "🌱 Plant Care Guide & Tracker");
 
     const setElText = (id, text) => {
       const el = document.getElementById(id);
       if (el) el.innerText = text;
     };
 
-    setElText("appMainTitle", t("🌱 Les Meves Plantes i Seguiment de Reg", "🌱 Mis Plantas y Seguimiento de Riego"));
-    setElText("appMainSubtitle", t("Guia botànica personal amb control intel·ligent de reg, adob i avisos per temporada.", "Guía botánica personal con control inteligente de riego, abono y avisos por temporada."));
-    setElText("addPlantHeaderBtn", t("➕ Afegir Planta", "➕ Añadir Planta"));
-    setElText("prefHeaderBtnLabel", t("Preferències", "Preferencias"));
+    setElText("appMainTitle", t("🌱 Les Meves Plantes i Seguiment de Reg", "🌱 Mis Plantas y Seguimiento de Riego", "🌱 My Plants & Care Tracker"));
+    setElText("appMainSubtitle", t("Guia botànica personal amb control intel·ligent de reg, adob i avisos per temporada.", "Guía botánica personal con control inteligente de riego, abono y avisos por temporada.", "Personal botanical guide with intelligent watering, fertilizer schedules, and seasonal care."));
+    setElText("addPlantHeaderBtn", t("➕ Afegir Planta", "➕ Añadir Planta", "➕ Add Plant"));
+    setElText("prefHeaderBtnLabel", t("Preferències", "Preferencias", "Settings"));
 
     const searchInp = document.getElementById("searchInput");
-    if (searchInp) searchInp.placeholder = t("Cerca per nom comú o científic...", "Buscar por nombre común o científico...");
+    if (searchInp) searchInp.placeholder = t("Cerca per nom comú o científic...", "Buscar por nombre común o científico...", "Search by common or scientific name...");
 
     const statusSel = document.getElementById("statusFilter");
     if (statusSel && statusSel.options.length >= 4) {
-      statusSel.options[0].text = t("💧 Estat de reg: Tots", "💧 Estado de riego: Todos");
-      statusSel.options[1].text = t("🪴 Per revisar reg (terra seca?)", "🪴 Por revisar riego (¿tierra seca?)");
-      statusSel.options[2].text = t("🟡 Tocarà regar aviat (1-2 dies)", "🟡 Tocará regar pronto (1-2 días)");
-      statusSel.options[3].text = t("🟢 Reg al dia", "🟢 Riego al día");
+      statusSel.options[0].text = t("💧 Estat de reg: Tots", "💧 Estado de riego: Todos", "💧 Watering status: All");
+      statusSel.options[1].text = t("🪴 Per revisar reg (terra seca?)", "🪴 Por revisar riego (¿tierra seca?)", "🪴 Check soil (dry?)");
+      statusSel.options[2].text = t("🟡 Tocarà regar aviat (1-2 dies)", "🟡 Tocará regar pronto (1-2 días)", "🟡 Due soon (1-2 days)");
+      statusSel.options[3].text = t("🟢 Reg al dia", "🟢 Riego al día", "🟢 Up to date");
     }
 
     const zoneSel = document.getElementById("zoneFilter");
     if (zoneSel && zoneSel.options.length >= 3) {
-      zoneSel.options[0].text = t("📍 Ubicació: Totes", "📍 Ubicación: Todas");
-      zoneSel.options[1].text = t("🏠 Interior", "🏠 Interior");
-      zoneSel.options[2].text = t("☀️ Exterior / Balcó", "☀️ Exterior / Balcón");
+      zoneSel.options[0].text = t("📍 Ubicació: Totes", "📍 Ubicación: Todas", "📍 Location: All");
+      zoneSel.options[1].text = t("🏠 Interior", "🏠 Interior", "🏠 Indoor");
+      zoneSel.options[2].text = t("☀️ Exterior / Balcó", "☀️ Exterior / Balcón", "☀️ Outdoor / Balcony");
     }
 
     const diffSel = document.getElementById("difficultyFilter");
     if (diffSel && diffSel.options.length >= 4) {
-      diffSel.options[0].text = t("⭐ Dificultat: Totes", "⭐ Dificultad: Todas");
-      diffSel.options[1].text = t("Molt fàcil", "Muy fácil");
-      diffSel.options[2].text = t("Fàcil", "Fácil");
-      diffSel.options[3].text = t("Mitjana", "Media");
+      diffSel.options[0].text = t("⭐ Dificultat: Totes", "⭐ Dificultad: Todas", "⭐ Difficulty: All");
+      diffSel.options[1].text = t("Molt fàcil", "Muy fácil", "Very easy");
+      diffSel.options[2].text = t("Fàcil", "Fácil", "Easy");
+      diffSel.options[3].text = t("Mitjana", "Media", "Moderate");
     }
 
     const sortSel = document.getElementById("sortFilter");
     if (sortSel && sortSel.options.length >= 3) {
-      sortSel.options[0].text = t("🚨 Ordenar: Reg més urgent primer", "🚨 Ordenar: Riego más urgente primero");
-      sortSel.options[1].text = t("🔤 Ordenar: Alfabètic (A → Z)", "🔤 Ordenar: Alfabético (A → Z)");
-      sortSel.options[2].text = t("🔤 Ordenar: Alfabètic (Z → A)", "🔤 Ordenar: Alfabético (Z → A)");
+      sortSel.options[0].text = t("🚨 Ordenar: Reg més urgent primer", "🚨 Ordenar: Riego más urgente primero", "🚨 Sort: Most urgent watering first");
+      sortSel.options[1].text = t("🔤 Ordenar: Alfabètic (A → Z)", "🔤 Ordenar: Alfabético (A → Z)", "🔤 Sort: Alphabetical (A → Z)");
+      sortSel.options[2].text = t("🔤 Ordenar: Alfabètic (Z → A)", "🔤 Ordenar: Alfabético (Z → A)", "🔤 Sort: Alphabetical (Z → A)");
     }
 
-    setElText("viewGridBtn", t("🗂️ Targetes", "🗂️ Tarjetas"));
-    setElText("viewTableBtn", t("📊 Taula", "📊 Tabla"));
-    setElText("viewCalendarBtn", t("📅 Calendari", "📅 Calendario"));
+    setElText("viewGridBtn", t("🗂️ Targetes", "🗂️ Tarjetas", "🗂️ Cards"));
+    setElText("viewTableBtn", t("📊 Taula", "📊 Tabla", "📊 Table"));
+    setElText("viewCalendarBtn", t("📅 Calendari", "📅 Calendario", "📅 Calendar"));
 
     const thRow = document.getElementById("tableHeaderRow");
     if (thRow && thRow.children.length >= 9) {
-      thRow.children[0].innerText = t("Planta", "Planta");
-      thRow.children[1].innerText = t("Nom / Científic", "Nombre / Científico");
-      thRow.children[2].innerText = t("Estat Reg", "Estado Riego");
-      thRow.children[3].innerText = t("Proper Reg / Darrer", "Próximo Riego / Último");
-      thRow.children[4].innerText = t("Estat Adob", "Estado Abono");
-      thRow.children[5].innerText = t("Proper Adob", "Próximo Abono");
-      thRow.children[6].innerText = t("Dificultat", "Dificultad");
-      thRow.children[7].innerText = t("Ubicació", "Ubicación");
-      thRow.children[8].innerText = t("Accions ràpides", "Acciones rápidas");
+      thRow.children[0].innerText = t("Planta", "Planta", "Plant");
+      thRow.children[1].innerText = t("Nom / Científic", "Nombre / Científico", "Name / Scientific");
+      thRow.children[2].innerText = t("Estat Reg", "Estado Riego", "Water Status");
+      thRow.children[3].innerText = t("Proper Reg / Darrer", "Próximo Riego / Último", "Next Water / Last");
+      thRow.children[4].innerText = t("Estat Adob", "Estado Abono", "Fertilizer Status");
+      thRow.children[5].innerText = t("Proper Adob", "Próximo Abono", "Next Fertilizer");
+      thRow.children[6].innerText = t("Dificultat", "Dificultad", "Difficulty");
+      thRow.children[7].innerText = t("Ubicació", "Ubicación", "Location");
+      thRow.children[8].innerText = t("Accions ràpides", "Acciones rápidas", "Quick Actions");
     }
 
-    setElText("weeklyCalendarTitle", t("🗓️ Previsió Setmanal (Propers 7 dies)", "🗓️ Previsión Semanal (Próximos 7 días)"));
-    setElText("weeklyCalendarHint", t("Clica una planta per obrir la fitxa", "Haz clic en una planta para abrir la ficha"));
-    setElText("calPrevMonthBtn", t("◀ Anterior", "◀ Anterior"));
-    setElText("calTodayBtn", t("Avui", "Hoy"));
-    setElText("calNextMonthBtn", t("Següent ▶", "Siguiente ▶"));
+    setElText("weeklyCalendarTitle", t("🗓️ Previsió Setmanal (Propers 7 dies)", "🗓️ Previsión Semanal (Próximos 7 días)", "🗓️ Weekly Forecast (Next 7 days)"));
+    setElText("weeklyCalendarHint", t("Clica una planta per obrir la fitxa", "Haz clic en una planta para abrir la ficha", "Click any plant to view details"));
+    setElText("calPrevMonthBtn", t("◀ Anterior", "◀ Anterior", "◀ Prev"));
+    setElText("calTodayBtn", t("Avui", "Hoy", "Today"));
+    setElText("calNextMonthBtn", t("Següent ▶", "Siguiente ▶", "Next ▶"));
 
     const wkRow = document.getElementById("monthWeekdaysRow");
     if (wkRow && wkRow.children.length === 7) {
-      const days = currentLang === "es"
-        ? ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
-        : ["Dl", "Dt", "Dc", "Dj", "Dv", "Ds", "Dg"];
+      const days = currentLang === "en"
+        ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        : (currentLang === "es"
+            ? ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
+            : ["Dl", "Dt", "Dc", "Dj", "Dv", "Ds", "Dg"]);
       for (let i = 0; i < 7; i++) wkRow.children[i].innerText = days[i];
     }
 
-    setElText("emptyStateTitle", t("No s'ha trobat cap planta", "No se ha encontrado ninguna planta"));
-    setElText("emptyStateDesc", t("Prova de canviar els filtres o el text de cerca.", "Prueba a cambiar los filtros o el texto de búsqueda."));
+    setElText("emptyStateTitle", t("No s'ha trobat cap planta", "No se ha encontrado ninguna planta", "No plants found"));
+    setElText("emptyStateDesc", t("Prova de canviar els filtres o el text de cerca.", "Prueba a cambiar los filtros o el texto de búsqueda.", "Try adjusting filters or search text."));
 
     // Modal de Preferències
-    setElText("prefModalTitle", t("⚙️ Preferències", "⚙️ Preferencias"));
-    setElText("prefModalSubtitle", t("Personalitza l'aparença i l'idioma de l'aplicació.", "Personaliza la apariencia y el idioma de la aplicación."));
-    setElText("prefThemeLabel", t("🎨 Aparença (Tema)", "🎨 Apariencia (Tema)"));
-    setElText("prefThemeLightText", t("Mode Clar", "Modo Claro"));
-    setElText("prefThemeDarkText", t("Mode Fosc", "Modo Oscuro"));
-    setElText("prefLangLabel", t("🌐 Idioma", "🌐 Idioma"));
-    setElText("prefCloseBtn", t("Fet", "Listo"));
+    setElText("prefModalTitle", t("⚙️ Preferències", "⚙️ Preferencias", "⚙️ Preferences & Settings"));
+    setElText("prefModalSubtitle", t("Personalitza l'aparença visual, l'idioma i gestiona les teves dades.", "Personaliza la apariencia visual, el idioma y gestiona tus datos.", "Customize appearance, language, and manage your plant data."));
+    setElText("prefThemeSectionLabel", t("🎨 Aparença / Tema", "🎨 Apariencia / Tema", "🎨 Appearance / Theme"));
+    setElText("prefThemeLightText", t("Mode Clar", "Modo Claro", "Light Mode"));
+    setElText("prefThemeDarkText", t("Mode Fosc", "Modo Oscuro", "Dark Mode"));
+    setElText("prefLangSectionLabel", t("🌐 Idioma / Language", "🌐 Idioma / Language", "🌐 Language / Idioma"));
+    setElText("prefBackupSectionLabel", t("💾 Còpia de Seguretat / Dades", "💾 Copia de Seguridad / Datos", "💾 Backup & Data Export"));
+    setElText("prefExportText", t("Exportar Còpia", "Exportar Copia", "Export Backup"));
+    setElText("prefImportText", t("Restaurar Còpia", "Restaurar Copia", "Restore Backup"));
+    setElText("prefBackupHint", t("Guarda totes les teves plantes, històric i fotos en un fitxer segur al teu dispositiu.", "Guarda todas tus plantas, historial y fotos en un archivo seguro en tu dispositivo.", "Save all your plants, care history, and evolution photos in a safe file on your device."));
+    setElText("prefLegalSectionLabel", t("⚖️ Legalitat i Privacitat", "⚖️ Legalidad y Privacidad", "⚖️ Legal & Privacy"));
+    setElText("prefLegalTermsText", t("Avís Legal i Condicions", "Aviso Legal y Condiciones", "Terms of Service"));
+    setElText("prefLegalPrivacyText", t("Política de Privacitat", "Política de Privacidad", "Privacy Policy"));
+    setElText("prefCloseBtn", t("Fet", "Listo", "Done"));
+
+    // Footer
+    setElText("footerLegalBtn", t("⚖️ Avís Legal i Condicions", "⚖️ Aviso Legal y Condiciones", "⚖️ Terms of Service"));
+    setElText("footerPrivacyBtn", t("🔒 Política de Privacitat", "🔒 Política de Privacidad", "🔒 Privacy Policy"));
+    setElText("footerCopyText", t("© 2026 El Meu Registre de Plantes · Cures botàniques locals i privades", "© 2026 Mi Registro de Plantas · Cuidados botánicos locales y privados", "© 2026 My Plant Tracker · Private & local botanical care"));
 
     // Botons i etiquetes de la fitxa de planta (#plantModal)
-    setElText("modalZoomHintBtn", t("🔍 Ampliar", "🔍 Ampliar"));
-    setElText("modalEditPlantBtn", t("✏️ Editar", "✏️ Editar"));
-    setElText("modalHistoryBtn", t("📜 Històric", "📜 Historial"));
-    setElText("modalDeletePlantBtn", t("🗑️ Eliminar", "🗑️ Eliminar"));
-    setElText("modalWaterPastBtn", t("📅 Data", "📅 Fecha"));
-    setElText("modalFertPastBtn", t("📅 Data", "📅 Fecha"));
-    setElText("modalMaintSectionTitle", t("🛠️ Manteniment: Trasplantament i Poda", "🛠️ Mantenimiento: Trasplante y Poda"));
-    setElText("modalTransplantCardTitle", t("🪴 Trasplantament i Test", "🪴 Trasplante y Maceta"));
-    setElText("modalAddTransplantBtn", t("🪴 Registrar trasplantament", "🪴 Registrar trasplante"));
-    setElText("modalPruningCardTitle", t("✂️ Poda i Neteja", "✂️ Poda y Limpieza"));
-    setElText("modalAddPruningBtn", t("✂️ Registrar poda / neteja", "✂️ Registrar poda / limpieza"));
-    setElText("modalFertSectionTitle", t("🧪 Pauta d'Abonament", "🧪 Pauta de Abonado"));
-    setElText("modalFertTypeLabel", t("Tipus:", "Tipo:"));
-    setElText("modalFertFreqLabel", t("Freqüència:", "Frecuencia:"));
-    setElText("modalFertSeasonLabel", t("Temporada activa:", "Temporada activa:"));
-    setElText("modalWaterSectionTitle", t("💧 Pauta de Reg", "💧 Pauta de Riego"));
-    setElText("modalWaterSummerLabel", t("☀️ Estiu:", "☀️ Verano:"));
-    setElText("modalWaterWinterLabel", t("❄️ Hivern:", "❄️ Invierno:"));
-    setElText("modalLightSectionTitle", t("☀️ Llum i Ubicació", "☀️ Luz y Ubicación"));
-    setElText("modalSubstrateSectionTitle", t("🪴 Substrat Recomanat", "🪴 Sustrato Recomendado"));
-    setElText("modalGalleryTitleText", t("📸 Galeria d'Evolució", "📸 Galería de Evolución"));
-    setElText("modalGalleryCameraBtn", t("📸 Fer foto", "📸 Hacer foto"));
-    setElText("modalGalleryUploadBtn", t("➕ Pujar foto", "➕ Subir foto"));
+    setElText("modalZoomHintBtn", t("🔍 Ampliar", "🔍 Ampliar", "🔍 Zoom"));
+    setElText("modalEditPlantBtn", t("✏️ Editar", "✏️ Editar", "✏️ Edit"));
+    setElText("modalHistoryBtn", t("📜 Històric", "📜 Historial", "📜 History"));
+    setElText("modalDeletePlantBtn", t("🗑️ Eliminar", "🗑️ Eliminar", "🗑️ Delete"));
+    setElText("modalWaterPastBtn", t("📅 Data", "📅 Fecha", "📅 Date"));
+    setElText("modalFertPastBtn", t("📅 Data", "📅 Fecha", "📅 Date"));
+    setElText("modalMaintSectionTitle", t("🛠️ Manteniment: Trasplantament i Poda", "🛠️ Mantenimiento: Trasplante y Poda", "🛠️ Maintenance: Repotting & Pruning"));
+    setElText("modalTransplantCardTitle", t("🪴 Trasplantament i Test", "🪴 Trasplante y Maceta", "🪴 Repotting & Pot Size"));
+    setElText("modalAddTransplantBtn", t("🪴 Registrar trasplantament", "🪴 Registrar trasplante", "🪴 Log repotting"));
+    setElText("modalPruningCardTitle", t("✂️ Poda i Neteja", "✂️ Poda y Limpieza", "✂️ Pruning & Cleaning"));
+    setElText("modalAddPruningBtn", t("✂️ Registrar poda / neteja", "✂️ Registrar poda / limpieza", "✂️ Log pruning"));
+    setElText("modalFertSectionTitle", t("🧪 Pauta d'Abonament", "🧪 Pauta de Abonado", "🧪 Fertilizer Routine"));
+    setElText("modalFertTypeLabel", t("Tipus:", "Tipo:", "Type:"));
+    setElText("modalFertFreqLabel", t("Freqüència:", "Frecuencia:", "Frequency:"));
+    setElText("modalFertSeasonLabel", t("Temporada activa:", "Temporada activa:", "Active season:"));
+    setElText("modalWaterSectionTitle", t("💧 Pauta de Reg", "💧 Pauta de Riego", "💧 Watering Routine"));
+    setElText("modalWaterSummerLabel", t("☀️ Estiu:", "☀️ Verano:", "☀️ Summer:"));
+    setElText("modalWaterWinterLabel", t("❄️ Hivern:", "❄️ Invierno:", "❄️ Winter:"));
+    setElText("modalLightSectionTitle", t("☀️ Llum i Ubicació", "☀️ Luz y Ubicación", "☀️ Light & Placement"));
+    setElText("modalSubstrateSectionTitle", t("🪴 Substrat Recomanat", "🪴 Sustrato Recomendado", "🪴 Recommended Soil Mix"));
+    setElText("modalGalleryTitleText", t("📸 Galeria d'Evolució", "📸 Galería de Evolución", "📸 Growth Gallery"));
+    setElText("modalGalleryCameraBtn", t("📸 Fer foto", "📸 Hacer foto", "📸 Take Photo"));
+    setElText("modalGalleryUploadBtn", t("➕ Pujar foto", "➕ Subir foto", "➕ Upload Photo"));
+  }
+
+  // -------------------------------------------------------------
+  // EXPORTACIÓ I IMPORTACIÓ DE DADES (BACKUP JSON)
+  // -------------------------------------------------------------
+  function exportDataBackup() {
+    try {
+      const backupPayload = {
+        app: "PlantesApp",
+        version: "1.0",
+        exportDate: new Date().toISOString(),
+        plantsCatalog: plantsCatalog,
+        history: inMemoryHistory,
+        language: currentLang,
+        themeDark: document.body.classList.contains("dark-mode")
+      };
+
+      const jsonStr = JSON.stringify(backupPayload, null, 2);
+      const blob = new Blob([jsonStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const datePart = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `backup_plantes_${datePart}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showToast(t("Còpia de seguretat descarregada amb èxit!", "¡Copia de seguridad descargada con éxito!", "Backup file exported successfully!"), "📥");
+    } catch (err) {
+      console.error("Error exportant còpia:", err);
+      alert(t("No s'ha pogut exportar la còpia de seguretat.", "No se ha podido exportar la copia de seguridad.", "Failed to export backup data."));
+    }
+  }
+
+  async function handleImportBackupFile(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (!data || !Array.isArray(data.plantsCatalog)) {
+          alert(t("El fitxer seleccionat no té el format de còpia vàlid.", "El archivo seleccionado no tiene un formato de copia válido.", "The selected file is not a valid plant backup."));
+          return;
+        }
+
+        const msg = t(
+          `Vols restaurar aquesta còpia (${data.plantsCatalog.length} plantes)? Això substituirà el registre actual.`,
+          `¿Quieres restaurar esta copia (${data.plantsCatalog.length} plantas)? Esto reemplazará el registro actual.`,
+          `Do you want to restore this backup (${data.plantsCatalog.length} plants)? This will replace your current records.`
+        );
+        if (!confirm(msg)) {
+          event.target.value = "";
+          return;
+        }
+
+        plantsCatalog = data.plantsCatalog;
+        saveLocalCatalog(plantsCatalog);
+
+        if (data.history && typeof data.history === "object") {
+          inMemoryHistory = data.history;
+          saveLocalHistory(inMemoryHistory);
+        }
+
+        if (data.language && (data.language === "ca" || data.language === "es" || data.language === "en")) {
+          setLanguagePreference(data.language);
+        } else {
+          renderPlants();
+        }
+
+        closeModal("preferencesModal");
+        showToast(t("Còpia de seguretat restaurada amb èxit!", "¡Copia de seguridad restaurada con éxito!", "Backup restored successfully!"), "✅");
+
+        // Opcional: sincronitzar amb núvol si hi ha credencials
+        await syncCatalogToCloud();
+        await syncHistoryToCloud();
+      } catch (err) {
+        console.error("Error processant còpia:", err);
+        alert(t("Error llegint el fitxer de còpia de seguretat.", "Error al leer el archivo de copia de seguridad.", "Error reading backup file."));
+      } finally {
+        event.target.value = "";
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // -------------------------------------------------------------
+  // NOTES LEGALS I POLÍTICA DE PRIVACITAT
+  // -------------------------------------------------------------
+  let activeLegalTab = 'terms';
+
+  function openLegalModal(tab = 'terms') {
+    activeLegalTab = tab;
+    switchLegalTab(tab);
+    const m = document.getElementById("legalModal");
+    if (m) m.classList.add("active");
+  }
+
+  function switchLegalTab(tab) {
+    activeLegalTab = tab;
+    const tabTermsBtn = document.getElementById("legalTabTermsBtn");
+    const tabPrivacyBtn = document.getElementById("legalTabPrivacyBtn");
+    const bodyEl = document.getElementById("legalModalBody");
+    const closeBtn = document.getElementById("legalModalCloseBtn");
+
+    if (closeBtn) closeBtn.innerText = t("Entès", "Entendido", "Got it");
+
+    if (tab === 'terms') {
+      if (tabTermsBtn) {
+        tabTermsBtn.style.background = "var(--accent-light)";
+        tabTermsBtn.style.color = "var(--text-main)";
+        tabTermsBtn.style.borderColor = "var(--accent)";
+      }
+      if (tabPrivacyBtn) {
+        tabPrivacyBtn.style.background = "var(--bg-tertiary)";
+        tabPrivacyBtn.style.color = "var(--text-muted)";
+        tabPrivacyBtn.style.borderColor = "var(--border-subtle)";
+      }
+      if (bodyEl) {
+        bodyEl.innerHTML = currentLang === 'en' ? `
+          <h3 style="font-size:1.05rem; margin-bottom:8px; color:var(--text-main);">Terms of Service & Disclaimer</h3>
+          <p><strong>1. Purpose of the Application:</strong> This application is a personal tool designed to organize plant care routines, track watering, fertilizing, repotting, and growth progress.</p>
+          <p><strong>2. Informational Botanical Guidance:</strong> Watering intervals, soil recommendations, and toxicity details are provided for informational and educational purposes. Ambient conditions (humidity, sunlight, temperature) vary greatly; always verify soil moisture manually before watering.</p>
+          <p><strong>3. Toxicity & Safety:</strong> Pet and child toxicity indicators are general guidelines. If you suspect plant ingestion or poisoning, immediately contact a veterinary or medical professional.</p>
+          <p><strong>4. Intellectual Property:</strong> Application layout, visual theme, and source code are protected. Photos uploaded by the user remain their exclusive property.</p>
+        ` : (currentLang === 'es' ? `
+          <h3 style="font-size:1.05rem; margin-bottom:8px; color:var(--text-main);">Aviso Legal y Condiciones de Uso</h3>
+          <p><strong>1. Finalidad de la Aplicación:</strong> Esta herramienta está diseñada como una agenda botánica personal para organizar rutinas de riego, abonado, trasplantes y seguimiento de plantas domésticas.</p>
+          <p><strong>2. Pautas Botánicas Informativas:</strong> Las frecuencias de riego, luz y sustrato son recomendaciones generales de referencia. Los factores ambientales de cada hogar varían; comprueba siempre la humedad del sustrato antes de regar.</p>
+          <p><strong>3. Toxicidad y Seguridad:</strong> Las indicaciones de toxicidad para mascotas son orientativas. Ante cualquier sospecha de ingesta o intoxicación, acude de inmediato a un centro veterinario o médico.</p>
+          <p><strong>4. Propiedad:</strong> El diseño, código fuente y estructura pertenecen a su desarrollador. Las fotografías que añadas permanecen siempre bajo tu exclusiva propiedad.</p>
+        ` : `
+          <h3 style="font-size:1.05rem; margin-bottom:8px; color:var(--text-main);">Avís Legal i Condicions d'Ús</h3>
+          <p><strong>1. Finalitat de l'Aplicació:</strong> Aquesta eina està pensada com una agenda botànica personal per a organitzar el reg, adobs, trasplantaments i evolució de les plantes de la llar.</p>
+          <p><strong>2. Pautes Botàniques Informatives:</strong> Els consells de reg, llum i substrat són orientatius. Cada habitatge té condicions de llum i humitat particulars; comprova sempre l'estat del substrat abans de regar.</p>
+          <p><strong>3. Toxicitat i Seguretat:</strong> Les indicacions de toxicitat per a mascotes són una guia preventiva. Davant qualsevol sospita d'ingesta, consulta immediatament un veterinari o metge.</p>
+          <p><strong>4. Propietat:</strong> El disseny i codi pertanyen al seu desenvolupador. Les fotografies que registris són teves i es guarden al teu dispositiu.</p>
+        `);
+      }
+    } else {
+      if (tabPrivacyBtn) {
+        tabPrivacyBtn.style.background = "var(--accent-light)";
+        tabPrivacyBtn.style.color = "var(--text-main)";
+        tabPrivacyBtn.style.borderColor = "var(--accent)";
+      }
+      if (tabTermsBtn) {
+        tabTermsBtn.style.background = "var(--bg-tertiary)";
+        tabTermsBtn.style.color = "var(--text-muted)";
+        tabTermsBtn.style.borderColor = "var(--border-subtle)";
+      }
+      if (bodyEl) {
+        bodyEl.innerHTML = currentLang === 'en' ? `
+          <h3 style="font-size:1.05rem; margin-bottom:8px; color:var(--text-main);">Privacy & Data Protection Policy</h3>
+          <p><strong>1. Local-First Architecture:</strong> Your privacy is paramount. Your plant catalog, care history, dates, notes, and photos are stored locally on your device (IndexedDB / LocalStorage).</p>
+          <p><strong>2. No User Tracking or Profiling:</strong> We do not collect your personal data, track your location, or sell information to third-party advertisers.</p>
+          <p><strong>3. Camera & Gallery Permissions:</strong> Access to camera and photo gallery is used exclusively to let you photograph and document your plants' evolution.</p>
+          <p><strong>4. User Data Control:</strong> You can export an unencrypted full backup of your data at any time or delete your records directly from the settings.</p>
+        ` : (currentLang === 'es' ? `
+          <h3 style="font-size:1.05rem; margin-bottom:8px; color:var(--text-main);">Política de Privacidad y Protección de Datos</h3>
+          <p><strong>1. Almacenamiento Local (Local-First):</strong> Tu privacidad es total. El registro de plantas, fechas de riego, notas y fotografías se guardan localmente en la memoria de tu dispositivo.</p>
+          <p><strong>2. Sin Rastreo ni Venta de Datos:</strong> Esta aplicación no recopila tus datos personales, no rastrea tu ubicación ni comercializa perfiles con redes publicitarias.</p>
+          <p><strong>3. Permisos de Cámara y Fotos:</strong> El acceso a la cámara o galería se utiliza única y exclusivamente para fotografiar tus plantas y seguir su crecimiento.</p>
+          <p><strong>4. Control de tus Datos:</strong> Puedes exportar una copia completa en formato JSON o borrar tus registros en cualquier momento desde las preferencias.</p>
+        ` : `
+          <h3 style="font-size:1.05rem; margin-bottom:8px; color:var(--text-main);">Política de Privacitat i Protecció de Dades</h3>
+          <p><strong>1. Emmagatzematge Local i Privat:</strong> La teva privacitat és absoluta. Les plantes, dates de reg, notes i fotografies es guarden directament a la memòria del teu dispositiu.</p>
+          <p><strong>2. Sense Rastreig ni Venda de Dades:</strong> Aquesta eina no recull dades personals, no rastreja la teva ubicació ni ven informació a tercers.</p>
+          <p><strong>3. Permisos de Càmera i Galeria:</strong> L'accés a fotos o càmera s'utilitza exclusivament per a documentar l'evolució de les teves plantes.</p>
+          <p><strong>4. Control Absolut:</strong> Pots descarregar una còpia de seguretat completa de les teves dades o esborrar-les quan vulguis.</p>
+        `);
+      }
+    }
   }
 
   function initPreferences() {
