@@ -2074,7 +2074,7 @@
       <select id="zoneFilter">
         <option value="all">Totes les zones</option>
         <option value="interior">🏠 Interior</option>
-        <option value="exterior">☀️ Balcó / Exterior</option>
+        <option value="exterior">☀️ Exterior</option>
       </select>
 
       <select id="roomFilter">
@@ -2083,7 +2083,11 @@
         <option value="cuina">🍳 Cuina</option>
         <option value="dormitori">🛏️ Dormitori</option>
         <option value="bany">🚿 Bany</option>
-        <option value="terrassa">🪴 Terrassa / Balcó</option>
+        <option value="despatx">💼 Despatx</option>
+        <option value="rebedor">🚪 Rebedor</option>
+        <option value="terrassa">🪴 Terrassa</option>
+        <option value="balco">☀️ Balcó</option>
+        <option value="pati">🌿 Pati</option>
         <option value="altres">📦 Altres</option>
       </select>
 
@@ -2170,6 +2174,8 @@
       <button type="button" class="app-footer-link" id="footerLegalBtn" onclick="openLegalModal('terms')">⚖️ Avís Legal i Condicions</button>
       <span>•</span>
       <button type="button" class="app-footer-link" id="footerPrivacyBtn" onclick="openLegalModal('privacy')">🔒 Política de Privacitat</button>
+      <span>•</span>
+      <button type="button" class="app-footer-link" id="footerFeedbackBtn" onclick="openFeedbackModal()">💬 <span id="footerFeedbackText">Enviar Suggeriments / Feedback</span></button>
     </div>
     <div id="footerCopyText">© 2026 El Meu Registre de Plantes · Cures botàniques locals i privades</div>
   </footer>
@@ -2299,7 +2305,11 @@
               <option value="cuina">🍳 Cuina</option>
               <option value="dormitori">🛏️ Dormitori</option>
               <option value="bany">🚿 Bany</option>
-              <option value="terrassa">🪴 Terrassa / Balcó</option>
+              <option value="despatx">💼 Despatx</option>
+              <option value="rebedor">🚪 Rebedor</option>
+              <option value="terrassa">🪴 Terrassa</option>
+              <option value="balco">☀️ Balcó</option>
+              <option value="pati">🌿 Pati</option>
               <option value="altres">📦 Altres</option>
             </select>
           </div>
@@ -2548,7 +2558,7 @@
             <label for="editPlantZone" id="editPlantZoneLabel">Ubicació / Zona:</label>
             <select id="editPlantZone" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
               <option value="interior">🏠 Interior</option>
-              <option value="exterior">☀️ Balcó / Exterior</option>
+              <option value="exterior">☀️ Exterior</option>
             </select>
           </div>
           <div class="form-group" style="margin-bottom: 0;">
@@ -2558,7 +2568,11 @@
               <option value="cuina">🍳 Cuina</option>
               <option value="dormitori">🛏️ Dormitori</option>
               <option value="bany">🚿 Bany</option>
-              <option value="terrassa">🪴 Terrassa / Balcó</option>
+              <option value="despatx">💼 Despatx</option>
+              <option value="rebedor">🚪 Rebedor</option>
+              <option value="terrassa">🪴 Terrassa</option>
+              <option value="balco">☀️ Balcó</option>
+              <option value="pati">🌿 Pati</option>
               <option value="altres">📦 Altres</option>
             </select>
           </div>
@@ -2805,6 +2819,19 @@
         </p>
       </div>
 
+      <!-- FEEDBACK I MILLORES -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefFeedbackSectionLabel">💬 Opinió i Millores</span>
+        <div>
+          <button type="button" class="btn-pref-backup" onclick="openFeedbackModal()" style="width: 100%; text-align: center; justify-content: center; gap: 8px;">
+            💬 <span id="prefFeedbackBtnText">Enviar Suggeriments o Dubtes</span>
+          </button>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefFeedbackHint">
+          Tens alguna idea per millorar l'app o has trobat alguna errada? Digue'ns-ho per seguir millorant.
+        </p>
+      </div>
+
       <!-- ENLLAÇOS LEGALS DES DE PREFERÈNCIES -->
       <div class="pref-section" style="margin-bottom: 22px;">
         <span class="pref-section-label" id="prefLegalSectionLabel">⚖️ Legalitat i Privacitat</span>
@@ -2854,6 +2881,53 @@
           Entès
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FORMULARI DE FEEDBACK I SUGGERIMENTS -->
+<div class="modal-overlay" id="feedbackModal">
+  <div class="modal-card" style="max-width: 540px; max-height: 88vh; overflow-y: auto;">
+    <button class="modal-close" onclick="closeModal('feedbackModal')" aria-label="Tancar finestra">&times;</button>
+    <div class="modal-content" style="padding: 24px;">
+      <h2 id="feedbackModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 6px; font-family: var(--font-display);">
+        💬 Envia'ns el teu Feedback
+      </h2>
+      <p id="feedbackModalSubtitle" style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 18px; line-height: 1.45;">
+        La teva opinió ens ajuda a fer l'aplicació molt millor. Pots proposar noves funcions, avisar d'un error o comentar qualsevol suggeriment.
+      </p>
+
+      <form id="feedbackForm" onsubmit="handleSendFeedback(event)">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label for="feedbackType" id="feedbackTypeLabel" style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 5px;">Tipus de comentari:</label>
+          <select id="feedbackType" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+            <option value="suggeriment">💡 Nova funcionalitat o idea</option>
+            <option value="error">🐛 He trobat un error / bug</option>
+            <option value="planta">🌿 Suggeriment de planta o guia botànica</option>
+            <option value="altres">💭 Opinió general / Altres</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label for="feedbackEmail" id="feedbackEmailLabel" style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 5px;">El teu correu de contacte (opcional):</label>
+          <input type="email" id="feedbackEmail" class="form-control" placeholder="nom@exemple.cat" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+          <span id="feedbackEmailHint" style="font-size: 0.74rem; color: var(--text-muted); display: block; margin-top: 3px;">Només si vols que et responguem sobre la teva proposta.</span>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label for="feedbackMessage" id="feedbackMessageLabel" style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 5px;">El teu missatge o suggeriment:</label>
+          <textarea id="feedbackMessage" class="form-control" required rows="5" placeholder="Explica'ns què t'agradaria veure a l'app..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px; resize: vertical; line-height: 1.45;"></textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
+          <button type="button" class="btn-action" style="background: var(--bg-tertiary); color: var(--text-main); border: 1px solid var(--border-subtle); padding: 8px 16px;" onclick="closeModal('feedbackModal')" id="feedbackCancelBtn">
+            Cancel·lar
+          </button>
+          <button type="submit" class="btn-action" style="background: #256a38; color: white; padding: 8px 20px; font-weight: 700;" id="feedbackSubmitBtn">
+            🚀 Enviar Comentari
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -4568,7 +4642,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   const plantVocabulary = {
     // Ubicacions
     "interior": { ca: "🏠 Interior", es: "🏠 Interior", en: "🏠 Indoor" },
-    "exterior": { ca: "☀️ Balcó / Exterior", es: "☀️ Balcón / Exterior", en: "☀️ Balcony / Outdoor" },
+    "exterior": { ca: "☀️ Exterior", es: "☀️ Exterior", en: "☀️ Outdoor" },
     // Dificultats
     "molt_facil": { ca: "Molt fàcil", es: "Muy fácil", en: "Very easy" },
     "facil": { ca: "Fàcil", es: "Fácil", en: "Easy" },
@@ -4591,7 +4665,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     "cuina": { ca: "🍳 Cuina", es: "🍳 Cocina", en: "🍳 Kitchen" },
     "dormitori": { ca: "🛏️ Dormitori", es: "🛏️ Dormitorio", en: "🛏️ Bedroom" },
     "bany": { ca: "🚿 Bany", es: "🚿 Baño", en: "🚿 Bathroom" },
-    "terrassa": { ca: "🪴 Terrassa / Balcó", es: "🪴 Terraza / Balcón", en: "🪴 Terrace / Balcony" },
+    "despatx": { ca: "💼 Despatx", es: "💼 Despacho", en: "💼 Office" },
+    "rebedor": { ca: "🚪 Rebedor", es: "🚪 Recibidor", en: "🚪 Hallway / Entry" },
+    "terrassa": { ca: "🪴 Terrassa", es: "🪴 Terraza", en: "🪴 Terrace" },
+    "balco": { ca: "☀️ Balcó", es: "☀️ Balcón", en: "☀️ Balcony" },
+    "pati": { ca: "🌿 Pati", es: "🌿 Patio", en: "🌿 Patio / Courtyard" },
     "altres": { ca: "📦 Altres", es: "📦 Otros", en: "📦 Other" }
   };
 
@@ -4617,7 +4695,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     // Mapeig exacte de cadenes històriques en català
     const exactMap = {
       "🏠 Interior": { ca: "🏠 Interior", es: "🏠 Interior", en: "🏠 Indoor" },
-      "☀️ Balcó / Exterior": { ca: "☀️ Balcó / Exterior", es: "☀️ Balcón / Exterior", en: "☀️ Balcony / Outdoor" },
+      "☀️ Exterior": { ca: "☀️ Exterior", es: "☀️ Exterior", en: "☀️ Outdoor" },
+      "☀️ Balcó / Exterior": { ca: "☀️ Exterior", es: "☀️ Exterior", en: "☀️ Outdoor" },
       "Molt fàcil": { ca: "Molt fàcil", es: "Muy fácil", en: "Very easy" },
       "Fàcil": { ca: "Fàcil", es: "Fácil", en: "Easy" },
       "Mitjana": { ca: "Mitjana", es: "Media", en: "Moderate" },
@@ -6009,18 +6088,22 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (zoneSel && zoneSel.options.length >= 3) {
       zoneSel.options[0].text = t("📍 Ubicació: Totes", "📍 Ubicación: Todas", "📍 Location: All");
       zoneSel.options[1].text = t("🏠 Interior", "🏠 Interior", "🏠 Indoor");
-      zoneSel.options[2].text = t("☀️ Exterior / Balcó", "☀️ Exterior / Balcón", "☀️ Outdoor / Balcony");
+      zoneSel.options[2].text = t("☀️ Exterior", "☀️ Exterior", "☀️ Outdoor");
     }
 
     const roomSel = document.getElementById("roomFilter");
-    if (roomSel && roomSel.options.length >= 7) {
+    if (roomSel && roomSel.options.length >= 11) {
       roomSel.options[0].text = t("📍 Totes les habitacions", "📍 Todas las habitaciones", "📍 All Rooms / Spots");
       roomSel.options[1].text = t("🛋️ Saló", "🛋️ Salón", "🛋️ Living Room");
       roomSel.options[2].text = t("🍳 Cuina", "🍳 Cocina", "🍳 Kitchen");
       roomSel.options[3].text = t("🛏️ Dormitori", "🛏️ Dormitorio", "🛏️ Bedroom");
       roomSel.options[4].text = t("🚿 Bany", "🚿 Baño", "🚿 Bathroom");
-      roomSel.options[5].text = t("🪴 Terrassa / Balcó", "🪴 Terraza / Balcón", "🪴 Terrace / Balcony");
-      roomSel.options[6].text = t("📦 Altres", "📦 Otros", "📦 Other");
+      roomSel.options[5].text = t("💼 Despatx", "💼 Despacho", "💼 Office");
+      roomSel.options[6].text = t("🚪 Rebedor", "🚪 Recibidor", "🚪 Hallway / Entry");
+      roomSel.options[7].text = t("🪴 Terrassa", "🪴 Terraza", "🪴 Terrace");
+      roomSel.options[8].text = t("☀️ Balcó", "☀️ Balcón", "☀️ Balcony");
+      roomSel.options[9].text = t("🌿 Pati", "🌿 Patio", "🌿 Patio / Courtyard");
+      roomSel.options[10].text = t("📦 Altres", "📦 Otros", "📦 Other");
     }
 
     const diffSel = document.getElementById("difficultyFilter");
@@ -6085,6 +6168,13 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("prefExportText", t("Exportar Còpia", "Exportar Copia", "Export Backup"));
     setElText("prefImportText", t("Restaurar Còpia", "Restaurar Copia", "Restore Backup"));
     setElText("prefBackupHint", t("Guarda totes les teves plantes, històric i fotos en un fitxer segur al teu dispositiu.", "Guarda todas tus plantas, historial y fotos en un archivo seguro en tu dispositivo.", "Save all your plants, care history, and evolution photos in a safe file on your device."));
+    setElText("prefFeedbackSectionLabel", t("💬 Opinió i Millores", "💬 Opinión y Mejoras", "💬 Feedback & Suggestions"));
+    setElText("prefFeedbackBtnText", t("Enviar Suggeriments o Dubtes", "Enviar Sugerencias o Dudas", "Send Feedback & Ideas"));
+    setElText("prefFeedbackHint", t(
+      "Tens alguna idea per millorar l'app o has trobat alguna errada? Digue'ns-ho per seguir millorant.",
+      "¿Tienes alguna idea para mejorar la app o has encontrado un error? Cuéntanoslo para seguir mejorando.",
+      "Have an idea to improve the app or spotted a bug? Let us know so we can keep making it better."
+    ));
     setElText("prefLegalSectionLabel", t("⚖️ Legalitat i Privacitat", "⚖️ Legalidad y Privacidad", "⚖️ Legal & Privacy"));
     setElText("prefLegalTermsText", t("Avís Legal i Condicions", "Aviso Legal y Condiciones", "Terms of Service"));
     setElText("prefLegalPrivacyText", t("Política de Privacitat", "Política de Privacidad", "Privacy Policy"));
@@ -6093,7 +6183,41 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     // Footer
     setElText("footerLegalBtn", t("⚖️ Avís Legal i Condicions", "⚖️ Aviso Legal y Condiciones", "⚖️ Terms of Service"));
     setElText("footerPrivacyBtn", t("🔒 Política de Privacitat", "🔒 Política de Privacidad", "🔒 Privacy Policy"));
+    setElText("footerFeedbackText", t("Enviar Suggeriments / Feedback", "Enviar Sugerencias / Feedback", "Send Feedback"));
     setElText("footerCopyText", t("© 2026 El Meu Registre de Plantes · Cures botàniques locals i privades", "© 2026 Mi Registro de Plantas · Cuidados botánicos locales y privados", "© 2026 My Plant Tracker · Private & local botanical care"));
+
+    // Modal de Feedback
+    setElText("feedbackModalTitle", t("💬 Envia'ns el teu Feedback", "💬 Envíanos tu Feedback", "💬 Send Us Your Feedback"));
+    setElText("feedbackModalSubtitle", t(
+      "La teva opinió ens ajuda a fer l'aplicació molt millor. Pots proposar noves funcions, avisar d'un error o comentar qualsevol suggeriment.",
+      "Tu opinión nos ayuda a hacer la aplicación mucho mejor. Puedes proponer nuevas funciones, avisar de un error o comentar cualquier sugerencia.",
+      "Your feedback helps us make the app much better. Suggest new features, report bugs, or share any thoughts."
+    ));
+    setElText("feedbackTypeLabel", t("Tipus de comentari:", "Tipo de comentario:", "Feedback type:"));
+    const fbTypeSel = document.getElementById("feedbackType");
+    if (fbTypeSel && fbTypeSel.options.length >= 4) {
+      fbTypeSel.options[0].text = t("💡 Nova funcionalitat o idea", "💡 Nueva funcionalidad o idea", "💡 New feature or idea");
+      fbTypeSel.options[1].text = t("🐛 He trobat un error / bug", "🐛 He encontrado un error / bug", "🐛 Found a bug / issue");
+      fbTypeSel.options[2].text = t("🌿 Suggeriment de planta o guia botànica", "🌿 Sugerencia de planta o guía botánica", "🌿 Plant or botanical guide suggestion");
+      fbTypeSel.options[3].text = t("💭 Opinió general / Altres", "💭 Opinión general / Otros", "💭 General thoughts / Other");
+    }
+    setElText("feedbackEmailLabel", t("El teu correu de contacte (opcional):", "Tu correo de contacto (opcional):", "Your contact email (optional):"));
+    setElText("feedbackEmailHint", t(
+      "Només si vols que et responguem sobre la teva proposta.",
+      "Solo si deseas que te respondamos sobre tu propuesta.",
+      "Only if you would like us to reply to your inquiry."
+    ));
+    setElText("feedbackMessageLabel", t("El teu missatge o suggeriment:", "Tu mensaje o sugerencia:", "Your message or suggestion:"));
+    const fbMsgArea = document.getElementById("feedbackMessage");
+    if (fbMsgArea) {
+      fbMsgArea.placeholder = t(
+        "Explica'ns què t'agradaria veure a l'app...",
+        "Cuéntanos qué te gustaría ver en la app...",
+        "Tell us what you would love to see in the app..."
+      );
+    }
+    setElText("feedbackCancelBtn", t("Cancel·lar", "Cancelar", "Cancel"));
+    setElText("feedbackSubmitBtn", t("🚀 Enviar Comentari", "🚀 Enviar Comentario", "🚀 Submit Feedback"));
 
     // Botons i etiquetes de la fitxa de planta (#plantModal)
     setElText("modalZoomHintBtn", t("🔍 Ampliar", "🔍 Ampliar", "🔍 Zoom"));
@@ -6337,6 +6461,50 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
         `);
       }
     }
+  }
+
+  // -------------------------------------------------------------
+  // FORMULARI DE FEEDBACK I SUGGERIMENTS
+  // -------------------------------------------------------------
+  function openFeedbackModal() {
+    const m = document.getElementById("feedbackModal");
+    if (m) m.classList.add("active");
+  }
+
+  function handleSendFeedback(event) {
+    if (event && event.preventDefault) event.preventDefault();
+    const type = document.getElementById("feedbackType") ? document.getElementById("feedbackType").value : "suggeriment";
+    const email = document.getElementById("feedbackEmail") ? document.getElementById("feedbackEmail").value.trim() : "";
+    const message = document.getElementById("feedbackMessage") ? document.getElementById("feedbackMessage").value.trim() : "";
+
+    if (!message) {
+      alert(t("Si us plau, escriu un missatge o comentari abans d'enviar.", "Por favor, escribe un mensaje o comentario antes de enviar.", "Please write a message or feedback before submitting."));
+      return;
+    }
+
+    // Guarda localment el feedback com a registre d'auditoria/històric
+    try {
+      const storedFeedback = JSON.parse(localStorage.getItem("registre_plantes_user_feedback") || "[]");
+      storedFeedback.push({
+        date: new Date().toISOString(),
+        type: type,
+        email: email,
+        message: message
+      });
+      localStorage.setItem("registre_plantes_user_feedback", JSON.stringify(storedFeedback));
+    } catch (e) {}
+
+    // Reseteja el formulari i tanca el modal
+    const form = document.getElementById("feedbackForm");
+    if (form) form.reset();
+    closeModal("feedbackModal");
+
+    const thankMsg = t(
+      "Moltes gràcies pel teu feedback! Ho tindrem molt en compte per a properes actualitzacions.",
+      "¡Muchas gracias por tu feedback! Lo tendremos muy en cuenta para próximas actualizaciones.",
+      "Thank you for your feedback! We will take it into account for future updates."
+    );
+    showToast(thankMsg, "💌");
   }
 
   function initPreferences() {
