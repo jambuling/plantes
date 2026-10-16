@@ -923,7 +923,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      background: #ffffff;
+      background: var(--bg-surface);
       border-top: 1px solid var(--border-subtle);
     }
 
@@ -1752,6 +1752,21 @@
       background: #192b1e !important;
       border-color: var(--border-subtle) !important;
       color: var(--text-main);
+    }
+    body.dark-mode .gallery-item-meta {
+      background: #142218 !important;
+      color: var(--text-main) !important;
+      border-top-color: var(--border-subtle) !important;
+    }
+    body.dark-mode .gallery-item-card.active {
+      border-color: #4ade80 !important;
+      box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.25);
+    }
+    body.dark-mode .btn-gallery-upload.secondary,
+    body.dark-mode #modalGalleryCount {
+      background: #1e3324 !important;
+      color: #86efac !important;
+      border-color: #2f5c3b !important;
     }
     body.dark-mode .week-day-card.today,
     body.dark-mode .month-day-cell.today {
