@@ -1712,7 +1712,7 @@
       <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta">
       <button type="button" class="modal-photo-nav-btn next" id="modalPhotoNextBtn" onclick="stepModalGalleryPhoto(1)" style="display:none;" aria-label="Foto següent">&#8250;</button>
       <div class="modal-photo-caption-badge">
-        <span class="modal-photo-date-pill" id="modalPhotoDatePill">⭐ Foto destacada</span>
+        <span class="modal-photo-date-pill" id="modalPhotoDatePill" style="display:none;"></span>
       </div>
     </div>
     <div class="modal-content">
@@ -1775,27 +1775,6 @@
         </div>
       </div>
 
-      <!-- GALERIA D'EVOLUCIÓ DE FOTOS -->
-      <div class="modal-section">
-        <div class="gallery-header-row">
-          <div class="modal-section-title" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-            📸 Galeria d'Evolució
-            <span id="modalGalleryCount" style="background: #e3efe5; color: #1e582e; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; text-transform: none;">1 foto</span>
-          </div>
-          <div class="gallery-upload-btns">
-            <input type="file" id="galleryCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleGalleryPhotoUpload(event)">
-            <input type="file" id="galleryFileInput" accept="image/*" multiple style="display:none;" onchange="handleGalleryPhotoUpload(event)">
-            <button type="button" class="btn-gallery-upload" onclick="document.getElementById('galleryCameraInput').click()">
-              📸 Fer foto
-            </button>
-            <button type="button" class="btn-gallery-upload secondary" onclick="document.getElementById('galleryFileInput').click()">
-              ➕ Pujar foto
-            </button>
-          </div>
-        </div>
-        <div class="plant-gallery-grid" id="modalGalleryGrid"></div>
-      </div>
-
       <!-- MANTENIMENT: TRASPLANTAMENT I PODA -->
       <div class="modal-section">
         <div class="modal-section-title">🛠️ Manteniment: Trasplantament i Poda</div>
@@ -1851,6 +1830,27 @@
       </div>
 
       <div class="tip-box" id="modalTip"></div>
+
+      <!-- GALERIA D'EVOLUCIÓ DE FOTOS (Al final de la fitxa) -->
+      <div class="modal-section" style="margin-top: 22px; margin-bottom: 0; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
+        <div class="gallery-header-row">
+          <div class="modal-section-title" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+            📸 Galeria d'Evolució
+            <span id="modalGalleryCount" style="background: #e3efe5; color: #1e582e; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; text-transform: none;">1 foto</span>
+          </div>
+          <div class="gallery-upload-btns">
+            <input type="file" id="galleryCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleGalleryPhotoUpload(event)">
+            <input type="file" id="galleryFileInput" accept="image/*" multiple style="display:none;" onchange="handleGalleryPhotoUpload(event)">
+            <button type="button" class="btn-gallery-upload" onclick="document.getElementById('galleryCameraInput').click()">
+              📸 Fer foto
+            </button>
+            <button type="button" class="btn-gallery-upload secondary" onclick="document.getElementById('galleryFileInput').click()">
+              ➕ Pujar foto
+            </button>
+          </div>
+        </div>
+        <div class="plant-gallery-grid" id="modalGalleryGrid"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -4165,17 +4165,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   function formatGalleryDateShort(isoStr) {
-    if (!isoStr) return "📸 Foto inicial";
+    if (!isoStr) return "Foto inicial";
     const d = new Date(isoStr);
-    if (isNaN(d.getTime())) return "📸 Foto inicial";
+    if (isNaN(d.getTime())) return "Foto inicial";
     return d.toLocaleDateString("ca-ES", { day: "numeric", month: "short", year: "numeric" });
-  }
-
-  function formatGalleryDateLong(isoStr) {
-    if (!isoStr) return "Foto inicial de referència";
-    const d = new Date(isoStr);
-    if (isNaN(d.getTime())) return "Foto inicial de referència";
-    return d.toLocaleDateString("ca-ES", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
   }
 
   function renderModalGallery(plant) {
@@ -4192,10 +4185,12 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const pillEl = document.getElementById("modalPhotoDatePill");
     if (pillEl && activePhoto) {
-      if (currentModalGalleryIndex === 0) {
-        pillEl.innerText = `⭐ Destacada · ${formatGalleryDateLong(activePhoto.date)}`;
+      if (activePhoto.date) {
+        pillEl.innerText = formatGalleryDateShort(activePhoto.date);
+        pillEl.style.display = "inline-flex";
       } else {
-        pillEl.innerText = `🕒 Evolució (${currentModalGalleryIndex + 1}/${gallery.length}) · ${formatGalleryDateLong(activePhoto.date)}`;
+        pillEl.innerText = "";
+        pillEl.style.display = "none";
       }
     }
 
@@ -4216,13 +4211,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (gridEl) {
       gridEl.innerHTML = gallery.map((item, idx) => {
         const isCurrent = (idx === currentModalGalleryIndex);
-        const isFeatured = (idx === 0);
         const canDelete = (gallery.length > 1);
         return `
           <div class="gallery-item-card ${isCurrent ? 'active' : ''}" onclick="selectModalGalleryPhoto(${idx})">
             <div class="gallery-item-thumb-wrap">
               <img src="${item.url}" alt="Foto ${idx + 1} de ${plant.name}" loading="lazy">
-              ${isFeatured ? `<span class="gallery-badge-featured">⭐ Destacada</span>` : ''}
               ${canDelete ? `<button type="button" class="gallery-delete-btn" onclick="deleteGalleryPhoto('${plant.id}', '${item.id}', event)" title="Eliminar foto" aria-label="Eliminar foto">&times;</button>` : ''}
             </div>
             <div class="gallery-item-meta">
