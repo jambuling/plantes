@@ -1564,10 +1564,10 @@
         padding: 12px;
         gap: 10px;
       }
-      .search-box {
+      .controls .search-box {
         min-width: 100%;
       }
-      .btn-filter-trigger {
+      .controls .btn-filter-trigger {
         width: 100%;
         justify-content: center;
       }
@@ -2518,16 +2518,19 @@
       gap: 10px;
       margin-bottom: 16px;
       width: 100%;
+      box-sizing: border-box;
     }
     .app-search-row .search-box {
-      flex: 1;
+      flex: 1 1 auto;
+      min-width: 0 !important;
       position: relative;
     }
     .app-search-row .search-box input {
       width: 100%;
+      box-sizing: border-box;
       padding: 12px 14px 12px 42px;
       border-radius: 999px;
-      border: 1px solid #d5ded8;
+      border: 1.5px solid #d5ded8;
       background: var(--bg-surface);
       font-size: 0.92rem;
       color: var(--text-main);
@@ -2547,30 +2550,65 @@
       font-size: 1.05rem;
       color: var(--text-muted);
     }
-    .btn-tune-trigger {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--bg-surface);
-      border: 1px solid #d5ded8;
-      color: var(--text-main);
-      display: flex;
+    .btn-filter-trigger {
+      display: inline-flex !important;
       align-items: center;
       justify-content: center;
+      gap: 6px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1.5px solid #275d36;
+      background: var(--bg-surface);
+      color: #1e582e;
+      font-size: 0.88rem;
+      font-weight: 700;
       cursor: pointer;
-      position: relative;
-      flex-shrink: 0;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      flex: 0 0 auto !important;
+      width: auto !important;
+      white-space: nowrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
       transition: all 0.18s;
+      min-height: 44px;
     }
-    .btn-tune-trigger:hover {
-      background: #eef4f0;
-      border-color: #275d36;
-    }
-    .btn-tune-trigger.has-active-filters {
+    .btn-filter-trigger:hover {
       background: #edf5ee;
+    }
+    .btn-filter-trigger.has-active-filters {
+      background: #275d36;
+      color: #ffffff;
       border-color: #275d36;
-      color: #275d36;
+    }
+    body.dark-mode .btn-filter-trigger {
+      background: #1e2630;
+      border-color: #86efac;
+      color: #86efac;
+    }
+    body.dark-mode .btn-filter-trigger.has-active-filters {
+      background: #275d36;
+      border-color: #86efac;
+      color: #ffffff;
+    }
+    body.dark-mode .btn-source-option {
+      background: #172033;
+      border-color: #334155;
+      color: var(--text-main);
+    }
+    body.dark-mode .btn-source-camera {
+      border-color: #2e5638;
+      background: #15281b;
+    }
+    body.dark-mode .btn-source-camera strong {
+      color: #86efac !important;
+    }
+    body.dark-mode .btn-source-gallery {
+      border-color: #0369a1;
+      background: #0f2338;
+    }
+    body.dark-mode .btn-source-gallery strong {
+      color: #7dd3fc !important;
+    }
+    .btn-tune-trigger {
+      display: none;
     }
 
     /* BARRA INFERIOR DE NAVEGACIÓ (Bottom Nav Bar - #bbf23d) */
@@ -2587,7 +2625,7 @@
       display: flex;
       justify-content: space-around;
       align-items: flex-start;
-      z-index: 1000;
+      z-index: 10001;
       padding-top: 8px;
       padding-bottom: env(safe-area-inset-bottom, 0px);
       box-shadow: 0 -2px 14px rgba(0,0,0,0.08);
@@ -3267,34 +3305,41 @@
       background: #2d3748;
     }
 
-    /* PANTALLA FITXA DE LA PLANTA (Fixta planta.png) */
+    /* PANTALLA FITXA DE LA PLANTA (PANTALLA COMPLETA - Fixta planta.png) */
     .plant-detail-overlay {
       position: fixed;
-      inset: 0;
-      z-index: 1500;
-      background: rgba(0, 0, 0, 0.6);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 10000;
+      background: var(--bg-surface);
       display: none;
-      align-items: flex-start;
-      justify-content: center;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+      padding: 0;
+      margin: 0;
+      border: none;
     }
     .plant-detail-overlay.active {
-      display: flex;
+      display: block;
     }
     .plant-detail-card {
       width: 100%;
       max-width: 600px;
-      min-height: 100vh;
-      background: var(--bg-primary);
-      margin: 0;
+      margin: 0 auto;
+      min-height: 100%;
+      background: var(--bg-surface);
       border-radius: 0;
       display: flex;
       flex-direction: column;
       position: relative;
       box-shadow: none;
-      padding-bottom: 40px;
+      padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+      border: none;
     }
     .plant-detail-top-bar {
       position: sticky;
@@ -3702,18 +3747,9 @@
           <span class="search-icon">🔍</span>
           <input type="text" id="searchInput" placeholder="Cerca per nom comú o científic...">
         </div>
-        <button type="button" class="btn-tune-trigger" id="openFilterModalBtn" onclick="openFilterModal()" title="Filtres i Vista" aria-label="Filtres">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="4" y1="21" x2="4" y2="14"></line>
-            <line x1="4" y1="10" x2="4" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="12"></line>
-            <line x1="12" y1="8" x2="12" y2="3"></line>
-            <line x1="20" y1="21" x2="20" y2="16"></line>
-            <line x1="20" y1="12" x2="20" y2="3"></line>
-            <line x1="1" y1="14" x2="7" y2="14"></line>
-            <line x1="9" y1="8" x2="15" y2="8"></line>
-            <line x1="17" y1="16" x2="23" y2="16"></line>
-          </svg>
+        <button type="button" class="btn-filter-trigger" id="openFilterModalBtn" onclick="openFilterModal()" title="Filtres i Vista" aria-label="Filtres i Vista">
+          <span style="font-size: 1.15rem; line-height: 1;">🌪️</span>
+          <span id="filterModalBtnText" class="filter-btn-label">Filtres</span>
           <span class="filter-count-badge" id="filterCountBadge" style="display:none;">0</span>
         </button>
       </div>
@@ -3746,48 +3782,30 @@
         <input type="file" id="aiCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleAIPhotoFile(event)">
         <input type="file" id="aiGalleryInput" accept="image/*" style="display:none;" onchange="handleAIPhotoFile(event)">
 
-        <!-- LES DUES TARGETES GUIONADES (DASHED CARDS - Afegir planta.png) -->
-        <div class="add-dashed-grid" id="aiUploadPromptSection">
-          <!-- TARGETA 1: NOVA FOTO -->
-          <div class="add-dashed-card" onclick="document.getElementById('aiCameraInput').click()" role="button" tabindex="0">
-            <div class="add-dashed-icon">
-              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                <circle cx="12" cy="13" r="4"></circle>
-              </svg>
-            </div>
-            <div class="add-dashed-title">Nova foto</div>
-            <div class="add-dashed-desc">Obre la càmera del mòbil</div>
+        <!-- SECCIÓ INICIAL DE PUJADA AMB ELS DOS BOTONS FER FOTO I GALERIA -->
+        <div id="aiUploadPromptSection">
+          <div class="source-options-grid">
+            <button type="button" class="btn-source-option btn-source-camera" onclick="document.getElementById('aiCameraInput').click()">
+              <span style="font-size: 2.2rem; line-height: 1;">📸</span>
+              <strong style="font-size: 1rem; color: #1e582e;">Fer Foto ara</strong>
+              <span style="font-size: 0.78rem; color: var(--text-muted);">Obre la càmera del mòbil</span>
+            </button>
+
+            <button type="button" class="btn-source-option btn-source-gallery" onclick="document.getElementById('aiGalleryInput').click()">
+              <span style="font-size: 2.2rem; line-height: 1;">🖼️</span>
+              <strong style="font-size: 1rem; color: #0284c7;">Triar de la Galeria</strong>
+              <span style="font-size: 0.78rem; color: var(--text-muted);">Tria una foto desada</span>
+            </button>
           </div>
 
-          <!-- TARGETA 2: TRIAR DE LA GALERIA -->
-          <div class="add-dashed-card" onclick="document.getElementById('aiGalleryInput').click()" role="button" tabindex="0">
-            <div class="add-dashed-icon">
-              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-            </div>
-            <div class="add-dashed-title">Triar de la galeria</div>
-            <div class="add-dashed-desc">Tria una foto desada</div>
+          <!-- ENLLAÇ ENTRADA MANUAL -->
+          <div class="manual-add-link-wrap" style="text-align: center; margin: 16px 0;">
+            <button type="button" class="btn-manual-add" onclick="openEditPlantModal(null)" style="background: none; border: 1px dashed var(--border-strong); padding: 10px 18px; border-radius: 10px; color: var(--text-muted); cursor: pointer; font-size: 0.88rem; font-family: inherit;">
+              ✏️ O afegir les dades manualment sense foto
+            </button>
           </div>
-        </div>
 
-        <!-- ENLLAÇ ENTRADA MANUAL -->
-        <div class="manual-add-link-wrap">
-          <button type="button" class="btn-manual-add" onclick="openEditPlantModal(null)">
-            ✏️ O afegir les dades manualment sense foto
-          </button>
-        </div>
-
-        <!-- Elements auxiliars per compatibilitat -->
-        <div style="display:none;">
-          <h1 id="addScreenMainTitle">Afegir planta</h1>
-          <h2 id="addScreenSubtitle">Nova foto</h2>
-        </div>
-
-          <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px 14px; font-size: 0.82rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px 14px; font-size: 0.82rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
             <span>🤖 IA Botànica Automàtica</span>
             <button type="button" onclick="toggleAICfgPanel()" style="background:none; border:none; color: var(--accent); cursor: pointer; text-decoration: underline; font-size: 0.8rem; font-weight:600;">
               ⚙️ Configuració Clau IA
@@ -3804,139 +3822,144 @@
           </div>
         </div>
 
-        <!-- SECCIÓ DE TRIA RÀPIDA / RESILIENT -->
         <!-- SECCIÓ DE TRIA RÀPIDA / RESILIENT SI LA IA NECESSITA CONFIRMACIÓ -->
-      <div id="aiFallbackPickerSection" style="display: none;">
-        <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 14px; background: #f8faf8; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px;">
-          <img id="aiFallbackPreviewImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 64px; height: 64px; border-radius: 8px; object-fit: cover;" alt="Foto capturada">
-          <div>
-            <div style="font-size: 0.76rem; font-weight: 700; color: #256a38; text-transform: uppercase;">📸 Foto capturada amb èxit</div>
-            <p style="font-size: 0.84rem; color: var(--text-main); margin: 2px 0; font-weight: 600;">Quina planta és?</p>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Tria una de les habituals o cerca-la: la IA calcularà totes les cures automàticament.</span>
+        <div id="aiFallbackPickerSection" style="display: none;">
+          <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 14px; background: #f8faf8; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px;">
+            <img id="aiFallbackPreviewImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 64px; height: 64px; border-radius: 8px; object-fit: cover;" alt="Foto capturada">
+            <div>
+              <div style="font-size: 0.76rem; font-weight: 700; color: #256a38; text-transform: uppercase;">📸 Foto capturada amb èxit</div>
+              <p style="font-size: 0.84rem; color: var(--text-main); margin: 2px 0; font-weight: 600;">Quina planta és?</p>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Tria una de les habituals o cerca-la: la IA calcularà totes les cures automàticament.</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 12px;">
+            <input type="text" id="fallbackPlantSearchInput" placeholder="🔍 Cerca nom (ex: Pothos, Monstera, Cinta, Ficus...)" class="form-control" oninput="filterFallbackPresets(this.value)">
+          </div>
+
+          <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;">🌱 Opcions freqüents (1 clic):</div>
+          <div id="fallbackPresetsContainer" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 180px; overflow-y: auto; margin-bottom: 16px;"></div>
+
+          <div style="display: flex; justify-content: space-between;">
+            <button class="btn-action" style="background: #e5e7eb; color: #374151;" onclick="resetAIModal()">
+              🔄 Repetir foto
+            </button>
           </div>
         </div>
-
-        <div style="margin-bottom: 12px;">
-          <input type="text" id="fallbackPlantSearchInput" placeholder="🔍 Cerca nom (ex: Pothos, Monstera, Cinta, Ficus...)" class="form-control" oninput="filterFallbackPresets(this.value)">
-        </div>
-
-        <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;">🌱 Opcions freqüents (1 clic):</div>
-        <div id="fallbackPresetsContainer" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 180px; overflow-y: auto; margin-bottom: 16px;">
-        </div>
-
-        <div style="display: flex; justify-content: space-between;">
-          <button class="btn-action" style="background: #e5e7eb; color: #374151;" onclick="resetAIModal()">
-            🔄 Repetir foto
-          </button>
-        </div>
-      </div>
-
-      
 
         <!-- ESTAT DE CÀRREGA / ESCANEIG IA -->
-        <!-- ESTAT DE CÀRREGA / ESCANEIG IA -->
-      <div id="aiScanningSection" style="display: none; text-align: center; padding: 24px 10px;">
-        <div style="width: 140px; height: 140px; margin: 0 auto 16px; position: relative; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-md);">
-          <img id="aiScanningPreviewImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;" alt="Planta">
-          <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(34,197,94,0) 0%, rgba(34,197,94,0.4) 50%, rgba(34,197,94,0) 100%); animation: scanAnim 1.8s infinite ease-in-out;"></div>
+        <div id="aiScanningSection" style="display: none; text-align: center; padding: 24px 10px;">
+          <div style="width: 140px; height: 140px; margin: 0 auto 16px; position: relative; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-md);">
+            <img id="aiScanningPreviewImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;" alt="Planta">
+            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(34,197,94,0) 0%, rgba(34,197,94,0.4) 50%, rgba(34,197,94,0) 100%); animation: scanAnim 1.8s infinite ease-in-out;"></div>
+          </div>
+          <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 6px;">🔍 Identificant la planta amb IA...</h3>
+          <p style="font-size: 0.84rem; color: var(--text-muted);" id="aiScanningStepText">
+            Reconeixent l'espècie botànica i calculant les necessitats de reg i adob...
+          </p>
         </div>
-        <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 6px;">🔍 Identificant la planta amb IA...</h3>
-        <p style="font-size: 0.84rem; color: var(--text-muted);" id="aiScanningStepText">
-          Reconeixent l'espècie botànica i calculant les necessitats de reg i adob...
-        </p>
-      </div>
-
-      
 
         <!-- RESULTAT DE LA IDENTIFICACIÓ -->
-        <!-- RESULTAT DE LA IDENTIFICACIÓ -->
-      <div id="aiResultSection" style="display: none;">
-        <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 16px; background: #f8faf8; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 12px;">
-          <img id="aiResultImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 74px; height: 74px; border-radius: 8px; object-fit: cover;" alt="Foto">
-          <div>
-            <div style="font-size: 0.76rem; font-weight: 700; color: #16a34a; text-transform: uppercase; letter-spacing: 0.04em;">✨ Planta Identificada</div>
-            <h3 id="aiResultCommonName" style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 2px 0;"></h3>
-            <p id="aiResultScientificName" style="font-size: 0.86rem; font-style: italic; color: var(--text-muted);"></p>
+        <div id="aiResultSection" style="display: none;">
+          <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 16px; background: #f8faf8; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 12px;">
+            <img id="aiResultImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 74px; height: 74px; border-radius: 8px; object-fit: cover;" alt="Foto">
+            <div>
+              <div style="font-size: 0.76rem; font-weight: 700; color: #16a34a; text-transform: uppercase; letter-spacing: 0.04em;">✨ Planta Identificada</div>
+              <h3 id="aiResultCommonName" style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 2px 0;"></h3>
+              <p id="aiResultScientificName" style="font-size: 0.86rem; font-style: italic; color: var(--text-muted);"></p>
+            </div>
+          </div>
+
+          <!-- RESUM DE CURES GENERAT PER IA -->
+          <div style="background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px; margin-bottom: 18px; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+              <span style="color: var(--text-muted);">💧 Freqüència de reg:</span>
+              <strong id="aiResultWaterText" style="color: var(--text-main);"></strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+              <span style="color: var(--text-muted);">🧪 Adob recomanat:</span>
+              <strong id="aiResultFertText" style="color: var(--text-main);"></strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+              <span style="color: var(--text-muted);">☀️ Exposició de llum:</span>
+              <strong id="aiResultLightText" style="color: var(--text-main);"></strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+              <span style="color: var(--text-muted);">🐾 Toxicitat mascotes:</span>
+              <span id="aiResultToxicBadge" class="badge"></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+              <span style="color: var(--text-muted);">📊 Nivell de dificultat:</span>
+              <span id="aiResultDiffBadge" class="badge"></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 2px;">
+              <label for="aiResultRoomSelect" style="color: var(--text-muted); font-weight: 600;">📍 Habitació / Racó:</label>
+              <select id="aiResultRoomSelect" class="form-control" style="padding: 4px 8px; font-size: 0.82rem; border-radius: 6px; border: 1px solid var(--border-strong);">
+                <option value="salo">🛋️ Saló</option>
+                <option value="cuina">🍳 Cuina</option>
+                <option value="dormitori">🛏️ Dormitori</option>
+                <option value="bany">🚿 Bany</option>
+                <option value="despatx">💼 Despatx</option>
+                <option value="rebedor">🚪 Rebedor</option>
+                <option value="terrassa">🪴 Terrassa</option>
+                <option value="balco">☀️ Balcó</option>
+                <option value="pati">🌿 Pati</option>
+                <option value="altres">📦 Altres</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; justify-content: space-between;">
+            <button class="btn-action" style="background: #e5e7eb; color: #374151;" onclick="resetAIModal()">
+              🔄 Repetir foto
+            </button>
+            <button class="btn-action" style="background: #256a38; color: white; padding: 10px 20px; font-size: 0.92rem;" onclick="confirmSaveAIPlant()">
+              🌿 Afegir al Meu Jardí
+            </button>
           </div>
         </div>
 
-        <!-- RESUM DE CURES GENERAT PER IA -->
-        <div style="background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px; margin-bottom: 18px; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
-            <span style="color: var(--text-muted);">💧 Freqüència de reg:</span>
-            <strong id="aiResultWaterText" style="color: var(--text-main);"></strong>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
-            <span style="color: var(--text-muted);">🧪 Adob recomanat:</span>
-            <strong id="aiResultFertText" style="color: var(--text-main);"></strong>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
-            <span style="color: var(--text-muted);">☀️ Exposició de llum:</span>
-            <strong id="aiResultLightText" style="color: var(--text-main);"></strong>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
-            <span style="color: var(--text-muted);">🐾 Toxicitat mascotes:</span>
-            <span id="aiResultToxicBadge" class="badge"></span>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
-            <span style="color: var(--text-muted);">📊 Nivell de dificultat:</span>
-            <span id="aiResultDiffBadge" class="badge"></span>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 2px;">
-            <label for="aiResultRoomSelect" style="color: var(--text-muted); font-weight: 600;">📍 Habitació / Racó:</label>
-            <select id="aiResultRoomSelect" class="form-control" style="padding: 4px 8px; font-size: 0.82rem; border-radius: 6px; border: 1px solid var(--border-strong);">
-              <option value="salo">🛋️ Saló</option>
-              <option value="cuina">🍳 Cuina</option>
-              <option value="dormitori">🛏️ Dormitori</option>
-              <option value="bany">🚿 Bany</option>
-              <option value="despatx">💼 Despatx</option>
-              <option value="rebedor">🚪 Rebedor</option>
-              <option value="terrassa">🪴 Terrassa</option>
-              <option value="balco">☀️ Balcó</option>
-              <option value="pati">🌿 Pati</option>
-              <option value="altres">📦 Altres</option>
-            </select>
-          </div>
+        <!-- Elements auxiliars per compatibilitat -->
+        <div style="display:none;">
+          <h1 id="addScreenMainTitle">Afegir planta</h1>
+          <h2 id="addScreenSubtitle">Nova foto</h2>
         </div>
-
-        <div style="display: flex; gap: 10px; justify-content: space-between;">
-          <button class="btn-action" style="background: #e5e7eb; color: #374151;" onclick="resetAIModal()">
-            🔄 Repetir foto
-          </button>
-          <button class="btn-action" style="background: #256a38; color: white; padding: 10px 20px; font-size: 0.92rem;" onclick="confirmSaveAIPlant()">
-            🌿 Afegir al Meu Jardí
-          </button>
-        </div>
-      </div>
 
       </div>
     </div>
 
     <!-- PANTALLA 3: CALENDARI (Calendari.png) -->
     <div class="app-view" id="viewCalendar">
-      <div class="calendar-screen-content">
-        <!-- PREVISIÓ SETMANAL (PROPERS 7 DIES) -->
-        <div class="cal-section-title" id="weeklyCalendarTitle">PREVISIÓ SETMANAL (PROPERS 7 DIES)</div>
-        <div class="cal-week-cards" id="weeklyCalendarGrid"></div>
+      <div class="calendar-container active" id="plantsCalendarContainer" style="display: flex; width: 100%;">
+        <!-- PREVISIÓ SETMANAL (7 DIES) -->
+        <div class="calendar-panel">
+          <div class="calendar-panel-header">
+            <div class="calendar-panel-title" id="weeklyCalendarTitle">🗓️ Previsió Setmanal (Propers 7 dies)</div>
+            <span id="weeklyCalendarHint" style="font-size: 0.80rem; color: var(--text-muted);">Fes clic a qualsevol planta per obrir la seva fitxa</span>
+          </div>
+          <div class="week-strip-grid" id="weeklyCalendarGrid"></div>
+        </div>
 
         <!-- CALENDARI MENSUAL -->
-        <div class="cal-month-header">
-          <div class="cal-month-title" id="calendarMonthTitle">OCTUBRE 2026</div>
-          <div class="cal-month-nav">
-            <button type="button" class="btn-cal-pill" id="calPrevMonthBtn" onclick="changeCalendarMonth(-1)">‹ Anterior</button>
-            <button type="button" class="btn-cal-pill" id="calTodayBtn" onclick="resetCalendarToToday()">Avui</button>
-            <button type="button" class="btn-cal-pill" id="calNextMonthBtn" onclick="changeCalendarMonth(1)">Següent ›</button>
+        <div class="calendar-panel">
+          <div class="calendar-panel-header">
+            <div class="calendar-panel-title" id="calendarMonthTitle">📅 Calendari Mensual</div>
+            <div class="month-nav-group">
+              <button type="button" class="btn-cal-nav" id="calPrevMonthBtn" onclick="changeCalendarMonth(-1)">‹ Mes anterior</button>
+              <button type="button" class="btn-cal-nav" id="calTodayBtn" onclick="resetCalendarToToday()">Avui</button>
+              <button type="button" class="btn-cal-nav" id="calNextMonthBtn" onclick="changeCalendarMonth(1)">Mes següent ›</button>
+            </div>
           </div>
+          <div class="month-weekdays-row" id="monthWeekdaysRow">
+            <div>Dl</div><div>Dt</div><div>Dc</div><div>Dj</div><div>Dv</div><div>Ds</div><div>Dg</div>
+          </div>
+          <div class="month-calendar-grid" id="monthlyCalendarGrid"></div>
         </div>
-        <div class="cal-days-list" id="monthlyCalendarGrid"></div>
+      </div>
 
-        <!-- Elements auxiliars per compatibilitat JS -->
-        <div style="display:none;">
-          <h1 id="calendarScreenTitle">Calendari</h1>
-          <span id="weeklyCalendarHint"></span>
-          <div id="plantsCalendarContainer"></div>
-          <div id="monthWeekdaysRow"></div>
-        </div>
+      <!-- Elements auxiliars per compatibilitat JS -->
+      <div style="display:none;">
+        <h1 id="calendarScreenTitle">Calendari</h1>
       </div>
     </div>
 
@@ -4121,9 +4144,9 @@
 
 </div>
 
-<!-- PANTALLA FITXA DE LA PLANTA (Fixta planta.png) -->
-<div class="modal-overlay plant-detail-overlay" id="plantModal">
-  <div class="modal-card plant-detail-card">
+<!-- PANTALLA FITXA DE LA PLANTA (PANTALLA COMPLETA - Fixta planta.png) -->
+<div class="plant-detail-overlay" id="plantModal">
+  <div class="plant-detail-card">
     <!-- Top bar amb fletxa enrere i campana (Fixta planta.png) -->
     <div class="plant-detail-top-bar">
       <button type="button" class="btn-detail-back" onclick="closeModal('plantModal')" aria-label="Tancar fitxa">
@@ -4840,8 +4863,15 @@
       }
     }
 
-    if (tabName === 'calendar') {
+    // Tancar fitxa a pantalla completa si estava oberta
+    closeModal('plantModal');
+
+    if (tabName === 'add') {
+      resetAIModal();
+    } else if (tabName === 'calendar') {
       renderCalendar();
+    } else if (tabName === 'settings') {
+      updatePreferencesButtonsState();
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6388,17 +6418,20 @@
   }
 
   function openAddPlantModal() {
-    resetAIModal();
-    document.getElementById("addPlantModal").classList.add("active");
+    switchAppTab('add');
   }
 
   function resetAIModal() {
     currentAIIdentifiedPlant = null;
     currentAIPhotoBase64 = null;
-    document.getElementById("aiUploadPromptSection").style.display = "block";
-    document.getElementById("aiScanningSection").style.display = "none";
-    document.getElementById("aiFallbackPickerSection").style.display = "none";
-    document.getElementById("aiResultSection").style.display = "none";
+    const promptSec = document.getElementById("aiUploadPromptSection");
+    if (promptSec) promptSec.style.display = "block";
+    const scanSec = document.getElementById("aiScanningSection");
+    if (scanSec) scanSec.style.display = "none";
+    const fbSec = document.getElementById("aiFallbackPickerSection");
+    if (fbSec) fbSec.style.display = "none";
+    const resSec = document.getElementById("aiResultSection");
+    if (resSec) resSec.style.display = "none";
     
     const camInp = document.getElementById("aiCameraInput");
     if (camInp) camInp.value = "";
@@ -7901,29 +7934,28 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           ? ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
           : ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"]);
 
-    // 1. Renderitzar Previsió Setmanal (Propers 7 dies - Calendari.png)
+    // 1. Renderitzar Previsió Setmanal (Propers 7 dies)
     const weekCardsHtml = [];
     for (let i = 0; i < 7; i++) {
       const d = new Date(todayMidnight);
       d.setDate(d.getDate() + i);
       const events = getProjectedEventsForDate(d);
-      const dayLabel = i === 0 ? t("AVUI", "HOY", "TODAY") : (i === 1 ? t("DEMÀ", "MAÑANA", "TOMORROW") : dayNamesShort[d.getDay()].toUpperCase());
+      const dayLabel = i === 0 ? t("Avui", "Hoy", "Today") : (i === 1 ? t("Demà", "Mañana", "Tomorrow") : dayNamesShort[d.getDay()]);
       const dateStr = d.toLocaleDateString(getLocale(), { day: "numeric", month: "short" });
 
       weekCardsHtml.push(`
-        <div class="cal-day-card ${i === 0 ? 'today' : ''}">
-          <div class="cal-day-header">
-            <span class="cal-day-title">${dayLabel}</span>
-            <span class="cal-day-date">${dateStr}</span>
+        <div class="week-day-card ${i === 0 ? 'today' : ''}">
+          <div class="week-day-header">
+            <span class="week-day-name">${dayLabel}</span>
+            <span class="week-day-num">${dateStr}</span>
           </div>
-          <div class="cal-day-tasks">
+          <div class="cal-events-list">
             ${events.length === 0
-              ? `<span class="cal-empty-text">${t('Cap tasca prevista', 'Sin tareas previstas', 'No tasks scheduled')}</span>`
+              ? `<span class="cal-empty-day">${t('Cap tasca prevista', 'Sin tareas previstas', 'No tasks scheduled')}</span>`
               : events.map(ev => `
-                  <button type="button" class="cal-task-pill" onclick="openPlantModal('${ev.plant.id}')" title="${ev.plant.name}">
-                    <span>${ev.type === 'fert' ? '🧪' : '💧'}</span>
-                    <span>${ev.plant.name}</span>
-                  </button>
+                  <span class="cal-event-chip ${ev.urgent ? 'overdue-water' : ev.type}" onclick="openPlantModal('${ev.plant.id}')" title="${ev.plant.name}">
+                    ${ev.label}
+                  </span>
                 `).join('')
             }
           </div>
@@ -7932,44 +7964,65 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     }
     weekGrid.innerHTML = weekCardsHtml.join('');
 
-    // 2. Renderitzar Calendari Mensual (Calendari.png)
+    // 2. Renderitzar Calendari Mensual
     if (monthTitle) {
-      monthTitle.innerText = `${monthNames[currentCalendarMonth].toUpperCase()} ${currentCalendarYear}`;
+      monthTitle.innerText = `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
     }
 
+    const firstDayOfMonth = new Date(currentCalendarYear, currentCalendarMonth, 1);
     const lastDayOfMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0);
+    const startOffset = (firstDayOfMonth.getDay() + 6) % 7;
     const totalDays = lastDayOfMonth.getDate();
 
-    const rowsHtml = [];
+    const cellsHtml = [];
+
+    const prevMonthLastDay = new Date(currentCalendarYear, currentCalendarMonth, 0).getDate();
+    for (let i = startOffset - 1; i >= 0; i--) {
+      const dayNum = prevMonthLastDay - i;
+      cellsHtml.push(`
+        <div class="month-day-cell other-month">
+          <div class="month-day-number">${dayNum}</div>
+        </div>
+      `);
+    }
+
     for (let day = 1; day <= totalDays; day++) {
       const cellDate = new Date(currentCalendarYear, currentCalendarMonth, day);
       const isToday = (cellDate.getTime() === todayMidnight.getTime());
       const events = getProjectedEventsForDate(cellDate);
       const weekdayShort = dayNamesShort[cellDate.getDay()];
-      const dayFormatted = `${weekdayShort}. ${day} ${monthNames[currentCalendarMonth].slice(0,3).toLowerCase()}.`;
 
-      rowsHtml.push(`
-        <div class="cal-day-row ${isToday ? 'today' : ''}">
-          <div class="cal-day-row-label">
-            <span>${dayFormatted}</span>
-            ${isToday ? ` <span style="color:#5f9b65; font-weight:800; font-size:0.75rem;">· ${t('AVUI', 'HOY', 'TODAY')}</span>` : ''}
+      cellsHtml.push(`
+        <div class="month-day-cell ${isToday ? 'today' : ''} ${events.length === 0 ? 'no-events' : ''}">
+          <div class="month-day-number">
+            <span><span class="mobile-weekday">${weekdayShort}</span>${day}${isToday ? ` <span class="mobile-weekday" style="color:#1e582e; font-weight:800;">· ${t('Avui', 'Hoy', 'Today')}</span>` : ''}</span>
+            ${events.length > 0 ? `<span style="font-size:0.68rem; color:var(--text-muted); font-weight:600;">${events.length}</span>` : ''}
           </div>
-          <div class="cal-day-tasks" style="justify-content: flex-end;">
-            ${events.length === 0
-              ? `<span style="color:var(--text-muted); font-size:0.75rem; opacity:0.6;">—</span>`
-              : events.map(ev => `
-                  <button type="button" class="cal-task-pill" onclick="openPlantModal('${ev.plant.id}')" title="${ev.plant.name}" style="padding:4px 8px; font-size:0.76rem;">
-                    <span>${ev.type === 'fert' ? '🧪' : '💧'}</span>
-                    <span>${ev.plant.name}</span>
-                  </button>
-                `).join('')
-            }
+          ${events.length > 0 ? `
+          <div class="cal-events-list">
+            ${events.slice(0, 4).map(ev => `
+              <span class="cal-event-chip ${ev.urgent ? 'overdue-water' : ev.type}" onclick="openPlantModal('${ev.plant.id}')" title="${ev.plant.name}">
+                ${ev.label}
+              </span>
+            `).join('')}
+            ${events.length > 4 ? `<span style="font-size:0.68rem; color:var(--text-muted); padding-left:4px;">+${events.length - 4} ${t('més', 'más', 'more')}</span>` : ''}
           </div>
+          ` : ''}
         </div>
       `);
     }
 
-    monthGrid.innerHTML = rowsHtml.join('');
+    const totalCellsSoFar = startOffset + totalDays;
+    const trailingDays = (7 - (totalCellsSoFar % 7)) % 7;
+    for (let i = 1; i <= trailingDays; i++) {
+      cellsHtml.push(`
+        <div class="month-day-cell other-month">
+          <div class="month-day-number">${i}</div>
+        </div>
+      `);
+    }
+
+    monthGrid.innerHTML = cellsHtml.join('');
   }
 
   // -------------------------------------------------------------
@@ -8128,9 +8181,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   // PREFERÈNCIES: MODE CLAR/FOSC I IDIOMA (CATALÀ / ESPAÑOL)
   // -------------------------------------------------------------
   function openPreferencesModal() {
-    updatePreferencesButtonsState();
-    const m = document.getElementById("preferencesModal");
-    if (m) m.classList.add("active");
+    switchAppTab('settings');
   }
 
   let currentTheme = "system"; // 'system', 'light', 'dark'
