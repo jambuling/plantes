@@ -3197,11 +3197,10 @@
       margin-bottom: 20px;
     }
     .settings-group-title {
-      font-size: 0.76rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
+      font-size: 0.88rem;
+      font-weight: 700;
       color: var(--text-main);
-      text-transform: uppercase;
+      text-transform: none;
       margin-bottom: 8px;
     }
     .settings-card {
@@ -3488,17 +3487,26 @@
       border-top: 1px solid var(--border-subtle);
     }
 
-    /* CARRUSEL DE FOTOS SUPERPOSAT */
+    /* CARRUSEL DE FOTOS SUPERPOSAT (100% amplada, aspect-ratio 3:4) */
     .plant-detail-card .modal-image-wrap {
       width: 100%;
-      height: 320px;
+      aspect-ratio: 3 / 4;
+      max-height: 70vh;
+      max-height: 70dvh;
       position: relative;
-      background: #e2e8f0;
+      background: #0f172a;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .plant-detail-card .modal-image-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
+      display: block;
+      cursor: pointer;
     }
     .carousel-arrow {
       position: absolute;
@@ -3807,7 +3815,7 @@
     </div>
 
     <!-- PANTALLA 2: AFEGIR PLANTA (Afegir planta.png) -->
-    <div class="app-view" id="viewAddPlant">
+    <div class="app-view" id="viewAdd">
       <div class="add-plant-screen-content">
         <p class="view-screen-desc" id="addScreenDesc" style="font-size:0.95rem; color:var(--text-main); line-height:1.45; margin-bottom: 20px;">
           Fes una foto o tria-la de la galeria. La Intel·ligència Artificial identificarà l'espècie i calcularà automàticament el calendari de reg, adob i cures.
@@ -4007,7 +4015,7 @@
 
         <!-- 1. TEMA -->
         <div class="settings-group">
-          <div class="settings-group-title" id="prefThemeSectionLabel">TEMA</div>
+          <div class="settings-group-title" id="prefThemeSectionLabel">Tema</div>
           <div class="settings-card">
             <div class="theme-segmented-control">
               <button type="button" class="theme-segment-btn active" id="prefThemeSystemBtn" onclick="setThemePreference('system')">
@@ -4028,7 +4036,7 @@
 
         <!-- 2. IDIOMA -->
         <div class="settings-group">
-          <div class="settings-group-title" id="prefLangSectionLabel">IDIOMA</div>
+          <div class="settings-group-title" id="prefLangSectionLabel">Idioma</div>
           <div class="settings-card">
             <select class="settings-select" id="prefLangSelect" onchange="setLanguagePreference(this.value)">
               <option value="ca">Català</option>
@@ -4040,7 +4048,7 @@
 
         <!-- 3. NOTIFICACIONS -->
         <div class="settings-group">
-          <div class="settings-group-title" id="prefNotifSectionLabel">NOTIFICACIONS</div>
+          <div class="settings-group-title" id="prefNotifSectionLabel">Notificacions</div>
           <div class="settings-card">
             <p class="settings-card-desc" id="prefNotifHint">
               Rebràs alertes al teu dispositiu quan alguna planta necessiti reg o atenció botànica.
@@ -4056,7 +4064,7 @@
               <label for="prefNotifTimeInput" class="settings-row-label" id="prefNotifTimeLabel">Hora de la notificació</label>
               <div class="time-picker-wrap">
                 <input type="time" id="prefNotifTimeInput" value="09:00" class="time-input" onchange="setNotificationTimePreference(this.value)">
-                <span style="font-size:1.05rem;">🕒</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted); flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
               </div>
             </div>
           </div>
@@ -4064,17 +4072,17 @@
 
         <!-- 4. CÒPIA DE SEGURETAT -->
         <div class="settings-group">
-          <div class="settings-group-title" id="prefBackupSectionLabel">CÒPIA DE SEGURETAT</div>
+          <div class="settings-group-title" id="prefBackupSectionLabel">Còpia de seguretat</div>
           <div class="settings-card">
             <p class="settings-card-desc" id="prefBackupHint">
               Guarda totes les teves plantes, històric i fotos en un fitxer segur al teu dispositiu.
             </p>
             <div class="settings-btn-grid">
               <button type="button" class="btn-settings-action" onclick="exportDataBackup()" id="prefExportBtn">
-                📥 <span id="prefExportText">Exportar còpia</span>
+                <span id="prefExportText">Exportar còpia</span>
               </button>
               <button type="button" class="btn-settings-action" onclick="document.getElementById('importBackupFileInput').click()" id="prefImportBtn">
-                📤 <span id="prefImportText">Restaurar còpia</span>
+                <span id="prefImportText">Restaurar còpia</span>
               </button>
             </div>
             <input type="file" id="importBackupFileInput" accept=".json,application/json" style="display:none;" onchange="handleImportBackupFile(event)">
@@ -4083,33 +4091,33 @@
 
         <!-- 5. CONTACTE -->
         <div class="settings-group">
-          <div class="settings-group-title" id="prefFeedbackSectionLabel">CONTACTE</div>
+          <div class="settings-group-title" id="prefFeedbackSectionLabel">Contacte</div>
           <div class="settings-card">
             <p class="settings-card-desc" id="prefFeedbackHint">
               Tens alguna idea per millorar l'app o has trobat alguna errada? Digue'ns-ho per seguir millorant.
             </p>
             <button type="button" class="btn-settings-action full-width" onclick="openFeedbackModal()">
-              💬 <span id="prefFeedbackBtnText">Enviar suggeriments o dubtes</span>
+              <span id="prefFeedbackBtnText">Enviar suggeriments o dubtes</span>
             </button>
           </div>
         </div>
 
         <!-- 6. GOOGLE PLAY -->
         <div class="settings-group">
-          <div class="settings-group-title" id="prefRateSectionLabel">GOOGLE PLAY</div>
+          <div class="settings-group-title" id="prefRateSectionLabel">Google Play</div>
           <div class="settings-card">
             <p class="settings-card-desc" id="prefRateHint">
               T'agrada l'aplicació? Una ressenya de 5 estrelles ens ajuda moltíssim a continuar millorant!
             </p>
             <button type="button" class="btn-settings-action btn-google-play full-width" onclick="rateOnGooglePlay()">
-              ⭐ <span id="prefRateBtnText">Valorar a Google Play</span>
+              <span id="prefRateBtnText">Valorar a Google Play</span>
             </button>
           </div>
         </div>
 
         <!-- 7. LEGALITAT I PRIVACITAT -->
         <div class="settings-group">
-          <div class="settings-group-title" id="prefLegalSectionLabel">LEGALITAT I PRIVACITAT</div>
+          <div class="settings-group-title" id="prefLegalSectionLabel">Legalitat i privacitat</div>
           <div class="settings-card legal-links-card">
             <button type="button" class="legal-link-row" id="prefLegalTermsBtn" onclick="openLegalModal('terms')">
               <span id="prefLegalTermsText">Avís Legal i Condicions</span>
@@ -4232,9 +4240,10 @@
             ⋮
           </button>
           <div class="detail-kebab-menu" id="detailKebabMenu">
-            <button type="button" onclick="triggerEditFromDetail()">✏️ Editar planta</button>
-            <button type="button" onclick="triggerHistoryFromDetail()">📜 Històric de cures</button>
-            <button type="button" class="danger" onclick="triggerDeleteFromDetail()">🗑️ Eliminar planta</button>
+            <button type="button" onclick="triggerEditFromDetail()">Editar planta</button>
+            <button type="button" onclick="openGalleryPhotoSourcePicker(); closePlantKebabMenu();">Nova foto</button>
+            <button type="button" onclick="triggerHistoryFromDetail()">Històric de cures</button>
+            <button type="button" class="danger" onclick="triggerDeleteFromDetail()">Eliminar planta</button>
           </div>
         </div>
       </div>
@@ -4252,14 +4261,16 @@
           <div id="modalWaterNext" style="display:none;"></div>
           <div class="tracker-box-last" id="modalWaterLast"></div>
           <div class="tracker-btn-row">
-            <button class="btn-app-water" id="modalWaterBtn">💧 Regar avui</button>
-            <button type="button" class="btn-app-clock" id="modalSnoozeBtn" title="Posposar reg 1 dia">🕒</button>
+            <button class="btn-app-water" id="modalWaterBtn">Regar avui</button>
+            <button type="button" class="btn-app-clock" id="modalSnoozeBtn" title="Posposar reg 1 dia" aria-label="Posposar reg 1 dia">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </button>
             <button type="button" id="modalWaterPastBtn" style="display:none;"></button>
           </div>
           <div class="detail-care-rules">
             <div class="detail-rule-heading">Pautes de reg</div>
-            <div class="detail-rule-item">☀️ Estiu: <span id="modalWaterSummer"></span></div>
-            <div class="detail-rule-item">❄️ Hivern: <span id="modalWaterWinter"></span></div>
+            <div class="detail-rule-item">Estiu: <span id="modalWaterSummer"></span></div>
+            <div class="detail-rule-item">Hivern: <span id="modalWaterWinter"></span></div>
           </div>
           <div class="detail-rule-note" id="modalWaterDetail"></div>
         </div>
@@ -4276,8 +4287,10 @@
           <div id="modalFertNext" style="display:none;"></div>
           <div class="tracker-box-last" id="modalFertLast"></div>
           <div class="tracker-btn-row">
-            <button class="btn-app-fert" id="modalFertBtn">🧪 Fertilitzar avui</button>
-            <button type="button" class="btn-app-clock" id="modalFertPastBtn" onclick="openQuickDateModal(currentModalPlantId, 'fert', event)" title="Registrar amb una altra data">🕒</button>
+            <button class="btn-app-fert" id="modalFertBtn">Fertilitzar avui</button>
+            <button type="button" class="btn-app-clock" id="modalFertPastBtn" onclick="openQuickDateModal(currentModalPlantId, 'fert', event)" title="Registrar amb una altra data" aria-label="Registrar data">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </button>
           </div>
           <div class="detail-care-rules">
             <div class="detail-rule-heading">Pautes de fertilització</div>
@@ -4366,6 +4379,41 @@
         <div class="detail-gallery-grid" id="modalGalleryGrid"></div>
         <input type="file" id="galleryCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleGalleryPhotoUpload(event)">
         <input type="file" id="galleryFileInput" accept="image/*" multiple style="display:none;" onchange="handleGalleryPhotoUpload(event)">
+      </div>
+
+      <!-- MODAL SELECCIÓ FONT FOTOGRAFIA GALERIA -->
+      <div class="notif-quick-overlay" id="gallerySourceModal" onclick="if(event.target === this) closeGalleryPhotoSourcePicker();">
+        <div class="notif-quick-card" style="max-width: 380px;">
+          <div class="notif-panel-header">
+            <span style="font-weight:700; font-size:1.05rem; color:var(--text-main); display:flex; align-items:center; gap:8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+              <span id="gallerySourceModalTitle">Nova fotografia</span>
+            </span>
+            <button type="button" class="btn-close-notif-panel" onclick="closeGalleryPhotoSourcePicker()" aria-label="Tancar">&times;</button>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:12px; padding: 8px 0 14px;">
+            <button type="button" class="btn-source-option" style="flex-direction:row; padding:14px 16px; gap:14px; text-align:left; border-style:solid; background:var(--bg-primary);" onclick="triggerGalleryCamera()">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+              <div>
+                <div style="font-weight:700; font-size:0.95rem; color:var(--text-main);" id="gallerySourceCameraTitle">Fer foto amb la càmera</div>
+                <div style="font-size:0.78rem; color:var(--text-muted);" id="gallerySourceCameraDesc">Obre la càmera del mòbil</div>
+              </div>
+            </button>
+
+            <button type="button" class="btn-source-option" style="flex-direction:row; padding:14px 16px; gap:14px; text-align:left; border-style:solid; background:var(--bg-primary);" onclick="triggerGalleryFile()">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              <div>
+                <div style="font-weight:700; font-size:0.95rem; color:var(--text-main);" id="gallerySourceGalleryTitle">Adjuntar de la galeria</div>
+                <div style="font-size:0.78rem; color:var(--text-muted);" id="gallerySourceGalleryDesc">Tria fotos desades al dispositiu</div>
+              </div>
+            </button>
+          </div>
+          <div style="text-align:right; border-top:1px solid var(--border-subtle); padding-top:12px;">
+            <button type="button" class="btn-action" style="background:var(--border-subtle); color:var(--text-main); padding:8px 16px; border-radius:8px; border:none; cursor:pointer; font-weight:600;" onclick="closeGalleryPhotoSourcePicker()">
+              Cancel·lar
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Elements auxiliars per compatibilitat JS -->
@@ -4886,7 +4934,8 @@
 
     tabs.forEach(tName => {
       const btn = document.getElementById(navMap[tName]);
-      const view = document.getElementById('view' + tName.charAt(0).toUpperCase() + tName.slice(1));
+      const view = document.getElementById('view' + tName.charAt(0).toUpperCase() + tName.slice(1)) ||
+                   (tName === 'add' ? document.getElementById('viewAddPlant') : null);
       if (btn) btn.classList.toggle('active', tName === tabName);
       if (view) view.classList.toggle('active', tName === tabName);
     });
@@ -6086,10 +6135,10 @@
     const transplantInfoEl = document.getElementById("modalTransplantInfo");
     if (transplantInfoEl) {
       const lastT = pHist.transplants && pHist.transplants[0];
-      const potText = plant.potSize ? `<br>🏺 ${t('Test actual', 'Maceta actual', 'Current pot')}: <strong>${plant.potSize}</strong>` : "";
+      const potText = plant.potSize ? `<br>${t('Test actual', 'Maceta actual', 'Current pot')}: <strong>${plant.potSize}</strong>` : "";
       if (lastT) {
         const dStr = formatGalleryDateShort(typeof lastT === 'string' ? lastT : lastT.date);
-        const noteStr = (typeof lastT === 'object' && lastT.note) ? `<br>📝 <em>${lastT.note}</em>` : "";
+        const noteStr = (typeof lastT === 'object' && lastT.note) ? `<br><em>${lastT.note}</em>` : "";
         transplantInfoEl.innerHTML = `${t('Últim', 'Último', 'Last')}: <strong>${dStr}</strong>${potText}${noteStr}`;
       } else {
         transplantInfoEl.innerHTML = `${t('Últim', 'Último', 'Last')}: <strong>${t('Cap registrat', 'Ninguno registrado', 'None recorded')}</strong>${potText}`;
@@ -6101,7 +6150,7 @@
       const lastP = pHist.prunings && pHist.prunings[0];
       if (lastP) {
         const dStr = formatGalleryDateShort(typeof lastP === 'string' ? lastP : lastP.date);
-        const noteStr = (typeof lastP === 'object' && lastP.note) ? `<br>📝 <em>${lastP.note}</em>` : "";
+        const noteStr = (typeof lastP === 'object' && lastP.note) ? `<br><em>${lastP.note}</em>` : "";
         pruningInfoEl.innerHTML = `${t('Última', 'Última', 'Last')}: <strong>${dStr}</strong>${noteStr}`;
       } else {
         pruningInfoEl.innerHTML = `${t('Última', 'Última', 'Last')}: <strong>${t('Cap registrada', 'Ninguna registrada', 'None recorded')}</strong>`;
@@ -6110,13 +6159,13 @@
 
     const btnAddT = document.getElementById("modalAddTransplantBtn");
     if (btnAddT) {
-      btnAddT.innerText = t("🪴 Registrar trasplantament", "🪴 Registrar trasplante", "🪴 Log repotting");
+      btnAddT.innerText = t("Registrar trasplantament", "Registrar trasplante", "Log repotting");
       btnAddT.onclick = (e) => openQuickDateModal(plantId, 'transplant', e);
     }
 
     const btnAddP = document.getElementById("modalAddPruningBtn");
     if (btnAddP) {
-      btnAddP.innerText = t("✂️ Registrar poda / neteja", "✂️ Registrar poda / limpieza", "✂️ Log pruning / cleaning");
+      btnAddP.innerText = t("Registrar poda / neteja", "Registrar poda / limpieza", "Log pruning / cleaning");
       btnAddP.onclick = (e) => openQuickDateModal(plantId, 'pruning', e);
     }
   }
@@ -6149,18 +6198,18 @@
         modalWaterNextBadge.innerText = waterParts.badgeStr;
         modalWaterNextBadge.className = `tracker-badge-pill ${ws.status === 'overdue' ? 'is-alert' : ''}`;
       }
-      if (modalWaterNext) modalWaterNext.innerHTML = `📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${ws.nextText}</strong>`;
+      if (modalWaterNext) modalWaterNext.innerHTML = `${t('Proper', 'Próximo', 'Next')}: <strong>${ws.nextText}</strong>`;
       if (modalWaterLast) modalWaterLast.innerText = ws.lastText;
       if (modalWaterBtn) {
         modalWaterBtn.className = `btn-app-water ${ws.isToday ? 'btn-done-today' : ''}`;
-        modalWaterBtn.innerText = ws.isToday ? t('✅ Regat avui', '✅ Regado hoy', '✅ Watered today') : t('💧 Regar avui', '💧 Regar hoy', '💧 Water today');
+        modalWaterBtn.innerText = ws.isToday ? t('Regat avui', 'Regado hoy', 'Watered today') : t('Regar avui', 'Regar hoy', 'Water today');
         modalWaterBtn.onclick = (e) => recordAction(plantId, 'water', e);
       }
       if (modalSnoozeBtn) {
         modalSnoozeBtn.onclick = (e) => snoozeWater(plantId, 1, e);
       }
       if (modalWaterPastBtn) {
-        modalWaterPastBtn.innerText = t("📅 Data", "📅 Fecha", "📅 Date");
+        modalWaterPastBtn.innerText = t("Data", "Fecha", "Date");
         modalWaterPastBtn.onclick = (e) => openQuickDateModal(plantId, 'water', e);
       }
     }
@@ -6182,15 +6231,15 @@
         modalFertNextBadge.innerText = fertParts.badgeStr;
         modalFertNextBadge.className = `tracker-badge-pill ${fs.status === 'overdue' ? 'is-alert' : ''}`;
       }
-      if (modalFertNext) modalFertNext.innerHTML = `📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${fs.nextText}</strong>`;
+      if (modalFertNext) modalFertNext.innerHTML = `${t('Proper', 'Próximo', 'Next')}: <strong>${fs.nextText}</strong>`;
       if (modalFertLast) modalFertLast.innerText = fs.lastText;
       if (modalFertBtn) {
         modalFertBtn.className = `btn-app-fert ${fs.isToday ? 'btn-done-today' : ''}`;
-        modalFertBtn.innerText = fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy', '✅ Fertilized today') : t('🧪 Abonar avui', '🧪 Abonar hoy', '🧪 Fertilize today');
+        modalFertBtn.innerText = fs.isToday ? t('Abonat avui', 'Abonado hoy', 'Fertilized today') : t('Fertilitzar avui', 'Abonar hoy', 'Fertilize today');
         modalFertBtn.onclick = (e) => recordAction(plantId, 'fert', e);
       }
       if (modalFertPastBtn) {
-        modalFertPastBtn.innerText = t("📅 Data", "📅 Fecha", "📅 Date");
+        modalFertPastBtn.innerText = t("Data", "Fecha", "Date");
         modalFertPastBtn.onclick = (e) => openQuickDateModal(plantId, 'fert', e);
       }
     }
@@ -7464,9 +7513,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       }).join('');
 
       const addPhotoCard = `
-        <div class="gallery-item-card gallery-add-card" onclick="document.getElementById('galleryFileInput').click()" title="${t('Afegir nova foto', 'Añadir nueva foto', 'Add new photo')}">
+        <div class="gallery-item-card gallery-add-card" onclick="openGalleryPhotoSourcePicker()" title="${t('Afegir nova foto', 'Añadir nueva foto', 'Add new photo')}">
           <div class="gallery-add-card-inner">
-            <span style="font-size:1.6rem;">📷</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent);"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
             <span style="font-size:0.75rem; font-weight:700; margin-top:4px;">${t('+ Nova foto', '+ Nueva foto', '+ New photo')}</span>
           </div>
         </div>
@@ -7474,6 +7523,28 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
       gridEl.innerHTML = itemsHtml + addPhotoCard;
     }
+  }
+
+  function openGalleryPhotoSourcePicker() {
+    const modal = document.getElementById('gallerySourceModal');
+    if (modal) modal.classList.add('active');
+  }
+
+  function closeGalleryPhotoSourcePicker() {
+    const modal = document.getElementById('gallerySourceModal');
+    if (modal) modal.classList.remove('active');
+  }
+
+  function triggerGalleryCamera() {
+    closeGalleryPhotoSourcePicker();
+    const inp = document.getElementById('galleryCameraInput');
+    if (inp) inp.click();
+  }
+
+  function triggerGalleryFile() {
+    closeGalleryPhotoSourcePicker();
+    const inp = document.getElementById('galleryFileInput');
+    if (inp) inp.click();
   }
 
   function selectModalGalleryPhoto(index) {
@@ -7615,7 +7686,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     document.getElementById("modalWaterDetail").innerText = plant.waterDetail || "";
     document.getElementById("modalSubstrate").innerText = plant.substrate;
-    document.getElementById("modalTip").innerHTML = `💡 <strong>${t('Consell clau:', 'Consejo clave:', 'Key tip:')}</strong> ${plant.tip}`;
+    document.getElementById("modalTip").innerHTML = `<strong>${t('Consell clau:', 'Consejo clave:', 'Key tip:')}</strong> ${plant.tip}`;
 
     document.getElementById("modalBadges").innerHTML = `
       <span class="badge ${plant.difficultyClass}">${trText(plant.difficultyLabel)}</span>
@@ -7630,18 +7701,18 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       if (plant.toxic) {
         toxBody.innerHTML = `
           <div class="toxicity-item-dot">
-            <span>🔴</span>
+            <span style="font-size:1.2rem; line-height:1; color:#ef4444;">•</span>
             <span>${t("Tòxica per a mascotes i nens si s'ingereix.", "Tóxica para mascotas y niños si se ingiere.", "Toxic to pets and children if ingested.")}</span>
           </div>
           <div class="toxicity-item-dot">
-            <span>🔴</span>
+            <span style="font-size:1.2rem; line-height:1; color:#ef4444;">•</span>
             <span>${plant.toxicityDetail ? trText(plant.toxicityDetail) : t("Mantenir fora de l'abast de gossos i gats.", "Mantener fuera del alcance de perros y gatos.", "Keep out of reach of dogs and cats.")}</span>
           </div>
         `;
       } else {
         toxBody.innerHTML = `
           <div class="toxicity-item-dot" style="color:#166534;">
-            <span>🟢</span>
+            <span style="font-size:1.2rem; line-height:1; color:#166534;">•</span>
             <span>${t("Planta segura: No és tòxica per a gossos ni gats.", "Planta segura: No es tóxica para perros ni gatos.", "Safe plant: Non-toxic for dogs and cats.")}</span>
           </div>
         `;
@@ -8615,42 +8686,49 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("emptyStateTitle", t("No s'ha trobat cap planta", "No se ha encontrado ninguna planta", "No plants found"));
     setElText("emptyStateDesc", t("Prova de canviar els filtres o el text de cerca.", "Prueba a cambiar los filtros o el texto de búsqueda.", "Try adjusting filters or search text."));
 
-    // Modal de Preferències
-    setElText("prefModalTitle", t("⚙️ Preferències", "⚙️ Preferencias", "⚙️ Preferences & Settings"));
+    // Modal de Preferències / Ajustaments
+    setElText("prefModalTitle", t("Ajustaments", "Ajustes", "Settings"));
     setElText("prefModalSubtitle", t("Personalitza l'aparença visual, l'idioma i gestiona les teves dades.", "Personaliza la apariencia visual, el idioma y gestiona tus datos.", "Customize appearance, language, and manage your plant data."));
-    setElText("prefThemeSectionLabel", t("🎨 Aparença / Tema", "🎨 Apariencia / Tema", "🎨 Appearance / Theme"));
+    setElText("prefThemeSectionLabel", t("Tema", "Tema", "Theme"));
     setElText("prefThemeSystemText", t("Sistema", "Sistema", "System"));
     setElText("prefThemeLightText", t("Mode Clar", "Modo Claro", "Light Mode"));
     setElText("prefThemeDarkText", t("Mode Fosc", "Modo Oscuro", "Dark Mode"));
-    setElText("prefLangSectionLabel", t("🌐 Idioma / Language", "🌐 Idioma / Language", "🌐 Language / Idioma"));
+    setElText("prefLangSectionLabel", t("Idioma", "Idioma", "Language"));
 
     // Notificacions
-    setElText("prefNotifSectionLabel", t("🔔 Notificacions", "🔔 Notificaciones", "🔔 Notifications"));
+    setElText("prefNotifSectionLabel", t("Notificacions", "Notificaciones", "Notifications"));
     setElText("prefNotifToggleLabel", t("Activar notificacions", "Activar notificaciones", "Enable notifications"));
-    setElText("prefNotifTimeLabel", t("⏰ Hora de la notificació", "⏰ Hora de la notificación", "⏰ Notification time"));
+    setElText("prefNotifTimeLabel", t("Hora de la notificació", "Hora de la notificación", "Notification time"));
     setElText("prefNotifTimeHint", t("Avisos diaris de les plantes que necessiten reg o atenció.", "Avisos diarios de las plantas que necesitan riego o atención.", "Daily reminders for plants needing water or care."));
     setElText("prefNotifHint", t("Rebràs alertes al teu dispositiu quan alguna planta necessiti reg o atenció botànica.", "Recibirás alertas en tu dispositivo cuando alguna planta necesite riego o atención botánica.", "Receive reminders on your device when a plant needs watering or care."));
 
     // Valoració Google Play
-    setElText("prefRateSectionLabel", t("⭐ Google Play", "⭐ Google Play", "⭐ Google Play"));
+    setElText("prefRateSectionLabel", t("Google Play", "Google Play", "Google Play"));
     setElText("prefRateBtnText", t("Valorar a Google Play", "Valorar en Google Play", "Rate on Google Play"));
     setElText("prefRateHint", t("T'agrada l'aplicació? Una ressenya de 5 estrelles ens ajuda moltíssim a continuar millorant!", "¿Te gusta la aplicación? ¡Una reseña de 5 estrellas nos ayuda muchísimo a seguir mejorándola!", "Enjoying the app? A 5-star review helps us immensely to keep improving it!"));
 
-    setElText("prefBackupSectionLabel", t("💾 Còpia de Seguretat / Dades", "💾 Copia de Seguridad / Datos", "💾 Backup & Data Export"));
-    setElText("prefExportText", t("Exportar Còpia", "Exportar Copia", "Export Backup"));
-    setElText("prefImportText", t("Restaurar Còpia", "Restaurar Copia", "Restore Backup"));
+    setElText("prefBackupSectionLabel", t("Còpia de seguretat", "Copia de seguridad", "Backup"));
+    setElText("prefExportText", t("Exportar còpia", "Exportar copia", "Export backup"));
+    setElText("prefImportText", t("Restaurar còpia", "Restaurar copia", "Restore backup"));
     setElText("prefBackupHint", t("Guarda totes les teves plantes, històric i fotos en un fitxer segur al teu dispositiu.", "Guarda todas tus plantas, historial y fotos en un archivo seguro en tu dispositivo.", "Save all your plants, care history, and evolution photos in a safe file on your device."));
-    setElText("prefFeedbackSectionLabel", t("💬 Opinió i Millores", "💬 Opinión y Mejoras", "💬 Feedback & Suggestions"));
-    setElText("prefFeedbackBtnText", t("Enviar Suggeriments o Dubtes", "Enviar Sugerencias o Dudas", "Send Feedback & Ideas"));
+    setElText("prefFeedbackSectionLabel", t("Contacte", "Contacto", "Contact"));
+    setElText("prefFeedbackBtnText", t("Enviar suggeriments o dubtes", "Enviar sugerencias o dudas", "Send suggestions or feedback"));
     setElText("prefFeedbackHint", t(
       "Tens alguna idea per millorar l'app o has trobat alguna errada? Digue'ns-ho per seguir millorant.",
       "¿Tienes alguna idea para mejorar la app o has encontrado un error? Cuéntanoslo para seguir mejorando.",
       "Have an idea to improve the app or spotted a bug? Let us know so we can keep making it better."
     ));
-    setElText("prefLegalSectionLabel", t("⚖️ Legalitat i Privacitat", "⚖️ Legalidad y Privacidad", "⚖️ Legal & Privacy"));
+    setElText("prefLegalSectionLabel", t("Legalitat i privacitat", "Legalidad y privacidad", "Legal & privacy"));
     setElText("prefLegalTermsText", t("Avís Legal i Condicions", "Aviso Legal y Condiciones", "Terms of Service"));
     setElText("prefLegalPrivacyText", t("Política de Privacitat", "Política de Privacidad", "Privacy Policy"));
     setElText("prefCloseBtn", t("Fet", "Listo", "Done"));
+
+    // Modal Nova Fotografia
+    setElText("gallerySourceModalTitle", t("Nova fotografia", "Nueva fotografía", "New photo"));
+    setElText("gallerySourceCameraTitle", t("Fer foto amb la càmera", "Hacer foto con la cámara", "Take photo with camera"));
+    setElText("gallerySourceCameraDesc", t("Obre la càmera del mòbil", "Abre la cámara del móvil", "Open device camera"));
+    setElText("gallerySourceGalleryTitle", t("Adjuntar de la galeria", "Adjuntar de la galería", "Attach from gallery"));
+    setElText("gallerySourceGalleryDesc", t("Tria fotos desades al dispositiu", "Elige fotos guardadas en el dispositivo", "Choose photos saved on device"));
 
     // Modal de Feedback
     setElText("feedbackModalTitle", t("💬 Envia'ns el teu Feedback", "💬 Envíanos tu Feedback", "💬 Send Us Your Feedback"));
