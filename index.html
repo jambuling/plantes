@@ -252,6 +252,53 @@
       color: var(--text-muted);
     }
 
+    .btn-filter-trigger {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      font-size: 0.90rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.18s ease;
+      font-family: inherit;
+      box-shadow: var(--shadow-sm);
+      white-space: nowrap;
+    }
+    .btn-filter-trigger:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent);
+    }
+    .btn-filter-trigger.has-active-filters {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    body.dark-mode .btn-filter-trigger.has-active-filters {
+      background: rgba(37, 106, 56, 0.3);
+      border-color: #4ade80;
+      color: #86efac;
+    }
+    .filter-count-badge {
+      background: #256a38;
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 12px;
+      padding: 1px 7px;
+      min-width: 18px;
+      text-align: center;
+      line-height: 1.4;
+    }
+    body.dark-mode .filter-count-badge {
+      background: #4ade80;
+      color: #0d1610;
+    }
+
     .filters-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
     select {
@@ -625,29 +672,79 @@
       animation: successPulse 0.55s ease;
     }
 
-    /* TABLE */
-    .table-container {
+    /* VISTA DE FOTOS TIPUS INSTAGRAM (3 COLUMNES) */
+    .insta-grid {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 25px;
+    }
+    @media (min-width: 640px) {
+      .insta-grid {
+        gap: 10px;
+      }
+    }
+    .insta-grid-item {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      overflow-x: auto;
-      box-shadow: var(--shadow-sm);
-      display: none;
-      padding: 2px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
     }
-
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
-    th {
-      background: #edf3ec;
-      padding: 12px 14px;
-      font-weight: 700;
-      color: #243525;
-      border-bottom: 2px solid var(--border-strong);
+    .insta-grid-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+    }
+    .insta-grid-item:active {
+      transform: scale(0.97);
+    }
+    .insta-grid-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+    .insta-grid-item:hover .insta-grid-img {
+      transform: scale(1.04);
+    }
+    .insta-gradient-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 24px 8px 8px 8px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.45) 60%, rgba(0, 0, 0, 0) 100%);
+      display: flex;
+      align-items: flex-end;
+      pointer-events: none;
+    }
+    .insta-plant-name {
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      display: block;
     }
-    td { padding: 12px 14px; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
-    tr:hover td { background: #fafcf9; }
-    .table-img { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid var(--border-subtle); }
+    @media (max-width: 480px) {
+      .insta-gradient-overlay {
+        padding: 18px 5px 5px 5px;
+      }
+      .insta-plant-name {
+        font-size: 0.72rem;
+      }
+    }
 
     /* MODAL */
     .modal-overlay {
@@ -1432,17 +1529,8 @@
       .search-box {
         min-width: 100%;
       }
-      .filters-row {
+      .btn-filter-trigger {
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .filters-row select, .view-toggle {
-        width: 100%;
-      }
-      .view-toggle button {
-        flex: 1;
         justify-content: center;
       }
       .plants-grid {
@@ -2121,78 +2209,18 @@
       <input type="text" id="searchInput" placeholder="Cerca per nom comú o científic...">
     </div>
 
-    <div class="filters-row">
-      <select id="statusFilter">
-        <option value="all">Tots els estats</option>
-        <option value="overdue">🏺 Toca revisar reg (avui / pendent)</option>
-        <option value="due_soon">🟡 Avis: Toca aviat (1-2 dies)</option>
-        <option value="ok">🟢 Al dia</option>
-        <option value="none">⚪ Sense registre de reg</option>
-      </select>
-
-      <select id="zoneFilter">
-        <option value="all">Totes les zones</option>
-        <option value="interior">🏠 Interior</option>
-        <option value="exterior">☀️ Exterior</option>
-      </select>
-
-      <select id="roomFilter">
-        <option value="all">📍 Totes les habitacions</option>
-        <option value="salo">🛋️ Saló</option>
-        <option value="cuina">🍳 Cuina</option>
-        <option value="dormitori">🛏️ Dormitori</option>
-        <option value="bany">🚿 Bany</option>
-        <option value="despatx">💼 Despatx</option>
-        <option value="rebedor">🚪 Rebedor</option>
-        <option value="terrassa">🪴 Terrassa</option>
-        <option value="balco">☀️ Balcó</option>
-        <option value="pati">🌿 Pati</option>
-        <option value="altres">📦 Altres</option>
-      </select>
-
-      <select id="difficultyFilter">
-        <option value="all">Totes les dificultats</option>
-        <option value="molt_facil">🟢 Molt fàcil</option>
-        <option value="facil">🔵 Fàcil</option>
-        <option value="mitjana">🟡 Mitjana</option>
-      </select>
-
-      <select id="sortFilter" title="Criteri d'ordenació">
-        <option value="urgency">💧 Toca regar abans (Urgència)</option>
-        <option value="name_asc">🔤 Alfabètic (A - Z)</option>
-        <option value="name_desc">🔤 Alfabètic (Z - A)</option>
-      </select>
-
-      <div class="view-toggle">
-        <button id="viewGridBtn" class="active" title="Vista de Targetes">▦ Targetes</button>
-        <button id="viewTableBtn" title="Vista de Taula">▤ Taula</button>
-        <button id="viewCalendarBtn" title="Vista de Calendari Setmanal i Mensual">📅 Calendari</button>
-      </div>
-    </div>
+    <button type="button" class="btn-filter-trigger" id="openFilterModalBtn" onclick="openFilterModal()" title="Obrir filtres i opcions de visualització">
+      <span>🌪️</span>
+      <span id="filterModalBtnText">Filtres i Vista</span>
+      <span class="filter-count-badge" id="filterCountBadge" style="display:none;">0</span>
+    </button>
   </div>
 
   <!-- GRID -->
   <div class="plants-grid" id="plantsGrid"></div>
 
-  <!-- TABLE -->
-  <div class="table-container" id="plantsTableContainer">
-    <table>
-      <thead>
-        <tr id="tableHeaderRow">
-          <th>Foto</th>
-          <th>Nom Comú</th>
-          <th>Estat Reg</th>
-          <th>Proper Reg</th>
-          <th>Estat Adob</th>
-          <th>Proper Adob</th>
-          <th>Dificultat</th>
-          <th>Zona</th>
-          <th>Acció Ràpida</th>
-        </tr>
-      </thead>
-      <tbody id="plantsTableBody"></tbody>
-    </table>
-  </div>
+  <!-- VISTA FOTOS (3 COLUMNES, TIPUS INSTAGRAM) -->
+  <div class="insta-grid" id="plantsTableContainer"></div>
 
   <!-- CALENDAR VIEW (SETMANAL + MENSUAL) -->
   <div class="calendar-container" id="plantsCalendarContainer">
@@ -2810,6 +2838,105 @@
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top: 16px;">
         <button type="button" class="btn-action" id="quickActionCancelBtn" style="background:#e5e7eb; color:#374151;" onclick="closeModal('quickActionDateModal')">Cancel·lar</button>
         <button type="button" class="btn-action btn-water-action" id="quickActionConfirmBtn" onclick="confirmQuickActionDate()">💾 Guardar registre</button>
+      </div>
+    </div>
+  </div>
+<!-- MODAL FILTRES I VISUALITZACIÓ -->
+<div class="modal-overlay" id="filterModal">
+  <div class="modal-card" style="max-width: 500px; max-height: 90vh; overflow-y: auto;">
+    <button class="modal-close" onclick="closeModal('filterModal')" aria-label="Tancar finestra">&times;</button>
+    <div class="modal-content" style="padding: 24px;">
+      <h2 id="filterModalTitle" style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
+        🌪️ Filtres i Visualització
+      </h2>
+      <p id="filterModalSubtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
+        Tria com vols veure les plantes i filtra per estat, ubicació o dificultat.
+      </p>
+
+      <!-- OPCIONS DE VISTA (3 BOTONS) -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="filterViewSectionLabel">👁️ Tipus de Visualització</span>
+        <div class="pref-options-grid">
+          <button type="button" class="pref-option-btn active" id="viewGridBtn" onclick="setActiveViewMode('grid')">
+            ▦ <span id="viewGridBtnText">Targetes</span>
+          </button>
+          <button type="button" class="pref-option-btn" id="viewTableBtn" onclick="setActiveViewMode('photos')">
+            📸 <span id="viewTableBtnText">Fotos (3 col.)</span>
+          </button>
+          <button type="button" class="pref-option-btn" id="viewCalendarBtn" onclick="setActiveViewMode('calendar')">
+            📅 <span id="viewCalendarBtnText">Calendari</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CRITERI D'ORDENACIÓ -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="filterSortSectionLabel">↕️ Criteri d'ordenació</span>
+        <select id="sortFilter" class="pref-select" title="Criteri d'ordenació" onchange="handleSortFilterChange(this.value)">
+          <option value="urgency">💧 Toca regar abans (Urgència)</option>
+          <option value="name_asc">🔤 Alfabètic (A - Z)</option>
+          <option value="name_desc">🔤 Alfabètic (Z - A)</option>
+        </select>
+      </div>
+
+      <!-- ESTAT DE REG -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="filterStatusSectionLabel">💧 Estat de Reg</span>
+        <select id="statusFilter" class="pref-select" onchange="renderPlants(); updateFilterActiveBadge();">
+          <option value="all">Tots els estats</option>
+          <option value="overdue">🏺 Toca revisar reg (avui / pendent)</option>
+          <option value="due_soon">🟡 Avis: Toca aviat (1-2 dies)</option>
+          <option value="ok">🟢 Al dia</option>
+          <option value="none">⚪ Sense registre de reg</option>
+        </select>
+      </div>
+
+      <!-- UBICACIÓ (ZONA) -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="filterZoneSectionLabel">📍 Ubicació Principal</span>
+        <select id="zoneFilter" class="pref-select" onchange="renderPlants(); updateFilterActiveBadge();">
+          <option value="all">Totes les zones</option>
+          <option value="interior">🏠 Interior</option>
+          <option value="exterior">☀️ Exterior</option>
+        </select>
+      </div>
+
+      <!-- HABITACIÓ / ESPAI -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="filterRoomSectionLabel">🛋️ Habitació o Espai</span>
+        <select id="roomFilter" class="pref-select" onchange="renderPlants(); updateFilterActiveBadge();">
+          <option value="all">📍 Totes les habitacions</option>
+          <option value="salo">🛋️ Saló</option>
+          <option value="cuina">🍳 Cuina</option>
+          <option value="dormitori">🛏️ Dormitori</option>
+          <option value="bany">🚿 Bany</option>
+          <option value="despatx">💼 Despatx</option>
+          <option value="rebedor">🚪 Rebedor</option>
+          <option value="terrassa">🪴 Terrassa</option>
+          <option value="balco">☀️ Balcó</option>
+          <option value="pati">🌿 Pati</option>
+          <option value="altres">📦 Altres</option>
+        </select>
+      </div>
+
+      <!-- DIFICULTAT -->
+      <div class="pref-section" style="margin-bottom: 22px;">
+        <span class="pref-section-label" id="filterDiffSectionLabel">⭐ Dificultat de Cures</span>
+        <select id="difficultyFilter" class="pref-select" onchange="renderPlants(); updateFilterActiveBadge();">
+          <option value="all">Totes les dificultats</option>
+          <option value="molt_facil">🟢 Molt fàcil</option>
+          <option value="facil">🔵 Fàcil</option>
+          <option value="mitjana">🟡 Mitjana</option>
+        </select>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
+        <button type="button" class="btn-action" id="resetFiltersBtn" style="background: var(--bg-tertiary); color: var(--text-main); border: 1px solid var(--border-subtle); padding: 8px 16px; font-size: 0.84rem;" onclick="resetAllFilters()">
+          🔄 Restablir filtres
+        </button>
+        <button type="button" class="btn-action" id="closeFilterBtn" style="background: #256a38; color: white; padding: 8px 22px; font-weight: 600;" onclick="closeModal('filterModal')">
+          Fet
+        </button>
       </div>
     </div>
   </div>
@@ -4993,7 +5120,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   // RENDERITZACIÓ
   // -------------------------------------------------------------
   const gridEl = document.getElementById("plantsGrid");
-  const tableBodyEl = document.getElementById("plantsTableBody");
+  const instaGridEl = document.getElementById("plantsTableContainer");
   const emptyStateEl = document.getElementById("emptyState");
 
   function bulkWaterAllDueToday() {
@@ -5129,7 +5256,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (filtered.length === 0) {
       emptyStateEl.style.display = "block";
       gridEl.innerHTML = "";
-      tableBodyEl.innerHTML = "";
+      if (instaGridEl) instaGridEl.innerHTML = "";
       return;
     } else {
       emptyStateEl.style.display = "none";
@@ -5211,44 +5338,16 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       `;
     }).join('');
 
-    tableBodyEl.innerHTML = filtered.map(plant => {
-      const ws = computeWaterStatus(plant);
-      const fs = computeFertStatus(plant);
-
-      return `
-        <tr id="plant-row-${plant.id}">
-          <td>
-            <img class="table-img" src="${plant.photo}" alt="${plant.name}" onclick="openPlantModal('${plant.id}')">
-          </td>
-          <td>
-            <strong>${plant.name}</strong><br>
-            <span style="font-size:0.75rem; color:var(--text-muted); font-style:italic;">${plant.scientific}</span>
-          </td>
-          <td id="plant-row-water-badge-${plant.id}">
-            <span class="badge" style="background:${getBadgeColor(ws.status)}; color:${getBadgeTextColor(ws.status)};">
-              ${ws.badgeText}
-            </span>
-          </td>
-          <td id="plant-row-water-dates-${plant.id}"><strong>${ws.nextText}</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">${ws.lastText}</span></td>
-          <td id="plant-row-fert-badge-${plant.id}">
-            <span class="badge" style="background:${getBadgeColor(fs.status)}; color:${getBadgeTextColor(fs.status)};">
-              ${fs.badgeText}
-            </span>
-          </td>
-          <td id="plant-row-fert-dates-${plant.id}"><strong>${fs.nextText}</strong></td>
-          <td><span class="badge ${plant.difficultyClass}">${trText(plant.difficultyLabel)}</span></td>
-          <td>${trText(plant.zoneLabel)}<br><span style="font-size:0.75rem; color:var(--text-muted);">${getRoomLabel(plant.room || (plant.zone === 'exterior' ? 'terrassa' : 'salo'))}</span></td>
-          <td>
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-row-water-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'water', event)">${ws.isToday ? t('✅ Regat', '✅ Regado', '✅ Watered') : t('💧 Regat', '💧 Regado', '💧 Water')}</button>
-              <button class="btn-action btn-snooze-action" style="padding:4px 7px; font-size:0.72rem;" onclick="snoozeWater('${plant.id}', 1, event)" title="${t('Posposar reg 1 dia', 'Posponer riego 1 día', 'Postpone watering 1 day')}">⏳+1d</button>
-              <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-row-fert-btn-${plant.id}" style="padding:4px 8px; font-size:0.74rem;" onclick="recordAction('${plant.id}', 'fert', event)">${fs.isToday ? t('✅ Abonat', '✅ Abonado', '✅ Fertilized') : t('🧪 Abonat', '🧪 Abonado', '🧪 Fertilize')}</button>
-              <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')" aria-label="${t('Veure històric de', 'Ver historial de', 'View history of')} ${plant.name}" title="${t('Històric de cures', 'Historial de cuidados', 'Care history')}">📜</button>
-            </div>
-          </td>
-        </tr>
-      `;
-    }).join('');
+    if (instaGridEl) {
+      instaGridEl.innerHTML = filtered.map(plant => `
+        <div class="insta-grid-item" onclick="openPlantModal('${plant.id}')" title="${plant.name}">
+          <img class="insta-grid-img" src="${plant.photo}" alt="${plant.name}" loading="lazy">
+          <div class="insta-gradient-overlay">
+            <span class="insta-plant-name">${plant.name}</span>
+          </div>
+        </div>
+      `).join('');
+    }
   }
 
   function getBadgeColor(st) {
@@ -6436,22 +6535,21 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       sortSel.options[2].text = t("🔤 Ordenar: Alfabètic (Z → A)", "🔤 Ordenar: Alfabético (Z → A)", "🔤 Sort: Alphabetical (Z → A)");
     }
 
-    setElText("viewGridBtn", t("🗂️ Targetes", "🗂️ Tarjetas", "🗂️ Cards"));
-    setElText("viewTableBtn", t("📊 Taula", "📊 Tabla", "📊 Table"));
-    setElText("viewCalendarBtn", t("📅 Calendari", "📅 Calendario", "📅 Calendar"));
-
-    const thRow = document.getElementById("tableHeaderRow");
-    if (thRow && thRow.children.length >= 9) {
-      thRow.children[0].innerText = t("Planta", "Planta", "Plant");
-      thRow.children[1].innerText = t("Nom / Científic", "Nombre / Científico", "Name / Scientific");
-      thRow.children[2].innerText = t("Estat Reg", "Estado Riego", "Water Status");
-      thRow.children[3].innerText = t("Proper Reg / Darrer", "Próximo Riego / Último", "Next Water / Last");
-      thRow.children[4].innerText = t("Estat Adob", "Estado Abono", "Fertilizer Status");
-      thRow.children[5].innerText = t("Proper Adob", "Próximo Abono", "Next Fertilizer");
-      thRow.children[6].innerText = t("Dificultat", "Dificultad", "Difficulty");
-      thRow.children[7].innerText = t("Ubicació", "Ubicación", "Location");
-      thRow.children[8].innerText = t("Accions ràpides", "Acciones rápidas", "Quick Actions");
-    }
+    // Modal de Filtres i Visualització
+    setElText("filterModalBtnText", t("Filtres i Vista", "Filtros y Vista", "Filters & View"));
+    setElText("filterModalTitle", t("🌪️ Filtres i Visualització", "🌪️ Filtros y Visualización", "🌪️ Filters & View Options"));
+    setElText("filterModalSubtitle", t("Tria com vols veure les plantes i filtra per estat, ubicació o dificultat.", "Elige cómo ver las plantas y filtra por estado, ubicación o dificultad.", "Choose how to view your plants and filter by status, location or care difficulty."));
+    setElText("filterViewSectionLabel", t("👁️ Tipus de Visualització", "👁️ Tipo de Visualización", "👁️ View Mode"));
+    setElText("viewGridBtnText", t("Targetes", "Tarjetas", "Cards"));
+    setElText("viewTableBtnText", t("Fotos (3 col.)", "Fotos (3 col.)", "Photos (3 col.)"));
+    setElText("viewCalendarBtnText", t("Calendari", "Calendario", "Calendar"));
+    setElText("filterSortSectionLabel", t("↕️ Criteri d'ordenació", "↕️ Criterio de ordenación", "↕️ Sort Order"));
+    setElText("filterStatusSectionLabel", t("💧 Estat de Reg", "💧 Estado de Riego", "💧 Water Status"));
+    setElText("filterZoneSectionLabel", t("📍 Ubicació Principal", "📍 Ubicación Principal", "📍 Main Location"));
+    setElText("filterRoomSectionLabel", t("🛋️ Habitació o Espai", "🛋️ Habitación o Espacio", "🛋️ Room or Spot"));
+    setElText("filterDiffSectionLabel", t("⭐ Dificultat de Cures", "⭐ Dificultad de Cuidados", "⭐ Care Difficulty"));
+    setElText("resetFiltersBtn", t("🔄 Restablir filtres", "🔄 Restablecer filtros", "🔄 Reset filters"));
+    setElText("closeFilterBtn", t("Fet", "Listo", "Done"));
 
     setElText("weeklyCalendarTitle", t("🗓️ Previsió Setmanal (Propers 7 dies)", "🗓️ Previsión Semanal (Próximos 7 días)", "🗓️ Weekly Forecast (Next 7 days)"));
     setElText("weeklyCalendarHint", t("Clica una planta per obrir la fitxa", "Haz clic en una planta para abrir la ficha", "Click any plant to view details"));
@@ -6887,71 +6985,122 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     }, 3200);
   }
 
+  // FILTRES I VISUALITZACIÓ UNIFICATS
+  function openFilterModal() {
+    updateFilterActiveBadge();
+    const m = document.getElementById("filterModal");
+    if (m) m.classList.add("active");
+  }
+
+  function updateFilterActiveBadge() {
+    let count = 0;
+    const statusSel = document.getElementById("statusFilter");
+    const zoneSel = document.getElementById("zoneFilter");
+    const roomSel = document.getElementById("roomFilter");
+    const diffSel = document.getElementById("difficultyFilter");
+    const sortSel = document.getElementById("sortFilter");
+
+    if (statusSel && statusSel.value !== "all") count++;
+    if (zoneSel && zoneSel.value !== "all") count++;
+    if (roomSel && roomSel.value !== "all") count++;
+    if (diffSel && diffSel.value !== "all") count++;
+    if (sortSel && sortSel.value !== "urgency") count++;
+
+    const badge = document.getElementById("filterCountBadge");
+    const triggerBtn = document.getElementById("openFilterModalBtn");
+
+    if (badge) {
+      badge.innerText = count;
+      badge.style.display = count > 0 ? "inline-block" : "none";
+    }
+    if (triggerBtn) {
+      triggerBtn.classList.toggle("has-active-filters", count > 0);
+    }
+  }
+
+  function resetAllFilters() {
+    const statusSel = document.getElementById("statusFilter");
+    const zoneSel = document.getElementById("zoneFilter");
+    const roomSel = document.getElementById("roomFilter");
+    const diffSel = document.getElementById("difficultyFilter");
+    const sortSel = document.getElementById("sortFilter");
+
+    if (statusSel) statusSel.value = "all";
+    if (zoneSel) zoneSel.value = "all";
+    if (roomSel) roomSel.value = "all";
+    if (diffSel) diffSel.value = "all";
+    if (sortSel) {
+      sortSel.value = "urgency";
+      try { localStorage.setItem("registre_plantes_sort_order", "urgency"); } catch(e) {}
+    }
+
+    updateFilterActiveBadge();
+    renderPlants();
+    showToast(t("Filtres restablerts", "Filtros restablecidos", "Filters reset"), "🔄");
+  }
+
+  function handleSortFilterChange(val) {
+    try { localStorage.setItem("registre_plantes_sort_order", val); } catch(e) {}
+    renderPlants();
+    updateFilterActiveBadge();
+  }
+
+  let currentViewMode = "grid"; // 'grid', 'photos', 'calendar'
+
+  function setActiveViewMode(mode) {
+    if (mode !== "grid" && mode !== "photos" && mode !== "calendar") mode = "grid";
+    currentViewMode = mode;
+    try { localStorage.setItem("registre_plantes_view_mode", mode); } catch(e) {}
+
+    const gridBtn = document.getElementById("viewGridBtn");
+    const photosBtn = document.getElementById("viewTableBtn");
+    const calendarBtn = document.getElementById("viewCalendarBtn");
+    const gridView = document.getElementById("plantsGrid");
+    const instaView = document.getElementById("plantsTableContainer");
+    const calendarView = document.getElementById("plantsCalendarContainer");
+
+    if (gridBtn) gridBtn.classList.toggle("active", mode === "grid");
+    if (photosBtn) photosBtn.classList.toggle("active", mode === "photos");
+    if (calendarBtn) calendarBtn.classList.toggle("active", mode === "calendar");
+
+    if (gridView) gridView.style.display = (mode === "grid") ? "grid" : "none";
+    if (instaView) instaView.style.display = (mode === "photos") ? "grid" : "none";
+
+    if (calendarView) {
+      if (mode === "calendar") {
+        calendarView.classList.add("active");
+        calendarView.style.display = "flex";
+        if (emptyStateEl) emptyStateEl.style.display = "none";
+        renderCalendar();
+      } else {
+        calendarView.classList.remove("active");
+        calendarView.style.display = "none";
+      }
+    }
+
+    renderPlants();
+  }
+
+  // Inicialització d'esdeveniments de cerca i filtres
   document.getElementById("searchInput").addEventListener("input", renderPlants);
-  document.getElementById("statusFilter").addEventListener("change", renderPlants);
-  document.getElementById("zoneFilter").addEventListener("change", renderPlants);
-  const roomFilterEl = document.getElementById("roomFilter");
-  if (roomFilterEl) roomFilterEl.addEventListener("change", renderPlants);
-  document.getElementById("difficultyFilter").addEventListener("change", renderPlants);
   
   const sortSelect = document.getElementById("sortFilter");
   if (sortSelect) {
-    const savedSort = localStorage.getItem("registre_plantes_sort_order");
-    if (savedSort) sortSelect.value = savedSort;
-    sortSelect.addEventListener("change", (e) => {
-      try { localStorage.setItem("registre_plantes_sort_order", e.target.value); } catch(err) {}
-      renderPlants();
-    });
+    try {
+      const savedSort = localStorage.getItem("registre_plantes_sort_order");
+      if (savedSort) sortSelect.value = savedSort;
+    } catch(err) {}
   }
 
-  const gridBtn = document.getElementById("viewGridBtn");
-  const tableBtn = document.getElementById("viewTableBtn");
-  const calendarBtn = document.getElementById("viewCalendarBtn");
-  const gridView = document.getElementById("plantsGrid");
-  const tableView = document.getElementById("plantsTableContainer");
-  const calendarView = document.getElementById("plantsCalendarContainer");
-
-  gridBtn.addEventListener("click", () => {
-    gridBtn.classList.add("active");
-    tableBtn.classList.remove("active");
-    if (calendarBtn) calendarBtn.classList.remove("active");
-    gridView.style.display = "grid";
-    tableView.style.display = "none";
-    if (calendarView) {
-      calendarView.classList.remove("active");
-      calendarView.style.display = "none";
-    }
-    renderPlants();
-  });
-
-  tableBtn.addEventListener("click", () => {
-    tableBtn.classList.add("active");
-    gridBtn.classList.remove("active");
-    if (calendarBtn) calendarBtn.classList.remove("active");
-    gridView.style.display = "none";
-    tableView.style.display = "block";
-    if (calendarView) {
-      calendarView.classList.remove("active");
-      calendarView.style.display = "none";
-    }
-    renderPlants();
-  });
-
-  if (calendarBtn) {
-    calendarBtn.addEventListener("click", () => {
-      calendarBtn.classList.add("active");
-      gridBtn.classList.remove("active");
-      tableBtn.classList.remove("active");
-      gridView.style.display = "none";
-      tableView.style.display = "none";
-      if (emptyStateEl) emptyStateEl.style.display = "none";
-      if (calendarView) {
-        calendarView.classList.add("active");
-        calendarView.style.display = "flex";
-        renderCalendar();
-      }
-    });
+  // Recupera la vista guardada o inicia en 'grid'
+  try {
+    const savedView = localStorage.getItem("registre_plantes_view_mode") || "grid";
+    setActiveViewMode(savedView);
+  } catch(e) {
+    setActiveViewMode("grid");
   }
+
+  updateFilterActiveBadge();
 
   // Inicialització
   initPreferences();
