@@ -2211,138 +2211,1239 @@
       margin-top: 6px;
       font-style: italic;
     }
+  
+    /* =============================================================
+       DISSENY NADIU APP PER SMARTPHONE (FOLIARI)
+       ============================================================= */
+    :root {
+      --app-header-bg: #3a353b;
+      --app-lime: #c8f53c;
+      --app-nav-bg: #bbf23d;
+      --app-nav-text: #283218;
+      --app-nav-active: #1e2610;
+      --app-info-bg: #edf2f6;
+      --app-info-border: #dbe4ec;
+      --app-loading-bg: #2f5d60;
+      --app-amazon-orange: #ea580c;
+      --app-amazon-hover: #c2410c;
+      --app-toxic-bg: #fde8e8;
+      --app-toxic-text: #9b1c1c;
+      --app-toxic-border: #f8b4b4;
+    }
+
+    body.dark-mode {
+      --app-header-bg: #262227;
+      --app-lime: #c8f53c;
+      --app-nav-bg: #bbf23d;
+      --app-nav-text: #283218;
+      --app-info-bg: #1c2520;
+      --app-info-border: #29382f;
+      --app-toxic-bg: rgba(185, 28, 28, 0.22);
+      --app-toxic-text: #fca5a5;
+      --app-toxic-border: rgba(239, 68, 68, 0.4);
+    }
+
+    /* PANTALLA D'ENTRADA LOADING (Loading.png) */
+    .app-loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background-color: var(--app-loading-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.55s ease;
+    }
+    .app-loading-screen.loaded {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .loading-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .loading-logo-wrap {
+      width: 120px;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: loadingPulse 2.2s ease-in-out infinite;
+    }
+    .loading-droplet-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.25));
+    }
+    .loading-brand-title {
+      font-family: var(--font-display);
+      font-size: 3.2rem;
+      font-weight: 500;
+      color: var(--app-lime);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .loading-dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .loading-dots span {
+      width: 8px;
+      height: 8px;
+      background-color: var(--app-lime);
+      border-radius: 50%;
+      animation: loadingDotBounce 1.4s infinite ease-in-out both;
+    }
+    .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes loadingPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    @keyframes loadingDotBounce {
+      0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* CONTENIDOR NADIU APP SHELL */
+    body {
+      background-color: var(--bg-primary);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .app-shell {
+      max-width: 600px;
+      width: 100%;
+      min-height: 100vh;
+      background: var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-bottom: 82px;
+      box-shadow: 0 0 50px rgba(0,0,0,0.08);
+    }
+
+    /* HEADER NADIU (3a353b) */
+    .app-header {
+      background: var(--app-header-bg);
+      color: var(--app-lime);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+      padding: 12px 18px;
+      padding-top: max(12px, env(safe-area-inset-top, 12px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-header-back {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--app-lime);
+      font-size: 1.5rem;
+      font-weight: 700;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background 0.15s;
+    }
+    .btn-header-back:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .app-brand-title {
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      font-weight: 600;
+      color: var(--app-lime);
+      letter-spacing: -0.02em;
+      cursor: pointer;
+      user-select: none;
+    }
+    .header-right {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-header-bell {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(200, 245, 60, 0.25);
+      color: var(--app-lime);
+      font-size: 1.25rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .btn-header-bell:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+    .bell-badge-dot {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      width: 9px;
+      height: 9px;
+      background: #f59e0b;
+      border: 2px solid var(--app-header-bg);
+      border-radius: 50%;
+    }
+
+    /* DROPDOWN RÀPID D'ALERTES I TASQUES (BELL) */
+    .notif-quick-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: min(88vw, 360px);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+      padding: 16px;
+      z-index: 1200;
+      display: none;
+      animation: fadeInDown 0.2s ease-out;
+    }
+    .notif-quick-panel.active {
+      display: block;
+    }
+    .notif-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .btn-close-notif-panel {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .notif-panel-body {
+      max-height: 280px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .notif-quick-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .notif-quick-item:hover {
+      background: var(--border-subtle);
+    }
+    .notif-quick-item img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    .notif-panel-footer {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 10px;
+      margin-top: 12px;
+      text-align: center;
+    }
+    .btn-notif-settings {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* PANTALLES / VISTES APP (app-view) */
+    .app-main-content {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .app-view {
+      display: none;
+      padding: 16px;
+      width: 100%;
+      animation: viewSlideIn 0.22s ease-out;
+    }
+    .app-view.active {
+      display: block;
+    }
+    @keyframes viewSlideIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ROW DE CERCA I FILTRES (Galeria) */
+    .app-search-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      width: 100%;
+    }
+    .app-search-row .search-box {
+      flex: 1;
+      position: relative;
+    }
+    .app-search-row .search-box input {
+      width: 100%;
+      padding: 12px 14px 12px 42px;
+      border-radius: 999px;
+      border: 1px solid #d5ded8;
+      background: var(--bg-surface);
+      font-size: 0.92rem;
+      color: var(--text-main);
+      outline: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .app-search-row .search-box input:focus {
+      border-color: #275d36;
+      box-shadow: 0 0 0 3px rgba(39, 93, 54, 0.12);
+    }
+    .app-search-row .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.05rem;
+      color: var(--text-muted);
+    }
+    .btn-tune-trigger {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 1px solid #d5ded8;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      transition: all 0.18s;
+    }
+    .btn-tune-trigger:hover {
+      background: #eef4f0;
+      border-color: #275d36;
+    }
+    .btn-tune-trigger.has-active-filters {
+      background: #edf5ee;
+      border-color: #275d36;
+      color: #275d36;
+    }
+
+    /* BARRA INFERIOR DE NAVEGACIÓ (Bottom Nav Bar - #bbf23d) */
+    .bottom-nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 600px;
+      height: 68px;
+      background: var(--app-nav-bg);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+      padding-bottom: max(6px, env(safe-area-inset-bottom, 6px));
+      box-shadow: 0 -2px 14px rgba(0,0,0,0.08);
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .nav-tab {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--app-nav-text);
+      font-family: inherit;
+      font-size: 0.70rem;
+      font-weight: 600;
+      padding: 4px 2px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .nav-tab-icon {
+      width: 38px;
+      height: 28px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.18s, transform 0.18s;
+    }
+    .nav-tab.active {
+      color: var(--app-nav-active);
+      font-weight: 800;
+    }
+    .nav-tab.active .nav-tab-icon {
+      background: rgba(30, 40, 15, 0.15);
+      transform: scale(1.08);
+    }
+    .nav-tab-label {
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    /* TARGETA DE PLANTA (Galeria - Vista llista.png) */
+    .plants-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+    .plant-card {
+      background: var(--bg-card);
+      border-radius: 18px;
+      border: 1px solid var(--border-subtle);
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .plant-card .card-image-wrap {
+      width: 100%;
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: #eef2f5;
+    }
+    .plant-card .card-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .plant-card:hover .card-image-wrap img {
+      transform: scale(1.02);
+    }
+    .plant-card .card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    .plant-card .plant-name {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.15;
+      margin-bottom: 2px;
+      cursor: pointer;
+    }
+    .plant-card .plant-scientific {
+      font-style: italic;
+      font-size: 0.90rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      cursor: pointer;
+    }
+
+    /* CAIXES PRÒXIM REG I PRÒXIMA FERTILITZACIÓ (#edf2f6) */
+    .tracker-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tracker-card {
+      background: var(--app-info-bg) !important;
+      border: 1px solid var(--app-info-border) !important;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .tracker-box-label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: #475569;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    body.dark-mode .tracker-box-label {
+      color: #94a3b8;
+    }
+    .tracker-box-date {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .tracker-box-last {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .tracker-btn-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+    .btn-app-water {
+      background: #5f9b65;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transition: background 0.15s;
+    }
+    .btn-app-water:hover {
+      background: #4a8250;
+    }
+    .btn-app-water.btn-done-today {
+      background: #1b542a;
+    }
+    .btn-app-fert {
+      background: #2e7d32;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transition: background 0.15s;
+    }
+    .btn-app-fert:hover {
+      background: #1e5a23;
+    }
+    .btn-app-fert.btn-done-today {
+      background: #1b542a;
+    }
+    .btn-app-snooze, .btn-app-date {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .btn-app-snooze:hover, .btn-app-date:hover {
+      background: var(--border-subtle);
+    }
+    .btn-app-amazon {
+      background: var(--app-amazon-orange);
+      color: #ffffff !important;
+      text-decoration: none;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
+      transition: background 0.15s, transform 0.15s;
+    }
+    .btn-app-amazon:hover {
+      background: var(--app-amazon-hover);
+      transform: translateY(-1px);
+    }
+    .btn-app-amazon.secondary {
+      background: rgba(234, 88, 12, 0.12);
+      color: #ea580c !important;
+      border: 1px solid rgba(234, 88, 12, 0.3);
+      box-shadow: none;
+    }
+    .btn-app-amazon.secondary:hover {
+      background: rgba(234, 88, 12, 0.2);
+    }
+
+    /* VISTA GRAELLA 3 COLUMNES (Galeria - Vista graella.png) */
+    .insta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+    .insta-grid-item {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      background: #e2e8f0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .insta-grid-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+    .insta-grid-item:hover .insta-grid-img {
+      transform: scale(1.05);
+    }
+    .insta-gradient-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 45%, transparent 100%);
+      display: flex;
+      align-items: flex-end;
+      padding: 8px 6px;
+      pointer-events: none;
+    }
+    .insta-plant-name {
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.2;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    /* PANTALLA AFEGIR PLANTA (Afegir planta.png) */
+    .add-plant-screen-content {
+      padding: 8px 4px;
+    }
+    .view-screen-title {
+      font-family: var(--font-display);
+      font-size: 1.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .view-screen-subtitle {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 14px;
+      margin-bottom: 4px;
+    }
+    .view-screen-desc {
+      font-size: 0.90rem;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      line-height: 1.45;
+    }
+    .dashed-options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .dashed-action-card {
+      background: var(--bg-surface);
+      border: 2px dashed #93c5fd;
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .dashed-action-card:hover {
+      border-color: #3b82f6;
+      background: #f8fafc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.12);
+    }
+    body.dark-mode .dashed-action-card {
+      border-color: #334155;
+      background: #172033;
+    }
+    body.dark-mode .dashed-action-card:hover {
+      border-color: #60a5fa;
+      background: #1e293b;
+    }
+    .dashed-card-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: #eff6ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    body.dark-mode .dashed-card-icon-wrap {
+      background: #1e293b;
+    }
+    .dashed-card-icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+    .dashed-card-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .dashed-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .dashed-card-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .manual-add-link-wrap {
+      text-align: center;
+      margin-top: 14px;
+    }
+    .btn-manual-add {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 0.90rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+    .btn-manual-add:hover {
+      text-decoration: underline;
+    }
+
+    /* PANTALLA CALENDARI (Calendari.png) */
+    .calendar-screen-content {
+      padding: 8px 4px;
+    }
+
+    /* PANTALLA AJUSTAMENTS (Preferencies.png) */
+    .settings-screen-content {
+      padding: 8px 4px;
+    }
+    .settings-toggle-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-surface);
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* PANTALLA FITXA DE LA PLANTA (Fixta planta.png) */
+    .plant-detail-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1500;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0;
+    }
+    .plant-detail-overlay.active {
+      display: flex;
+    }
+    .plant-detail-card {
+      width: 100%;
+      max-width: 600px;
+      min-height: 100vh;
+      background: var(--bg-primary);
+      margin: 0;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: none;
+      padding-bottom: 40px;
+    }
+    .plant-detail-top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--app-header-bg);
+      color: #ffffff;
+      padding: 12px 16px;
+      padding-top: max(12px, env(safe-area-inset-top, 12px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .btn-detail-back {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .detail-top-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .detail-kebab-wrap {
+      position: relative;
+    }
+    .btn-detail-kebab {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .detail-kebab-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.22);
+      min-width: 180px;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 110;
+    }
+    .detail-kebab-menu.active {
+      display: flex;
+    }
+    .detail-kebab-menu button {
+      background: none;
+      border: none;
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .detail-kebab-menu button:hover {
+      background: var(--border-subtle);
+    }
+    .detail-kebab-menu button.danger {
+      color: #dc2626;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* CARRUSEL DE FOTOS SUPERPOSAT */
+    .plant-detail-card .modal-image-wrap {
+      width: 100%;
+      height: 300px;
+      position: relative;
+      background: #e2e8f0;
+    }
+    .plant-detail-card .modal-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.45);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 1.8rem;
+      font-weight: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      line-height: 1;
+      backdrop-filter: blur(4px);
+      transition: background 0.2s;
+    }
+    .carousel-arrow:hover {
+      background: rgba(0, 0, 0, 0.75);
+    }
+    .carousel-arrow.prev { left: 14px; }
+    .carousel-arrow.next { right: 14px; }
+
+    .plant-detail-content {
+      padding: 20px 18px;
+    }
+    .plant-name-detail {
+      font-family: var(--font-display);
+      font-size: 2.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+    .plant-scientific-detail {
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .plant-badges-detail {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .detail-trackers-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    /* CARD DE TOXICITAT I SEGURETAT (Soft Pink) */
+    .toxicity-alert-box {
+      background: var(--app-toxic-bg);
+      border: 1px solid var(--app-toxic-border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .toxicity-box-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toxicity-icon {
+      font-size: 1.2rem;
+    }
+    .toxicity-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: var(--app-toxic-text);
+      text-transform: uppercase;
+    }
+    .toxicity-body {
+      font-size: 0.86rem;
+      color: var(--app-toxic-text);
+      line-height: 1.45;
+    }
+
+    /* GALERIA A LA FITXA I CARD '+ NOVA FOTO' */
+    .gallery-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .gallery-count-pill {
+      background: #e3efe5;
+      color: #1e582e;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+    body.dark-mode .gallery-count-pill {
+      background: #193822;
+      color: #86efac;
+    }
+    .gallery-add-card {
+      border: 2px dashed #94a3b8 !important;
+      background: rgba(148, 163, 184, 0.08) !important;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s ease;
+      min-height: 80px;
+    }
+    .gallery-add-card:hover {
+      border-color: #256a38 !important;
+      background: #edf5ee !important;
+    }
+    .gallery-add-card-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px 4px;
+      color: var(--text-main);
+    }
+    .btn-app-photo-add {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .care-cards-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .care-detail-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .care-detail-item-title {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
   </style>
 </head>
 <body>
 
-<div class="container">
+<!-- PANTALLA D'ENTRADA LOADING (Loading.png - Abans de res) -->
+<div id="appLoadingScreen" class="app-loading-screen" aria-label="Carregant Foliari">
+  <div class="loading-content">
+    <div class="loading-logo-wrap">
+      <svg class="loading-droplet-svg" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 12 C60 12 18 64 18 96 C18 119.2 36.8 138 60 138 C83.2 138 102 119.2 102 96 C102 64 60 12 60 12 Z" fill="#204649" stroke="#c8f53c" stroke-width="3.5"/>
+        <path d="M60 22 C55 6 38 4 36 16 C34 28 48 28 60 22 Z" fill="#c8f53c"/>
+        <path d="M60 16 C60 -2 68 -4 74 6 C80 16 68 22 60 16 Z" fill="#b8ea3a"/>
+        <path d="M60 24 C68 12 84 14 82 26 C80 36 68 32 60 24 Z" fill="#c8f53c"/>
+        <path d="M36 102 C42 94 50 90 60 90 C70 90 78 94 84 102 C76 110 66 114 60 114 C54 114 44 110 36 102 Z" fill="#152f31"/>
+        <path d="M60 90 L60 66" stroke="#c8f53c" stroke-width="3" stroke-linecap="round"/>
+        <path d="M60 76 C52 70 48 78 60 82" fill="#c8f53c"/>
+        <path d="M60 70 C68 64 72 72 60 76" fill="#c8f53c"/>
+      </svg>
+    </div>
+    <div class="loading-brand-title">foliari</div>
+    <div class="loading-dots">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</div>
 
-  <!-- HEADER -->
-  <header>
-    <div class="header-content">
-      <div class="header-top">
-        <div>
-          <h1 id="appMainTitle">🌱 El Meu Registre de Plantes</h1>
-          <p class="header-subtitle" id="appMainSubtitle">Seguiment de reg, abonament i cures de les plantes domèstiques.</p>
+<div class="app-shell">
+
+  <!-- HEADER NADIU (3a353b) -->
+  <header class="app-header" id="appHeader">
+    <div class="header-left">
+      <button type="button" class="btn-header-back" id="headerBackBtn" onclick="handleHeaderBack()" aria-label="Enrere" style="display:none;">
+        ‹
+      </button>
+      <div class="app-brand-title" id="appBrandLogo" onclick="switchAppTab('plants')">foliari</div>
+    </div>
+
+    <div class="header-right">
+      <button type="button" class="btn-header-bell" id="headerBellBtn" onclick="toggleQuickNotifPanel()" aria-label="Notificacions i alertes">
+        <span>🔔</span>
+        <span class="bell-badge-dot" id="headerBellBadgeDot" style="display:none;"></span>
+      </button>
+
+      <!-- DROPDOWN RÀPID D'ALERTES I TASQUES (BELL) -->
+      <div class="notif-quick-panel" id="notifQuickPanel">
+        <div class="notif-panel-header">
+          <span style="font-weight:700; font-size:0.92rem; color:var(--text-main);">🔔 Alertes de Cures</span>
+          <button type="button" class="btn-close-notif-panel" onclick="toggleQuickNotifPanel(false)">×</button>
         </div>
-
-        <div class="header-actions">
-          <button type="button" class="btn-header" id="preferencesBtn" onclick="openPreferencesModal()" title="Preferències">
-            ⚙️ <span id="prefHeaderBtnLabel">Preferències</span>
-          </button>
-          <button class="btn-header btn-add-plant" id="addPlantHeaderBtn" onclick="openAddPlantModal()">
-            ➕ Afegir Nova Planta
+        <div class="notif-panel-body" id="notifPanelBody"></div>
+        <div class="notif-panel-footer">
+          <button type="button" class="btn-notif-settings" onclick="switchAppTab('settings'); toggleQuickNotifPanel(false);">
+            ⚙️ Ajustaments de Notificacions
           </button>
         </div>
       </div>
-      
-      <div class="stats-bar" id="statsBar"></div>
     </div>
   </header>
 
-  <!-- CONTROLS -->
-  <div class="controls">
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Cerca per nom comú o científic...">
+  <!-- CONTINGUT PRINCIPAL DE LES PANTALLES DE L'APP -->
+  <main class="app-main-content">
+
+    <!-- PANTALLA 1: LES MEVES PLANTES (Galeria - Vista llista.png & Vista graella.png) -->
+    <div class="app-view active" id="viewPlants">
+      <!-- Cerca i filtre ràpid -->
+      <div class="app-search-row">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Cerca per nom, espècie, ubicació...">
+        </div>
+        <button type="button" class="btn-tune-trigger" id="openFilterModalBtn" onclick="openFilterModal()" title="Filtres i Vista" aria-label="Filtres">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line>
+            <line x1="9" y1="8" x2="15" y2="8"></line>
+            <line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
+          <span class="filter-count-badge" id="filterCountBadge" style="display:none;">0</span>
+        </button>
+      </div>
+
+      <!-- Barra d'estadístiques compacta -->
+      <div class="stats-bar" id="statsBar" style="display:none;"></div>
+
+      <!-- VISTA LLISTA (Galeria - Vista llista.png) -->
+      <div class="plants-grid" id="plantsGrid"></div>
+
+      <!-- VISTA GRAELLA 3 COLUMNES (Galeria - Vista graella.png) -->
+      <div class="insta-grid" id="plantsTableContainer" style="display:none;"></div>
+
+      <!-- ESTAT BUIT -->
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <h2 id="emptyStateTitle" style="font-size: 1.25rem; font-family: var(--font-display); font-weight: 600; color: var(--text-main); margin-bottom: 4px;">No s'ha trobat cap planta</h2>
+        <p id="emptyStateDesc">Prova de canviar els filtres de cerca o afegeix una nova planta.</p>
+        <button type="button" class="btn-app-water" style="margin-top:14px; align-self:center;" onclick="switchAppTab('add')">➕ Afegir Planta</button>
+      </div>
     </div>
 
-    <button type="button" class="btn-filter-trigger" id="openFilterModalBtn" onclick="openFilterModal()" title="Obrir filtres i opcions de visualització">
-      <span>🌪️</span>
-      <span id="filterModalBtnText">Filtres i Vista</span>
-      <span class="filter-count-badge" id="filterCountBadge" style="display:none;">0</span>
-    </button>
-  </div>
+    <!-- PANTALLA 2: AFEGIR PLANTA (Afegir planta.png) -->
+    <div class="app-view" id="viewAddPlant">
+      <div class="add-plant-screen-content">
+        <h1 class="view-screen-title" id="addScreenMainTitle">Afegir nova planta</h1>
+        <h2 class="view-screen-subtitle" id="addScreenSubtitle">Com vols afegir la teva planta?</h2>
+        <p class="view-screen-desc" id="addScreenDesc">
+          Tria una opció per identificar o registrar una nova planta al teu foliari:
+        </p>
 
-  <!-- GRID -->
-  <div class="plants-grid" id="plantsGrid"></div>
+        <!-- INPUTS D'ARXIU OCULTS -->
+        <input type="file" id="aiCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleAIPhotoFile(event)">
+        <input type="file" id="aiGalleryInput" accept="image/*" style="display:none;" onchange="handleAIPhotoFile(event)">
 
-  <!-- VISTA FOTOS (3 COLUMNES, TIPUS INSTAGRAM) -->
-  <div class="insta-grid" id="plantsTableContainer"></div>
-
-  <!-- CALENDAR VIEW (SETMANAL + MENSUAL) -->
-  <div class="calendar-container" id="plantsCalendarContainer">
-    <!-- PREVISIÓ SETMANAL (7 DIES) -->
-    <div class="calendar-panel">
-      <div class="calendar-panel-header">
-        <div class="calendar-panel-title" id="weeklyCalendarTitle">🗓️ Previsió Setmanal (Propers 7 dies)</div>
-        <span id="weeklyCalendarHint" style="font-size: 0.80rem; color: var(--text-muted);">Fes clic a qualsevol planta per obrir la seva fitxa</span>
-      </div>
-      <div class="week-strip-grid" id="weeklyCalendarGrid"></div>
-    </div>
-
-    <!-- CALENDARI MENSUAL -->
-    <div class="calendar-panel">
-      <div class="calendar-panel-header">
-        <div class="calendar-panel-title" id="calendarMonthTitle">📅 Calendari Mensual</div>
-        <div class="month-nav-group">
-          <button type="button" class="btn-cal-nav" id="calPrevMonthBtn" onclick="changeCalendarMonth(-1)">‹ Mes anterior</button>
-          <button type="button" class="btn-cal-nav" id="calTodayBtn" onclick="resetCalendarToToday()">Avui</button>
-          <button type="button" class="btn-cal-nav" id="calNextMonthBtn" onclick="changeCalendarMonth(1)">Mes següent ›</button>
-        </div>
-      </div>
-      <div class="month-weekdays-row" id="monthWeekdaysRow">
-        <div>Dl</div><div>Dt</div><div>Dc</div><div>Dj</div><div>Dv</div><div>Ds</div><div>Dg</div>
-      </div>
-      <div class="month-calendar-grid" id="monthlyCalendarGrid"></div>
-    </div>
-  </div>
-
-  <div class="empty-state" id="emptyState">
-    <h2 id="emptyStateTitle" style="font-size: 1.25rem; font-family: var(--font-display); font-weight: 600; color: var(--text-main); margin-bottom: 4px;">No s'ha trobat cap planta</h2>
-    <p id="emptyStateDesc">Prova de canviar els filtres de cerca.</p>
-  </div>
-
-
-
-</div>
-
-<!-- MODAL AFEGIR NOVA PLANTA AMB IA -->
-<div class="modal-overlay" id="addPlantModal">
-  <div class="modal-card" style="max-width: 540px;">
-    <button class="modal-close" onclick="closeModal('addPlantModal')" aria-label="Tancar finestra">&times;</button>
-    <div class="modal-content" style="padding: 24px;">
-      <h2 style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px;">📸 Afegir Planta amb IA</h2>
-      <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px;">
-        Fes una foto o tria-la de la galeria. La Intel·ligència Artificial identificarà l'espècie i calcularà automàticament el calendari de reg, adob i cures.
-      </p>
-
-      <!-- BOTONS FER FOTO O GALERIA -->
-      <div id="aiUploadPromptSection">
-        <div class="source-options-grid">
-          <button type="button" class="btn-source-option btn-source-camera" onclick="document.getElementById('aiCameraInput').click()">
-            <input type="file" id="aiCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleAIPhotoFile(event)">
-            <span style="font-size: 2.2rem; line-height: 1;">📸</span>
-            <strong style="font-size: 1rem; color: #1e582e;">Fer Foto ara</strong>
-            <span style="font-size: 0.78rem; color: var(--text-muted);">Obre la càmera del mòbil</span>
-          </button>
-
-          <button type="button" class="btn-source-option btn-source-gallery" onclick="document.getElementById('aiGalleryInput').click()">
-            <input type="file" id="aiGalleryInput" accept="image/*" style="display:none;" onchange="handleAIPhotoFile(event)">
-            <span style="font-size: 2.2rem; line-height: 1;">🖼️</span>
-            <strong style="font-size: 1rem; color: #0284c7;">Triar de la Galeria</strong>
-            <span style="font-size: 0.78rem; color: var(--text-muted);">Tria una foto desada</span>
-          </button>
-        </div>
-
-        <div style="background: #fafaf9; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
-          <span>🤖 IA Botànica Automàtica</span>
-          <button type="button" onclick="toggleAICfgPanel()" style="background:none; border:none; color: var(--accent); cursor: pointer; text-decoration: underline; font-size: 0.8rem; font-weight:600;">
-            ⚙️ Configuració Clau IA
-          </button>
-        </div>
-
-        <div id="aiCfgPanel" style="display:none; margin-top: 10px; padding: 12px; background: #ffffff; border: 1px solid var(--border-subtle); border-radius: 10px;">
-          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Clau API Gemini (Google AI Studio):</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy..." class="form-control" style="font-size: 0.82rem; padding: 6px 10px;">
-            <button type="button" class="btn-action" style="background: #256a38; color: white; padding: 6px 14px; white-space: nowrap; font-size: 0.8rem;" onclick="saveGeminiApiKey()">Desar</button>
+        <!-- LES DUES TARGETES GUIONADES (DASHED CARDS - Afegir planta.png) -->
+        <div class="dashed-options-container" id="aiUploadPromptSection">
+          <!-- TARGETA 1: NOVA FOTO -->
+          <div class="dashed-action-card" onclick="document.getElementById('aiCameraInput').click()" role="button" tabindex="0">
+            <div class="dashed-card-icon-wrap">
+              <span class="dashed-card-icon">📷</span>
+            </div>
+            <div class="dashed-card-body">
+              <div class="dashed-card-title">Nova foto</div>
+              <div class="dashed-card-desc">Fes una foto a la teva planta ara mateix amb la càmera del mòbil per identificar-la o registrar-la.</div>
+            </div>
           </div>
-          <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Permet identificació visual 100% autònoma directament de la imatge.</span>
-        </div>
-      </div>
 
-      <!-- SECCIÓ DE TRIA RÀPIDA / RESILIENT SI LA IA NECESSITA CONFIRMACIÓ -->
+          <!-- TARGETA 2: TRIAR DE LA GALERIA -->
+          <div class="dashed-action-card" onclick="document.getElementById('aiGalleryInput').click()" role="button" tabindex="0">
+            <div class="dashed-card-icon-wrap">
+              <span class="dashed-card-icon">🖼️</span>
+            </div>
+            <div class="dashed-card-body">
+              <div class="dashed-card-title">Triar de la galeria</div>
+              <div class="dashed-card-desc">Puja una foto des de la teva galeria d'imatges.</div>
+            </div>
+          </div>
+
+          <!-- ENLLAÇ ENTRADA MANUAL -->
+          <div class="manual-add-link-wrap">
+            <button type="button" class="btn-manual-add" onclick="openEditPlantModal(null)">
+              ✏️ O afegir les dades manualment sense foto
+            </button>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px 14px; font-size: 0.82rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+            <span>🤖 IA Botànica Automàtica</span>
+            <button type="button" onclick="toggleAICfgPanel()" style="background:none; border:none; color: var(--accent); cursor: pointer; text-decoration: underline; font-size: 0.8rem; font-weight:600;">
+              ⚙️ Configuració Clau IA
+            </button>
+          </div>
+
+          <div id="aiCfgPanel" style="display:none; margin-top: 10px; padding: 14px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px;">
+            <label style="font-size: 0.80rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 6px;">Clau API Gemini (Google AI Studio):</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy..." class="form-control" style="font-size: 0.84rem; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-subtle); flex: 1;">
+              <button type="button" class="btn-action" style="background: #256a38; color: white; padding: 8px 16px; white-space: nowrap; font-size: 0.82rem; border-radius: 8px; font-weight: 600;" onclick="saveGeminiApiKey()">Desar</button>
+            </div>
+            <span style="font-size: 0.74rem; color: var(--text-muted); display: block; margin-top: 6px;">Permet identificació visual autònoma directament de la imatge.</span>
+          </div>
+        </div>
+
+        <!-- SECCIÓ DE TRIA RÀPIDA / RESILIENT -->
+        <!-- SECCIÓ DE TRIA RÀPIDA / RESILIENT SI LA IA NECESSITA CONFIRMACIÓ -->
       <div id="aiFallbackPickerSection" style="display: none;">
         <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 14px; background: #f8faf8; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px;">
           <img id="aiFallbackPreviewImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 64px; height: 64px; border-radius: 8px; object-fit: cover;" alt="Foto capturada">
@@ -2368,7 +3469,10 @@
         </div>
       </div>
 
-      <!-- ESTAT DE CÀRREGA / ESCANEIG IA -->
+      
+
+        <!-- ESTAT DE CÀRREGA / ESCANEIG IA -->
+        <!-- ESTAT DE CÀRREGA / ESCANEIG IA -->
       <div id="aiScanningSection" style="display: none; text-align: center; padding: 24px 10px;">
         <div style="width: 140px; height: 140px; margin: 0 auto 16px; position: relative; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-md);">
           <img id="aiScanningPreviewImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;" alt="Planta">
@@ -2380,7 +3484,10 @@
         </p>
       </div>
 
-      <!-- RESULTAT DE LA IDENTIFICACIÓ -->
+      
+
+        <!-- RESULTAT DE LA IDENTIFICACIÓ -->
+        <!-- RESULTAT DE LA IDENTIFICACIÓ -->
       <div id="aiResultSection" style="display: none;">
         <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 16px; background: #f8faf8; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 12px;">
           <img id="aiResultImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 74px; height: 74px; border-radius: 8px; object-fit: cover;" alt="Foto">
@@ -2440,182 +3547,395 @@
         </div>
       </div>
 
-
+      </div>
     </div>
-  </div>
+
+    <!-- PANTALLA 3: CALENDARI (Calendari.png) -->
+    <div class="app-view" id="viewCalendar">
+      <div class="calendar-screen-content">
+        <h1 class="view-screen-title" id="calendarScreenTitle">Calendari de reg i cura</h1>
+        <div class="calendar-container active" id="plantsCalendarContainer" style="display:flex; flex-direction:column; gap:20px;">
+          
+    <!-- PREVISIÓ SETMANAL (7 DIES) -->
+    <div class="calendar-panel">
+      <div class="calendar-panel-header">
+        <div class="calendar-panel-title" id="weeklyCalendarTitle">🗓️ Previsió Setmanal (Propers 7 dies)</div>
+        <span id="weeklyCalendarHint" style="font-size: 0.80rem; color: var(--text-muted);">Fes clic a qualsevol planta per obrir la seva fitxa</span>
+      </div>
+      <div class="week-strip-grid" id="weeklyCalendarGrid"></div>
+    </div>
+
+    <!-- CALENDARI MENSUAL -->
+    <div class="calendar-panel">
+      <div class="calendar-panel-header">
+        <div class="calendar-panel-title" id="calendarMonthTitle">📅 Calendari Mensual</div>
+        <div class="month-nav-group">
+          <button type="button" class="btn-cal-nav" id="calPrevMonthBtn" onclick="changeCalendarMonth(-1)">‹ Mes anterior</button>
+          <button type="button" class="btn-cal-nav" id="calTodayBtn" onclick="resetCalendarToToday()">Avui</button>
+          <button type="button" class="btn-cal-nav" id="calNextMonthBtn" onclick="changeCalendarMonth(1)">Mes següent ›</button>
+        </div>
+      </div>
+      <div class="month-weekdays-row" id="monthWeekdaysRow">
+        <div>Dl</div><div>Dt</div><div>Dc</div><div>Dj</div><div>Dv</div><div>Ds</div><div>Dg</div>
+      </div>
+      <div class="month-calendar-grid" id="monthlyCalendarGrid"></div>
+    </div>
+  
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 4: AJUSTAMENTS (Preferencies.png) -->
+    <div class="app-view" id="viewSettings">
+      <div class="settings-screen-content">
+        <h1 class="view-screen-title" id="settingsScreenTitle">Ajustaments</h1>
+        <!-- TEMA -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefThemeSectionLabel">🎨 Aparença / Tema</span>
+        <div class="pref-options-grid">
+          <button type="button" class="pref-option-btn active" id="prefThemeSystemBtn" onclick="setThemePreference('system')">
+            💻 <span id="prefThemeSystemText">Sistema</span>
+          </button>
+          <button type="button" class="pref-option-btn" id="prefThemeLightBtn" onclick="setThemePreference('light')">
+            ☀️ <span id="prefThemeLightText">Mode Clar</span>
+          </button>
+          <button type="button" class="pref-option-btn" id="prefThemeDarkBtn" onclick="setThemePreference('dark')">
+            🌙 <span id="prefThemeDarkText">Mode Fosc</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- IDIOMA (SENSE BANDERES I EN ORDRE ALFABÈTIC) -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefLangSectionLabel">🌐 Idioma / Language</span>
+        <select class="pref-select" id="prefLangSelect" onchange="setLanguagePreference(this.value)">
+          <option value="ca">Català</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+      </div>
+
+      <!-- NOTIFICACIONS -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefNotifSectionLabel">🔔 Notificacions</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-primary); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-subtle);">
+          <label for="prefNotifToggle" style="margin: 0; font-size: 0.88rem; font-weight: 600; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+            <span id="prefNotifToggleLabel">Activar notificacions</span>
+          </label>
+          <label class="switch-toggle" style="margin: 0;">
+            <input type="checkbox" id="prefNotifToggle" onchange="toggleNotificationsPreference(this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+        
+        <!-- Opcio per triar l'hora si les notificacions estan actives -->
+        <div id="prefNotifTimeContainer" style="display: none; margin-top: 10px; background: var(--bg-primary); padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border-subtle);">
+          <label for="prefNotifTimeInput" id="prefNotifTimeLabel" style="display: block; font-size: 0.82rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">
+            ⏰ Hora de la notificació
+          </label>
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <input type="time" id="prefNotifTimeInput" value="09:00" class="form-control" style="width: 130px; padding: 6px 10px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; border: 1px solid var(--border-subtle);" onchange="setNotificationTimePreference(this.value)">
+            <span id="prefNotifTimeHint" style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.35; flex: 1; min-width: 180px;">
+              Avisos diaris de les plantes que necessiten reg o atenció.
+            </span>
+          </div>
+        </div>
+        
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefNotifHint">
+          Rebràs alertes al teu dispositiu quan alguna planta necessiti reg o atenció botànica.
+        </p>
+      </div>
+
+      <!-- VALORAR A GOOGLE PLAY -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefRateSectionLabel">⭐ Google Play</span>
+        <div>
+          <button type="button" class="btn-pref-backup" onclick="rateOnGooglePlay()" style="width: 100%; text-align: center; justify-content: center; gap: 8px; font-weight: 600; background: linear-gradient(135deg, #256a38 0%, #1e562d 100%); color: #ffffff; border: 1px solid #1e562d; box-shadow: 0 2px 6px rgba(0,0,0,0.12);">
+            <span>⭐</span> <span id="prefRateBtnText">Valorar a Google Play</span>
+          </button>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefRateHint">
+          T'agrada l'aplicació? Una ressenya de 5 estrelles ens ajuda moltíssim a continuar millorant!
+        </p>
+      </div>
+
+      <!-- GESTIÓ DE DADES I COPIES DE SEGURETAT -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefBackupSectionLabel">💾 Còpia de Seguretat / Dades</span>
+        <div class="pref-backup-grid">
+          <button type="button" class="btn-pref-backup" onclick="exportDataBackup()" id="prefExportBtn" title="Descarrega una còpia de seguretat en fitxer JSON">
+            📥 <span id="prefExportText">Exportar Còpia</span>
+          </button>
+          <button type="button" class="btn-pref-backup" onclick="document.getElementById('importBackupFileInput').click()" id="prefImportBtn" title="Restaura una còpia de seguretat prèvia">
+            📤 <span id="prefImportText">Restaurar Còpia</span>
+          </button>
+          <input type="file" id="importBackupFileInput" accept=".json,application/json" style="display:none;" onchange="handleImportBackupFile(event)">
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefBackupHint">
+          Guarda totes les teves plantes, històric i fotos en un fitxer segur al teu ordinador o mòbil.
+        </p>
+      </div>
+
+      <!-- FEEDBACK I MILLORES -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefFeedbackSectionLabel">💬 Opinió i Millores</span>
+        <div>
+          <button type="button" class="btn-pref-backup" onclick="openFeedbackModal()" style="width: 100%; text-align: center; justify-content: center; gap: 8px;">
+            💬 <span id="prefFeedbackBtnText">Enviar Suggeriments o Dubtes</span>
+          </button>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefFeedbackHint">
+          Tens alguna idea per millorar l'app o has trobat alguna errada? Digue'ns-ho per seguir millorant.
+        </p>
+      </div>
+
+      <!-- ENLLAÇOS LEGALS DES DE PREFERÈNCIES -->
+      <div class="pref-section" style="margin-bottom: 22px;">
+        <span class="pref-section-label" id="prefLegalSectionLabel">⚖️ Legalitat i Privacitat</span>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="app-footer-link" id="prefLegalTermsBtn" onclick="openLegalModal('terms')" style="font-size:0.83rem;">
+            📄 <span id="prefLegalTermsText">Avís Legal i Condicions</span>
+          </button>
+          <span style="color:var(--text-muted);">•</span>
+          <button type="button" class="app-footer-link" id="prefLegalPrivacyBtn" onclick="openLegalModal('privacy')" style="font-size:0.83rem;">
+            🔒 <span id="prefLegalPrivacyText">Política de Privacitat</span>
+          </button>
+        </div>
+      </div>
+
+      
+      </div>
+    </div>
+
+  </main>
+
+  <!-- BARRA DE NAVEGACIÓ INFERIOR FIXA (Bottom Nav Bar - #bbf23d) -->
+  <nav class="bottom-nav-bar" id="bottomNavBar">
+    <button type="button" class="nav-tab active" id="navTabPlants" onclick="switchAppTab('plants')">
+      <div class="nav-tab-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+          <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+        </svg>
+      </div>
+      <span class="nav-tab-label">Les meves plantes</span>
+    </button>
+
+    <button type="button" class="nav-tab" id="navTabAdd" onclick="switchAppTab('add')">
+      <div class="nav-tab-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </div>
+      <span class="nav-tab-label">Afegir planta</span>
+    </button>
+
+    <button type="button" class="nav-tab" id="navTabCalendar" onclick="switchAppTab('calendar')">
+      <div class="nav-tab-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <span class="nav-tab-label">Calendari</span>
+    </button>
+
+    <button type="button" class="nav-tab" id="navTabSettings" onclick="switchAppTab('settings')">
+      <div class="nav-tab-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </div>
+      <span class="nav-tab-label">Ajustaments</span>
+    </button>
+  </nav>
+
 </div>
 
-<!-- MODAL DETALL PLANTA -->
-<div class="modal-overlay" id="plantModal">
-  <div class="modal-card">
-    <button class="modal-close" onclick="closeModal('plantModal')" aria-label="Tancar finestra">&times;</button>
+<!-- PANTALLA FITXA DE LA PLANTA (Fixta planta.png) -->
+<div class="modal-overlay plant-detail-overlay" id="plantModal">
+  <div class="modal-card plant-detail-card">
+    <!-- Top bar amb fletxa enrere, titol i 3 punts -->
+    <div class="plant-detail-top-bar">
+      <button type="button" class="btn-detail-back" onclick="closeModal('plantModal')" aria-label="Tancar fitxa">
+        ‹
+      </button>
+      <div class="detail-top-title" id="detailTopTitle">Fitxa de la planta</div>
+      <div class="detail-kebab-wrap">
+        <button type="button" class="btn-detail-kebab" onclick="togglePlantKebabMenu(event)" aria-label="Opcions de planta">
+          ⋮
+        </button>
+        <div class="detail-kebab-menu" id="detailKebabMenu">
+          <button type="button" onclick="triggerEditFromDetail()">✏️ Editar planta</button>
+          <button type="button" onclick="triggerHistoryFromDetail()">📜 Històric de cures</button>
+          <button type="button" class="danger" onclick="triggerDeleteFromDetail()">🗑️ Eliminar planta</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carrusel de fotos amb fletxes superposades -->
     <div class="modal-image-wrap">
-      <button type="button" class="modal-zoom-hint-btn" id="modalZoomHintBtn" onclick="openPhotoLightbox()" title="Obrir foto a pantalla completa amb zoom">🔍 Ampliar</button>
-      <button type="button" class="modal-photo-nav-btn prev" id="modalPhotoPrevBtn" onclick="stepModalGalleryPhoto(-1)" style="display:none;" aria-label="Foto anterior">&#8249;</button>
-      <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta" onclick="openPhotoLightbox()" title="Fes clic per ampliar a pantalla completa">
-      <button type="button" class="modal-photo-nav-btn next" id="modalPhotoNextBtn" onclick="stepModalGalleryPhoto(1)" style="display:none;" aria-label="Foto següent">&#8250;</button>
+      <button type="button" class="carousel-arrow prev" id="modalPhotoPrevBtn" onclick="stepModalGalleryPhoto(-1)" aria-label="Foto anterior">‹</button>
+      <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta" onclick="openPhotoLightbox()" title="Fes clic per ampliar">
+      <button type="button" class="carousel-arrow next" id="modalPhotoNextBtn" onclick="stepModalGalleryPhoto(1)" aria-label="Foto següent">›</button>
       <div class="modal-photo-caption-badge">
         <span class="modal-photo-date-pill" id="modalPhotoDatePill" style="display:none;"></span>
       </div>
     </div>
-    <div class="modal-content">
-      <div class="modal-header">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap: 12px; flex-wrap: wrap;">
-          <div>
-            <h2 id="modalTitle" class="plant-name" style="font-size: 2.2rem; line-height: 1.1; color: var(--text-main); margin-bottom: 4px;"></h2>
-            <p id="modalScientific" class="plant-scientific"></p>
-          </div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <button id="modalEditPlantBtn" style="background:#eaf6ec; color:#1e582e; border:1px solid #c4ecc9; padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:4px;">
-              ✏️ Editar
-            </button>
-            <button id="modalHistoryBtn" style="background:var(--bg-tertiary); color:var(--text-main); border:1px solid var(--border-subtle); padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:4px;">
-              📜 Històric
-            </button>
-            <button id="modalDeletePlantBtn" style="background:rgba(180, 83, 9, 0.08); color:var(--status-overdue-text); border:1px solid rgba(180, 83, 9, 0.2); padding:6px 10px; border-radius:6px; font-size:0.78rem; cursor:pointer; font-weight:600;">
-              🗑️ Eliminar
-            </button>
+
+    <!-- Contingut fitxa -->
+    <div class="modal-content plant-detail-content">
+      <div class="plant-detail-title-block">
+        <h2 id="modalTitle" class="plant-name-detail"></h2>
+        <p id="modalScientific" class="plant-scientific-detail"></p>
+        <div id="modalBadges" class="plant-badges-detail"></div>
+      </div>
+
+      <!-- PRÒXIM REG & PRÒXIMA FERTILITZACIÓ (Fixta planta.png) -->
+      <div class="detail-trackers-grid">
+        <div id="modalWaterBox" class="tracker-card status-ok">
+          <div class="tracker-box-label" id="modalWaterTitle">💧 PRÒXIM REG</div>
+          <div class="tracker-box-date" id="modalWaterNext"></div>
+          <div class="tracker-box-last" id="modalWaterLast"></div>
+          <div class="tracker-btn-row">
+            <button class="btn-app-water" id="modalWaterBtn">💧 Regar avui</button>
+            <button type="button" class="btn-app-snooze" id="modalSnoozeBtn" title="Posposar 1 dia">⏳ +1d</button>
+            <button type="button" class="btn-app-date" id="modalWaterPastBtn" title="Altra data">📅</button>
           </div>
         </div>
-        <div id="modalBadges" style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;"></div>
-        
-        <!-- TRACKER ACCIÓ RÀPIDA DIRECTE A LA FITXA -->
-        <div id="modalTrackerSection" style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-          <div id="modalWaterBox" class="tracker-card status-ok" style="padding: 10px 12px; margin: 0;">
-            <div class="tracker-info">
-              <span class="tracker-title" id="modalWaterTitle">💧 Reg:</span>
-              <span class="tracker-next-date" id="modalWaterNext">📅 Proper:</span>
-              <span class="tracker-last-date" id="modalWaterLast"></span>
-            </div>
-            <div class="tracker-btn-group">
-              <button class="btn-action btn-water-action" id="modalWaterBtn">
-                💧 Regar avui
-              </button>
-              <button type="button" class="btn-snooze-action" id="modalSnoozeBtn" title="Terra encara humida: posposar el reg 1 dia">
-                ⏳ +1d
-              </button>
-              <button type="button" class="btn-date-action" id="modalWaterPastBtn" title="Registrar reg en una data passada">
-                📅 Data
-              </button>
-            </div>
-          </div>
 
-          <div id="modalFertBox" class="tracker-card status-ok" style="padding: 10px 12px; margin: 0;">
-            <div class="tracker-info">
-              <span class="tracker-title" id="modalFertTitle">🧪 Adob:</span>
-              <span class="tracker-next-date" id="modalFertNext">📅 Proper:</span>
-              <span class="tracker-last-date" id="modalFertLast"></span>
-            </div>
-            <div class="tracker-btn-group">
-              <button class="btn-action btn-fert-action" id="modalFertBtn">
-                🧪 Abonar avui
-              </button>
-              <button type="button" class="btn-date-action" id="modalFertPastBtn" title="Registrar adob en una data passada">
-                📅 Data
-              </button>
-            </div>
+        <div id="modalFertBox" class="tracker-card status-ok">
+          <div class="tracker-box-label" id="modalFertTitle">🧪 PRÒXIMA FERTILITZACIÓ</div>
+          <div class="tracker-box-date" id="modalFertNext"></div>
+          <div class="tracker-box-last" id="modalFertLast"></div>
+          <div class="tracker-btn-row">
+            <button class="btn-app-fert" id="modalFertBtn">🧪 Fertilitzar avui</button>
+            <button type="button" class="btn-app-date" id="modalFertPastBtn" title="Altra data">📅</button>
+          </div>
+          <div class="affiliate-recommend-wrap" id="affiliateFertWrap" style="margin-top:4px;">
+            <a href="#" class="btn-app-amazon" id="amzFertLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a adobs a Amazon (afiliat)...', '🛒');">
+              🛒 <span id="amzFertText">Comprar fertilitzant a Amazon</span>
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- MANTENIMENT: TRASPLANTAMENT I PODA -->
+      <!-- MANTENIMENT (Trasplantament i Poda) -->
       <div class="modal-section">
         <div class="modal-section-title" id="modalMaintSectionTitle">🛠️ Manteniment: Trasplantament i Poda</div>
         <div class="maint-grid">
           <div class="maint-card">
-            <div>
-              <div class="maint-card-title" id="modalTransplantCardTitle">🪴 Trasplantament i Test</div>
-              <div class="maint-card-info" id="modalTransplantInfo">Últim: Cap registrat</div>
-            </div>
-            <button type="button" class="btn-maint-action" id="modalAddTransplantBtn">
+            <div class="maint-card-title" id="modalTransplantCardTitle">🪴 Trasplantament</div>
+            <div id="modalTransplantInfo" class="maint-card-info"></div>
+            <button type="button" class="btn-maint-action" id="modalAddTransplantBtn" style="margin-top:6px; background:var(--bg-surface); border:1px solid var(--border-subtle); padding:6px 12px; border-radius:8px; font-size:0.82rem; font-weight:600; cursor:pointer;">
               🪴 Registrar trasplantament
             </button>
             <div class="affiliate-recommend-wrap" id="affiliateTransplantWrap">
-              <a href="#" class="affiliate-link-btn" id="amzTransplantLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a productes recomanats a Amazon (afiliat)...', '🛒');">
-                <span class="amz-tag">Amazon</span> 🪴 <span id="amzTransplantText">Veure testos de fang i auto-reg recomanats ↗</span>
+              <a href="#" class="btn-app-amazon secondary" id="amzTransplantLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a testos a Amazon...', '🪴');">
+                🪴 <span id="amzTransplantText">Veure testos de fang a Amazon</span>
               </a>
             </div>
           </div>
           <div class="maint-card">
-            <div>
-              <div class="maint-card-title" id="modalPruningCardTitle">✂️ Poda i Neteja</div>
-              <div class="maint-card-info" id="modalPruningInfo">Última: Cap registrada</div>
-            </div>
-            <button type="button" class="btn-maint-action" id="modalAddPruningBtn">
+            <div class="maint-card-title" id="modalPruningCardTitle">✂️ Poda i Neteja</div>
+            <div id="modalPruningInfo" class="maint-card-info"></div>
+            <button type="button" class="btn-maint-action" id="modalAddPruningBtn" style="margin-top:6px; background:var(--bg-surface); border:1px solid var(--border-subtle); padding:6px 12px; border-radius:8px; font-size:0.82rem; font-weight:600; cursor:pointer;">
               ✂️ Registrar poda / neteja
             </button>
           </div>
         </div>
       </div>
 
+      <!-- NECESSITATS I CURA -->
       <div class="modal-section">
-        <div class="modal-section-title" id="modalFertSectionTitle">🧪 Pauta d'Abonament</div>
-        <div class="modal-box-highlight">
-          <p><strong id="modalFertTypeLabel">Tipus:</strong> <span id="modalFertType"></span></p>
-          <p><strong id="modalFertFreqLabel">Freqüència:</strong> <span id="modalFertFreq"></span></p>
-          <p><strong id="modalFertSeasonLabel">Temporada activa:</strong> <span id="modalFertSeason"></span></p>
-          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;" id="modalFertNotes"></p>
-          <div class="affiliate-recommend-wrap" id="affiliateFertWrap">
-            <a href="#" class="affiliate-link-btn" id="amzFertLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a adobs i nutrients a Amazon (afiliat)...', '🛒');">
-              <span class="amz-tag">Amazon</span> 🧪 <span id="amzFertText">Comprar aquest tipus d'adob a Amazon ↗</span>
-            </a>
+        <div class="modal-section-title">🌿 Necessitats i Cura</div>
+        <div class="care-cards-stack">
+          <!-- Reg -->
+          <div class="care-detail-item">
+            <div class="care-detail-item-title" id="modalWaterSectionTitle">💧 Pauta de Reg</div>
+            <div style="font-size:0.88rem; color:var(--text-main); margin-bottom:4px;">
+              <strong id="modalWaterSummerLabel">☀️ Estiu:</strong> <span id="modalWaterSummer"></span> | <strong id="modalWaterWinterLabel">❄️ Hivern:</strong> <span id="modalWaterWinter"></span>
+            </div>
+            <div id="modalWaterDetail" style="font-size:0.82rem; color:var(--text-muted); margin-bottom:8px;"></div>
+            <div class="affiliate-recommend-wrap" id="affiliateWaterMeterWrap">
+              <a href="#" class="btn-app-amazon secondary" id="amzWaterMeterLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a mesurador d'humitat a Amazon...', '💧');">
+                💧 <span id="amzWaterMeterText">Mesurador d'humitat a Amazon</span>
+              </a>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div class="modal-section">
-        <div class="modal-section-title" id="modalWaterSectionTitle">💧 Pauta de Reg</div>
-        <div class="modal-box-highlight">
-          <p><strong id="modalWaterSummerLabel">☀️ Estiu:</strong> <span id="modalWaterSummer"></span></p>
-          <p><strong id="modalWaterWinterLabel">❄️ Hivern:</strong> <span id="modalWaterWinter"></span></p>
-          <p style="font-size: 0.84rem; color: var(--text-muted); margin-top: 4px;" id="modalWaterDetail"></p>
-          <div class="affiliate-recommend-wrap" id="affiliateWaterMeterWrap">
-            <a href="#" class="affiliate-link-btn" id="amzWaterMeterLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a mesuradors d\'humitat a Amazon (afiliat)...', '🛒');">
-              <span class="amz-tag">Amazon</span> 💧 <span id="amzWaterMeterText">Mesurador d'humitat per no fallar mai el reg ↗</span>
-            </a>
+          <!-- Llum -->
+          <div class="care-detail-item">
+            <div class="care-detail-item-title" id="modalLightSectionTitle">☀️ Necessitat de Llum</div>
+            <div id="modalLight" style="font-size:0.88rem; color:var(--text-main);"></div>
           </div>
-        </div>
-      </div>
 
-      <div class="modal-section">
-        <div class="modal-section-title" id="modalLightSectionTitle">☀️ Llum i Ubicació</div>
-        <p id="modalLight"></p>
-      </div>
-
-      <div class="modal-section">
-        <div class="modal-section-title" id="modalSubstrateSectionTitle">🪴 Substrat Recomanat</div>
-        <p id="modalSubstrate"></p>
-        <div class="affiliate-recommend-wrap" id="affiliateSubstrateWrap">
-          <a href="#" class="affiliate-link-btn" id="amzSubstrateLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a substrats i perlita a Amazon (afiliat)...', '🛒');">
-            <span class="amz-tag">Amazon</span> 🪴 <span id="amzSubstrateText">Comprar substrat i perlita recomanats ↗</span>
-          </a>
-        </div>
-        <div class="affiliate-notice-badge" id="affiliateDisclaimerText">
-          * Recomanacions amb enllaços d'afiliat d'Amazon. Com a afiliats, podem percebre ingressos per compres adscrites sense cap cost extra per a tu.
-        </div>
-      </div>
-
-      <div class="tip-box" id="modalTip"></div>
-
-      <!-- GALERIA D'EVOLUCIÓ DE FOTOS (Al final de la fitxa) -->
-      <div class="modal-section" style="margin-top: 22px; margin-bottom: 0; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
-        <div class="gallery-header-row">
-          <div class="modal-section-title" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-            <span id="modalGalleryTitleText">📸 Galeria d'Evolució</span>
-            <span id="modalGalleryCount" style="background: #e3efe5; color: #1e582e; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; text-transform: none;">1 foto</span>
+          <!-- Substrat -->
+          <div class="care-detail-item">
+            <div class="care-detail-item-title" id="modalSubstrateSectionTitle">🪴 Substrat Recomanat</div>
+            <div id="modalSubstrate" style="font-size:0.88rem; color:var(--text-main); margin-bottom:8px;"></div>
+            <div class="affiliate-recommend-wrap" id="affiliateSubstrateWrap">
+              <a href="#" class="btn-app-amazon secondary" id="amzSubstrateLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a substrat a Amazon...', '🪴');">
+                🪴 <span id="amzSubstrateText">Comprar substrat a Amazon</span>
+              </a>
+            </div>
           </div>
-          <div class="gallery-upload-btns">
+
+          <!-- Fertilitzant -->
+          <div class="care-detail-item">
+            <div class="care-detail-item-title" id="modalFertSectionTitle">🧪 Requisits d'Adob</div>
+            <div style="font-size:0.88rem; color:var(--text-main);">
+              <strong id="modalFertTypeLabel">Tipus:</strong> <span id="modalFertType"></span> · <strong id="modalFertFreqLabel">Freqüència:</strong> <span id="modalFertFreq"></span> · <strong id="modalFertSeasonLabel">Època:</strong> <span id="modalFertSeason"></span>
+            </div>
+            <div id="modalFertNotes" style="font-size:0.80rem; color:var(--text-muted); margin-top:4px;"></div>
+          </div>
+
+          <!-- Tip botànic -->
+          <div class="tip-box" id="modalTip"></div>
+          <div class="affiliate-notice-badge" id="affiliateDisclaimerText">* Recomanacions amb enllaços d'afiliat d'Amazon.</div>
+        </div>
+      </div>
+
+      <!-- TOXICITAT I SEGURETAT (Soft pink - Fixta planta.png) -->
+      <div class="toxicity-alert-box" id="modalToxicityBox">
+        <div class="toxicity-box-header">
+          <span class="toxicity-icon">⚠️</span>
+          <span class="toxicity-title">TOXICITAT I SEGURETAT</span>
+        </div>
+        <div class="toxicity-body" id="modalToxicityBody">
+          Comprova sempre si aquesta planta és apta per conviure amb gats, gossos o infants a la llar.
+        </div>
+      </div>
+
+      <!-- GALERIA D'EVOLUCIÓ (Fixta planta.png) -->
+      <div class="modal-section" style="margin-top:20px;">
+        <div class="gallery-section-header">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span class="modal-section-title" style="margin:0;">📸 Galeria</span>
+            <span id="modalGalleryCount" class="gallery-count-pill">1 foto</span>
+          </div>
+          <div class="gallery-inputs-wrap">
             <input type="file" id="galleryCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleGalleryPhotoUpload(event)">
             <input type="file" id="galleryFileInput" accept="image/*" multiple style="display:none;" onchange="handleGalleryPhotoUpload(event)">
-            <button type="button" class="btn-gallery-upload" id="modalGalleryCameraBtn" onclick="document.getElementById('galleryCameraInput').click()">
-              📸 Fer foto
-            </button>
-            <button type="button" class="btn-gallery-upload secondary" id="modalGalleryUploadBtn" onclick="document.getElementById('galleryFileInput').click()">
-              ➕ Pujar foto
+            <button type="button" class="btn-app-photo-add" onclick="document.getElementById('galleryFileInput').click()">
+              ➕ Afegir foto
             </button>
           </div>
         </div>
         <div class="plant-gallery-grid" id="modalGalleryGrid"></div>
+      </div>
+
+      <!-- Elements de suport per compatibilitat JS -->
+      <div id="addPlantModal" style="display:none;"></div>
+      <div id="preferencesModal" style="display:none;"></div>
+      <div style="display:none;">
+        <button id="modalEditPlantBtn"></button>
+        <button id="modalHistoryBtn"></button>
+        <button id="modalDeletePlantBtn"></button>
       </div>
     </div>
   </div>
@@ -2799,6 +4119,7 @@
   </div>
 </div>
 
+
 <!-- MODAL HISTÒRIC -->
 <div class="modal-overlay" id="historyModal">
   <div class="modal-card" style="max-width: 560px;">
@@ -2842,6 +4163,7 @@
   </div>
 </div>
 
+
 <!-- MODAL RÀPID DE DATA PASSADA / MANTENIMENT -->
 <div class="modal-overlay" id="quickActionDateModal">
   <div class="modal-card" style="max-width: 430px;">
@@ -2881,6 +4203,7 @@
   </div>
 </div>
 
+
 <!-- MODAL FILTRES I VISUALITZACIÓ -->
 <div class="modal-overlay" id="filterModal">
   <div class="modal-card filter-modal-card" style="max-width: 500px; width: 94vw; max-height: 88vh; overflow-y: auto;">
@@ -2899,11 +4222,11 @@
         <div class="pref-options-grid filter-view-grid">
           <button type="button" class="pref-option-btn active" id="viewGridBtn" onclick="setActiveViewMode('grid')">
             <span style="font-size:1.15rem; line-height:1;">▦</span>
-            <span id="viewGridBtnText">Targetes</span>
+            <span id="viewGridBtnText">Vista llista</span>
           </button>
           <button type="button" class="pref-option-btn" id="viewTableBtn" onclick="setActiveViewMode('photos')">
             <span style="font-size:1.15rem; line-height:1;">📸</span>
-            <span id="viewTableBtnText">Fotos</span>
+            <span id="viewTableBtnText">Vista graella</span>
           </button>
           <button type="button" class="pref-option-btn" id="viewCalendarBtn" onclick="setActiveViewMode('calendar')">
             <span style="font-size:1.15rem; line-height:1;">📅</span>
@@ -2986,140 +4309,6 @@
 </div>
 
 
-<!-- MODAL PREFERÈNCIES (TEMA, IDIOMA I DADES) -->
-<div class="modal-overlay" id="preferencesModal">
-  <div class="modal-card" style="max-width: 460px; max-height: 90vh; overflow-y: auto;">
-    <button class="modal-close" onclick="closeModal('preferencesModal')" aria-label="Tancar finestra">&times;</button>
-    <div class="modal-content" style="padding: 24px;">
-      <h2 id="prefModalTitle" style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
-        ⚙️ Preferències
-      </h2>
-      <p id="prefModalSubtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
-        Personalitza l'aparença visual, l'idioma i gestiona les teves dades.
-      </p>
-
-      <!-- TEMA -->
-      <div class="pref-section">
-        <span class="pref-section-label" id="prefThemeSectionLabel">🎨 Aparença / Tema</span>
-        <div class="pref-options-grid">
-          <button type="button" class="pref-option-btn active" id="prefThemeSystemBtn" onclick="setThemePreference('system')">
-            💻 <span id="prefThemeSystemText">Sistema</span>
-          </button>
-          <button type="button" class="pref-option-btn" id="prefThemeLightBtn" onclick="setThemePreference('light')">
-            ☀️ <span id="prefThemeLightText">Mode Clar</span>
-          </button>
-          <button type="button" class="pref-option-btn" id="prefThemeDarkBtn" onclick="setThemePreference('dark')">
-            🌙 <span id="prefThemeDarkText">Mode Fosc</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- IDIOMA (SENSE BANDERES I EN ORDRE ALFABÈTIC) -->
-      <div class="pref-section">
-        <span class="pref-section-label" id="prefLangSectionLabel">🌐 Idioma / Language</span>
-        <select class="pref-select" id="prefLangSelect" onchange="setLanguagePreference(this.value)">
-          <option value="ca">Català</option>
-          <option value="en">English</option>
-          <option value="es">Español</option>
-        </select>
-      </div>
-
-      <!-- NOTIFICACIONS -->
-      <div class="pref-section">
-        <span class="pref-section-label" id="prefNotifSectionLabel">🔔 Notificacions</span>
-        <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-primary); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-subtle);">
-          <label for="prefNotifToggle" style="margin: 0; font-size: 0.88rem; font-weight: 600; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 8px;">
-            <span id="prefNotifToggleLabel">Activar notificacions</span>
-          </label>
-          <label class="switch-toggle" style="margin: 0;">
-            <input type="checkbox" id="prefNotifToggle" onchange="toggleNotificationsPreference(this.checked)">
-            <span class="slider"></span>
-          </label>
-        </div>
-        
-        <!-- Opcio per triar l'hora si les notificacions estan actives -->
-        <div id="prefNotifTimeContainer" style="display: none; margin-top: 10px; background: var(--bg-primary); padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border-subtle);">
-          <label for="prefNotifTimeInput" id="prefNotifTimeLabel" style="display: block; font-size: 0.82rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">
-            ⏰ Hora de la notificació
-          </label>
-          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <input type="time" id="prefNotifTimeInput" value="09:00" class="form-control" style="width: 130px; padding: 6px 10px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; border: 1px solid var(--border-subtle);" onchange="setNotificationTimePreference(this.value)">
-            <span id="prefNotifTimeHint" style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.35; flex: 1; min-width: 180px;">
-              Avisos diaris de les plantes que necessiten reg o atenció.
-            </span>
-          </div>
-        </div>
-        
-        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefNotifHint">
-          Rebràs alertes al teu dispositiu quan alguna planta necessiti reg o atenció botànica.
-        </p>
-      </div>
-
-      <!-- VALORAR A GOOGLE PLAY -->
-      <div class="pref-section">
-        <span class="pref-section-label" id="prefRateSectionLabel">⭐ Google Play</span>
-        <div>
-          <button type="button" class="btn-pref-backup" onclick="rateOnGooglePlay()" style="width: 100%; text-align: center; justify-content: center; gap: 8px; font-weight: 600; background: linear-gradient(135deg, #256a38 0%, #1e562d 100%); color: #ffffff; border: 1px solid #1e562d; box-shadow: 0 2px 6px rgba(0,0,0,0.12);">
-            <span>⭐</span> <span id="prefRateBtnText">Valorar a Google Play</span>
-          </button>
-        </div>
-        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefRateHint">
-          T'agrada l'aplicació? Una ressenya de 5 estrelles ens ajuda moltíssim a continuar millorant!
-        </p>
-      </div>
-
-      <!-- GESTIÓ DE DADES I COPIES DE SEGURETAT -->
-      <div class="pref-section">
-        <span class="pref-section-label" id="prefBackupSectionLabel">💾 Còpia de Seguretat / Dades</span>
-        <div class="pref-backup-grid">
-          <button type="button" class="btn-pref-backup" onclick="exportDataBackup()" id="prefExportBtn" title="Descarrega una còpia de seguretat en fitxer JSON">
-            📥 <span id="prefExportText">Exportar Còpia</span>
-          </button>
-          <button type="button" class="btn-pref-backup" onclick="document.getElementById('importBackupFileInput').click()" id="prefImportBtn" title="Restaura una còpia de seguretat prèvia">
-            📤 <span id="prefImportText">Restaurar Còpia</span>
-          </button>
-          <input type="file" id="importBackupFileInput" accept=".json,application/json" style="display:none;" onchange="handleImportBackupFile(event)">
-        </div>
-        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefBackupHint">
-          Guarda totes les teves plantes, històric i fotos en un fitxer segur al teu ordinador o mòbil.
-        </p>
-      </div>
-
-      <!-- FEEDBACK I MILLORES -->
-      <div class="pref-section">
-        <span class="pref-section-label" id="prefFeedbackSectionLabel">💬 Opinió i Millores</span>
-        <div>
-          <button type="button" class="btn-pref-backup" onclick="openFeedbackModal()" style="width: 100%; text-align: center; justify-content: center; gap: 8px;">
-            💬 <span id="prefFeedbackBtnText">Enviar Suggeriments o Dubtes</span>
-          </button>
-        </div>
-        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefFeedbackHint">
-          Tens alguna idea per millorar l'app o has trobat alguna errada? Digue'ns-ho per seguir millorant.
-        </p>
-      </div>
-
-      <!-- ENLLAÇOS LEGALS DES DE PREFERÈNCIES -->
-      <div class="pref-section" style="margin-bottom: 22px;">
-        <span class="pref-section-label" id="prefLegalSectionLabel">⚖️ Legalitat i Privacitat</span>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button type="button" class="app-footer-link" id="prefLegalTermsBtn" onclick="openLegalModal('terms')" style="font-size:0.83rem;">
-            📄 <span id="prefLegalTermsText">Avís Legal i Condicions</span>
-          </button>
-          <span style="color:var(--text-muted);">•</span>
-          <button type="button" class="app-footer-link" id="prefLegalPrivacyBtn" onclick="openLegalModal('privacy')" style="font-size:0.83rem;">
-            🔒 <span id="prefLegalPrivacyText">Política de Privacitat</span>
-          </button>
-        </div>
-      </div>
-
-      <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
-        <button type="button" class="btn-action" id="prefCloseBtn" style="background: #256a38; color: white; padding: 8px 20px;" onclick="closeModal('preferencesModal')">
-          Fet
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- MODAL NOTES LEGALS I POLÍTICA DE PRIVACITAT -->
 <div class="modal-overlay" id="legalModal">
@@ -3150,6 +4339,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- MODAL FORMULARI DE FEEDBACK I SUGGERIMENTS -->
 <div class="modal-overlay" id="feedbackModal">
@@ -3198,6 +4388,7 @@
   </div>
 </div>
 
+
 <!-- LIGHTBOX PANTALLA COMPLETA AMB ZOOM (PUNT 9) -->
 <div class="lightbox-overlay" id="photoLightboxModal">
   <div class="lightbox-topbar">
@@ -3216,13 +4407,242 @@
   </div>
 </div>
 
+
 <!-- TOAST -->
 <div class="toast-notification" id="toastNotification">
   <span id="toastIcon">🌱</span>
   <span id="toastMsg">Acció registrada correctament</span>
 </div>
 
+
+
 <script>
+
+  // =============================================================
+  // NAVEGACIÓ I CONTROL D'APP PER SMARTPHONE (FOLIARI)
+  // =============================================================
+  let currentAppTab = "plants"; // 'plants', 'add', 'calendar', 'settings'
+
+  function switchAppTab(tabName) {
+    const tabs = ['plants', 'add', 'calendar', 'settings'];
+    if (!tabs.includes(tabName)) tabName = 'plants';
+    currentAppTab = tabName;
+
+    const navMap = {
+      plants: 'navTabPlants',
+      add: 'navTabAdd',
+      calendar: 'navTabCalendar',
+      settings: 'navTabSettings'
+    };
+
+    tabs.forEach(tName => {
+      const btn = document.getElementById(navMap[tName]);
+      const view = document.getElementById('view' + tName.charAt(0).toUpperCase() + tName.slice(1));
+      if (btn) btn.classList.toggle('active', tName === tabName);
+      if (view) view.classList.toggle('active', tName === tabName);
+    });
+
+    const backBtn = document.getElementById('headerBackBtn');
+    if (backBtn) {
+      backBtn.style.display = (tabName === 'add') ? 'flex' : 'none';
+    }
+
+    if (tabName === 'calendar') {
+      renderCalendar();
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function handleHeaderBack() {
+    switchAppTab('plants');
+  }
+
+  function openAddPlantModal() {
+    switchAppTab('add');
+  }
+
+  function openPreferencesModal() {
+    switchAppTab('settings');
+  }
+
+  // PANTALLA DE CÀRREGA LOADING (Loading.png)
+  function dismissLoadingScreen() {
+    const screen = document.getElementById('appLoadingScreen');
+    if (screen) {
+      screen.classList.add('loaded');
+      setTimeout(() => {
+        screen.style.display = 'none';
+      }, 600);
+    }
+  }
+  window.addEventListener('load', () => {
+    setTimeout(dismissLoadingScreen, 1200);
+  });
+  setTimeout(dismissLoadingScreen, 2500);
+
+  // DROPDOWN D'ALERTES I NOTIFICACIONS RÀPIDES
+  function toggleQuickNotifPanel(forceState) {
+    const panel = document.getElementById('notifQuickPanel');
+    if (!panel) return;
+    const isShown = panel.classList.contains('active');
+    const newState = (forceState !== undefined) ? forceState : !isShown;
+    panel.classList.toggle('active', newState);
+
+    if (newState) {
+      renderQuickNotifPanel();
+    }
+  }
+
+  function renderQuickNotifPanel() {
+    const body = document.getElementById('notifPanelBody');
+    const dot = document.getElementById('headerBellBadgeDot');
+    if (!body) return;
+
+    const overduePlants = [];
+    const dueSoonPlants = [];
+
+    plantsCatalog.forEach(plant => {
+      const ws = computeWaterStatus(plant);
+      if (ws.status === 'overdue') {
+        overduePlants.push({ plant, ws, type: 'water' });
+      } else if (ws.status === 'due_soon') {
+        dueSoonPlants.push({ plant, ws, type: 'water' });
+      }
+    });
+
+    if (dot) {
+      dot.style.display = (overduePlants.length > 0 || dueSoonPlants.length > 0) ? 'block' : 'none';
+    }
+
+    if (overduePlants.length === 0 && dueSoonPlants.length === 0) {
+      body.innerHTML = `
+        <div style="text-align:center; padding: 22px 10px; color: var(--text-muted);">
+          <div style="font-size:2.2rem; margin-bottom:8px;">🌿</div>
+          <p style="font-weight:700; color:var(--text-main); font-size:0.95rem;">${t('Tot al dia!', '¡Todo al día!', 'All up to date!')}</p>
+          <p style="font-size:0.80rem; margin-top:4px;">${t('No tens cap planta pendent de reg o atenció en aquest moment.', 'No tienes ninguna planta pendiente de riego o atención en este momento.', 'No plants require watering or attention right now.')}</p>
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    if (overduePlants.length > 0) {
+      html += `<div style="font-size:0.75rem; font-weight:800; color:#b45309; text-transform:uppercase; margin-bottom:6px;">⚠️ ${t('Pendents de reg avui', 'Pendientes de riego hoy', 'Due for watering today')} (${overduePlants.length})</div>`;
+      overduePlants.forEach(item => {
+        html += `
+          <div class="notif-quick-item" onclick="openPlantModal('${item.plant.id}'); toggleQuickNotifPanel(false);">
+            <img src="${item.plant.photo}" alt="${item.plant.name}">
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:0.88rem; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.plant.name}</div>
+              <div style="font-size:0.76rem; color:#b45309; font-weight:600;">${item.ws.badgeText}</div>
+            </div>
+            <button type="button" class="btn-app-water" style="padding:6px 12px; font-size:0.78rem;" onclick="event.stopPropagation(); recordAction('${item.plant.id}', 'water', event); renderQuickNotifPanel();">💧</button>
+          </div>
+        `;
+      });
+    }
+
+    if (dueSoonPlants.length > 0) {
+      html += `<div style="font-size:0.75rem; font-weight:800; color:#a16207; text-transform:uppercase; margin-top:10px; margin-bottom:6px;">🟡 ${t('Propers dies', 'Próximos días', 'Due soon')} (${dueSoonPlants.length})</div>`;
+      dueSoonPlants.forEach(item => {
+        html += `
+          <div class="notif-quick-item" onclick="openPlantModal('${item.plant.id}'); toggleQuickNotifPanel(false);">
+            <img src="${item.plant.photo}" alt="${item.plant.name}">
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:0.88rem; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.plant.name}</div>
+              <div style="font-size:0.76rem; color:var(--text-muted);">${item.ws.badgeText}</div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    body.innerHTML = html;
+  }
+
+  function updateBellBadgeDot() {
+    const dot = document.getElementById("headerBellBadgeDot");
+    if (!dot) return;
+    let hasAlert = false;
+    for (const plant of plantsCatalog) {
+      const ws = computeWaterStatus(plant);
+      if (ws.status === 'overdue' || ws.status === 'due_soon') {
+        hasAlert = true;
+        break;
+      }
+    }
+    dot.style.display = hasAlert ? "block" : "none";
+  }
+
+  // MENÚ KEBAB A LA FITXA DE PLANTA (⋮)
+  function togglePlantKebabMenu(event) {
+    if (event) event.stopPropagation();
+    const menu = document.getElementById('detailKebabMenu');
+    if (menu) menu.classList.toggle('active');
+  }
+  function closePlantKebabMenu() {
+    const menu = document.getElementById('detailKebabMenu');
+    if (menu) menu.classList.remove('active');
+  }
+  document.addEventListener('click', () => closePlantKebabMenu());
+
+  function triggerEditFromDetail() {
+    closePlantKebabMenu();
+    if (currentModalPlantId) openEditPlantModal(currentModalPlantId);
+  }
+  function triggerHistoryFromDetail() {
+    closePlantKebabMenu();
+    if (currentModalPlantId) openHistoryModal(currentModalPlantId);
+  }
+  function triggerDeleteFromDetail() {
+    closePlantKebabMenu();
+    if (currentModalPlantId) deletePlant(currentModalPlantId);
+  }
+
+  // HELPER FORMAT DATA AMIGABLE (Galeria - Vista llista.png)
+  function formatAppDueDate(dateObj, daysLeft) {
+    if (!dateObj || isNaN(dateObj.getTime())) return "-";
+    const weekday = dateObj.toLocaleDateString(getLocale(), { weekday: 'long' });
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleDateString(getLocale(), { month: 'long' });
+    const formattedDate = `${weekday}, ${day} ${currentLang === 'ca' ? "d'" : (currentLang === 'es' ? "de " : "")}${month}`;
+
+    if (daysLeft === null || daysLeft === undefined) {
+      return formattedDate;
+    }
+    if (daysLeft < 0) {
+      const overdueDays = Math.abs(daysLeft);
+      if (overdueDays === 1) {
+        return `${t('Ahir', 'Ayer', 'Yesterday')} (${formattedDate})`;
+      }
+      return `${t(`Fa ${overdueDays} dies`, `Hace ${overdueDays} días`, `${overdueDays} days ago`)} (${formattedDate})`;
+    }
+    if (daysLeft === 0) {
+      return `${t('Avui', 'Hoy', 'Today')} (${formattedDate})`;
+    }
+    if (daysLeft === 1) {
+      return `${t('Demà', 'Mañana', 'Tomorrow')} (${formattedDate})`;
+    }
+    return `${t(`En ${daysLeft} dies`, `En ${daysLeft} días`, `In ${daysLeft} days`)} (${formattedDate})`;
+  }
+
+  function getAmazonAffiliateUrl(type, plant) {
+    let query = 'adob universal plantes';
+    if (type === 'fertilizer') {
+      const fertType = (plant && plant.fertilizerType) ? plant.fertilizerType : 'adob universal plantes';
+      query = `fertilitzant ${fertType}`;
+    } else if (type === 'substrate') {
+      query = 'substrat universal perlita plantes';
+    } else if (type === 'moisture') {
+      query = 'mesurador humitat terra plantes';
+    } else if (type === 'pot') {
+      query = 'test fang auto reg plantes';
+    }
+    return `https://www.amazon.es/s?k=${encodeURIComponent(query)}&tag=foliari-21`;
+  }
+
+
   // -------------------------------------------------------------
   // BIBLIOTECA BOTÀNICA PER A AUTO-COMPLETAT INTEL·LIGENT
   // -------------------------------------------------------------
@@ -5236,6 +6656,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   function renderPlants() {
     renderStats();
     renderCalendar();
+    updateBellBadgeDot();
 
     const searchVal = document.getElementById("searchInput").value.toLowerCase().trim();
     const statusVal = document.getElementById("statusFilter").value;
@@ -5310,6 +6731,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const ws = computeWaterStatus(plant);
       const fs = computeFertStatus(plant);
       const isCardAlert = (ws.status === 'overdue');
+      const waterDueDateStr = formatAppDueDate(ws.nextDateObj, ws.daysLeft);
+      const fertDueDateStr = formatAppDueDate(fs.nextDateObj, fs.daysLeft);
 
       return `
         <div class="plant-card ${isCardAlert ? 'alert-water' : ''}" id="plant-card-${plant.id}">
@@ -5330,50 +6753,48 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           </div>
 
           <div class="card-body">
-            <div class="card-header" onclick="openPlantModal('${plant.id}')" style="cursor:pointer;">
-              <div>
-                <h2 class="plant-name">${plant.name}</h2>
-                <p class="plant-scientific">${plant.scientific}</p>
-              </div>
+            <div onclick="openPlantModal('${plant.id}')" style="cursor:pointer;">
+              <h2 class="plant-name">${plant.name}</h2>
+              <p class="plant-scientific">${plant.scientific}</p>
             </div>
 
             <div class="tracker-section">
+              <!-- PRÒXIM REG (Galeria - Vista llista.png) -->
               <div class="tracker-card ${ws.statusClass}" id="plant-water-box-${plant.id}">
-                <div class="tracker-info">
-                  <span class="tracker-title" id="plant-water-title-${plant.id}">💧 ${t('Reg', 'Riego', 'Water')}: ${ws.badgeText}</span>
-                  <span class="tracker-next-date" id="plant-water-next-${plant.id}">📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${ws.nextText}</strong></span>
-                  <span class="tracker-last-date" id="plant-water-last-${plant.id}">${ws.lastText}</span>
-                </div>
-                <div class="tracker-btn-group">
-                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Registrar reg amb una altra data', 'Registrar riego con otra fecha', 'Log watering with custom date')}">📅</button>
-                  <button class="btn-action btn-snooze-action" onclick="snoozeWater('${plant.id}', 1, event)" title="${t('Posposar reg 1 dia (encara humida)', 'Posponer riego 1 día (aún húmeda)', 'Postpone watering 1 day (still moist)')}">⏳ +1d</button>
-                  <button class="btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
+                <div class="tracker-box-label">💧 PRÒXIM REG</div>
+                <div class="tracker-box-date">${waterDueDateStr}</div>
+                <div class="tracker-box-last">${ws.lastText}</div>
+                <div class="tracker-btn-row">
+                  <button class="btn-app-water ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
                     ${ws.isToday ? t('✅ Regat avui', '✅ Regado hoy', '✅ Watered today') : t('💧 Regar avui', '💧 Regar hoy', '💧 Water today')}
                   </button>
+                  <button class="btn-app-snooze" onclick="snoozeWater('${plant.id}', 1, event)" title="${t('Posposar reg 1 dia (encara humida)', 'Posponer riego 1 día (aún húmeda)', 'Postpone watering 1 day (still moist)')}">⏳ +1d</button>
+                  <button class="btn-app-date" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Registrar reg amb una altra data', 'Registrar riego con otra fecha', 'Log watering with custom date')}">📅</button>
                 </div>
               </div>
 
+              <!-- PRÒXIMA FERTILITZACIÓ (Galeria - Vista llista.png) -->
               <div class="tracker-card ${fs.statusClass}" id="plant-fert-box-${plant.id}">
-                <div class="tracker-info">
-                  <span class="tracker-title" id="plant-fert-title-${plant.id}">🧪 ${t('Adob', 'Abono', 'Fertilizer')}: ${fs.badgeText}</span>
-                  <span class="tracker-next-date" id="plant-fert-next-${plant.id}">📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${fs.nextText}</strong></span>
-                  <span class="tracker-last-date" id="plant-fert-last-${plant.id}">${fs.lastText}</span>
-                </div>
-                <div class="tracker-btn-group">
-                  <button class="btn-action btn-date-action" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Registrar adob amb una altra data', 'Registrar abono con otra fecha', 'Log fertilizing with custom date')}">📅</button>
-                  <button class="btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}" id="plant-fert-btn-${plant.id}" onclick="recordAction('${plant.id}', 'fert', event)">
-                    ${fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy', '✅ Fertilized today') : t('🧪 Abonar avui', '🧪 Abonar hoy', '🧪 Fertilize today')}
+                <div class="tracker-box-label">🧪 PRÒXIMA FERTILITZACIÓ</div>
+                <div class="tracker-box-date">${fertDueDateStr}</div>
+                <div class="tracker-box-last">${fs.lastText}</div>
+                <div class="tracker-btn-row">
+                  <button class="btn-app-fert ${fs.isToday ? 'btn-done-today' : ''}" id="plant-fert-btn-${plant.id}" onclick="recordAction('${plant.id}', 'fert', event)">
+                    ${fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy', '✅ Fertilized today') : t('🧪 Fertilitzar avui', '🧪 Abonar hoy', '🧪 Fertilize today')}
                   </button>
+                  <button class="btn-app-date" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Registrar adob amb una altra data', 'Registrar abono con otra fecha', 'Log fertilizing with custom date')}">📅</button>
+                </div>
+                <div style="margin-top: 4px;">
+                  <a href="${getAmazonAffiliateUrl('fertilizer', plant)}" target="_blank" rel="noopener sponsored" class="btn-app-amazon">
+                    🛒 ${t('Comprar fertilitzant a Amazon', 'Comprar abono en Amazon', 'Buy fertilizer on Amazon')}
+                  </a>
                 </div>
               </div>
             </div>
 
-            <div class="card-footer-links">
+            <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
               <button class="btn-detail-link" onclick="openPlantModal('${plant.id}')">
                 ${t('Veure cures completes →', 'Ver cuidados completos →', 'View full care guide →')}
-              </button>
-              <button class="btn-history-link" onclick="openHistoryModal('${plant.id}')">
-                ${t('📜 Històric', '📜 Historial', '📜 History')}
               </button>
             </div>
           </div>
@@ -5485,7 +6906,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const gridEl = document.getElementById("modalGalleryGrid");
     if (gridEl) {
-      gridEl.innerHTML = gallery.map((item, idx) => {
+      const itemsHtml = gallery.map((item, idx) => {
         const isCurrent = (idx === currentModalGalleryIndex);
         const canDelete = (gallery.length > 1);
         return `
@@ -5500,6 +6921,17 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           </div>
         `;
       }).join('');
+
+      const addPhotoCard = `
+        <div class="gallery-item-card gallery-add-card" onclick="document.getElementById('galleryFileInput').click()" title="${t('Afegir nova foto', 'Añadir nueva foto', 'Add new photo')}">
+          <div class="gallery-add-card-inner">
+            <span style="font-size:1.6rem;">📷</span>
+            <span style="font-size:0.75rem; font-weight:700; margin-top:4px;">${t('+ Nova foto', '+ Nueva foto', '+ New photo')}</span>
+          </div>
+        </div>
+      `;
+
+      gridEl.innerHTML = itemsHtml + addPhotoCard;
     }
   }
 
@@ -5601,6 +7033,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     renderModalGallery(plant);
     document.getElementById("modalTitle").innerText = plant.name;
     document.getElementById("modalScientific").innerText = plant.scientific;
+    const topTitle = document.getElementById("detailTopTitle");
+    if (topTitle) topTitle.innerText = plant.name;
+
     document.getElementById("modalFertType").innerText = plant.fertilizerType;
     document.getElementById("modalFertFreq").innerText = trText(plant.fertilizerFreq);
     document.getElementById("modalFertSeason").innerText = trText(plant.fertilizerSeason);
@@ -5648,15 +7083,30 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       <span class="badge badge-room">${getRoomLabel(plant.room || (plant.zone === 'exterior' ? 'terrassa' : 'salo'))}</span>
     `;
 
-    document.getElementById("modalDeletePlantBtn").onclick = () => deletePlant(plant.id);
+    // Toxicitat box
+    const toxBody = document.getElementById("modalToxicityBody");
+    if (toxBody) {
+      toxBody.innerHTML = plant.toxic
+        ? `<strong style="color:#991b1b;">⚠️ ${t('Atenció:', 'Atención:', 'Warning:')}</strong> ${plant.toxicityDetail || t('Aquesta planta pot ser tòxica per a mascotes o persones si s\'ingereix. Mantenir fora de l\'abast.', 'Esta planta puede ser tóxica para mascotas o niños si se ingiere.', 'This plant may be toxic to pets or children if ingested.')}`
+        : `<strong style="color:#166534;">🟢 ${t('Planta segura:', 'Planta segura:', 'Safe plant:')}</strong> ${plant.toxicityDetail || t('No és tòxica per a gossos ni gats. Ideal per a una llar amb mascotes.', 'No es tóxica para perros ni gatos.', 'Non-toxic for pets.')}`;
+    }
+
+    // Set Amazon affiliate links
+    const amzFert = document.getElementById("amzFertLink");
+    if (amzFert) amzFert.href = getAmazonAffiliateUrl('fertilizer', plant);
+    const amzTransplant = document.getElementById("amzTransplantLink");
+    if (amzTransplant) amzTransplant.href = getAmazonAffiliateUrl('pot', plant);
+    const amzSubstrate = document.getElementById("amzSubstrateLink");
+    if (amzSubstrate) amzSubstrate.href = getAmazonAffiliateUrl('substrate', plant);
+    const amzWaterMeter = document.getElementById("amzWaterMeterLink");
+    if (amzWaterMeter) amzWaterMeter.href = getAmazonAffiliateUrl('moisture', plant);
+
+    const modalDeleteBtn = document.getElementById("modalDeletePlantBtn");
+    if (modalDeleteBtn) modalDeleteBtn.onclick = () => deletePlant(plant.id);
     const modalHistBtn = document.getElementById("modalHistoryBtn");
-    if (modalHistBtn) {
-      modalHistBtn.onclick = () => openHistoryModal(plant.id);
-    }
+    if (modalHistBtn) modalHistBtn.onclick = () => openHistoryModal(plant.id);
     const modalEditBtn = document.getElementById("modalEditPlantBtn");
-    if (modalEditBtn) {
-      modalEditBtn.onclick = () => openEditPlantModal(plant.id);
-    }
+    if (modalEditBtn) modalEditBtn.onclick = () => openEditPlantModal(plant.id);
 
     updateModalTracker(plantId);
 
@@ -5666,9 +7116,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   // -------------------------------------------------------------
   // EDICIÓ COMPLETA DE PLANTA (Dades + Substitució de Fotografia)
   // -------------------------------------------------------------
-  let currentEditingPlantId = null;
-  let currentEditingPhotoBase64 = null;
-
   function openEditPlantModal(plantId) {
     const plant = plantsCatalog.find(p => p.id === plantId);
     if (!plant) return;
@@ -6583,8 +8030,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("filterModalTitle", t("🌪️ Filtres i Visualització", "🌪️ Filtros y Visualización", "🌪️ Filters & View Options"));
     setElText("filterModalSubtitle", t("Tria com vols veure les plantes i filtra per estat, ubicació o dificultat.", "Elige cómo ver las plantas y filtra por estado, ubicación o dificultad.", "Choose how to view your plants and filter by status, location or care difficulty."));
     setElText("filterViewSectionLabel", t("👁️ Tipus de Visualització", "👁️ Tipo de Visualización", "👁️ View Mode"));
-    setElText("viewGridBtnText", t("Targetes", "Tarjetas", "Cards"));
-    setElText("viewTableBtnText", t("Fotos (3 col.)", "Fotos (3 col.)", "Photos (3 col.)"));
+    setElText("viewGridBtnText", t("Vista llista", "Vista lista", "List view"));
+    setElText("viewTableBtnText", t("Vista graella", "Vista cuadrícula", "Grid view"));
     setElText("viewCalendarBtnText", t("Calendari", "Calendario", "Calendar"));
     setElText("filterSortSectionLabel", t("↕️ Criteri d'ordenació", "↕️ Criterio de ordenación", "↕️ Sort Order"));
     setElText("filterStatusSectionLabel", t("💧 Estat de Reg", "💧 Estado de Riego", "💧 Water Status"));
@@ -7091,7 +8538,12 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   let currentViewMode = "grid"; // 'grid', 'photos', 'calendar'
 
   function setActiveViewMode(mode) {
-    if (mode !== "grid" && mode !== "photos" && mode !== "calendar") mode = "grid";
+    if (mode === "calendar") {
+      closeModal('filterModal');
+      switchAppTab('calendar');
+      return;
+    }
+    if (mode !== "grid" && mode !== "photos") mode = "grid";
     currentViewMode = mode;
     try { localStorage.setItem("registre_plantes_view_mode", mode); } catch(e) {}
 
@@ -7100,26 +8552,13 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const calendarBtn = document.getElementById("viewCalendarBtn");
     const gridView = document.getElementById("plantsGrid");
     const instaView = document.getElementById("plantsTableContainer");
-    const calendarView = document.getElementById("plantsCalendarContainer");
 
     if (gridBtn) gridBtn.classList.toggle("active", mode === "grid");
     if (photosBtn) photosBtn.classList.toggle("active", mode === "photos");
-    if (calendarBtn) calendarBtn.classList.toggle("active", mode === "calendar");
+    if (calendarBtn) calendarBtn.classList.toggle("active", false);
 
-    if (gridView) gridView.style.display = (mode === "grid") ? "grid" : "none";
+    if (gridView) gridView.style.display = (mode === "grid") ? "flex" : "none";
     if (instaView) instaView.style.display = (mode === "photos") ? "grid" : "none";
-
-    if (calendarView) {
-      if (mode === "calendar") {
-        calendarView.classList.add("active");
-        calendarView.style.display = "flex";
-        if (emptyStateEl) emptyStateEl.style.display = "none";
-        renderCalendar();
-      } else {
-        calendarView.classList.remove("active");
-        calendarView.style.display = "none";
-      }
-    }
 
     renderPlants();
   }
