@@ -1836,24 +1836,83 @@
     }
     .pref-options-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    @media (max-width: 480px) {
+      .pref-options-grid {
+        grid-template-columns: 1fr;
+      }
     }
     .pref-option-btn {
       background: var(--bg-primary);
       border: 2px solid var(--border-subtle);
       color: var(--text-main);
       border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 0.92rem;
+      padding: 10px 10px;
+      font-size: 0.88rem;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.15s ease;
       font-family: inherit;
+    }
+    .pref-option-btn:hover {
+      border-color: var(--accent);
+      background: var(--bg-tertiary);
+    }
+    .pref-option-btn.active {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+      font-weight: 700;
+    }
+    body.dark-mode .pref-option-btn.active {
+      background: rgba(37, 106, 56, 0.28);
+      border-color: #4ade80;
+      color: #86efac;
+    }
+    /* Switch toggle per a notificacions */
+    .switch-toggle {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .switch-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .switch-toggle .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--border-strong, #ccc);
+      transition: 0.25s ease;
+      border-radius: 24px;
+    }
+    .switch-toggle .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #ffffff;
+      transition: 0.25s ease;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .switch-toggle input:checked + .slider {
+      background-color: #256a38;
+    }
+    .switch-toggle input:checked + .slider:before {
+      transform: translateX(22px);
     }
     .pref-select {
       width: 100%;
@@ -2168,17 +2227,7 @@
     <p id="emptyStateDesc">Prova de canviar els filtres de cerca.</p>
   </div>
 
-  <!-- FOOTER AMB ENLLAÇOS LEGALS -->
-  <footer class="app-footer">
-    <div class="app-footer-links">
-      <button type="button" class="app-footer-link" id="footerLegalBtn" onclick="openLegalModal('terms')">⚖️ Avís Legal i Condicions</button>
-      <span>•</span>
-      <button type="button" class="app-footer-link" id="footerPrivacyBtn" onclick="openLegalModal('privacy')">🔒 Política de Privacitat</button>
-      <span>•</span>
-      <button type="button" class="app-footer-link" id="footerFeedbackBtn" onclick="openFeedbackModal()">💬 <span id="footerFeedbackText">Enviar Suggeriments / Feedback</span></button>
-    </div>
-    <div id="footerCopyText">© 2026 El Meu Registre de Plantes · Cures botàniques locals i privades</div>
-  </footer>
+
 
 </div>
 
@@ -2783,7 +2832,10 @@
       <div class="pref-section">
         <span class="pref-section-label" id="prefThemeSectionLabel">🎨 Aparença / Tema</span>
         <div class="pref-options-grid">
-          <button type="button" class="pref-option-btn active" id="prefThemeLightBtn" onclick="setThemePreference('light')">
+          <button type="button" class="pref-option-btn active" id="prefThemeSystemBtn" onclick="setThemePreference('system')">
+            💻 <span id="prefThemeSystemText">Sistema</span>
+          </button>
+          <button type="button" class="pref-option-btn" id="prefThemeLightBtn" onclick="setThemePreference('light')">
             ☀️ <span id="prefThemeLightText">Mode Clar</span>
           </button>
           <button type="button" class="pref-option-btn" id="prefThemeDarkBtn" onclick="setThemePreference('dark')">
@@ -2792,14 +2844,58 @@
         </div>
       </div>
 
-      <!-- IDIOMA (DESPLEGABLE EXTENSIBLE) -->
+      <!-- IDIOMA (SENSE BANDERES I EN ORDRE ALFABÈTIC) -->
       <div class="pref-section">
         <span class="pref-section-label" id="prefLangSectionLabel">🌐 Idioma / Language</span>
         <select class="pref-select" id="prefLangSelect" onchange="setLanguagePreference(this.value)">
-          <option value="ca">🏴󠁥󠁳󠁣󠁴󠁿 Català</option>
-          <option value="es">🇪🇸 Español</option>
-          <option value="en">🇬🇧 English</option>
+          <option value="ca">Català</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
         </select>
+      </div>
+
+      <!-- NOTIFICACIONS -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefNotifSectionLabel">🔔 Notificacions</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-primary); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-subtle);">
+          <label for="prefNotifToggle" style="margin: 0; font-size: 0.88rem; font-weight: 600; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+            <span id="prefNotifToggleLabel">Activar notificacions</span>
+          </label>
+          <label class="switch-toggle" style="margin: 0;">
+            <input type="checkbox" id="prefNotifToggle" onchange="toggleNotificationsPreference(this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+        
+        <!-- Opcio per triar l'hora si les notificacions estan actives -->
+        <div id="prefNotifTimeContainer" style="display: none; margin-top: 10px; background: var(--bg-primary); padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border-subtle);">
+          <label for="prefNotifTimeInput" id="prefNotifTimeLabel" style="display: block; font-size: 0.82rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">
+            ⏰ Hora de la notificació
+          </label>
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <input type="time" id="prefNotifTimeInput" value="09:00" class="form-control" style="width: 130px; padding: 6px 10px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; border: 1px solid var(--border-subtle);" onchange="setNotificationTimePreference(this.value)">
+            <span id="prefNotifTimeHint" style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.35; flex: 1; min-width: 180px;">
+              Avisos diaris de les plantes que necessiten reg o atenció.
+            </span>
+          </div>
+        </div>
+        
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefNotifHint">
+          Rebràs alertes al teu dispositiu quan alguna planta necessiti reg o atenció botànica.
+        </p>
+      </div>
+
+      <!-- VALORAR A GOOGLE PLAY -->
+      <div class="pref-section">
+        <span class="pref-section-label" id="prefRateSectionLabel">⭐ Google Play</span>
+        <div>
+          <button type="button" class="btn-pref-backup" onclick="rateOnGooglePlay()" style="width: 100%; text-align: center; justify-content: center; gap: 8px; font-weight: 600; background: linear-gradient(135deg, #256a38 0%, #1e562d 100%); color: #ffffff; border: 1px solid #1e562d; box-shadow: 0 2px 6px rgba(0,0,0,0.12);">
+            <span>⭐</span> <span id="prefRateBtnText">Valorar a Google Play</span>
+          </button>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; line-height: 1.35;" id="prefRateHint">
+          T'agrada l'aplicació? Una ressenya de 5 estrelles ens ajuda moltíssim a continuar millorant!
+        </p>
       </div>
 
       <!-- GESTIÓ DE DADES I COPIES DE SEGURETAT -->
@@ -6016,28 +6112,247 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (m) m.classList.add("active");
   }
 
-  function updatePreferencesButtonsState() {
-    const isDark = document.body.classList.contains("dark-mode");
-    const lightBtn = document.getElementById("prefThemeLightBtn");
-    const darkBtn = document.getElementById("prefThemeDarkBtn");
-    if (lightBtn) lightBtn.classList.toggle("active", !isDark);
-    if (darkBtn) darkBtn.classList.toggle("active", isDark);
+  let currentTheme = "system"; // 'system', 'light', 'dark'
 
-    const sel = document.getElementById("prefLangSelect");
-    if (sel) sel.value = currentLang;
+  function getStoredThemePreference() {
+    try {
+      const savedTheme = localStorage.getItem("registre_plantes_theme");
+      if (savedTheme === "light" || savedTheme === "dark" || savedTheme === "system") {
+        return savedTheme;
+      }
+      // Si l'usuari tenia una versió anterior amb 'registre_plantes_dark_mode'
+      const legacyDark = localStorage.getItem("registre_plantes_dark_mode");
+      if (legacyDark === "1") return "dark";
+      if (legacyDark === "0") return "light";
+    } catch (e) {}
+    return "system"; // Per defecte: Sistema
   }
 
-  function setThemePreference(mode) {
-    const isDark = (mode === "dark");
-    if (isDark) {
+  function applyCurrentTheme() {
+    const theme = getStoredThemePreference();
+    currentTheme = theme;
+    let shouldBeDark = false;
+    if (theme === "dark") {
+      shouldBeDark = true;
+    } else if (theme === "light") {
+      shouldBeDark = false;
+    } else {
+      // 'system'
+      shouldBeDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+
+    if (shouldBeDark) {
       document.body.classList.add("dark-mode");
     } else {
       document.body.classList.remove("dark-mode");
     }
-    try {
-      localStorage.setItem("registre_plantes_dark_mode", isDark ? "1" : "0");
-    } catch (e) {}
     updatePreferencesButtonsState();
+  }
+
+  function setThemePreference(mode) {
+    if (mode !== "system" && mode !== "light" && mode !== "dark") mode = "system";
+    currentTheme = mode;
+    try {
+      localStorage.setItem("registre_plantes_theme", mode);
+      if (mode === "dark") {
+        localStorage.setItem("registre_plantes_dark_mode", "1");
+      } else if (mode === "light") {
+        localStorage.setItem("registre_plantes_dark_mode", "0");
+      } else {
+        localStorage.removeItem("registre_plantes_dark_mode");
+      }
+    } catch (e) {}
+
+    applyCurrentTheme();
+  }
+
+  // Escolta canvis dinàmics del tema del sistema operatiu si el mode és 'system'
+  if (window.matchMedia) {
+    const systemThemeMedia = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleSystemThemeChange = () => {
+      if (getStoredThemePreference() === "system") {
+        applyCurrentTheme();
+      }
+    };
+    if (systemThemeMedia.addEventListener) {
+      systemThemeMedia.addEventListener("change", handleSystemThemeChange);
+    } else if (systemThemeMedia.addListener) {
+      systemThemeMedia.addListener(handleSystemThemeChange);
+    }
+  }
+
+  // Notificacions de reg i atencions
+  function getNotificationsEnabledPreference() {
+    try {
+      return localStorage.getItem("registre_plantes_notifications_enabled") === "1";
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function getNotificationTimePreference() {
+    try {
+      return localStorage.getItem("registre_plantes_notification_time") || "09:00";
+    } catch (e) {
+      return "09:00";
+    }
+  }
+
+  function toggleNotificationsPreference(enabled) {
+    try {
+      localStorage.setItem("registre_plantes_notifications_enabled", enabled ? "1" : "0");
+    } catch (e) {}
+
+    const timeContainer = document.getElementById("prefNotifTimeContainer");
+    if (timeContainer) {
+      timeContainer.style.display = enabled ? "block" : "none";
+    }
+
+    if (enabled) {
+      if ("Notification" in window) {
+        if (Notification.permission === "default") {
+          Notification.requestPermission().then((perm) => {
+            if (perm === "granted") {
+              showToast(
+                t(
+                  "🔔 Notificacions activades correctament!",
+                  "🔔 ¡Notificaciones activadas correctamente!",
+                  "🔔 Notifications enabled successfully!"
+                ),
+                "🔔"
+              );
+              scheduleCareCheck();
+            } else if (perm === "denied") {
+              showToast(
+                t(
+                  "⚠️ Permís de notificacions blocat al teu navegador.",
+                  "⚠️ Permiso de notificaciones bloqueado en tu navegador.",
+                  "⚠️ Notification permissions blocked in your browser."
+                ),
+                "⚠️"
+              );
+            }
+          });
+        } else if (Notification.permission === "granted") {
+          showToast(
+            t(
+              "🔔 Notificacions activades!",
+              "🔔 ¡Notificaciones activadas!",
+              "🔔 Notifications enabled!"
+            ),
+            "🔔"
+          );
+          scheduleCareCheck();
+        } else if (Notification.permission === "denied") {
+          showToast(
+            t(
+              "⚠️ Permís de notificacions blocat al teu navegador.",
+              "⚠️ Permiso de notificaciones bloqueado en tu navegador.",
+              "⚠️ Notification permissions blocked in your browser."
+            ),
+            "⚠️"
+          );
+        }
+      } else {
+        showToast(
+          t(
+            "🔔 Notificacions activades (subjecte al navegador).",
+            "🔔 Notificaciones activadas (sujeto al navegador).",
+            "🔔 Notifications enabled (browser dependent)."
+          ),
+          "🔔"
+        );
+      }
+    } else {
+      showToast(
+        t(
+          "🔕 Notificacions desactivades.",
+          "🔕 Notificaciones desactivadas.",
+          "🔕 Notifications disabled."
+        ),
+        "🔕"
+      );
+    }
+  }
+
+  function setNotificationTimePreference(time) {
+    if (!time) return;
+    try {
+      localStorage.setItem("registre_plantes_notification_time", time);
+    } catch (e) {}
+    showToast(
+      t(
+        `⏰ Hora establerta a les ${time}`,
+        `⏰ Hora establecida a las ${time}`,
+        `⏰ Notification time set to ${time}`
+      ),
+      "⏰"
+    );
+  }
+
+  function scheduleCareCheck() {
+    if (!getNotificationsEnabledPreference()) return;
+    if (!("Notification" in window) || Notification.permission !== "granted") return;
+
+    const todayStr = getTodayISO();
+    try {
+      const lastCheck = localStorage.getItem("registre_plantes_last_notif_date");
+      if (lastCheck === todayStr) return; // Ja notificat avui
+    } catch (e) {}
+
+    const urgentPlants = plantsData.filter(p => {
+      const calc = getCalculatedStatus(p);
+      return calc.statusKey === "OVERDUE" || calc.daysUntilWater === 0;
+    });
+
+    if (urgentPlants.length > 0) {
+      try {
+        const title = t("🌱 Recordatori de reg de plantes", "🌱 Recordatorio de riego de plantas", "🌱 Plant watering reminder");
+        const body = urgentPlants.length === 1
+          ? t(`La planta "${urgentPlants[0].name}" necessita aigua avui.`, `La planta "${urgentPlants[0].name}" necesita agua hoy.`, `Plant "${urgentPlants[0].name}" needs water today.`)
+          : t(`Tens ${urgentPlants.length} plantes que necessiten reg avui.`, `Tienes ${urgentPlants.length} plantas que necesitan riego hoy.`, `You have ${urgentPlants.length} plants that need watering today.`);
+        new Notification(title, {
+          body: body,
+          icon: "favicon.svg"
+        });
+        localStorage.setItem("registre_plantes_last_notif_date", todayStr);
+      } catch (e) {}
+    }
+  }
+
+  function rateOnGooglePlay() {
+    const url = "https://play.google.com/store/apps/details?id=cat.plantcare.app";
+    window.open(url, "_blank");
+    showToast(
+      t(
+        "⭐ Gràcies per valorar-nos a Google Play!",
+        "⭐ ¡Gracias por valorarnos en Google Play!",
+        "⭐ Thank you for rating us on Google Play!"
+      ),
+      "⭐"
+    );
+  }
+
+  function updatePreferencesButtonsState() {
+    const activeTheme = getStoredThemePreference();
+    const systemBtn = document.getElementById("prefThemeSystemBtn");
+    const lightBtn = document.getElementById("prefThemeLightBtn");
+    const darkBtn = document.getElementById("prefThemeDarkBtn");
+    if (systemBtn) systemBtn.classList.toggle("active", activeTheme === "system");
+    if (lightBtn) lightBtn.classList.toggle("active", activeTheme === "light");
+    if (darkBtn) darkBtn.classList.toggle("active", activeTheme === "dark");
+
+    const sel = document.getElementById("prefLangSelect");
+    if (sel) sel.value = currentLang;
+
+    // Estat notificacions
+    const notifEnabled = getNotificationsEnabledPreference();
+    const notifToggle = document.getElementById("prefNotifToggle");
+    const notifTimeContainer = document.getElementById("prefNotifTimeContainer");
+    const notifTimeInput = document.getElementById("prefNotifTimeInput");
+    if (notifToggle) notifToggle.checked = notifEnabled;
+    if (notifTimeContainer) notifTimeContainer.style.display = notifEnabled ? "block" : "none";
+    if (notifTimeInput) notifTimeInput.value = getNotificationTimePreference();
   }
 
   function setLanguagePreference(lang) {
@@ -6161,9 +6476,23 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("prefModalTitle", t("⚙️ Preferències", "⚙️ Preferencias", "⚙️ Preferences & Settings"));
     setElText("prefModalSubtitle", t("Personalitza l'aparença visual, l'idioma i gestiona les teves dades.", "Personaliza la apariencia visual, el idioma y gestiona tus datos.", "Customize appearance, language, and manage your plant data."));
     setElText("prefThemeSectionLabel", t("🎨 Aparença / Tema", "🎨 Apariencia / Tema", "🎨 Appearance / Theme"));
+    setElText("prefThemeSystemText", t("Sistema", "Sistema", "System"));
     setElText("prefThemeLightText", t("Mode Clar", "Modo Claro", "Light Mode"));
     setElText("prefThemeDarkText", t("Mode Fosc", "Modo Oscuro", "Dark Mode"));
     setElText("prefLangSectionLabel", t("🌐 Idioma / Language", "🌐 Idioma / Language", "🌐 Language / Idioma"));
+
+    // Notificacions
+    setElText("prefNotifSectionLabel", t("🔔 Notificacions", "🔔 Notificaciones", "🔔 Notifications"));
+    setElText("prefNotifToggleLabel", t("Activar notificacions", "Activar notificaciones", "Enable notifications"));
+    setElText("prefNotifTimeLabel", t("⏰ Hora de la notificació", "⏰ Hora de la notificación", "⏰ Notification time"));
+    setElText("prefNotifTimeHint", t("Avisos diaris de les plantes que necessiten reg o atenció.", "Avisos diarios de las plantas que necesitan riego o atención.", "Daily reminders for plants needing water or care."));
+    setElText("prefNotifHint", t("Rebràs alertes al teu dispositiu quan alguna planta necessiti reg o atenció botànica.", "Recibirás alertas en tu dispositivo cuando alguna planta necesite riego o atención botánica.", "Receive reminders on your device when a plant needs watering or care."));
+
+    // Valoració Google Play
+    setElText("prefRateSectionLabel", t("⭐ Google Play", "⭐ Google Play", "⭐ Google Play"));
+    setElText("prefRateBtnText", t("Valorar a Google Play", "Valorar en Google Play", "Rate on Google Play"));
+    setElText("prefRateHint", t("T'agrada l'aplicació? Una ressenya de 5 estrelles ens ajuda moltíssim a continuar millorant!", "¿Te gusta la aplicación? ¡Una reseña de 5 estrellas nos ayuda muchísimo a seguir mejorándola!", "Enjoying the app? A 5-star review helps us immensely to keep improving it!"));
+
     setElText("prefBackupSectionLabel", t("💾 Còpia de Seguretat / Dades", "💾 Copia de Seguridad / Datos", "💾 Backup & Data Export"));
     setElText("prefExportText", t("Exportar Còpia", "Exportar Copia", "Export Backup"));
     setElText("prefImportText", t("Restaurar Còpia", "Restaurar Copia", "Restore Backup"));
@@ -6179,12 +6508,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("prefLegalTermsText", t("Avís Legal i Condicions", "Aviso Legal y Condiciones", "Terms of Service"));
     setElText("prefLegalPrivacyText", t("Política de Privacitat", "Política de Privacidad", "Privacy Policy"));
     setElText("prefCloseBtn", t("Fet", "Listo", "Done"));
-
-    // Footer
-    setElText("footerLegalBtn", t("⚖️ Avís Legal i Condicions", "⚖️ Aviso Legal y Condiciones", "⚖️ Terms of Service"));
-    setElText("footerPrivacyBtn", t("🔒 Política de Privacitat", "🔒 Política de Privacidad", "🔒 Privacy Policy"));
-    setElText("footerFeedbackText", t("Enviar Suggeriments / Feedback", "Enviar Sugerencias / Feedback", "Send Feedback"));
-    setElText("footerCopyText", t("© 2026 El Meu Registre de Plantes · Cures botàniques locals i privades", "© 2026 Mi Registro de Plantas · Cuidados botánicos locales y privados", "© 2026 My Plant Tracker · Private & local botanical care"));
 
     // Modal de Feedback
     setElText("feedbackModalTitle", t("💬 Envia'ns el teu Feedback", "💬 Envíanos tu Feedback", "💬 Send Us Your Feedback"));
@@ -6508,15 +6831,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   function initPreferences() {
-    try {
-      const savedDark = localStorage.getItem("registre_plantes_dark_mode");
-      if (savedDark === "1") {
-        document.body.classList.add("dark-mode");
-      }
-    } catch (e) {}
+    applyCurrentTheme();
     document.documentElement.lang = currentLang;
     applyStaticTranslations();
     updatePreferencesButtonsState();
+    scheduleCareCheck();
   }
 
   function closeModal(modalId) {
