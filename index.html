@@ -2415,54 +2415,97 @@
       border-radius: 50%;
     }
 
-    /* DROPDOWN RÀPID D'ALERTES I TASQUES (BELL) */
-    .notif-quick-panel {
-      position: absolute;
-      top: calc(100% + 8px);
+    /* MODAL D'ALERTES I CURES RÀPIDES (BELL) */
+    .notif-quick-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
       right: 0;
-      width: min(88vw, 360px);
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
-      padding: 16px;
-      z-index: 1200;
+      bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 20000;
       display: none;
-      animation: fadeInDown 0.2s ease-out;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
     }
-    .notif-quick-panel.active {
-      display: block;
+    .notif-quick-overlay.active {
+      display: flex;
+    }
+    .notif-quick-card {
+      background: var(--bg-surface);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+      padding: 18px 20px;
+      width: 100%;
+      max-width: 420px;
+      max-height: 82vh;
+      max-height: 82dvh;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      animation: modalPopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .notif-panel-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 10px;
+      padding-bottom: 12px;
       margin-bottom: 12px;
     }
     .btn-close-notif-panel {
-      background: none;
+      background: rgba(0,0,0,0.06);
       border: none;
-      font-size: 1.2rem;
+      font-size: 1.35rem;
+      line-height: 1;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
       color: var(--text-muted);
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .btn-close-notif-panel:hover {
+      background: rgba(0,0,0,0.12);
+      color: var(--text-main);
+    }
+    body.dark-mode .btn-close-notif-panel {
+      background: rgba(255,255,255,0.1);
+      color: var(--text-muted);
+    }
+    body.dark-mode .btn-close-notif-panel:hover {
+      background: rgba(255,255,255,0.2);
+      color: var(--text-main);
     }
     .notif-panel-body {
-      max-height: 280px;
+      max-height: 380px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
+      -webkit-overflow-scrolling: touch;
+      padding-right: 2px;
     }
     .notif-quick-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 8px 10px;
+      gap: 12px;
+      padding: 10px 12px;
       background: var(--bg-primary);
       border: 1px solid var(--border-subtle);
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
       transition: background 0.15s;
     }
@@ -2470,14 +2513,15 @@
       background: var(--border-subtle);
     }
     .notif-quick-item img {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
       object-fit: cover;
+      flex-shrink: 0;
     }
     .notif-panel-footer {
       border-top: 1px solid var(--border-subtle);
-      padding-top: 10px;
+      padding-top: 12px;
       margin-top: 12px;
       text-align: center;
     }
@@ -2485,9 +2529,13 @@
       background: none;
       border: none;
       color: var(--accent);
-      font-size: 0.82rem;
-      font-weight: 600;
+      font-size: 0.85rem;
+      font-weight: 700;
       cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-notif-settings:hover {
+      text-decoration: underline;
     }
 
     /* PANTALLES / VISTES APP (app-view) */
@@ -3379,6 +3427,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
     .detail-kebab-wrap {
       position: relative;
@@ -3715,24 +3764,10 @@
     </div>
 
     <div class="header-right">
-      <button type="button" class="btn-header-bell" id="headerBellBtn" onclick="toggleQuickNotifPanel()" aria-label="Notificacions i alertes">
+      <button type="button" class="btn-header-bell" id="headerBellBtn" onclick="toggleQuickNotifPanel(event)" aria-label="Notificacions i alertes">
         <span>🔔</span>
         <span class="bell-badge-dot" id="headerBellBadgeDot" style="display:none;"></span>
       </button>
-
-      <!-- DROPDOWN RÀPID D'ALERTES I TASQUES (BELL) -->
-      <div class="notif-quick-panel" id="notifQuickPanel">
-        <div class="notif-panel-header">
-          <span style="font-weight:700; font-size:0.92rem; color:var(--text-main);">🔔 Alertes de Cures</span>
-          <button type="button" class="btn-close-notif-panel" onclick="toggleQuickNotifPanel(false)">×</button>
-        </div>
-        <div class="notif-panel-body" id="notifPanelBody"></div>
-        <div class="notif-panel-footer">
-          <button type="button" class="btn-notif-settings" onclick="switchAppTab('settings'); toggleQuickNotifPanel(false);">
-            ⚙️ Ajustaments de Notificacions
-          </button>
-        </div>
-      </div>
     </div>
   </header>
 
@@ -4144,6 +4179,24 @@
 
 </div>
 
+<!-- MODAL D'ALERTES I NOTIFICACIONS RÀPIDES -->
+<div class="notif-quick-overlay" id="notifQuickPanel" onclick="if(event.target === this) toggleQuickNotifPanel(false);">
+  <div class="notif-quick-card">
+    <div class="notif-panel-header">
+      <span style="font-weight:700; font-size:1.05rem; color:var(--text-main); display:flex; align-items:center; gap:8px;">
+        <span>🔔</span> <span id="notifPanelTitle">Alertes de Cures</span>
+      </span>
+      <button type="button" class="btn-close-notif-panel" onclick="toggleQuickNotifPanel(false)" aria-label="Tancar">&times;</button>
+    </div>
+    <div class="notif-panel-body" id="notifPanelBody"></div>
+    <div class="notif-panel-footer">
+      <button type="button" class="btn-notif-settings" id="notifPanelSettingsBtn" onclick="switchAppTab('settings'); toggleQuickNotifPanel(false);">
+        ⚙️ Ajustaments de Notificacions
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- PANTALLA FITXA DE LA PLANTA (PANTALLA COMPLETA - Fixta planta.png) -->
 <div class="plant-detail-overlay" id="plantModal">
   <div class="plant-detail-card">
@@ -4153,8 +4206,9 @@
         ‹
       </button>
       <div id="detailTopTitle" style="display:none;"></div>
-      <button type="button" class="btn-detail-bell" onclick="toggleQuickNotifPanel()" aria-label="Notificacions">
-        🔔
+      <button type="button" class="btn-detail-bell" onclick="toggleQuickNotifPanel(event)" aria-label="Notificacions">
+        <span>🔔</span>
+        <span class="bell-badge-dot" id="detailBellBadgeDot" style="display:none;"></span>
       </button>
     </div>
 
@@ -4904,28 +4958,47 @@
   });
   setTimeout(dismissLoadingScreen, 2500);
 
-  // DROPDOWN D'ALERTES I NOTIFICACIONS RÀPIDES
-  function toggleQuickNotifPanel(forceState) {
+  // MODAL D'ALERTES I NOTIFICACIONS RÀPIDES
+  function toggleQuickNotifPanel(eventOrForce, forceState) {
+    if (eventOrForce && eventOrForce.stopPropagation) {
+      eventOrForce.stopPropagation();
+    }
     const panel = document.getElementById('notifQuickPanel');
     if (!panel) return;
-    const isShown = panel.classList.contains('active');
-    const newState = (forceState !== undefined) ? forceState : !isShown;
-    panel.classList.toggle('active', newState);
 
-    if (newState) {
+    let targetState;
+    if (typeof eventOrForce === 'boolean') {
+      targetState = eventOrForce;
+    } else if (typeof forceState === 'boolean') {
+      targetState = forceState;
+    } else {
+      targetState = !panel.classList.contains('active');
+    }
+
+    panel.classList.toggle('active', targetState);
+
+    if (targetState) {
       renderQuickNotifPanel();
     }
   }
 
   function renderQuickNotifPanel() {
     const body = document.getElementById('notifPanelBody');
-    const dot = document.getElementById('headerBellBadgeDot');
     if (!body) return;
+
+    const titleEl = document.getElementById('notifPanelTitle');
+    if (titleEl) {
+      titleEl.textContent = t('Alertes de Cures', 'Alertas de Cuidados', 'Care Alerts');
+    }
+    const settingsBtn = document.getElementById('notifPanelSettingsBtn');
+    if (settingsBtn) {
+      settingsBtn.textContent = '⚙️ ' + t('Ajustaments de Notificacions', 'Ajustes de Notificaciones', 'Notification Settings');
+    }
 
     const overduePlants = [];
     const dueSoonPlants = [];
 
-    plantsCatalog.forEach(plant => {
+    (plantsCatalog || []).forEach(plant => {
       const ws = computeWaterStatus(plant);
       if (ws.status === 'overdue') {
         overduePlants.push({ plant, ws, type: 'water' });
@@ -4934,9 +5007,7 @@
       }
     });
 
-    if (dot) {
-      dot.style.display = (overduePlants.length > 0 || dueSoonPlants.length > 0) ? 'block' : 'none';
-    }
+    updateBellBadgeDot();
 
     if (overduePlants.length === 0 && dueSoonPlants.length === 0) {
       body.innerHTML = `
@@ -4985,17 +5056,18 @@
   }
 
   function updateBellBadgeDot() {
-    const dot = document.getElementById("headerBellBadgeDot");
-    if (!dot) return;
     let hasAlert = false;
-    for (const plant of plantsCatalog) {
+    for (const plant of (plantsCatalog || [])) {
       const ws = computeWaterStatus(plant);
       if (ws.status === 'overdue' || ws.status === 'due_soon') {
         hasAlert = true;
         break;
       }
     }
-    dot.style.display = hasAlert ? "block" : "none";
+    const dots = document.querySelectorAll(".bell-badge-dot");
+    dots.forEach(d => {
+      d.style.display = hasAlert ? "block" : "none";
+    });
   }
 
   // MENÚ KEBAB A LA FITXA DE PLANTA (⋮)
@@ -8366,15 +8438,15 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (!getNotificationsEnabledPreference()) return;
     if (!("Notification" in window) || Notification.permission !== "granted") return;
 
-    const todayStr = getTodayISO();
+    const todayStr = new Date().toISOString().split("T")[0];
     try {
       const lastCheck = localStorage.getItem("registre_plantes_last_notif_date");
       if (lastCheck === todayStr) return; // Ja notificat avui
     } catch (e) {}
 
-    const urgentPlants = plantsData.filter(p => {
-      const calc = getCalculatedStatus(p);
-      return calc.statusKey === "OVERDUE" || calc.daysUntilWater === 0;
+    const urgentPlants = (plantsCatalog || []).filter(p => {
+      const ws = computeWaterStatus(p);
+      return ws.status === "overdue";
     });
 
     if (urgentPlants.length > 0) {
