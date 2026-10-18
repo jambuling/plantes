@@ -104,16 +104,6 @@
       overflow: hidden;
     }
 
-    header::after {
-      content: "🌿";
-      position: absolute;
-      right: 20px;
-      bottom: -25px;
-      font-size: 140px;
-      opacity: 0.10;
-      pointer-events: none;
-    }
-
     .header-content { position: relative; z-index: 2; }
 
     .header-top {
@@ -719,7 +709,7 @@
     }
     @media (min-width: 640px) {
       .insta-grid {
-        gap: 10px;
+        gap: 6px;
       }
     }
     .insta-grid-item {
@@ -2345,18 +2335,26 @@
 
     /* HEADER NADIU (3a353b) */
     .app-header {
-      background: var(--app-header-bg);
+      background: var(--app-header-bg) !important;
+      background-image: none !important;
       color: var(--app-lime);
       position: sticky;
-      top: 0;
+      top: max(6px, env(safe-area-inset-top, 6px));
       z-index: 1000;
-      width: 100%;
-      padding: 12px 18px;
-      padding-top: max(12px, env(safe-area-inset-top, 12px));
+      width: calc(100% - 12px);
+      margin: max(6px, env(safe-area-inset-top, 6px)) 6px 6px 6px;
+      border-radius: 12px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+      box-sizing: border-box;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+    }
+    .app-header::before,
+    .app-header::after {
+      display: none !important;
+      content: none !important;
     }
     .header-left {
       display: flex;
@@ -2390,39 +2388,50 @@
       letter-spacing: -0.02em;
       cursor: pointer;
       user-select: none;
+      line-height: 1;
     }
     .header-right {
       position: relative;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
     }
     .btn-header-bell {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(200, 245, 60, 0.25);
-      color: var(--app-lime);
-      font-size: 1.25rem;
-      width: 40px;
-      height: 40px;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      transition: all 0.2s;
+      padding: 0;
+      transition: opacity 0.15s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
     .btn-header-bell:hover {
-      background: rgba(255, 255, 255, 0.18);
+      opacity: 0.8;
+    }
+    .btn-header-bell:active {
+      transform: scale(0.92);
+    }
+    .header-bell-icon {
+      stroke: #ffffff;
+      width: 22px;
+      height: 22px;
+      display: block;
     }
     .bell-badge-dot {
       position: absolute;
-      top: 7px;
-      right: 7px;
-      width: 9px;
-      height: 9px;
-      background: #f59e0b;
-      border: 2px solid var(--app-header-bg);
+      top: 4px;
+      right: 4px;
+      width: 8px;
+      height: 8px;
+      background: #f97316;
+      border: 1.5px solid var(--app-header-bg);
       border-radius: 50%;
     }
 
@@ -2565,6 +2574,10 @@
     .app-view.active {
       display: block;
     }
+    #viewPlants {
+      padding: 6px 6px calc(24px + env(safe-area-inset-bottom, 0px)) 6px;
+      box-sizing: border-box;
+    }
     @keyframes viewSlideIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
@@ -2574,8 +2587,8 @@
     .app-search-row {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
+      gap: 6px;
+      margin-bottom: 8px;
       width: 100%;
       box-sizing: border-box;
     }
@@ -2587,19 +2600,23 @@
     .app-search-row .search-box input {
       width: 100%;
       box-sizing: border-box;
-      padding: 12px 14px 12px 42px;
+      padding: 10px 14px 10px 42px;
       border-radius: 999px;
-      border: 1.5px solid #d5ded8;
+      border: 1.5px solid #2e282e;
       background: var(--bg-surface);
       font-size: 0.92rem;
       color: var(--text-main);
       outline: none;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      box-shadow: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     .app-search-row .search-box input:focus {
       border-color: #275d36;
       box-shadow: 0 0 0 3px rgba(39, 93, 54, 0.12);
+    }
+    body.dark-mode .app-search-row .search-box input {
+      border-color: #555057;
+      background: #1e1b20;
     }
     .app-search-row .search-icon {
       position: absolute;
@@ -2608,44 +2625,69 @@
       transform: translateY(-50%);
       font-size: 1.05rem;
       color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
     }
     .btn-filter-trigger {
       display: inline-flex !important;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1.5px solid #275d36;
-      background: var(--bg-surface);
-      color: #1e582e;
-      font-size: 0.88rem;
-      font-weight: 700;
+      padding: 6px;
+      border: none !important;
+      background: transparent !important;
+      color: var(--text-main) !important;
       cursor: pointer;
       flex: 0 0 auto !important;
-      width: auto !important;
-      white-space: nowrap;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-      transition: all 0.18s;
-      min-height: 44px;
+      width: 42px !important;
+      height: 42px !important;
+      min-height: 42px;
+      border-radius: 50%;
+      box-shadow: none !important;
+      position: relative;
+      transition: opacity 0.15s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
     .btn-filter-trigger:hover {
-      background: #edf5ee;
+      opacity: 0.7;
+      background: rgba(0, 0, 0, 0.04) !important;
+    }
+    .btn-filter-trigger:active {
+      transform: scale(0.92);
     }
     .btn-filter-trigger.has-active-filters {
-      background: #275d36;
-      color: #ffffff;
-      border-color: #275d36;
+      color: var(--accent) !important;
+      background: transparent !important;
     }
     body.dark-mode .btn-filter-trigger {
-      background: #1e2630;
-      border-color: #86efac;
-      color: #86efac;
+      color: #e2e8f0 !important;
+      background: transparent !important;
+      border: none !important;
+    }
+    body.dark-mode .btn-filter-trigger:hover {
+      background: rgba(255, 255, 255, 0.08) !important;
     }
     body.dark-mode .btn-filter-trigger.has-active-filters {
-      background: #275d36;
-      border-color: #86efac;
+      color: var(--app-lime) !important;
+      background: transparent !important;
+    }
+    .btn-filter-trigger .filter-count-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      min-width: 16px;
+      height: 16px;
+      font-size: 0.65rem;
+      padding: 0 4px;
+      border-radius: 999px;
+      background: var(--accent);
       color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      border: 1.5px solid var(--bg-primary);
     }
     body.dark-mode .btn-source-option {
       background: #172033;
@@ -2934,17 +2976,24 @@
     .insta-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 6px !important;
       width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 25px;
     }
     .insta-grid-item {
       position: relative;
       aspect-ratio: 3 / 4;
-      border-radius: 12px;
+      border-radius: 8px;
       overflow: hidden;
       cursor: pointer;
-      background: #e2e8f0;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      background: var(--bg-surface);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .insta-grid-item:active {
+      transform: scale(0.97);
     }
     .insta-grid-img {
       width: 100%;
@@ -2954,28 +3003,13 @@
       transition: transform 0.25s ease;
     }
     .insta-grid-item:hover .insta-grid-img {
-      transform: scale(1.05);
+      transform: scale(1.04);
     }
     .insta-gradient-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 40%, transparent 100%);
-      display: flex;
-      align-items: flex-end;
-      padding: 8px 6px;
-      pointer-events: none;
+      display: none !important;
     }
     .insta-plant-name {
-      color: #ffffff;
-      font-size: 0.78rem;
-      font-weight: 700;
-      line-height: 1.2;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+      display: none !important;
     }
 
     /* PANTALLA AFEGIR PLANTA (Afegir planta.png) */
@@ -3784,7 +3818,10 @@
 
     <div class="header-right">
       <button type="button" class="btn-header-bell" id="headerBellBtn" onclick="toggleQuickNotifPanel(event)" aria-label="Notificacions i alertes">
-        <span>🔔</span>
+        <svg class="header-bell-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
         <span class="bell-badge-dot" id="headerBellBadgeDot" style="display:none;"></span>
       </button>
     </div>
@@ -3798,12 +3835,22 @@
       <!-- Cerca i filtre ràpid -->
       <div class="app-search-row">
         <div class="search-box">
-          <span class="search-icon">🔍</span>
+          <span class="search-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
           <input type="text" id="searchInput" placeholder="Cerca per nom comú o científic...">
         </div>
         <button type="button" class="btn-filter-trigger" id="openFilterModalBtn" onclick="openFilterModal()" title="Filtres i Vista" aria-label="Filtres i Vista">
-          <span style="font-size: 1.15rem; line-height: 1;">🌪️</span>
-          <span id="filterModalBtnText" class="filter-btn-label">Filtres</span>
+          <svg class="filter-icon-svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="7" x2="21" y2="7"></line>
+            <line x1="16" y1="3.5" x2="16" y2="10.5"></line>
+            <line x1="3" y1="17" x2="21" y2="17"></line>
+            <line x1="8" y1="13.5" x2="8" y2="20.5"></line>
+          </svg>
+          <span id="filterModalBtnText" class="filter-btn-label" style="display:none;"></span>
           <span class="filter-count-badge" id="filterCountBadge" style="display:none;">0</span>
         </button>
       </div>
@@ -4226,7 +4273,10 @@
       </button>
       <div id="detailTopTitle" style="display:none;"></div>
       <button type="button" class="btn-detail-bell" onclick="toggleQuickNotifPanel(event)" aria-label="Notificacions">
-        <span>🔔</span>
+        <svg class="header-bell-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
         <span class="bell-badge-dot" id="detailBellBadgeDot" style="display:none;"></span>
       </button>
     </div>
