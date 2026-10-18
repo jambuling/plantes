@@ -789,20 +789,31 @@
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(16, 26, 18, 0.68);
       backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       display: flex; align-items: center; justify-content: center;
-      padding: 16px; z-index: 1000;
+      padding: 16px; z-index: 25000;
       opacity: 0; visibility: hidden;
-      transition: all 0.2s ease;
+      pointer-events: none;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
     }
-    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
 
     .modal-card {
-      background: #ffffff;
+      background: var(--bg-surface);
+      color: var(--text-main);
       border-radius: var(--radius-lg);
       max-width: 720px; width: 100%;
-      max-height: 90vh; overflow-y: auto;
+      max-height: 90vh;
+      max-height: 90dvh;
+      overflow-y: auto;
       box-shadow: 0 20px 45px rgba(0,0,0,0.3);
       position: relative;
+      box-sizing: border-box;
+      -webkit-overflow-scrolling: touch;
     }
 
     .modal-close {
@@ -4240,7 +4251,7 @@
             ⋮
           </button>
           <div class="detail-kebab-menu" id="detailKebabMenu">
-            <button type="button" onclick="triggerEditFromDetail()">Editar planta</button>
+            <button type="button" onclick="triggerEditFromDetail(event)">Editar planta</button>
             <button type="button" onclick="openGalleryPhotoSourcePicker(); closePlantKebabMenu();">Nova foto</button>
             <button type="button" onclick="triggerHistoryFromDetail()">Històric de cures</button>
             <button type="button" class="danger" onclick="triggerDeleteFromDetail()">Eliminar planta</button>
@@ -4443,8 +4454,8 @@
   <div class="modal-card" style="max-width: 580px; max-height: 88vh; overflow-y: auto;">
     <button class="modal-close" onclick="closeModal('editPlantModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 24px;">
-      <h2 style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
-        ✏️ Editar Planta
+      <h2 id="editPlantModalTitle" style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
+        Editar Planta
       </h2>
       <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 18px;">
         Modifica qualsevol dada de la fitxa o substitueix la fotografia de la planta.
@@ -4608,7 +4619,7 @@
             Cancel·lar
           </button>
           <button type="submit" class="btn-action" style="background: #256a38; color: white; padding: 9px 20px; font-size: 0.90rem;">
-            💾 Desar Canvis
+            Desar Canvis
           </button>
         </div>
       </form>
@@ -5131,15 +5142,27 @@
   }
   document.addEventListener('click', () => closePlantKebabMenu());
 
-  function triggerEditFromDetail() {
+  function triggerEditFromDetail(event) {
+    if (event) {
+      if (event.preventDefault) event.preventDefault();
+      if (event.stopPropagation) event.stopPropagation();
+    }
     closePlantKebabMenu();
     if (currentModalPlantId) openEditPlantModal(currentModalPlantId);
   }
-  function triggerHistoryFromDetail() {
+  function triggerHistoryFromDetail(event) {
+    if (event) {
+      if (event.preventDefault) event.preventDefault();
+      if (event.stopPropagation) event.stopPropagation();
+    }
     closePlantKebabMenu();
     if (currentModalPlantId) openHistoryModal(currentModalPlantId);
   }
-  function triggerDeleteFromDetail() {
+  function triggerDeleteFromDetail(event) {
+    if (event) {
+      if (event.preventDefault) event.preventDefault();
+      if (event.stopPropagation) event.stopPropagation();
+    }
     closePlantKebabMenu();
     if (currentModalPlantId) deletePlant(currentModalPlantId);
   }
@@ -7745,50 +7768,127 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   // EDICIÓ COMPLETA DE PLANTA (Dades + Substitució de Fotografia)
   // -------------------------------------------------------------
   function openEditPlantModal(plantId) {
-    const plant = plantsCatalog.find(p => p.id === plantId);
-    if (!plant) return;
+    const targetId = plantId || currentModalPlantId;
 
-    currentEditingPlantId = plantId;
+    if (!targetId) {
+      // Mode afegir planta manualment
+      currentEditingPlantId = null;
+      currentEditingPhotoBase64 = null;
+      const preview = document.getElementById("editPlantPhotoPreview");
+      if (preview) preview.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E";
+      const nameInp = document.getElementById("editPlantName");
+      if (nameInp) nameInp.value = "";
+      const sciInp = document.getElementById("editPlantScientific");
+      if (sciInp) sciInp.value = "";
+      const zoneInp = document.getElementById("editPlantZone");
+      if (zoneInp) zoneInp.value = "interior";
+      const editRoomEl = document.getElementById("editPlantRoom");
+      if (editRoomEl) editRoomEl.value = "salo";
+      const diffInp = document.getElementById("editPlantDifficulty");
+      if (diffInp) diffInp.value = "facil";
+      const wsInp = document.getElementById("editPlantWaterSummer");
+      if (wsInp) wsInp.value = 7;
+      const wwInp = document.getElementById("editPlantWaterWinter");
+      if (wwInp) wwInp.value = 14;
+      const wdInp = document.getElementById("editPlantWaterDetail");
+      if (wdInp) wdInp.value = "";
+      const ftInp = document.getElementById("editPlantFertType");
+      if (ftInp) ftInp.value = "Líquid universal";
+      const fdInp = document.getElementById("editPlantFertDays");
+      if (fdInp) fdInp.value = 20;
+      const fsInp = document.getElementById("editPlantFertSeason");
+      if (fsInp) fsInp.value = "Primavera i Estiu";
+      const fnInp = document.getElementById("editPlantFertNotes");
+      if (fnInp) fnInp.value = "";
+      const lInp = document.getElementById("editPlantLight");
+      if (lInp) lInp.value = "";
+      const sInp = document.getElementById("editPlantSubstrate");
+      if (sInp) sInp.value = "";
+      const potInp = document.getElementById("editPlantPotSize");
+      if (potInp) potInp.value = "";
+      const toxInp = document.getElementById("editPlantToxic");
+      if (toxInp) toxInp.value = "false";
+      const toxdInp = document.getElementById("editPlantToxicityDetail");
+      if (toxdInp) toxdInp.value = "Segura per a mascotes.";
+      const tipInp = document.getElementById("editPlantTip");
+      if (tipInp) tipInp.value = "";
+      const titleEl = document.getElementById("editPlantModalTitle");
+      if (titleEl) titleEl.innerText = t("Afegir Planta Manualment", "Añadir Planta Manualmente", "Add Plant Manually");
+      const modal = document.getElementById("editPlantModal");
+      if (modal) modal.classList.add("active");
+      return;
+    }
+
+    const plant = plantsCatalog.find(p => String(p.id) === String(targetId));
+    if (!plant) {
+      console.warn("Plant not found for edit:", targetId);
+      return;
+    }
+
+    currentEditingPlantId = plant.id;
     currentEditingPhotoBase64 = plant.photo;
 
-    document.getElementById("editPlantPhotoPreview").src = plant.photo;
-    document.getElementById("editPlantName").value = plant.name || "";
-    document.getElementById("editPlantScientific").value = plant.scientific || "";
-    document.getElementById("editPlantZone").value = plant.zone || "interior";
+    const titleEl = document.getElementById("editPlantModalTitle");
+    if (titleEl) titleEl.innerText = t("Editar Planta", "Editar Planta", "Edit Plant");
+
+    const preview = document.getElementById("editPlantPhotoPreview");
+    if (preview) preview.src = plant.photo;
+    const nameInp = document.getElementById("editPlantName");
+    if (nameInp) nameInp.value = plant.name || "";
+    const sciInp = document.getElementById("editPlantScientific");
+    if (sciInp) sciInp.value = plant.scientific || "";
+    const zoneInp = document.getElementById("editPlantZone");
+    if (zoneInp) zoneInp.value = plant.zone || "interior";
     const editRoomEl = document.getElementById("editPlantRoom");
     if (editRoomEl) {
       editRoomEl.value = plant.room || (plant.zone === "exterior" ? "terrassa" : "salo");
     }
-    document.getElementById("editPlantDifficulty").value = plant.difficulty || "facil";
+    const diffInp = document.getElementById("editPlantDifficulty");
+    if (diffInp) diffInp.value = plant.difficulty || "facil";
     
-    document.getElementById("editPlantWaterSummer").value = plant.waterDaysSummer || 7;
-    document.getElementById("editPlantWaterWinter").value = plant.waterDaysWinter || 14;
-    document.getElementById("editPlantWaterDetail").value = plant.waterDetail || "";
+    const wsInp = document.getElementById("editPlantWaterSummer");
+    if (wsInp) wsInp.value = plant.waterDaysSummer || 7;
+    const wwInp = document.getElementById("editPlantWaterWinter");
+    if (wwInp) wwInp.value = plant.waterDaysWinter || 14;
+    const wdInp = document.getElementById("editPlantWaterDetail");
+    if (wdInp) wdInp.value = plant.waterDetail || "";
 
-    document.getElementById("editPlantFertType").value = plant.fertilizerType || "";
-    document.getElementById("editPlantFertDays").value = plant.fertilizerDays || 20;
-    document.getElementById("editPlantFertSeason").value = plant.fertilizerSeason || "Primavera i Estiu";
-    document.getElementById("editPlantFertNotes").value = plant.fertilizerNotes || "";
+    const ftInp = document.getElementById("editPlantFertType");
+    if (ftInp) ftInp.value = plant.fertilizerType || "";
+    const fdInp = document.getElementById("editPlantFertDays");
+    if (fdInp) fdInp.value = plant.fertilizerDays || 20;
+    const fsInp = document.getElementById("editPlantFertSeason");
+    if (fsInp) fsInp.value = plant.fertilizerSeason || "Primavera i Estiu";
+    const fnInp = document.getElementById("editPlantFertNotes");
+    if (fnInp) fnInp.value = plant.fertilizerNotes || "";
 
-    document.getElementById("editPlantLight").value = plant.light || "";
-    document.getElementById("editPlantSubstrate").value = plant.substrate || "";
+    const lInp = document.getElementById("editPlantLight");
+    if (lInp) lInp.value = plant.light || "";
+    const sInp = document.getElementById("editPlantSubstrate");
+    if (sInp) sInp.value = plant.substrate || "";
     const potInp = document.getElementById("editPlantPotSize");
     if (potInp) potInp.value = plant.potSize || "";
     
-    document.getElementById("editPlantToxic").value = plant.toxic ? "true" : "false";
-    document.getElementById("editPlantToxicityDetail").value = plant.toxicityDetail || (plant.toxic ? "🔴 Tòxica per a mascotes." : "🟢 Segura per mascotes.");
-    document.getElementById("editPlantTip").value = plant.tip || "";
+    const toxInp = document.getElementById("editPlantToxic");
+    if (toxInp) toxInp.value = plant.toxic ? "true" : "false";
+    const toxdInp = document.getElementById("editPlantToxicityDetail");
+    if (toxdInp) toxdInp.value = plant.toxicityDetail || (plant.toxic ? "Tòxica per a mascotes." : "Segura per mascotes.");
+    const tipInp = document.getElementById("editPlantTip");
+    if (tipInp) tipInp.value = plant.tip || "";
 
-    document.getElementById("editPlantModal").classList.add("active");
+    const modal = document.getElementById("editPlantModal");
+    if (modal) {
+      modal.classList.add("active");
+    }
   }
 
   function updateEditToxicityLabel(val) {
     const isToxic = (val === "true");
     const detailInp = document.getElementById("editPlantToxicityDetail");
     if (isToxic && (!detailInp.value || detailInp.value.includes("Segura"))) {
-      detailInp.value = "🔴 Tòxica en cas d'ingesta per mascotes.";
+      detailInp.value = "Tòxica en cas d'ingesta per mascotes.";
     } else if (!isToxic && (!detailInp.value || detailInp.value.includes("Tòxica"))) {
-      detailInp.value = "🟢 Segura per mascotes.";
+      detailInp.value = "Segura per mascotes.";
     }
   }
 
@@ -7809,15 +7909,83 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
   async function saveEditedPlant(event) {
     if (event && event.preventDefault) event.preventDefault();
-    if (!currentEditingPlantId) return;
 
-    const plantIndex = plantsCatalog.findIndex(p => p.id === currentEditingPlantId);
+    const diffVal = document.getElementById("editPlantDifficulty").value;
+    const diffLabel = diffVal === 'molt_facil' ? 'Molt fàcil' : (diffVal === 'facil' ? 'Fàcil' : 'Mitjana');
+    const diffCls = diffVal === 'molt_facil' ? 'badge-diff-very-easy' : (diffVal === 'facil' ? 'badge-diff-easy' : 'badge-diff-medium');
+
+    const zoneVal = document.getElementById("editPlantZone").value;
+    const zoneLabel = (zoneVal === "exterior") ? "Balcó / Exterior" : "Interior";
+    const editRoomInput = document.getElementById("editPlantRoom");
+    const roomVal = editRoomInput ? editRoomInput.value : (zoneVal === "exterior" ? "terrassa" : "salo");
+
+    const isToxic = (document.getElementById("editPlantToxic").value === "true");
+    const toxicDetail = document.getElementById("editPlantToxicityDetail").value.trim() || 
+                        (isToxic ? "Tòxica en cas d'ingesta per mascotes." : "Segura per mascotes.");
+
+    const waterSummer = parseInt(document.getElementById("editPlantWaterSummer").value) || 7;
+    const waterWinter = parseInt(document.getElementById("editPlantWaterWinter").value) || 14;
+    const fertDays = parseInt(document.getElementById("editPlantFertDays").value) || 20;
+    const potInp = document.getElementById("editPlantPotSize");
+    const potSizeVal = potInp ? potInp.value.trim() : "";
+
+    // 1. Cas Afegir Nova Planta Manualment
+    if (!currentEditingPlantId) {
+      const newId = "planta_" + Date.now();
+      let photoUrl = currentEditingPhotoBase64 || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E";
+      if (currentEditingPhotoBase64 && currentEditingPhotoBase64.startsWith("data:")) {
+        photoUrl = await storeUploadedPhoto("photo_" + Date.now(), currentEditingPhotoBase64);
+      }
+      const newPlant = {
+        id: newId,
+        name: document.getElementById("editPlantName").value.trim() || t("Nova planta", "Nueva planta", "New plant"),
+        scientific: document.getElementById("editPlantScientific").value.trim(),
+        photo: photoUrl,
+        gallery: [
+          { id: "photo_" + Date.now(), url: photoUrl, date: new Date().toISOString() }
+        ],
+        zone: zoneVal,
+        zoneLabel: zoneLabel,
+        room: roomVal,
+        difficulty: diffVal,
+        difficultyLabel: diffLabel,
+        difficultyClass: diffCls,
+        waterDaysSummer: waterSummer,
+        waterDaysWinter: waterWinter,
+        waterSummerText: "Cada " + waterSummer + " dies",
+        waterWinterText: "Cada " + waterWinter + " dies",
+        waterDetail: document.getElementById("editPlantWaterDetail").value.trim(),
+        fertilizerType: document.getElementById("editPlantFertType").value.trim(),
+        fertilizerDays: fertDays,
+        fertilizerFreq: "Cada " + fertDays + " dies",
+        fertilizerSeason: document.getElementById("editPlantFertSeason").value.trim() || "Primavera i Estiu",
+        fertilizerNotes: document.getElementById("editPlantFertNotes").value.trim(),
+        light: document.getElementById("editPlantLight").value.trim(),
+        substrate: document.getElementById("editPlantSubstrate").value.trim(),
+        potSize: potSizeVal,
+        toxic: isToxic,
+        toxicityDetail: toxicDetail,
+        tip: document.getElementById("editPlantTip").value.trim()
+      };
+      getPlantGallery(newPlant);
+      plantsCatalog.unshift(newPlant);
+      saveLocalCatalog(plantsCatalog);
+      closeModal("editPlantModal");
+      switchAppTab("plants");
+      renderPlants();
+      showToast(t(`Planta "${newPlant.name}" afegida amb èxit!`, `¡Planta "${newPlant.name}" añadida con éxito!`, `Plant "${newPlant.name}" added successfully!`), "🌿");
+      await syncCatalogToCloud();
+      return;
+    }
+
+    // 2. Cas Edició Planta Existent
+    const plantIndex = plantsCatalog.findIndex(p => String(p.id) === String(currentEditingPlantId));
     if (plantIndex === -1) return;
 
     const existingPlant = plantsCatalog[plantIndex];
     const gallery = getPlantGallery(existingPlant);
     let newPhoto = currentEditingPhotoBase64 || existingPlant.photo;
-    if (newPhoto && newPhoto !== existingPlant.photo) {
+    if (newPhoto && newPhoto !== existingPlant.photo && newPhoto.startsWith("data:")) {
       const photoId = "photo_" + Date.now();
       newPhoto = await storeUploadedPhoto(photoId, newPhoto);
       gallery.unshift({
@@ -7826,25 +7994,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
         date: new Date().toISOString()
       });
     }
-
-    const diffVal = document.getElementById("editPlantDifficulty").value;
-    const diffLabel = diffVal === 'molt_facil' ? 'Molt fàcil' : (diffVal === 'facil' ? 'Fàcil' : 'Mitjana');
-    const diffCls = diffVal === 'molt_facil' ? 'badge-diff-very-easy' : (diffVal === 'facil' ? 'badge-diff-easy' : 'badge-diff-medium');
-
-    const zoneVal = document.getElementById("editPlantZone").value;
-    const zoneLabel = (zoneVal === "exterior") ? "☀️ Balcó / Exterior" : "🏠 Interior";
-    const editRoomInput = document.getElementById("editPlantRoom");
-    const roomVal = editRoomInput ? editRoomInput.value : (zoneVal === "exterior" ? "terrassa" : "salo");
-
-    const isToxic = (document.getElementById("editPlantToxic").value === "true");
-    const toxicDetail = document.getElementById("editPlantToxicityDetail").value.trim() || 
-                        (isToxic ? "🔴 Tòxica en cas d'ingesta per mascotes." : "🟢 Segura per mascotes.");
-
-    const waterSummer = parseInt(document.getElementById("editPlantWaterSummer").value) || 7;
-    const waterWinter = parseInt(document.getElementById("editPlantWaterWinter").value) || 14;
-    const fertDays = parseInt(document.getElementById("editPlantFertDays").value) || 20;
-    const potInp = document.getElementById("editPlantPotSize");
-    const potSizeVal = potInp ? potInp.value.trim() : (existingPlant.potSize || "");
 
     const updated = {
       ...existingPlant,
@@ -7870,7 +8019,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       fertilizerNotes: document.getElementById("editPlantFertNotes").value.trim(),
       light: document.getElementById("editPlantLight").value.trim(),
       substrate: document.getElementById("editPlantSubstrate").value.trim(),
-      potSize: potSizeVal,
+      potSize: potSizeVal || existingPlant.potSize || "",
       toxic: isToxic,
       toxicityDetail: toxicDetail,
       tip: document.getElementById("editPlantTip").value.trim()
