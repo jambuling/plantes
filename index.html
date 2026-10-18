@@ -299,6 +299,44 @@
       color: #0d1610;
     }
 
+    .filter-modal-card {
+      max-width: 500px;
+      width: 94vw;
+      max-height: 88vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+    }
+    .filter-view-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    @media (max-width: 520px) {
+      .filter-modal-card {
+        width: 96vw;
+        max-height: 86vh;
+        margin: auto;
+      }
+      .filter-modal-content {
+        padding: 18px 14px !important;
+      }
+      .filter-view-grid {
+        gap: 6px !important;
+      }
+      .filter-view-grid .pref-option-btn {
+        padding: 10px 4px !important;
+        font-size: 0.78rem !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+      }
+      .filter-modal-card select {
+        font-size: 0.90rem !important;
+        padding: 10px 12px !important;
+      }
+    }
+
     .filters-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
     select {
@@ -2841,12 +2879,14 @@
       </div>
     </div>
   </div>
+</div>
+
 <!-- MODAL FILTRES I VISUALITZACIÓ -->
 <div class="modal-overlay" id="filterModal">
-  <div class="modal-card" style="max-width: 500px; max-height: 90vh; overflow-y: auto;">
+  <div class="modal-card filter-modal-card" style="max-width: 500px; width: 94vw; max-height: 88vh; overflow-y: auto;">
     <button class="modal-close" onclick="closeModal('filterModal')" aria-label="Tancar finestra">&times;</button>
-    <div class="modal-content" style="padding: 24px;">
-      <h2 id="filterModalTitle" style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
+    <div class="modal-content filter-modal-content" style="padding: 22px 20px;">
+      <h2 id="filterModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
         🌪️ Filtres i Visualització
       </h2>
       <p id="filterModalSubtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
@@ -2856,15 +2896,18 @@
       <!-- OPCIONS DE VISTA (3 BOTONS) -->
       <div class="pref-section">
         <span class="pref-section-label" id="filterViewSectionLabel">👁️ Tipus de Visualització</span>
-        <div class="pref-options-grid">
+        <div class="pref-options-grid filter-view-grid">
           <button type="button" class="pref-option-btn active" id="viewGridBtn" onclick="setActiveViewMode('grid')">
-            ▦ <span id="viewGridBtnText">Targetes</span>
+            <span style="font-size:1.15rem; line-height:1;">▦</span>
+            <span id="viewGridBtnText">Targetes</span>
           </button>
           <button type="button" class="pref-option-btn" id="viewTableBtn" onclick="setActiveViewMode('photos')">
-            📸 <span id="viewTableBtnText">Fotos (3 col.)</span>
+            <span style="font-size:1.15rem; line-height:1;">📸</span>
+            <span id="viewTableBtnText">Fotos</span>
           </button>
           <button type="button" class="pref-option-btn" id="viewCalendarBtn" onclick="setActiveViewMode('calendar')">
-            📅 <span id="viewCalendarBtnText">Calendari</span>
+            <span style="font-size:1.15rem; line-height:1;">📅</span>
+            <span id="viewCalendarBtnText">Calendari</span>
           </button>
         </div>
       </div>
