@@ -1183,8 +1183,8 @@
       margin-bottom: 14px;
     }
     .calendar-panel-title {
-      font-family: var(--font-display);
-      font-size: 1.2rem;
+      font-family: var(--font-sans);
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--text-main);
       display: flex;
@@ -4309,7 +4309,7 @@
         <!-- PREVISIÓ SETMANAL (7 DIES) -->
         <div class="calendar-panel">
           <div class="calendar-panel-header">
-            <div class="calendar-panel-title" id="weeklyCalendarTitle">🗓️ Previsió Setmanal (Propers 7 dies)</div>
+            <div class="calendar-panel-title" id="weeklyCalendarTitle">Propers 7 dies</div>
             <span id="weeklyCalendarHint" style="font-size: 0.80rem; color: var(--text-muted);">Fes clic a qualsevol planta per obrir la seva fitxa</span>
           </div>
           <div class="week-strip-grid" id="weeklyCalendarGrid"></div>
@@ -4318,7 +4318,7 @@
         <!-- CALENDARI MENSUAL -->
         <div class="calendar-panel">
           <div class="calendar-panel-header">
-            <div class="calendar-panel-title" id="calendarMonthTitle">📅 Calendari Mensual</div>
+            <div class="calendar-panel-title" id="calendarMonthTitle">Calendari mensual</div>
             <div class="month-nav-group">
               <button type="button" class="btn-cal-nav" id="calPrevMonthBtn" onclick="changeCalendarMonth(-1)">‹ Mes anterior</button>
               <button type="button" class="btn-cal-nav" id="calTodayBtn" onclick="resetCalendarToToday()">Avui</button>
@@ -9284,7 +9284,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("resetFiltersBtn", t("Restablir filtres", "Restablecer filtros", "Reset filters"));
     setElText("closeFilterBtn", t("Fet", "Listo", "Done"));
 
-    setElText("weeklyCalendarTitle", t("🗓️ Previsió Setmanal (Propers 7 dies)", "🗓️ Previsión Semanal (Próximos 7 días)", "🗓️ Weekly Forecast (Next 7 days)"));
+    setElText("weeklyCalendarTitle", t("Propers 7 dies", "Próximos 7 días", "Next 7 days"));
     setElText("weeklyCalendarHint", t("Clica una planta per obrir la fitxa", "Haz clic en una planta para abrir la ficha", "Click any plant to view details"));
     setElText("calPrevMonthBtn", t("◀ Anterior", "◀ Anterior", "◀ Prev"));
     setElText("calTodayBtn", t("Avui", "Hoy", "Today"));
