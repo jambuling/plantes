@@ -704,12 +704,12 @@
     .insta-grid {
       display: none;
       grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
+      gap: 3px;
       margin-bottom: 25px;
     }
     @media (min-width: 640px) {
       .insta-grid {
-        gap: 6px;
+        gap: 3px;
       }
     }
     .insta-grid-item {
@@ -2976,7 +2976,7 @@
     .insta-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 6px !important;
+      gap: 3px !important;
       width: 100%;
       box-sizing: border-box;
       margin-bottom: 25px;
@@ -3010,6 +3010,75 @@
     }
     .insta-plant-name {
       display: none !important;
+    }
+
+    /* TARGETA AFEGIR PLANTA A LA GRAELLA */
+    .insta-grid-add-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--bg-surface);
+      border: 1.5px dashed var(--border-strong);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      padding: 10px 6px;
+      text-align: center;
+      user-select: none;
+      box-sizing: border-box;
+      text-decoration: none;
+    }
+    .insta-grid-add-card:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    .insta-grid-add-card:active {
+      transform: scale(0.96);
+    }
+    .insta-add-icon-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+    }
+    .insta-grid-add-card:hover .insta-add-icon-wrap {
+      transform: scale(1.1);
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .insta-add-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.25;
+      text-align: center;
+      padding: 0 4px;
+    }
+    body.dark-mode .insta-grid-add-card {
+      background: #1e2621;
+      border-color: #3b5443;
+    }
+    body.dark-mode .insta-add-icon-wrap {
+      background: rgba(200, 245, 60, 0.12);
+      color: var(--app-lime);
+    }
+    body.dark-mode .insta-grid-add-card:hover {
+      background: #25332a;
+      border-color: var(--app-lime);
+    }
+    body.dark-mode .insta-grid-add-card:hover .insta-add-icon-wrap {
+      background: var(--app-lime);
+      color: #1e2610;
+    }
+    body.dark-mode .insta-add-label {
+      color: #e2e8f0;
     }
 
     /* PANTALLA AFEGIR PLANTA (Afegir planta.png) */
@@ -7466,7 +7535,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     }).join('');
 
     if (instaGridEl) {
-      instaGridEl.innerHTML = filtered.map(plant => `
+      const itemsHtml = filtered.map(plant => `
         <div class="insta-grid-item" onclick="openPlantModal('${plant.id}')" title="${plant.name}">
           <img class="insta-grid-img" src="${plant.photo}" alt="${plant.name}" loading="lazy">
           <div class="insta-gradient-overlay">
@@ -7474,6 +7543,20 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           </div>
         </div>
       `).join('');
+
+      const addCardHtml = `
+        <div class="insta-grid-item insta-grid-add-card" onclick="switchAppTab('add')" title="${t('Afegir planta', 'Añadir planta', 'Add plant')}" role="button" tabindex="0">
+          <div class="insta-add-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </div>
+          <span class="insta-add-label">${t('Afegir planta', 'Añadir planta', 'Add plant')}</span>
+        </div>
+      `;
+
+      instaGridEl.innerHTML = itemsHtml + addCardHtml;
     }
   }
 
