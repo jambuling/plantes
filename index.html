@@ -300,8 +300,8 @@
     }
     .filter-view-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
     @media (max-width: 520px) {
       .filter-modal-card {
@@ -313,13 +313,13 @@
         padding: 18px 14px !important;
       }
       .filter-view-grid {
-        gap: 6px !important;
+        gap: 8px !important;
       }
       .filter-view-grid .pref-option-btn {
-        padding: 10px 4px !important;
-        font-size: 0.78rem !important;
-        flex-direction: column !important;
-        gap: 4px !important;
+        padding: 11px 12px !important;
+        font-size: 0.88rem !important;
+        flex-direction: row !important;
+        gap: 8px !important;
       }
       .filter-modal-card select {
         font-size: 0.90rem !important;
@@ -4893,95 +4893,103 @@
     <button class="modal-close" onclick="closeModal('filterModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content filter-modal-content" style="padding: 22px 20px;">
       <h2 id="filterModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
-        🌪️ Filtres i Visualització
+        Filtres i visualització
       </h2>
       <p id="filterModalSubtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
         Tria com vols veure les plantes i filtra per estat, ubicació o dificultat.
       </p>
 
-      <!-- OPCIONS DE VISTA (3 BOTONS) -->
+      <!-- OPCIONS DE VISTA (2 BOTONS) -->
       <div class="pref-section">
-        <span class="pref-section-label" id="filterViewSectionLabel">👁️ Tipus de Visualització</span>
+        <span class="pref-section-label" id="filterViewSectionLabel">Tipus de visualització</span>
         <div class="pref-options-grid filter-view-grid">
           <button type="button" class="pref-option-btn active" id="viewGridBtn" onclick="setActiveViewMode('grid')">
-            <span style="font-size:1.15rem; line-height:1;">▦</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
             <span id="viewGridBtnText">Vista llista</span>
           </button>
           <button type="button" class="pref-option-btn" id="viewTableBtn" onclick="setActiveViewMode('photos')">
-            <span style="font-size:1.15rem; line-height:1;">📸</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
             <span id="viewTableBtnText">Vista graella</span>
-          </button>
-          <button type="button" class="pref-option-btn" id="viewCalendarBtn" onclick="setActiveViewMode('calendar')">
-            <span style="font-size:1.15rem; line-height:1;">📅</span>
-            <span id="viewCalendarBtnText">Calendari</span>
           </button>
         </div>
       </div>
 
-      <!-- CRITERI D'ORDENACIÓ -->
+      <!-- ORDRE -->
       <div class="pref-section">
-        <span class="pref-section-label" id="filterSortSectionLabel">↕️ Criteri d'ordenació</span>
-        <select id="sortFilter" class="pref-select" title="Criteri d'ordenació" onchange="handleSortFilterChange(this.value)">
-          <option value="urgency">💧 Toca regar abans (Urgència)</option>
-          <option value="name_asc">🔤 Alfabètic (A - Z)</option>
-          <option value="name_desc">🔤 Alfabètic (Z - A)</option>
+        <span class="pref-section-label" id="filterSortSectionLabel">Ordre</span>
+        <select id="sortFilter" class="pref-select" title="Ordre" onchange="handleSortFilterChange(this.value)">
+          <option value="urgency">Reg més urgent primer</option>
+          <option value="name_asc">Alfabètic (A - Z)</option>
+          <option value="name_desc">Alfabètic (Z - A)</option>
         </select>
       </div>
 
       <!-- ESTAT DE REG -->
       <div class="pref-section">
-        <span class="pref-section-label" id="filterStatusSectionLabel">💧 Estat de Reg</span>
+        <span class="pref-section-label" id="filterStatusSectionLabel">Estat de reg</span>
         <select id="statusFilter" class="pref-select" onchange="renderPlants(); updateFilterActiveBadge();">
-          <option value="all">Tots els estats</option>
-          <option value="overdue">🏺 Toca revisar reg (avui / pendent)</option>
-          <option value="due_soon">🟡 Avis: Toca aviat (1-2 dies)</option>
-          <option value="ok">🟢 Al dia</option>
-          <option value="none">⚪ Sense registre de reg</option>
+          <option value="all">Estat de reg: Tots</option>
+          <option value="overdue">Toca revisar reg (avui / pendent)</option>
+          <option value="due_soon">Avís: Toca aviat (1-2 dies)</option>
+          <option value="ok">Al dia</option>
+          <option value="none">Sense registre de reg</option>
         </select>
       </div>
 
       <!-- UBICACIÓ (ZONA) -->
       <div class="pref-section">
-        <span class="pref-section-label" id="filterZoneSectionLabel">📍 Ubicació Principal</span>
+        <span class="pref-section-label" id="filterZoneSectionLabel">Ubicació principal</span>
         <select id="zoneFilter" class="pref-select" onchange="renderPlants(); updateFilterActiveBadge();">
-          <option value="all">Totes les zones</option>
-          <option value="interior">🏠 Interior</option>
-          <option value="exterior">☀️ Exterior</option>
+          <option value="all">Ubicació: Totes</option>
+          <option value="interior">Interior</option>
+          <option value="exterior">Exterior</option>
         </select>
       </div>
 
       <!-- HABITACIÓ / ESPAI -->
       <div class="pref-section">
-        <span class="pref-section-label" id="filterRoomSectionLabel">🛋️ Habitació o Espai</span>
+        <span class="pref-section-label" id="filterRoomSectionLabel">Habitació o espai</span>
         <select id="roomFilter" class="pref-select" onchange="renderPlants(); updateFilterActiveBadge();">
-          <option value="all">📍 Totes les habitacions</option>
-          <option value="salo">🛋️ Saló</option>
-          <option value="cuina">🍳 Cuina</option>
-          <option value="dormitori">🛏️ Dormitori</option>
-          <option value="bany">🚿 Bany</option>
-          <option value="despatx">💼 Despatx</option>
-          <option value="rebedor">🚪 Rebedor</option>
-          <option value="terrassa">🪴 Terrassa</option>
-          <option value="balco">☀️ Balcó</option>
-          <option value="pati">🌿 Pati</option>
-          <option value="altres">📦 Altres</option>
+          <option value="all">Totes les habitacions</option>
+          <option value="salo">Saló</option>
+          <option value="cuina">Cuina</option>
+          <option value="dormitori">Dormitori</option>
+          <option value="bany">Bany</option>
+          <option value="despatx">Despatx</option>
+          <option value="rebedor">Rebedor</option>
+          <option value="terrassa">Terrassa</option>
+          <option value="balco">Balcó</option>
+          <option value="pati">Pati</option>
+          <option value="altres">Altres</option>
         </select>
       </div>
 
       <!-- DIFICULTAT -->
       <div class="pref-section" style="margin-bottom: 22px;">
-        <span class="pref-section-label" id="filterDiffSectionLabel">⭐ Dificultat de Cures</span>
+        <span class="pref-section-label" id="filterDiffSectionLabel">Dificultat de cures</span>
         <select id="difficultyFilter" class="pref-select" onchange="renderPlants(); updateFilterActiveBadge();">
-          <option value="all">Totes les dificultats</option>
-          <option value="molt_facil">🟢 Molt fàcil</option>
-          <option value="facil">🔵 Fàcil</option>
-          <option value="mitjana">🟡 Mitjana</option>
+          <option value="all">Dificultat: Totes</option>
+          <option value="molt_facil">Molt fàcil</option>
+          <option value="facil">Fàcil</option>
+          <option value="mitjana">Mitjana</option>
         </select>
       </div>
 
       <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
         <button type="button" class="btn-action" id="resetFiltersBtn" style="background: var(--bg-tertiary); color: var(--text-main); border: 1px solid var(--border-subtle); padding: 8px 16px; font-size: 0.84rem;" onclick="resetAllFilters()">
-          🔄 Restablir filtres
+          Restablir filtres
         </button>
         <button type="button" class="btn-action" id="closeFilterBtn" style="background: #256a38; color: white; padding: 8px 22px; font-weight: 600;" onclick="closeModal('filterModal')">
           Fet
@@ -9004,37 +9012,37 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const statusSel = document.getElementById("statusFilter");
     if (statusSel && statusSel.options.length >= 4) {
-      statusSel.options[0].text = t("💧 Estat de reg: Tots", "💧 Estado de riego: Todos", "💧 Watering status: All");
-      statusSel.options[1].text = t("🪴 Per revisar reg (terra seca?)", "🪴 Por revisar riego (¿tierra seca?)", "🪴 Check soil (dry?)");
-      statusSel.options[2].text = t("🟡 Tocarà regar aviat (1-2 dies)", "🟡 Tocará regar pronto (1-2 días)", "🟡 Due soon (1-2 days)");
-      statusSel.options[3].text = t("🟢 Reg al dia", "🟢 Riego al día", "🟢 Up to date");
+      statusSel.options[0].text = t("Estat de reg: Tots", "Estado de riego: Todos", "Watering status: All");
+      statusSel.options[1].text = t("Per revisar reg (terra seca?)", "Por revisar riego (¿tierra seca?)", "Check soil (dry?)");
+      statusSel.options[2].text = t("Tocarà regar aviat (1-2 dies)", "Tocará regar pronto (1-2 días)", "Due soon (1-2 days)");
+      statusSel.options[3].text = t("Reg al dia", "Riego al día", "Up to date");
     }
 
     const zoneSel = document.getElementById("zoneFilter");
     if (zoneSel && zoneSel.options.length >= 3) {
-      zoneSel.options[0].text = t("📍 Ubicació: Totes", "📍 Ubicación: Todas", "📍 Location: All");
-      zoneSel.options[1].text = t("🏠 Interior", "🏠 Interior", "🏠 Indoor");
-      zoneSel.options[2].text = t("☀️ Exterior", "☀️ Exterior", "☀️ Outdoor");
+      zoneSel.options[0].text = t("Ubicació: Totes", "Ubicación: Todas", "Location: All");
+      zoneSel.options[1].text = t("Interior", "Interior", "Indoor");
+      zoneSel.options[2].text = t("Exterior", "Exterior", "Outdoor");
     }
 
     const roomSel = document.getElementById("roomFilter");
     if (roomSel && roomSel.options.length >= 11) {
-      roomSel.options[0].text = t("📍 Totes les habitacions", "📍 Todas las habitaciones", "📍 All Rooms / Spots");
-      roomSel.options[1].text = t("🛋️ Saló", "🛋️ Salón", "🛋️ Living Room");
-      roomSel.options[2].text = t("🍳 Cuina", "🍳 Cocina", "🍳 Kitchen");
-      roomSel.options[3].text = t("🛏️ Dormitori", "🛏️ Dormitorio", "🛏️ Bedroom");
-      roomSel.options[4].text = t("🚿 Bany", "🚿 Baño", "🚿 Bathroom");
-      roomSel.options[5].text = t("💼 Despatx", "💼 Despacho", "💼 Office");
-      roomSel.options[6].text = t("🚪 Rebedor", "🚪 Recibidor", "🚪 Hallway / Entry");
-      roomSel.options[7].text = t("🪴 Terrassa", "🪴 Terraza", "🪴 Terrace");
-      roomSel.options[8].text = t("☀️ Balcó", "☀️ Balcón", "☀️ Balcony");
-      roomSel.options[9].text = t("🌿 Pati", "🌿 Patio", "🌿 Patio / Courtyard");
-      roomSel.options[10].text = t("📦 Altres", "📦 Otros", "📦 Other");
+      roomSel.options[0].text = t("Totes les habitacions", "Todas las habitaciones", "All rooms / spots");
+      roomSel.options[1].text = t("Saló", "Salón", "Living Room");
+      roomSel.options[2].text = t("Cuina", "Cocina", "Kitchen");
+      roomSel.options[3].text = t("Dormitori", "Dormitorio", "Bedroom");
+      roomSel.options[4].text = t("Bany", "Baño", "Bathroom");
+      roomSel.options[5].text = t("Despatx", "Despacho", "Office");
+      roomSel.options[6].text = t("Rebedor", "Recibidor", "Hallway / Entry");
+      roomSel.options[7].text = t("Terrassa", "Terraza", "Terrace");
+      roomSel.options[8].text = t("Balcó", "Balcón", "Balcony");
+      roomSel.options[9].text = t("Pati", "Patio", "Patio / Courtyard");
+      roomSel.options[10].text = t("Altres", "Otros", "Other");
     }
 
     const diffSel = document.getElementById("difficultyFilter");
     if (diffSel && diffSel.options.length >= 4) {
-      diffSel.options[0].text = t("⭐ Dificultat: Totes", "⭐ Dificultad: Todas", "⭐ Difficulty: All");
+      diffSel.options[0].text = t("Dificultat: Totes", "Dificultad: Todas", "Difficulty: All");
       diffSel.options[1].text = t("Molt fàcil", "Muy fácil", "Very easy");
       diffSel.options[2].text = t("Fàcil", "Fácil", "Easy");
       diffSel.options[3].text = t("Mitjana", "Media", "Moderate");
@@ -9042,25 +9050,24 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const sortSel = document.getElementById("sortFilter");
     if (sortSel && sortSel.options.length >= 3) {
-      sortSel.options[0].text = t("🚨 Ordenar: Reg més urgent primer", "🚨 Ordenar: Riego más urgente primero", "🚨 Sort: Most urgent watering first");
-      sortSel.options[1].text = t("🔤 Ordenar: Alfabètic (A → Z)", "🔤 Ordenar: Alfabético (A → Z)", "🔤 Sort: Alphabetical (A → Z)");
-      sortSel.options[2].text = t("🔤 Ordenar: Alfabètic (Z → A)", "🔤 Ordenar: Alfabético (Z → A)", "🔤 Sort: Alphabetical (Z → A)");
+      sortSel.options[0].text = t("Reg més urgent primer", "Riego más urgente primero", "Most urgent watering first");
+      sortSel.options[1].text = t("Alfabètic (A → Z)", "Alfabético (A → Z)", "Alphabetical (A → Z)");
+      sortSel.options[2].text = t("Alfabètic (Z → A)", "Alfabético (Z → A)", "Alphabetical (Z → A)");
     }
 
     // Modal de Filtres i Visualització
-    setElText("filterModalBtnText", t("Filtres i Vista", "Filtros y Vista", "Filters & View"));
-    setElText("filterModalTitle", t("🌪️ Filtres i Visualització", "🌪️ Filtros y Visualización", "🌪️ Filters & View Options"));
+    setElText("filterModalBtnText", t("Filtres i vista", "Filtros y vista", "Filters & view"));
+    setElText("filterModalTitle", t("Filtres i visualització", "Filtros y visualización", "Filters & view options"));
     setElText("filterModalSubtitle", t("Tria com vols veure les plantes i filtra per estat, ubicació o dificultat.", "Elige cómo ver las plantas y filtra por estado, ubicación o dificultad.", "Choose how to view your plants and filter by status, location or care difficulty."));
-    setElText("filterViewSectionLabel", t("👁️ Tipus de Visualització", "👁️ Tipo de Visualización", "👁️ View Mode"));
+    setElText("filterViewSectionLabel", t("Tipus de visualització", "Tipo de visualización", "View mode"));
     setElText("viewGridBtnText", t("Vista llista", "Vista lista", "List view"));
     setElText("viewTableBtnText", t("Vista graella", "Vista cuadrícula", "Grid view"));
-    setElText("viewCalendarBtnText", t("Calendari", "Calendario", "Calendar"));
-    setElText("filterSortSectionLabel", t("↕️ Criteri d'ordenació", "↕️ Criterio de ordenación", "↕️ Sort Order"));
-    setElText("filterStatusSectionLabel", t("💧 Estat de Reg", "💧 Estado de Riego", "💧 Water Status"));
-    setElText("filterZoneSectionLabel", t("📍 Ubicació Principal", "📍 Ubicación Principal", "📍 Main Location"));
-    setElText("filterRoomSectionLabel", t("🛋️ Habitació o Espai", "🛋️ Habitación o Espacio", "🛋️ Room or Spot"));
-    setElText("filterDiffSectionLabel", t("⭐ Dificultat de Cures", "⭐ Dificultad de Cuidados", "⭐ Care Difficulty"));
-    setElText("resetFiltersBtn", t("🔄 Restablir filtres", "🔄 Restablecer filtros", "🔄 Reset filters"));
+    setElText("filterSortSectionLabel", t("Ordre", "Orden", "Order"));
+    setElText("filterStatusSectionLabel", t("Estat de reg", "Estado de riego", "Water status"));
+    setElText("filterZoneSectionLabel", t("Ubicació principal", "Ubicación principal", "Main location"));
+    setElText("filterRoomSectionLabel", t("Habitació o espai", "Habitación o espacio", "Room or spot"));
+    setElText("filterDiffSectionLabel", t("Dificultat de cures", "Dificultad de cuidados", "Care difficulty"));
+    setElText("resetFiltersBtn", t("Restablir filtres", "Restablecer filtros", "Reset filters"));
     setElText("closeFilterBtn", t("Fet", "Listo", "Done"));
 
     setElText("weeklyCalendarTitle", t("🗓️ Previsió Setmanal (Propers 7 dies)", "🗓️ Previsión Semanal (Próximos 7 días)", "🗓️ Weekly Forecast (Next 7 days)"));
