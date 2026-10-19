@@ -3,3 +3,5 @@
 __pycache__/
 *.ai
 layout-app.ai
+*.tmp
+~*
