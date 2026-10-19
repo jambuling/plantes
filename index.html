@@ -1648,7 +1648,7 @@
        PUNT 9: ZOOM A PANTALLA COMPLETA (LIGHTBOX)
        ============================================================= */
     #modalImg {
-      cursor: zoom-in;
+      cursor: default;
     }
     .modal-zoom-hint-btn {
       position: absolute;
@@ -4588,7 +4588,7 @@
     <!-- Carrusel de fotos amb fletxes superposades -->
     <div class="modal-image-wrap">
       <button type="button" class="carousel-arrow prev" id="modalPhotoPrevBtn" onclick="stepModalGalleryPhoto(-1)" aria-label="Foto anterior">‹</button>
-      <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta" onclick="openPhotoLightbox()" title="Fes clic per ampliar">
+      <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta">
       <button type="button" class="carousel-arrow next" id="modalPhotoNextBtn" onclick="stepModalGalleryPhoto(1)" aria-label="Foto següent">›</button>
       <div class="modal-photo-caption-badge">
         <span class="modal-photo-date-pill" id="modalPhotoDatePill" style="display:none;"></span>
@@ -9402,7 +9402,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("feedbackSubmitBtn", t("🚀 Enviar Comentari", "🚀 Enviar Comentario", "🚀 Submit Feedback"));
 
     // Botons i etiquetes de la fitxa de planta (#plantModal)
-    setElText("modalZoomHintBtn", t("Ampliar", "Ampliar", "Zoom"));
     setElText("modalEditPlantBtn", t("Editar", "Editar", "Edit"));
     setElText("modalHistoryBtn", t("Històric", "Historial", "History"));
     setElText("modalDeletePlantBtn", t("Eliminar", "Eliminar", "Delete"));
