@@ -4663,7 +4663,7 @@
 
       <!-- 3. GUIA BÀSICA (Fixta planta.png) -->
       <div class="detail-section">
-        <div class="detail-section-label">GUIA BÀSICA</div>
+        <div class="detail-section-label" id="modalGuideHeading">GUIA BÀSICA</div>
         <div class="tracker-card">
           <div class="guide-item">
             <div class="guide-item-title" id="modalLightSectionTitle">Llum i ubicació</div>
@@ -4721,9 +4721,9 @@
         </div>
       </div>
 
-      <!-- 5. SEGURIDAD (Soft pink - Fixta planta.png) -->
+      <!-- 5. SEGURETAT (Soft pink - Fixta planta.png) -->
       <div class="detail-section">
-        <div class="detail-section-label">SEGURIDAD</div>
+        <div class="detail-section-label" id="modalSecurityHeading">SEGURETAT</div>
         <div class="toxicity-alert-box" id="modalToxicityBox">
           <div id="modalToxicityBody"></div>
         </div>
@@ -8228,6 +8228,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const modalEditBtn = document.getElementById("modalEditPlantBtn");
     if (modalEditBtn) modalEditBtn.onclick = () => openEditPlantModal(plant.id);
 
+    const secHeading = document.getElementById("modalSecurityHeading");
+    if (secHeading) secHeading.textContent = t("SEGURETAT", "SEGURIDAD", "SAFETY");
+    const guideHeading = document.getElementById("modalGuideHeading");
+    if (guideHeading) guideHeading.textContent = t("GUIA BÀSICA", "GUÍA BÁSICA", "BASIC GUIDE");
+
     updateModalTracker(plantId);
 
     document.getElementById("plantModal").classList.add("active");
@@ -9401,6 +9406,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("modalWaterWinterLabel", t("Hivern:", "Invierno:", "Winter:"));
     setElText("modalLightSectionTitle", t("Llum i ubicació", "Luz y ubicación", "Light & placement"));
     setElText("modalSubstrateSectionTitle", t("Substrat recomanat", "Sustrato recomendado", "Recommended soil mix"));
+    setElText("modalGuideHeading", t("GUIA BÀSICA", "GUÍA BÁSICA", "BASIC GUIDE"));
+    setElText("modalSecurityHeading", t("SEGURETAT", "SEGURIDAD", "SAFETY"));
     setElText("modalGalleryHeading", t("GALERIA", "GALERÍA", "GALLERY"));
     setElText("modalGalleryTitleText", t("Galeria d'evolució", "Galería de evolución", "Growth gallery"));
     setElText("modalGalleryCameraBtn", t("Fer foto", "Hacer foto", "Take photo"));
