@@ -3160,64 +3160,90 @@
       color: #e2e8f0;
     }
 
-    /* PANTALLA AFEGIR PLANTA (Afegir planta.png) */
+    /* PANTALLA AFEGIR PLANTA I TARGETES DASHED (Afegir planta.png) */
     .add-plant-screen-content {
       padding: 6px 2px;
     }
     .add-dashed-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 16px;
+      gap: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 12px;
+      margin-bottom: 12px;
     }
     .add-dashed-card {
-      background: #f3f8f9;
-      border: 1.5px dashed #b2ced8;
+      background: #f4f8f6;
+      border: 1.5px dashed #a8c2ba;
       border-radius: 16px;
-      padding: 28px 12px;
+      padding: 24px 12px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
       cursor: pointer;
+      color: var(--text-main);
       transition: all 0.2s ease;
       box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      font-family: inherit;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
     }
     .add-dashed-card:hover {
-      background: #e8f2f5;
-      border-color: #3b82f6;
+      background: #eaf3ee;
+      border-color: #275d36;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+      box-shadow: 0 6px 14px rgba(39, 93, 54, 0.10);
+    }
+    .add-dashed-card:active {
+      transform: scale(0.97);
+    }
+    .add-dashed-card.compact {
+      padding: 14px 10px 12px;
+      border-radius: 14px;
     }
     body.dark-mode .add-dashed-card {
-      background: #172033;
-      border-color: #334155;
+      background: #18231c;
+      border-color: #384d41;
+      color: var(--text-main);
     }
     body.dark-mode .add-dashed-card:hover {
-      background: #1e293b;
-      border-color: #60a5fa;
+      background: #202f26;
+      border-color: #557964;
     }
     .add-dashed-icon {
-      color: #334155;
-      margin-bottom: 12px;
+      color: var(--text-main);
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+    .add-dashed-card.compact .add-dashed-icon {
+      margin-bottom: 6px;
+    }
     body.dark-mode .add-dashed-icon {
-      color: #93c5fd;
+      color: #e2f1e5;
     }
     .add-dashed-title {
-      font-size: 0.98rem;
+      font-size: 0.96rem;
       font-weight: 700;
       color: var(--text-main);
       margin-bottom: 4px;
+      line-height: 1.25;
+    }
+    .add-dashed-card.compact .add-dashed-title {
+      font-size: 0.88rem;
     }
     .add-dashed-desc {
-      font-size: 0.78rem;
+      font-size: 0.80rem;
       color: var(--text-muted);
       line-height: 1.35;
+    }
+    .add-dashed-card.compact .add-dashed-desc {
+      font-size: 0.74rem;
     }
     .manual-add-link-wrap {
       text-align: center;
@@ -4177,24 +4203,35 @@
 
         <!-- SECCIÓ INICIAL DE PUJADA AMB ELS DOS BOTONS FER FOTO I GALERIA -->
         <div id="aiUploadPromptSection">
-          <div class="source-options-grid">
-            <button type="button" class="btn-source-option btn-source-camera" onclick="document.getElementById('aiCameraInput').click()">
-              <span style="font-size: 2.2rem; line-height: 1;">📸</span>
-              <strong style="font-size: 1rem; color: #1e582e;">Fer Foto ara</strong>
-              <span style="font-size: 0.78rem; color: var(--text-muted);">Obre la càmera del mòbil</span>
+          <div class="add-dashed-grid">
+            <button type="button" class="add-dashed-card" onclick="document.getElementById('aiCameraInput').click()">
+              <div class="add-dashed-icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+              </div>
+              <div class="add-dashed-title" id="aiSourceCameraTitle">Nova foto</div>
+              <div class="add-dashed-desc" id="aiSourceCameraDesc">Obre la càmera del mòbil</div>
             </button>
 
-            <button type="button" class="btn-source-option btn-source-gallery" onclick="document.getElementById('aiGalleryInput').click()">
-              <span style="font-size: 2.2rem; line-height: 1;">🖼️</span>
-              <strong style="font-size: 1rem; color: #0284c7;">Triar de la Galeria</strong>
-              <span style="font-size: 0.78rem; color: var(--text-muted);">Tria una foto desada</span>
+            <button type="button" class="add-dashed-card" onclick="document.getElementById('aiGalleryInput').click()">
+              <div class="add-dashed-icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </div>
+              <div class="add-dashed-title" id="aiSourceGalleryTitle">Triar de la galeria</div>
+              <div class="add-dashed-desc" id="aiSourceGalleryDesc">Tria una foto desada</div>
             </button>
           </div>
 
           <!-- ENLLAÇ ENTRADA MANUAL -->
-          <div class="manual-add-link-wrap" style="text-align: center; margin: 16px 0;">
+          <div class="manual-add-link-wrap" style="text-align: center; margin: 18px 0 14px;">
             <button type="button" class="btn-manual-add" onclick="openEditPlantModal(null)" style="background: none; border: 1px dashed var(--border-strong); padding: 10px 18px; border-radius: 10px; color: var(--text-muted); cursor: pointer; font-size: 0.88rem; font-family: inherit;">
-              ✏️ O afegir les dades manualment sense foto
+              O afegir les dades manualment sense foto
             </button>
           </div>
 
@@ -4757,33 +4794,37 @@
 
       <!-- MODAL SELECCIÓ FONT FOTOGRAFIA GALERIA -->
       <div class="notif-quick-overlay" id="gallerySourceModal" onclick="if(event.target === this) closeGalleryPhotoSourcePicker();">
-        <div class="notif-quick-card" style="max-width: 380px;">
+        <div class="notif-quick-card" style="max-width: 420px;">
           <div class="notif-panel-header">
-            <span style="font-weight:700; font-size:1.05rem; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-              <span id="gallerySourceModalTitle">Nova fotografia</span>
-            </span>
+            <span id="gallerySourceModalTitle" style="font-weight:700; font-size:1.15rem; color:var(--text-main); font-family:var(--font-sans);">Nova fotografia</span>
             <button type="button" class="btn-close-notif-panel" onclick="closeGalleryPhotoSourcePicker()" aria-label="Tancar">&times;</button>
           </div>
-          <div style="display:flex; flex-direction:column; gap:12px; padding: 8px 0 14px;">
-            <button type="button" class="btn-source-option" style="flex-direction:row; padding:14px 16px; gap:14px; text-align:left; border-style:solid; background:var(--bg-primary);" onclick="triggerGalleryCamera()">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-              <div>
-                <div style="font-weight:700; font-size:0.95rem; color:var(--text-main);" id="gallerySourceCameraTitle">Fer foto amb la càmera</div>
-                <div style="font-size:0.78rem; color:var(--text-muted);" id="gallerySourceCameraDesc">Obre la càmera del mòbil</div>
+          <div class="add-dashed-grid" style="margin: 10px 0 16px;">
+            <button type="button" class="add-dashed-card" onclick="triggerGalleryCamera()">
+              <div class="add-dashed-icon">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="13" r="4"></circle>
+                </svg>
               </div>
+              <div class="add-dashed-title" id="gallerySourceCameraTitle">Nova foto</div>
+              <div class="add-dashed-desc" id="gallerySourceCameraDesc">Obre la càmera del mòbil</div>
             </button>
 
-            <button type="button" class="btn-source-option" style="flex-direction:row; padding:14px 16px; gap:14px; text-align:left; border-style:solid; background:var(--bg-primary);" onclick="triggerGalleryFile()">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-              <div>
-                <div style="font-weight:700; font-size:0.95rem; color:var(--text-main);" id="gallerySourceGalleryTitle">Adjuntar de la galeria</div>
-                <div style="font-size:0.78rem; color:var(--text-muted);" id="gallerySourceGalleryDesc">Tria fotos desades al dispositiu</div>
+            <button type="button" class="add-dashed-card" onclick="triggerGalleryFile()">
+              <div class="add-dashed-icon">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
               </div>
+              <div class="add-dashed-title" id="gallerySourceGalleryTitle">Triar de la galeria</div>
+              <div class="add-dashed-desc" id="gallerySourceGalleryDesc">Tria una foto desada</div>
             </button>
           </div>
           <div style="text-align:right; border-top:1px solid var(--border-subtle); padding-top:12px;">
-            <button type="button" class="btn-action" style="background:var(--border-subtle); color:var(--text-main); padding:8px 16px; border-radius:8px; border:none; cursor:pointer; font-weight:600;" onclick="closeGalleryPhotoSourcePicker()">
+            <button type="button" class="btn-action" style="background:var(--border-subtle); color:var(--text-main); padding:8px 18px; border-radius:8px; border:none; cursor:pointer; font-weight:600;" onclick="closeGalleryPhotoSourcePicker()">
               Cancel·lar
             </button>
           </div>
@@ -4818,7 +4859,7 @@
     <button class="modal-close" onclick="closeModal('editPlantModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 24px;">
       <h2 id="editPlantModalTitle" style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-sans); font-weight: 700;">
-        Editar Planta
+        Editar planta
       </h2>
       <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 18px;">
         Modifica qualsevol dada de la fitxa o substitueix la fotografia de la planta.
@@ -4826,23 +4867,43 @@
 
       <form id="editPlantForm" onsubmit="saveEditedPlant(event)">
         <!-- FOTO I CANVI DE FOTO -->
-        <div style="margin-bottom: 18px; background: var(--bg-primary); padding: 14px; border-radius: 12px; border: 1px solid var(--border-subtle); display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
-          <div style="width: 86px; height: 86px; border-radius: 10px; overflow: hidden; background: #e8eee6; flex-shrink: 0; box-shadow: var(--shadow-sm);">
-            <img id="editPlantPhotoPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;" alt="Vista prèvia foto">
-          </div>
-          <div style="flex: 1; min-width: 200px;">
-            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 6px;">Fotografia de la Planta:</label>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button type="button" class="btn-action" style="background: #256a38; color: white; padding: 6px 12px; font-size: 0.78rem;" onclick="document.getElementById('editPhotoCameraInput').click()">
-                <input type="file" id="editPhotoCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleEditPhotoFile(event)">
-                📸 Fer foto
-              </button>
-              <button type="button" class="btn-action" style="background: var(--bg-tertiary); color: var(--text-main); border: 1px solid var(--border-subtle); padding: 6px 12px; font-size: 0.78rem;" onclick="document.getElementById('editPhotoGalleryInput').click()">
-                <input type="file" id="editPhotoGalleryInput" accept="image/*" style="display:none;" onchange="handleEditPhotoFile(event)">
-                🖼️ Triar galeria
-              </button>
+        <div style="margin-bottom: 18px; background: var(--bg-primary); padding: 14px; border-radius: 14px; border: 1px solid var(--border-subtle);">
+          <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 12px;">
+            <div style="width: 72px; height: 72px; border-radius: 12px; overflow: hidden; background: #e8eee6; flex-shrink: 0; box-shadow: var(--shadow-sm); border: 1px solid var(--border-subtle);">
+              <img id="editPlantPhotoPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;" alt="Vista prèvia foto">
             </div>
-            <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Pots canviar la foto capturant-ne una de nova o des de la galeria.</span>
+            <div>
+              <label style="font-size: 0.84rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 3px;" id="editPlantPhotoHeading">Fotografia de la planta:</label>
+              <span style="font-size: 0.76rem; color: var(--text-muted); display: block; line-height: 1.35;" id="editPlantPhotoSub">Captura una foto amb la càmera o tria'n una de desada.</span>
+            </div>
+          </div>
+
+          <input type="file" id="editPhotoCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleEditPhotoFile(event)">
+          <input type="file" id="editPhotoGalleryInput" accept="image/*" style="display:none;" onchange="handleEditPhotoFile(event)">
+
+          <div class="add-dashed-grid">
+            <button type="button" class="add-dashed-card compact" onclick="document.getElementById('editPhotoCameraInput').click()">
+              <div class="add-dashed-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+              </div>
+              <div class="add-dashed-title" id="editPlantCameraTitle">Nova foto</div>
+              <div class="add-dashed-desc" id="editPlantCameraDesc">Obre la càmera</div>
+            </button>
+
+            <button type="button" class="add-dashed-card compact" onclick="document.getElementById('editPhotoGalleryInput').click()">
+              <div class="add-dashed-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </div>
+              <div class="add-dashed-title" id="editPlantGalleryTitle">Triar de la galeria</div>
+              <div class="add-dashed-desc" id="editPlantGalleryDesc">Tria una foto</div>
+            </button>
           </div>
         </div>
 
@@ -8312,7 +8373,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const tipInp = document.getElementById("editPlantTip");
       if (tipInp) tipInp.value = "";
       const titleEl = document.getElementById("editPlantModalTitle");
-      if (titleEl) titleEl.innerText = t("Afegir Planta Manualment", "Añadir Planta Manualmente", "Add Plant Manually");
+      if (titleEl) titleEl.innerText = t("Afegir planta manualment", "Añadir planta manualmente", "Add plant manually");
       const modal = document.getElementById("editPlantModal");
       if (modal) modal.classList.add("active");
       return;
@@ -8328,7 +8389,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     currentEditingPhotoBase64 = plant.photo;
 
     const titleEl = document.getElementById("editPlantModalTitle");
-    if (titleEl) titleEl.innerText = t("Editar Planta", "Editar Planta", "Edit Plant");
+    if (titleEl) titleEl.innerText = t("Editar planta", "Editar planta", "Edit plant");
 
     const preview = document.getElementById("editPlantPhotoPreview");
     if (preview) preview.src = plant.photo;
@@ -9387,12 +9448,24 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     // Modal Legal
     setElText("legalModalTitle", t("Informació legal i privacitat", "Información legal y privacidad", "Legal information & privacy"));
 
-    // Modal Nova Fotografia
+    // Modal Nova Fotografia i targetes dashed
     setElText("gallerySourceModalTitle", t("Nova fotografia", "Nueva fotografía", "New photo"));
-    setElText("gallerySourceCameraTitle", t("Fer foto amb la càmera", "Hacer foto con la cámara", "Take photo with camera"));
+    setElText("gallerySourceCameraTitle", t("Nova foto", "Nueva foto", "New photo"));
     setElText("gallerySourceCameraDesc", t("Obre la càmera del mòbil", "Abre la cámara del móvil", "Open device camera"));
-    setElText("gallerySourceGalleryTitle", t("Adjuntar de la galeria", "Adjuntar de la galería", "Attach from gallery"));
-    setElText("gallerySourceGalleryDesc", t("Tria fotos desades al dispositiu", "Elige fotos guardadas en el dispositivo", "Choose photos saved on device"));
+    setElText("gallerySourceGalleryTitle", t("Triar de la galeria", "Elegir de la galería", "Choose from gallery"));
+    setElText("gallerySourceGalleryDesc", t("Tria una foto desada", "Elige una foto guardada", "Choose a saved photo"));
+
+    setElText("aiSourceCameraTitle", t("Nova foto", "Nueva foto", "New photo"));
+    setElText("aiSourceCameraDesc", t("Obre la càmera del mòbil", "Abre la cámara del móvil", "Open device camera"));
+    setElText("aiSourceGalleryTitle", t("Triar de la galeria", "Elegir de la galería", "Choose from gallery"));
+    setElText("aiSourceGalleryDesc", t("Tria una foto desada", "Elige una foto guardada", "Choose a saved photo"));
+
+    setElText("editPlantPhotoHeading", t("Fotografia de la planta:", "Fotografía de la planta:", "Plant photo:"));
+    setElText("editPlantPhotoSub", t("Captura una foto amb la càmera o tria'n una de desada.", "Captura una foto con la cámara o elige una guardada.", "Capture a photo with your camera or choose a saved one."));
+    setElText("editPlantCameraTitle", t("Nova foto", "Nueva foto", "New photo"));
+    setElText("editPlantCameraDesc", t("Obre la càmera", "Abre la cámara", "Open camera"));
+    setElText("editPlantGalleryTitle", t("Triar de la galeria", "Elegir de la galería", "Choose from gallery"));
+    setElText("editPlantGalleryDesc", t("Tria una foto", "Elige una foto", "Choose a photo"));
 
     // Modal de Feedback
     setElText("feedbackModalTitle", t("Envia'ns el teu feedback", "Envíanos tu feedback", "Send us your feedback"));
