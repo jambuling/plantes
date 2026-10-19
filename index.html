@@ -2416,6 +2416,13 @@
       text-overflow: ellipsis;
       padding: 0 8px;
     }
+    .app-header.header-plants-view .header-left {
+      display: none !important;
+    }
+    .app-header.header-plants-view .app-brand-title {
+      text-align: left !important;
+      padding-left: 2px !important;
+    }
     .header-right {
       width: 38px;
       min-width: 38px;
@@ -4092,7 +4099,7 @@
 <div class="app-shell">
 
   <!-- HEADER NADIU (3a353b) -->
-  <header class="app-header" id="appHeader">
+  <header class="app-header header-plants-view" id="appHeader">
     <div class="header-left">
       <button type="button" class="btn-header-back" id="headerBackBtn" onclick="handleHeaderBack()" aria-label="Enrere" style="display:none;">
         ‹
@@ -5343,6 +5350,11 @@
       if (view) view.classList.toggle('active', tName === tabName);
     });
 
+    const appHeader = document.getElementById('appHeader');
+    if (appHeader) {
+      appHeader.classList.toggle('header-plants-view', tabName === 'plants');
+    }
+
     const backBtn = document.getElementById('headerBackBtn');
     const brandLogo = document.getElementById('appBrandLogo');
 
@@ -5356,6 +5368,7 @@
         brandLogo.style.fontFamily = 'var(--font-display)';
         brandLogo.style.fontSize = '1.85rem';
         brandLogo.style.fontWeight = '600';
+        brandLogo.style.textAlign = 'left';
       } else {
         const titles = {
           add: t('Afegir planta', 'Añadir planta', 'Add plant'),
@@ -5366,6 +5379,7 @@
         brandLogo.style.fontFamily = 'var(--font-sans)';
         brandLogo.style.fontSize = '1.35rem';
         brandLogo.style.fontWeight = '700';
+        brandLogo.style.textAlign = 'center';
       }
     }
 
@@ -9231,6 +9245,18 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const el = document.getElementById(id);
       if (el) el.innerText = text;
     };
+
+    if (typeof currentAppTab !== "undefined" && currentAppTab !== 'plants') {
+      const brandLogo = document.getElementById('appBrandLogo');
+      if (brandLogo) {
+        const titles = {
+          add: t('Afegir planta', 'Añadir planta', 'Add plant'),
+          calendar: t('Calendari', 'Calendario', 'Calendar'),
+          settings: t('Ajustaments', 'Ajustes', 'Settings')
+        };
+        brandLogo.textContent = titles[currentAppTab] || 'foliari';
+      }
+    }
 
     setElText("appMainTitle", t("🌱 Les Meves Plantes i Seguiment de Reg", "🌱 Mis Plantas y Seguimiento de Riego", "🌱 My Plants & Care Tracker"));
     setElText("appMainSubtitle", t("Guia botànica personal amb control intel·ligent de reg, adob i avisos per temporada.", "Guía botánica personal con control inteligente de riego, abono y avisos por temporada.", "Personal botanical guide with intelligent watering, fertilizer schedules, and seasonal care."));
