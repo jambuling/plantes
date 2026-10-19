@@ -820,6 +820,17 @@
     .modal-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
     .modal-content { padding: 24px 28px 30px; }
 
+    .modal-card h1:not(.plant-name-detail),
+    .modal-card h2:not(.plant-name-detail),
+    .modal-card h3:not(.plant-name-detail),
+    .modal-content h1:not(.plant-name-detail),
+    .modal-content h2:not(.plant-name-detail),
+    .modal-content h3:not(.plant-name-detail),
+    .notif-quick-card h1, .notif-quick-card h2, .notif-quick-card h3 {
+      font-family: var(--font-sans) !important;
+      letter-spacing: -0.01em;
+    }
+
     /* FITXA COMPLETA DE PLANTA (MODAL DETALL) - DISSENY DESKTOP */
     #plantModal .modal-card {
       display: flex;
@@ -4799,7 +4810,7 @@
   <div class="modal-card" style="max-width: 580px; max-height: 88vh; overflow-y: auto;">
     <button class="modal-close" onclick="closeModal('editPlantModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 24px;">
-      <h2 id="editPlantModalTitle" style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
+      <h2 id="editPlantModalTitle" style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-sans); font-weight: 700;">
         Editar Planta
       </h2>
       <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 18px;">
@@ -4978,7 +4989,7 @@
   <div class="modal-card" style="max-width: 560px;">
     <button class="modal-close" onclick="closeModal('historyModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 24px;">
-      <h2 id="historyPlantTitle" style="font-size: 1.35rem; color: var(--text-main); margin-bottom: 4px;"></h2>
+      <h2 id="historyPlantTitle" style="font-size: 1.35rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-sans); font-weight: 700;"></h2>
       <p id="historyModalSubtitle" style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px;">Registre complet de regs, adobs, trasplantaments i podes. Tria la data per anotar accions d'avui o de dies passats:</p>
 
       <div style="background: #f6f9f6; border: 1px solid var(--border-subtle); border-radius: 9px; padding: 10px 12px; margin-bottom: 12px;">
@@ -5022,7 +5033,7 @@
   <div class="modal-card" style="max-width: 430px;">
     <button class="modal-close" onclick="closeModal('quickActionDateModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 22px 24px;">
-      <h3 id="quickDateModalTitle" style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">Opcions de reg</h3>
+      <h3 id="quickDateModalTitle" style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-sans); font-weight: 700;">Opcions de reg</h3>
       <p id="quickDateModalSubtitle" style="font-size: 0.83rem; color: var(--text-muted); margin-bottom: 14px;"></p>
 
       <!-- OPCIONS RÀPIDES DE REG (Regar avui, Retrasar 1 dia, 2 dies, 3 dies) -->
@@ -5090,7 +5101,7 @@
   <div class="modal-card filter-modal-card" style="max-width: 500px; width: 94vw; max-height: 88vh; overflow-y: auto;">
     <button class="modal-close" onclick="closeModal('filterModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content filter-modal-content" style="padding: 22px 20px;">
-      <h2 id="filterModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">
+      <h2 id="filterModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-sans); font-weight: 700;">
         Filtres i visualització
       </h2>
       <p id="filterModalSubtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
@@ -5204,8 +5215,8 @@
   <div class="modal-card" style="max-width: 620px; max-height: 88vh; overflow-y: auto;">
     <button class="modal-close" onclick="closeModal('legalModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 26px;">
-      <h2 id="legalModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 6px; font-family: var(--font-display);">
-        ⚖️ Informació Legal i Privacitat
+      <h2 id="legalModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 6px; font-family: var(--font-sans); font-weight: 700;">
+        Informació legal i privacitat
       </h2>
       <div style="display:flex; gap:8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px;">
         <button type="button" class="btn-action" id="legalTabTermsBtn" style="background:var(--accent-light); color:var(--text-main); border:1px solid var(--accent); padding:5px 12px; font-size:0.82rem;" onclick="switchLegalTab('terms')">
@@ -5235,8 +5246,8 @@
   <div class="modal-card" style="max-width: 540px; max-height: 88vh; overflow-y: auto;">
     <button class="modal-close" onclick="closeModal('feedbackModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 24px;">
-      <h2 id="feedbackModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 6px; font-family: var(--font-display);">
-        💬 Envia'ns el teu Feedback
+      <h2 id="feedbackModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 6px; font-family: var(--font-sans); font-weight: 700;">
+        Envia'ns el teu feedback
       </h2>
       <p id="feedbackModalSubtitle" style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 18px; line-height: 1.45;">
         La teva opinió ens ajuda a fer l'aplicació molt millor. Pots proposar noves funcions, avisar d'un error o comentar qualsevol suggeriment.
@@ -9347,6 +9358,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("prefLegalPrivacyText", t("Política de Privacitat", "Política de Privacidad", "Privacy Policy"));
     setElText("prefCloseBtn", t("Fet", "Listo", "Done"));
 
+    // Modal Legal
+    setElText("legalModalTitle", t("Informació legal i privacitat", "Información legal y privacidad", "Legal information & privacy"));
+
     // Modal Nova Fotografia
     setElText("gallerySourceModalTitle", t("Nova fotografia", "Nueva fotografía", "New photo"));
     setElText("gallerySourceCameraTitle", t("Fer foto amb la càmera", "Hacer foto con la cámara", "Take photo with camera"));
@@ -9355,7 +9369,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("gallerySourceGalleryDesc", t("Tria fotos desades al dispositiu", "Elige fotos guardadas en el dispositivo", "Choose photos saved on device"));
 
     // Modal de Feedback
-    setElText("feedbackModalTitle", t("💬 Envia'ns el teu Feedback", "💬 Envíanos tu Feedback", "💬 Send Us Your Feedback"));
+    setElText("feedbackModalTitle", t("Envia'ns el teu feedback", "Envíanos tu feedback", "Send us your feedback"));
     setElText("feedbackModalSubtitle", t(
       "La teva opinió ens ajuda a fer l'aplicació molt millor. Pots proposar noves funcions, avisar d'un error o comentar qualsevol suggeriment.",
       "Tu opinión nos ayuda a hacer la aplicación mucho mejor. Puedes proponer nuevas funciones, avisar de un error o comentar cualquier sugerencia.",
