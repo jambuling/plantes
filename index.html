@@ -3532,43 +3532,62 @@
     }
     .plant-detail-top-bar {
       position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--app-header-bg);
-      color: #ffffff;
-      padding: 12px 16px;
-      padding-top: max(12px, env(safe-area-inset-top, 12px));
+      top: max(6px, env(safe-area-inset-top, 6px));
+      z-index: 1000;
+      background: var(--app-header-bg) !important;
+      background-image: none !important;
+      color: var(--app-lime);
+      width: calc(100% - 12px);
+      margin: max(6px, env(safe-area-inset-top, 6px)) 6px 6px 6px;
+      border-radius: 12px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      box-sizing: border-box;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.18);
     }
-    .btn-detail-back {
-      background: none;
+    .btn-detail-back,
+    .plant-detail-top-bar .btn-header-back {
+      background: rgba(255, 255, 255, 0.1);
       border: none;
-      color: #ffffff;
-      font-size: 1.8rem;
-      cursor: pointer;
-      line-height: 1;
+      color: var(--app-lime);
+      font-size: 1.5rem;
+      font-weight: 700;
       width: 36px;
       height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
+      line-height: 1;
+      padding: 0;
+      transition: background 0.15s;
     }
-    .btn-detail-bell {
-      background: none;
+    .btn-detail-back:hover,
+    .plant-detail-top-bar .btn-header-back:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+    .btn-detail-bell,
+    .plant-detail-top-bar .btn-header-bell {
+      background: rgba(255, 255, 255, 0.1);
       border: none;
-      color: #ffffff;
-      font-size: 1.3rem;
+      color: var(--app-lime);
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
       cursor: pointer;
-      width: 36px;
-      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
+      transition: background 0.15s;
+      padding: 0;
+    }
+    .btn-detail-bell:hover,
+    .plant-detail-top-bar .btn-header-bell:hover {
+      background: rgba(255, 255, 255, 0.18);
     }
     .detail-kebab-wrap {
       position: relative;
@@ -3802,7 +3821,7 @@
       background: rgba(255,255,255,0.08);
     }
 
-    /* CARD DE TOXICITAT I SEGURETAT (Soft Pink) */
+    /* CARD DE TOXICITAT I SEGURETAT (Soft Pink si és tòxica, igual que cards anteriors si és segura) */
     .toxicity-alert-box {
       background: var(--app-toxic-bg);
       border: 1px solid var(--app-toxic-border);
@@ -3812,6 +3831,10 @@
       flex-direction: column;
       gap: 8px;
     }
+    .toxicity-alert-box.is-safe {
+      background: var(--app-info-bg) !important;
+      border: 1px solid var(--app-info-border) !important;
+    }
     .toxicity-item-dot {
       display: flex;
       align-items: center;
@@ -3820,60 +3843,88 @@
       font-weight: 600;
       color: var(--app-toxic-text);
     }
+    .toxicity-item-dot.is-safe {
+      color: var(--text-main) !important;
+    }
 
-    /* GALERIA A LA FITXA I CARD '+ NOVA FOTO' */
+    /* GALERIA A LA FITXA (4 COLUMNES, MATEIX FORMAT, ASPECT RATIO 3:4 I ESTILS QUE VISTA GRAELLA) */
     .detail-gallery-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-    .detail-gallery-item {
-      position: relative;
-      aspect-ratio: 3 / 4;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #e2e8f0;
-      cursor: pointer;
-    }
-    .detail-gallery-item img {
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 3px !important;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      box-sizing: border-box;
     }
-    .detail-gallery-date {
+    .detail-gallery-grid .insta-grid-item {
+      aspect-ratio: 3 / 4;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      background: var(--bg-surface);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .detail-gallery-grid .insta-grid-item:active {
+      transform: scale(0.97);
+    }
+    .detail-gallery-grid .insta-grid-item.active {
+      box-shadow: 0 0 0 2.5px var(--accent) !important;
+    }
+    body.dark-mode .detail-gallery-grid .insta-grid-item.active {
+      box-shadow: 0 0 0 2.5px var(--app-lime) !important;
+    }
+    .detail-gallery-grid .gallery-date-overlay {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 6px 4px 4px 4px;
-      font-size: 0.65rem;
+      padding: 6px 2px 3px 2px;
+      font-size: 0.58rem;
       font-weight: 600;
       color: #ffffff;
-      background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+      background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
       text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      pointer-events: none;
     }
-    .gallery-add-card {
-      border: 2px dashed #94a3b8 !important;
-      background: rgba(148, 163, 184, 0.08) !important;
+    .detail-gallery-grid .gallery-delete-btn {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.65);
+      color: #ffffff;
+      border: none;
+      font-size: 0.8rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.18s ease;
-      min-height: 80px;
+      opacity: 0.85;
+      transition: opacity 0.15s ease, background 0.15s ease;
+      z-index: 2;
     }
-    .gallery-add-card:hover {
-      border-color: #256a38 !important;
-      background: #edf5ee !important;
+    .detail-gallery-grid .gallery-delete-btn:hover {
+      opacity: 1;
+      background: #dc2626;
     }
-    .gallery-add-card-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 10px 4px;
-      color: var(--text-main);
+    .detail-gallery-grid .gallery-add-card {
+      padding: 6px 2px !important;
+      gap: 4px !important;
+    }
+    .detail-gallery-grid .gallery-add-card .insta-add-icon-wrap {
+      width: 32px !important;
+      height: 32px !important;
+    }
+    .detail-gallery-grid .gallery-add-card .insta-add-label {
+      font-size: 0.68rem !important;
+      padding: 0 2px !important;
     }
 
   </style>
@@ -4363,20 +4414,24 @@
 <!-- PANTALLA FITXA DE LA PLANTA (PANTALLA COMPLETA - Fixta planta.png) -->
 <div class="plant-detail-overlay" id="plantModal">
   <div class="plant-detail-card">
-    <!-- Top bar amb fletxa enrere i campana (Fixta planta.png) -->
-    <div class="plant-detail-top-bar">
-      <button type="button" class="btn-detail-back" onclick="closeModal('plantModal')" aria-label="Tancar fitxa">
-        ‹
-      </button>
+    <!-- Top bar igual que la resta de pantalles (Fixta planta.png) -->
+    <header class="app-header plant-detail-top-bar">
+      <div class="header-left">
+        <button type="button" class="btn-header-back" onclick="closeModal('plantModal')" aria-label="Tancar fitxa">
+          ‹
+        </button>
+      </div>
       <div id="detailTopTitle" style="display:none;"></div>
-      <button type="button" class="btn-detail-bell" onclick="toggleQuickNotifPanel(event)" aria-label="Notificacions">
-        <svg class="header-bell-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
-        <span class="bell-badge-dot" id="detailBellBadgeDot" style="display:none;"></span>
-      </button>
-    </div>
+      <div class="header-right">
+        <button type="button" class="btn-header-bell" onclick="toggleQuickNotifPanel(event)" aria-label="Notificacions">
+          <svg class="header-bell-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="bell-badge-dot" id="detailBellBadgeDot" style="display:none;"></span>
+        </button>
+      </div>
+    </header>
 
     <!-- Carrusel de fotos amb fletxes superposades -->
     <div class="modal-image-wrap">
@@ -4458,7 +4513,7 @@
           </div>
           <div class="detail-rule-note" id="modalFertNotes"></div>
           <div class="affiliate-recommend-wrap" id="affiliateFertWrap">
-            <a href="#" class="btn-amz-pill" id="amzFertLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a adobs a Amazon (afiliat)...', '🛒');">
+            <a href="#" class="btn-amz-pill" id="amzFertLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a adobs a Amazon (afiliat)...');">
               <span class="amz-tag">AMAZON</span> <span id="amzFertText">Comprar aquest tipus d'adob a Amazon ↗</span>
             </a>
           </div>
@@ -4477,7 +4532,7 @@
             <div class="guide-item-title" id="modalSubstrateSectionTitle">Substrat recomanat</div>
             <div class="guide-item-text" id="modalSubstrate"></div>
             <div class="affiliate-recommend-wrap" id="affiliateSubstrateWrap">
-              <a href="#" class="btn-amz-pill" id="amzSubstrateLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a substrat a Amazon...', '🪴');">
+              <a href="#" class="btn-amz-pill" id="amzSubstrateLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a substrat a Amazon...');">
                 <span class="amz-tag">AMAZON</span> <span id="amzSubstrateText">Comprar substrat i perlita recomanats ↗</span>
               </a>
             </div>
@@ -4500,7 +4555,7 @@
             </div>
             <div class="maint-item-sub" id="modalTransplantInfo">Últim: Cap registrat</div>
             <div class="affiliate-recommend-wrap" id="affiliateTransplantWrap">
-              <a href="#" class="btn-amz-pill" id="amzTransplantLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a testos a Amazon...', '🪴');">
+              <a href="#" class="btn-amz-pill" id="amzTransplantLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a testos a Amazon...');">
                 <span class="amz-tag">AMAZON</span> <span id="amzTransplantText">Veure testos de fang i auto-reg recomanats ↗</span>
               </a>
             </div>
@@ -4515,7 +4570,7 @@
             </div>
             <div class="maint-item-sub" id="modalPruningInfo">Últim: Cap registrat</div>
             <div class="affiliate-recommend-wrap" id="affiliatePruningWrap">
-              <a href="#" class="btn-amz-pill" id="amzPruningLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a eines de poda a Amazon...', '✂️');">
+              <a href="#" class="btn-amz-pill" id="amzPruningLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a eines de poda a Amazon...');">
                 <span class="amz-tag">AMAZON</span> <span id="amzPruningText">Veure eines de poda i neteja recomanats ↗</span>
               </a>
             </div>
@@ -6373,13 +6428,13 @@
 
     const btnAddT = document.getElementById("modalAddTransplantBtn");
     if (btnAddT) {
-      btnAddT.innerText = t("Registrar trasplantament", "Registrar trasplante", "Log repotting");
+      btnAddT.innerText = t("Registrar", "Registrar", "Log");
       btnAddT.onclick = (e) => openQuickDateModal(plantId, 'transplant', e);
     }
 
     const btnAddP = document.getElementById("modalAddPruningBtn");
     if (btnAddP) {
-      btnAddP.innerText = t("Registrar poda / neteja", "Registrar poda / limpieza", "Log pruning / cleaning");
+      btnAddP.innerText = t("Registrar", "Registrar", "Log");
       btnAddP.onclick = (e) => openQuickDateModal(plantId, 'pruning', e);
     }
   }
@@ -7203,16 +7258,16 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   };
 
   const roomVocabulary = {
-    "salo": { ca: "🛋️ Saló", es: "🛋️ Salón", en: "🛋️ Living Room" },
-    "cuina": { ca: "🍳 Cuina", es: "🍳 Cocina", en: "🍳 Kitchen" },
-    "dormitori": { ca: "🛏️ Dormitori", es: "🛏️ Dormitorio", en: "🛏️ Bedroom" },
-    "bany": { ca: "🚿 Bany", es: "🚿 Baño", en: "🚿 Bathroom" },
-    "despatx": { ca: "💼 Despatx", es: "💼 Despacho", en: "💼 Office" },
-    "rebedor": { ca: "🚪 Rebedor", es: "🚪 Recibidor", en: "🚪 Hallway / Entry" },
-    "terrassa": { ca: "🪴 Terrassa", es: "🪴 Terraza", en: "🪴 Terrace" },
-    "balco": { ca: "☀️ Balcó", es: "☀️ Balcón", en: "☀️ Balcony" },
-    "pati": { ca: "🌿 Pati", es: "🌿 Patio", en: "🌿 Patio / Courtyard" },
-    "altres": { ca: "📦 Altres", es: "📦 Otros", en: "📦 Other" }
+    "salo": { ca: "Saló", es: "Salón", en: "Living Room" },
+    "cuina": { ca: "Cuina", es: "Cocina", en: "Kitchen" },
+    "dormitori": { ca: "Dormitori", es: "Dormitorio", en: "Bedroom" },
+    "bany": { ca: "Bany", es: "Baño", en: "Bathroom" },
+    "despatx": { ca: "Despatx", es: "Despacho", en: "Office" },
+    "rebedor": { ca: "Rebedor", es: "Recibidor", en: "Hallway / Entry" },
+    "terrassa": { ca: "Terrassa", es: "Terraza", en: "Terrace" },
+    "balco": { ca: "Balcó", es: "Balcón", en: "Balcony" },
+    "pati": { ca: "Pati", es: "Patio", en: "Patio / Courtyard" },
+    "altres": { ca: "Altres", es: "Otros", en: "Other" }
   };
 
   function getRoomLabel(roomKey) {
@@ -7220,7 +7275,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (roomVocabulary[key] && roomVocabulary[key][currentLang]) {
       return roomVocabulary[key][currentLang];
     }
-    return roomVocabulary["salo"][currentLang] || "🛋️ Saló";
+    return roomVocabulary["salo"][currentLang] || "Saló";
   }
 
   function trKey(key, fallback = "") {
@@ -7777,25 +7832,25 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const itemsHtml = gallery.map((item, idx) => {
         const isCurrent = (idx === currentModalGalleryIndex);
         const canDelete = (gallery.length > 1);
+        const dateStr = item.date ? formatGalleryDateShort(item.date) : '';
         return `
-          <div class="gallery-item-card ${isCurrent ? 'active' : ''}" onclick="selectModalGalleryPhoto(${idx})">
-            <div class="gallery-item-thumb-wrap">
-              <img src="${item.url}" alt="Foto ${idx + 1} de ${plant.name}" loading="lazy">
-              ${canDelete ? `<button type="button" class="gallery-delete-btn" onclick="deleteGalleryPhoto('${plant.id}', '${item.id}', event)" title="Eliminar foto" aria-label="Eliminar foto">&times;</button>` : ''}
-            </div>
-            <div class="gallery-item-meta">
-              ${formatGalleryDateShort(item.date)}
-            </div>
+          <div class="insta-grid-item ${isCurrent ? 'active' : ''}" onclick="selectModalGalleryPhoto(${idx})" title="Foto ${idx + 1} de ${plant.name}">
+            <img class="insta-grid-img" src="${item.url}" alt="Foto ${idx + 1} de ${plant.name}" loading="lazy">
+            ${dateStr ? `<span class="gallery-date-overlay">${dateStr}</span>` : ''}
+            ${canDelete ? `<button type="button" class="gallery-delete-btn" onclick="deleteGalleryPhoto('${plant.id}', '${item.id}', event)" title="Eliminar foto" aria-label="Eliminar foto">&times;</button>` : ''}
           </div>
         `;
       }).join('');
 
       const addPhotoCard = `
-        <div class="gallery-item-card gallery-add-card" onclick="openGalleryPhotoSourcePicker()" title="${t('Afegir nova foto', 'Añadir nueva foto', 'Add new photo')}">
-          <div class="gallery-add-card-inner">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent);"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-            <span style="font-size:0.75rem; font-weight:700; margin-top:4px;">${t('+ Nova foto', '+ Nueva foto', '+ New photo')}</span>
+        <div class="insta-grid-item insta-grid-add-card gallery-add-card" onclick="openGalleryPhotoSourcePicker()" title="${t('Afegir nova foto', 'Añadir nueva foto', 'Add new photo')}" role="button" tabindex="0">
+          <div class="insta-add-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
           </div>
+          <span class="insta-add-label">${t('+ Nova foto', '+ Nueva foto', '+ New photo')}</span>
         </div>
       `;
 
@@ -7964,7 +8019,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     document.getElementById("modalWaterDetail").innerText = plant.waterDetail || "";
     document.getElementById("modalSubstrate").innerText = plant.substrate;
-    document.getElementById("modalTip").innerHTML = `<strong>${t('Consell clau:', 'Consejo clave:', 'Key tip:')}</strong> ${plant.tip}`;
+    let cleanTip = plant.tip || "";
+    cleanTip = cleanTip.replace(/^(Consell clau|Consejo clave|Key tip):\s*/i, "");
+    document.getElementById("modalTip").innerText = cleanTip;
 
     document.getElementById("modalBadges").innerHTML = `
       <span class="badge ${plant.difficultyClass}">${trText(plant.difficultyLabel)}</span>
@@ -7974,9 +8031,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     `;
 
     // Toxicitat box (Fixta planta.png)
+    const toxBox = document.getElementById("modalToxicityBox");
     const toxBody = document.getElementById("modalToxicityBody");
     if (toxBody) {
       if (plant.toxic) {
+        if (toxBox) toxBox.className = "toxicity-alert-box is-toxic";
         toxBody.innerHTML = `
           <div class="toxicity-item-dot">
             <span style="font-size:1.2rem; line-height:1; color:#ef4444;">•</span>
@@ -7988,8 +8047,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           </div>
         `;
       } else {
+        if (toxBox) toxBox.className = "toxicity-alert-box is-safe";
         toxBody.innerHTML = `
-          <div class="toxicity-item-dot" style="color:#166534;">
+          <div class="toxicity-item-dot is-safe">
             <span style="font-size:1.2rem; line-height:1; color:#166534;">•</span>
             <span>${t("Planta segura: No és tòxica per a gossos ni gats.", "Planta segura: No es tóxica para perros ni gatos.", "Safe plant: Non-toxic for dogs and cats.")}</span>
           </div>
@@ -9167,29 +9227,30 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("feedbackSubmitBtn", t("🚀 Enviar Comentari", "🚀 Enviar Comentario", "🚀 Submit Feedback"));
 
     // Botons i etiquetes de la fitxa de planta (#plantModal)
-    setElText("modalZoomHintBtn", t("🔍 Ampliar", "🔍 Ampliar", "🔍 Zoom"));
-    setElText("modalEditPlantBtn", t("✏️ Editar", "✏️ Editar", "✏️ Edit"));
-    setElText("modalHistoryBtn", t("📜 Històric", "📜 Historial", "📜 History"));
-    setElText("modalDeletePlantBtn", t("🗑️ Eliminar", "🗑️ Eliminar", "🗑️ Delete"));
-    setElText("modalWaterPastBtn", t("📅 Data", "📅 Fecha", "📅 Date"));
-    setElText("modalFertPastBtn", t("📅 Data", "📅 Fecha", "📅 Date"));
-    setElText("modalMaintSectionTitle", t("🛠️ Manteniment: Trasplantament i Poda", "🛠️ Mantenimiento: Trasplante y Poda", "🛠️ Maintenance: Repotting & Pruning"));
-    setElText("modalTransplantCardTitle", t("🪴 Trasplantament i Test", "🪴 Trasplante y Maceta", "🪴 Repotting & Pot Size"));
-    setElText("modalAddTransplantBtn", t("🪴 Registrar trasplantament", "🪴 Registrar trasplante", "🪴 Log repotting"));
-    setElText("modalPruningCardTitle", t("✂️ Poda i Neteja", "✂️ Poda y Limpieza", "✂️ Pruning & Cleaning"));
-    setElText("modalAddPruningBtn", t("✂️ Registrar poda / neteja", "✂️ Registrar poda / limpieza", "✂️ Log pruning"));
-    setElText("modalFertSectionTitle", t("🧪 Pauta d'Abonament", "🧪 Pauta de Abonado", "🧪 Fertilizer Routine"));
+    setElText("modalZoomHintBtn", t("Ampliar", "Ampliar", "Zoom"));
+    setElText("modalEditPlantBtn", t("Editar", "Editar", "Edit"));
+    setElText("modalHistoryBtn", t("Històric", "Historial", "History"));
+    setElText("modalDeletePlantBtn", t("Eliminar", "Eliminar", "Delete"));
+    setElText("modalWaterPastBtn", t("Data", "Fecha", "Date"));
+    setElText("modalFertPastBtn", t("Data", "Fecha", "Date"));
+    setElText("modalMaintSectionTitle", t("Manteniment", "Mantenimiento", "Maintenance"));
+    setElText("modalTransplantCardTitle", t("Trasplantament i test", "Trasplante y maceta", "Repotting & pot"));
+    setElText("modalAddTransplantBtn", t("Registrar", "Registrar", "Log"));
+    setElText("modalPruningCardTitle", t("Poda i neteja", "Poda y limpieza", "Pruning & cleaning"));
+    setElText("modalAddPruningBtn", t("Registrar", "Registrar", "Log"));
+    setElText("modalFertSectionTitle", t("Pauta d'adob", "Pauta de abonado", "Fertilizer routine"));
     setElText("modalFertTypeLabel", t("Tipus:", "Tipo:", "Type:"));
     setElText("modalFertFreqLabel", t("Freqüència:", "Frecuencia:", "Frequency:"));
     setElText("modalFertSeasonLabel", t("Temporada activa:", "Temporada activa:", "Active season:"));
-    setElText("modalWaterSectionTitle", t("💧 Pauta de Reg", "💧 Pauta de Riego", "💧 Watering Routine"));
-    setElText("modalWaterSummerLabel", t("☀️ Estiu:", "☀️ Verano:", "☀️ Summer:"));
-    setElText("modalWaterWinterLabel", t("❄️ Hivern:", "❄️ Invierno:", "❄️ Winter:"));
-    setElText("modalLightSectionTitle", t("☀️ Llum i Ubicació", "☀️ Luz y Ubicación", "☀️ Light & Placement"));
-    setElText("modalSubstrateSectionTitle", t("🪴 Substrat Recomanat", "🪴 Sustrato Recomendado", "🪴 Recommended Soil Mix"));
-    setElText("modalGalleryTitleText", t("📸 Galeria d'Evolució", "📸 Galería de Evolución", "📸 Growth Gallery"));
-    setElText("modalGalleryCameraBtn", t("📸 Fer foto", "📸 Hacer foto", "📸 Take Photo"));
-    setElText("modalGalleryUploadBtn", t("➕ Pujar foto", "➕ Subir foto", "➕ Upload Photo"));
+    setElText("modalWaterSectionTitle", t("Pauta de reg", "Pauta de riego", "Watering routine"));
+    setElText("modalWaterSummerLabel", t("Estiu:", "Verano:", "Summer:"));
+    setElText("modalWaterWinterLabel", t("Hivern:", "Invierno:", "Winter:"));
+    setElText("modalLightSectionTitle", t("Llum i ubicació", "Luz y ubicación", "Light & placement"));
+    setElText("modalSubstrateSectionTitle", t("Substrat recomanat", "Sustrato recomendado", "Recommended soil mix"));
+    setElText("modalGalleryHeading", t("GALERIA", "GALERÍA", "GALLERY"));
+    setElText("modalGalleryTitleText", t("Galeria d'evolució", "Galería de evolución", "Growth gallery"));
+    setElText("modalGalleryCameraBtn", t("Fer foto", "Hacer foto", "Take photo"));
+    setElText("modalGalleryUploadBtn", t("Pujar foto", "Subir foto", "Upload photo"));
 
     // Enllaços d'afiliació Amazon
     setElText("amzTransplantText", t("Veure testos de fang i auto-reg recomanats ↗", "Ver macetas de barro y autorriego recomendadas ↗", "Recommended terracotta & self-watering pots ↗"));
