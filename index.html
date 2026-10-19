@@ -2792,7 +2792,9 @@
     }
     .plant-card .card-image-wrap {
       width: 100%;
-      height: 240px;
+      aspect-ratio: 1 / 1;
+      height: auto;
+      max-height: 440px;
       position: relative;
       overflow: hidden;
       cursor: pointer;
@@ -2834,11 +2836,13 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
+      width: 100%;
     }
     .tracker-group {
       display: flex;
       flex-direction: column;
       gap: 6px;
+      width: 100%;
     }
     .tracker-card {
       background: var(--app-info-bg) !important;
@@ -2847,7 +2851,11 @@
       padding: 14px 16px;
       display: flex;
       flex-direction: column;
+      align-items: flex-start !important;
+      text-align: left !important;
       gap: 6px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .tracker-box-label {
       font-size: 0.74rem;
@@ -2857,16 +2865,24 @@
       text-transform: uppercase;
       display: flex;
       align-items: center;
+      justify-content: flex-start;
       gap: 5px;
+      text-align: left;
+      align-self: flex-start;
+      margin-bottom: 2px;
     }
     .tracker-date-row {
       display: flex;
       align-items: baseline;
+      justify-content: flex-start;
       gap: 8px;
       flex-wrap: wrap;
+      text-align: left;
+      align-self: flex-start;
+      width: 100%;
     }
     .tracker-big-date {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       font-weight: 800;
       color: var(--text-main);
       line-height: 1.2;
@@ -2875,7 +2891,7 @@
       background: #ffffff;
       border: 1px solid #cbd5e1;
       border-radius: 999px;
-      padding: 2px 8px;
+      padding: 2px 10px;
       font-size: 0.76rem;
       font-weight: 700;
       color: #475569;
@@ -2890,23 +2906,26 @@
       font-size: 0.82rem;
       color: var(--text-muted);
       margin-bottom: 6px;
+      text-align: left;
+      align-self: flex-start;
     }
     .tracker-btn-row {
       display: flex;
       align-items: center;
+      justify-content: flex-start;
       gap: 8px;
       margin-top: 4px;
+      width: 100%;
     }
     .btn-app-water, .btn-app-fert {
       flex: 1;
-      max-width: 240px;
       background: #5f9b65;
       color: #ffffff;
       border: none;
       border-radius: 8px;
-      padding: 10px 18px;
+      padding: 11px 18px;
       font-weight: 700;
-      font-size: 0.90rem;
+      font-size: 0.92rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -2914,6 +2933,7 @@
       gap: 6px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       transition: background 0.15s;
+      min-height: 44px;
     }
     .btn-app-water:hover, .btn-app-fert:hover {
       background: #4e8554;
@@ -2922,22 +2942,26 @@
       background: #1b542a;
     }
     .btn-app-clock {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 8px;
-      background: #b0c5ba;
-      color: #1e293b;
+      background: #b5c7bc;
+      color: #19281c;
       border: none;
-      font-size: 1.1rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.15s;
+      transition: background 0.15s, color 0.15s, transform 0.1s;
       flex-shrink: 0;
+      padding: 0;
     }
     .btn-app-clock:hover {
-      background: #9fb4a9;
+      background: #a3baa9;
+      color: #000000;
+    }
+    .btn-app-clock:active {
+      transform: scale(0.94);
     }
     body.dark-mode .btn-app-clock {
       background: #374740;
@@ -4418,8 +4442,8 @@
           <div class="tracker-box-last" id="modalFertLast"></div>
           <div class="tracker-btn-row">
             <button class="btn-app-fert" id="modalFertBtn">Fertilitzar avui</button>
-            <button type="button" class="btn-app-clock" id="modalFertPastBtn" onclick="openQuickDateModal(currentModalPlantId, 'fert', event)" title="Registrar amb una altra data" aria-label="Registrar data">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <button type="button" class="btn-app-clock" id="modalFertPastBtn" onclick="openQuickDateModal(currentModalPlantId, 'fert', event)" title="Opcions d'adob" aria-label="Opcions d'adob">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             </button>
           </div>
           <div class="detail-care-rules">
@@ -4757,7 +4781,7 @@
 
       <div style="background: #f6f9f6; border: 1px solid var(--border-subtle); border-radius: 9px; padding: 10px 12px; margin-bottom: 12px;">
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
-          <label for="historyDateInput" id="historyDateInputLabel" style="font-size: 0.80rem; font-weight: 700; color: var(--text-main);">📅 Data del registre:</label>
+          <label for="historyDateInput" id="historyDateInputLabel" style="font-size: 0.80rem; font-weight: 700; color: var(--text-main);">Data del registre:</label>
           <input type="date" id="historyDateInput" style="padding: 5px 8px; border: 1px solid var(--border-strong); border-radius: 6px; font-size: 0.82rem; font-family: inherit;">
           <button type="button" class="preset-chip-btn" id="histPresetTodayBtn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(0)">Avui</button>
           <button type="button" class="preset-chip-btn" id="histPresetYesterdayBtn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(-1)">Ahir</button>
@@ -4765,16 +4789,16 @@
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
           <button class="btn-action btn-water-action" id="btnHistoryAddWater" style="justify-content:center;">
-            💧 Registrar Reg
+            Registrar Reg
           </button>
           <button class="btn-action btn-fert-action" id="btnHistoryAddFert" style="justify-content:center;">
-            🧪 Registrar Adob
+            Registrar Adob
           </button>
           <button class="btn-action" id="btnHistoryAddTransplant" style="background:#78350f; color:#fff; justify-content:center;">
-            🪴 Trasplantament
+            Trasplantament
           </button>
           <button class="btn-action" id="btnHistoryAddPruning" style="background:#3f6212; color:#fff; justify-content:center;">
-            ✂️ Poda / Neteja
+            Poda / Neteja
           </button>
         </div>
       </div>
@@ -4796,35 +4820,63 @@
   <div class="modal-card" style="max-width: 430px;">
     <button class="modal-close" onclick="closeModal('quickActionDateModal')" aria-label="Tancar finestra">&times;</button>
     <div class="modal-content" style="padding: 22px 24px;">
-      <h3 id="quickDateModalTitle" style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">📅 Registrar amb data</h3>
+      <h3 id="quickDateModalTitle" style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-display);">Opcions de reg</h3>
       <p id="quickDateModalSubtitle" style="font-size: 0.83rem; color: var(--text-muted); margin-bottom: 14px;"></p>
 
-      <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
-        <button type="button" class="preset-chip-btn" id="quickDatePresetToday" onclick="setQuickModalDateOffset(0)">Avui</button>
-        <button type="button" class="preset-chip-btn" id="quickDatePresetYesterday" onclick="setQuickModalDateOffset(-1)">Ahir</button>
-        <button type="button" class="preset-chip-btn" id="quickDatePreset2Days" onclick="setQuickModalDateOffset(-2)">Fa 2 dies</button>
-        <button type="button" class="preset-chip-btn" id="quickDatePreset3Days" onclick="setQuickModalDateOffset(-3)">Fa 3 dies</button>
-        <button type="button" class="preset-chip-btn" id="quickDatePreset1Week" onclick="setQuickModalDateOffset(-7)">Fa 1 setmana</button>
+      <!-- OPCIONS RÀPIDES DE REG (Regar avui, Retrasar 1 dia, 2 dies, 3 dies) -->
+      <div id="quickWaterOptionsGroup" style="display:none; margin-bottom: 14px;">
+        <button type="button" class="btn-app-water" id="quickWaterTodayBtn" style="width: 100%; max-width: none; justify-content: center; margin-bottom: 10px;" onclick="quickModalRecordToday()">
+          Regar avui
+        </button>
+        <div style="font-size: 0.76rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;" id="quickWaterSnoozeHeading">
+          Posposar proper reg
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+          <button type="button" class="preset-chip-btn" id="quickWaterDelay1Btn" style="padding: 9px 4px; font-weight: 700; text-align: center;" onclick="quickModalSnooze(1)">
+            +1 dia
+          </button>
+          <button type="button" class="preset-chip-btn" id="quickWaterDelay2Btn" style="padding: 9px 4px; font-weight: 700; text-align: center;" onclick="quickModalSnooze(2)">
+            +2 dies
+          </button>
+          <button type="button" class="preset-chip-btn" id="quickWaterDelay3Btn" style="padding: 9px 4px; font-weight: 700; text-align: center;" onclick="quickModalSnooze(3)">
+            +3 dies
+          </button>
+        </div>
+        <div style="border-top: 1px solid var(--border-subtle); margin: 14px 0 12px 0;"></div>
       </div>
 
-      <div class="form-group">
-        <label for="quickActionDatePicker" id="quickActionDateLabel">Data exacta:</label>
-        <input type="date" id="quickActionDatePicker" class="form-control">
+      <!-- SECCIÓ TRIAR DATA EXACTA -->
+      <div id="quickDateSection">
+        <div style="font-size: 0.76rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;" id="quickExactDateHeading">
+          Triar data exacta
+        </div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;" id="quickDatePresetsRow">
+          <button type="button" class="preset-chip-btn" id="quickDatePresetToday" onclick="setQuickModalDateOffset(0)">Avui</button>
+          <button type="button" class="preset-chip-btn" id="quickDatePresetYesterday" onclick="setQuickModalDateOffset(-1)">Ahir</button>
+          <button type="button" class="preset-chip-btn" id="quickDatePreset2Days" onclick="setQuickModalDateOffset(-2)">Fa 2 dies</button>
+          <button type="button" class="preset-chip-btn" id="quickDatePreset3Days" onclick="setQuickModalDateOffset(-3)">Fa 3 dies</button>
+          <button type="button" class="preset-chip-btn" id="quickDatePreset1Week" onclick="setQuickModalDateOffset(-7)">Fa 1 setmana</button>
+        </div>
+
+        <div class="form-group">
+          <label for="quickActionDatePicker" id="quickActionDateLabel">Data:</label>
+          <input type="date" id="quickActionDatePicker" class="form-control">
+        </div>
       </div>
 
       <div class="form-group" id="quickActionPotGroup" style="display:none;">
-        <label for="quickActionPotInput" id="quickActionPotLabel">🏺 Nova mida o tipus de test (opcional):</label>
+        <label for="quickActionPotInput" id="quickActionPotLabel">Nova mida o tipus de test (opcional):</label>
         <input type="text" id="quickActionPotInput" class="form-control" placeholder="ex: Test terracota 18 cm">
       </div>
 
       <div class="form-group" id="quickActionNoteGroup" style="display:none;">
-        <label for="quickActionNoteInput" id="quickActionNoteLabel">📝 Nota o detall (opcional):</label>
+        <label for="quickActionNoteInput" id="quickActionNoteLabel">Nota o detall (opcional):</label>
         <input type="text" id="quickActionNoteInput" class="form-control" placeholder="ex: Substrat universal + perlita / Poda de fulles seques">
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top: 16px;">
         <button type="button" class="btn-action" id="quickActionCancelBtn" style="background:#e5e7eb; color:#374151;" onclick="closeModal('quickActionDateModal')">Cancel·lar</button>
-        <button type="button" class="btn-action btn-water-action" id="quickActionConfirmBtn" onclick="confirmQuickActionDate()">💾 Guardar registre</button>
+        <button type="button" class="btn-action btn-water-action" id="quickActionConfirmBtn" onclick="confirmQuickActionDate()">Desar data</button>
       </div>
     </div>
   </div>
@@ -6182,6 +6234,8 @@
 
     const ws = computeWaterStatus(plant);
     const fs = computeFertStatus(plant);
+    const waterParts = formatAppDateParts(ws.nextDateObj, ws.daysLeft, ws.status);
+    const fertParts = formatAppDateParts(fs.nextDateObj, fs.daysLeft, fs.status);
 
     // 1. Targeta al Grid
     const cardEl = document.getElementById(`plant-card-${plantId}`);
@@ -6196,38 +6250,44 @@
       const waterBox = document.getElementById(`plant-water-box-${plantId}`);
       if (waterBox) waterBox.className = `tracker-card ${ws.statusClass}`;
 
-      const waterTitle = document.getElementById(`plant-water-title-${plantId}`);
-      if (waterTitle) waterTitle.innerText = `💧 ${t('Reg', 'Riego', 'Water')}: ${ws.badgeText}`;
+      const waterDate = document.getElementById(`plant-water-date-${plantId}`);
+      if (waterDate) waterDate.innerText = waterParts.dateStr;
 
-      const waterNext = document.getElementById(`plant-water-next-${plantId}`);
-      if (waterNext) waterNext.innerHTML = `📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${ws.nextText}</strong>`;
+      const waterBadge = document.getElementById(`plant-water-badge-${plantId}`);
+      if (waterBadge) {
+        waterBadge.innerText = waterParts.badgeStr;
+        waterBadge.className = `tracker-badge-pill ${ws.status === 'overdue' ? 'is-alert' : ''}`;
+      }
 
       const waterLast = document.getElementById(`plant-water-last-${plantId}`);
       if (waterLast) waterLast.innerText = ws.lastText;
 
       const waterBtn = document.getElementById(`plant-water-btn-${plantId}`);
       if (waterBtn) {
-        waterBtn.className = `btn-action btn-water-action ${ws.isToday ? 'btn-done-today' : ''}`;
-        waterBtn.innerText = ws.isToday ? t('✅ Regat avui', '✅ Regado hoy', '✅ Watered today') : t('💧 Regar avui', '💧 Regar hoy', '💧 Water today');
+        waterBtn.className = `btn-app-water ${ws.isToday ? 'btn-done-today' : ''}`;
+        waterBtn.innerText = ws.isToday ? t('Regat avui', 'Regado hoy', 'Watered today') : t('Regar avui', 'Regar hoy', 'Water today');
       }
 
       // Caixa d'Adob
       const fertBox = document.getElementById(`plant-fert-box-${plantId}`);
       if (fertBox) fertBox.className = `tracker-card ${fs.statusClass}`;
 
-      const fertTitle = document.getElementById(`plant-fert-title-${plantId}`);
-      if (fertTitle) fertTitle.innerText = `🧪 ${t('Adob', 'Abono', 'Fertilizer')}: ${fs.badgeText}`;
+      const fertDate = document.getElementById(`plant-fert-date-${plantId}`);
+      if (fertDate) fertDate.innerText = fertParts.dateStr;
 
-      const fertNext = document.getElementById(`plant-fert-next-${plantId}`);
-      if (fertNext) fertNext.innerHTML = `📅 ${t('Proper', 'Próximo', 'Next')}: <strong>${fs.nextText}</strong>`;
+      const fertBadge = document.getElementById(`plant-fert-badge-${plantId}`);
+      if (fertBadge) {
+        fertBadge.innerText = fertParts.badgeStr;
+        fertBadge.className = `tracker-badge-pill ${fs.status === 'overdue' ? 'is-alert' : ''}`;
+      }
 
       const fertLast = document.getElementById(`plant-fert-last-${plantId}`);
       if (fertLast) fertLast.innerText = fs.lastText;
 
       const fertBtn = document.getElementById(`plant-fert-btn-${plantId}`);
       if (fertBtn) {
-        fertBtn.className = `btn-action btn-fert-action ${fs.isToday ? 'btn-done-today' : ''}`;
-        fertBtn.innerText = ws.isToday ? t('✅ Abonat avui', '✅ Abonado hoy', '✅ Fertilized today') : t('🧪 Abonar avui', '🧪 Abonar hoy', '🧪 Fertilize today');
+        fertBtn.className = `btn-app-fert ${fs.isToday ? 'btn-done-today' : ''}`;
+        fertBtn.innerText = fs.isToday ? t('Abonat avui', 'Abonado hoy', 'Fertilized today') : t('Fertilitzar avui', 'Abonar hoy', 'Fertilize today');
       }
 
       // Micro-animació de confirmació visual immediata
@@ -6348,7 +6408,9 @@
         modalWaterBtn.onclick = (e) => recordAction(plantId, 'water', e);
       }
       if (modalSnoozeBtn) {
-        modalSnoozeBtn.onclick = (e) => snoozeWater(plantId, 1, e);
+        modalSnoozeBtn.title = t("Opcions de reg", "Opciones de riego", "Watering options");
+        modalSnoozeBtn.setAttribute("aria-label", t("Opcions de reg", "Opciones de riego", "Watering options"));
+        modalSnoozeBtn.onclick = (e) => openQuickDateModal(plantId, 'water', e);
       }
       if (modalWaterPastBtn) {
         modalWaterPastBtn.innerText = t("Data", "Fecha", "Date");
@@ -6381,7 +6443,8 @@
         modalFertBtn.onclick = (e) => recordAction(plantId, 'fert', e);
       }
       if (modalFertPastBtn) {
-        modalFertPastBtn.innerText = t("Data", "Fecha", "Date");
+        modalFertPastBtn.title = t("Opcions d'adob", "Opciones de abono", "Fertilizer options");
+        modalFertPastBtn.setAttribute("aria-label", t("Opcions d'adob", "Opciones de abono", "Fertilizer options"));
         modalFertPastBtn.onclick = (e) => openQuickDateModal(plantId, 'fert', e);
       }
     }
@@ -6451,6 +6514,22 @@
     if (inp) inp.value = toInputDateString(d);
   }
 
+  function quickModalRecordToday() {
+    const { plantId, actionType } = quickModalContext;
+    if (!plantId) return;
+    closeModal("quickActionDateModal");
+    recordAction(plantId, actionType || 'water');
+  }
+
+  async function quickModalSnooze(days) {
+    const { plantId } = quickModalContext;
+    if (!plantId) return;
+    closeModal("quickActionDateModal");
+    await snoozeWater(plantId, days);
+    const dWord = days === 1 ? t('1 dia', '1 día', '1 day') : `${days} ${t('dies', 'días', 'days')}`;
+    showToast(t(`Reg posposat ${dWord}!`, `¡Riego pospuesto ${dWord}!`, `Watering postponed ${dWord}!`), "⏳");
+  }
+
   function openQuickDateModal(plantId, actionType, event) {
     if (event && event.stopPropagation) event.stopPropagation();
     const plant = plantsCatalog.find(p => p.id === plantId);
@@ -6460,6 +6539,7 @@
 
     const titleEl = document.getElementById("quickDateModalTitle");
     const subEl = document.getElementById("quickDateModalSubtitle");
+    const waterGroup = document.getElementById("quickWaterOptionsGroup");
     const potGroup = document.getElementById("quickActionPotGroup");
     const noteGroup = document.getElementById("quickActionNoteGroup");
     const potInp = document.getElementById("quickActionPotInput");
@@ -6469,26 +6549,30 @@
     if (noteInp) noteInp.value = "";
 
     if (actionType === 'water') {
-      titleEl.innerText = t("💧 Registrar Reg amb Data", "💧 Registrar Riego con Fecha", "💧 Log Watering with Date");
-      subEl.innerText = t(`Tria quin dia vas regar "${plant.name}":`, `Elige qué día regaste "${plant.name}":`, `Choose which day you watered "${plant.name}":`);
+      titleEl.innerText = t("Opcions de reg", "Opciones de riego", "Watering options");
+      subEl.innerText = t(`Planta: "${plant.name}"`, `Planta: "${plant.name}"`, `Plant: "${plant.name}"`);
+      if (waterGroup) waterGroup.style.display = "block";
       potGroup.style.display = "none";
       noteGroup.style.display = "none";
-      setQuickModalDateOffset(-1); // Per defecte Ahir
+      setQuickModalDateOffset(0); // Per defecte Avui
     } else if (actionType === 'fert') {
-      titleEl.innerText = t("🧪 Registrar Adob amb Data", "🧪 Registrar Abono con Fecha", "🧪 Log Fertilizer with Date");
+      titleEl.innerText = t("Registrar adob amb data", "Registrar abono con fecha", "Log fertilizer with date");
       subEl.innerText = t(`Tria quin dia vas adobar "${plant.name}":`, `Elige qué día abonaste "${plant.name}":`, `Choose which day you fertilized "${plant.name}":`);
+      if (waterGroup) waterGroup.style.display = "none";
       potGroup.style.display = "none";
       noteGroup.style.display = "none";
       setQuickModalDateOffset(-1);
     } else if (actionType === 'transplant') {
-      titleEl.innerText = t("🪴 Registrar Trasplantament", "🪴 Registrar Trasplante", "🪴 Log Repotting");
+      titleEl.innerText = t("Registrar trasplantament", "Registrar trasplante", "Log repotting");
       subEl.innerText = t(`Anota el canvi de test o substrat de "${plant.name}":`, `Anota el cambio de maceta o sustrato de "${plant.name}":`, `Note pot or soil change for "${plant.name}":`);
+      if (waterGroup) waterGroup.style.display = "none";
       potGroup.style.display = "block";
       noteGroup.style.display = "block";
       setQuickModalDateOffset(0); // Per defecte Avui
     } else if (actionType === 'pruning') {
-      titleEl.innerText = t("✂️ Registrar Poda / Neteja", "✂️ Registrar Poda / Limpieza", "✂️ Log Pruning / Cleaning");
+      titleEl.innerText = t("Registrar poda / neteja", "Registrar poda / limpieza", "Log pruning / cleaning");
       subEl.innerText = t(`Anota el manteniment de fulles o tiges de "${plant.name}":`, `Anota el mantenimiento de hojas o tallos de "${plant.name}":`, `Note leaf maintenance or pruning for "${plant.name}":`);
+      if (waterGroup) waterGroup.style.display = "none";
       potGroup.style.display = "none";
       noteGroup.style.display = "block";
       setQuickModalDateOffset(0);
@@ -6509,13 +6593,29 @@
 
     const parts = dateVal.split("-");
     const now = new Date();
+    const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const chosenDateMidnight = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
     const chosenDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), now.getHours(), now.getMinutes());
     const isoStr = chosenDate.toISOString();
 
-    const potVal = document.getElementById("quickActionPotInput").value.trim();
-    const noteVal = document.getElementById("quickActionNoteInput").value.trim();
+    const potVal = document.getElementById("quickActionPotInput") ? document.getElementById("quickActionPotInput").value.trim() : "";
+    const noteVal = document.getElementById("quickActionNoteInput") ? document.getElementById("quickActionNoteInput").value.trim() : "";
 
     closeModal("quickActionDateModal");
+
+    // Si és aigua i la data és futura (> avui), reprogramar / posposar proper reg
+    if (actionType === 'water' && chosenDateMidnight > todayMidnight) {
+      const pHist = getPlantHistory(plantId);
+      pHist.snoozeUntil = chosenDateMidnight.toISOString();
+      saveLocalHistory(inMemoryHistory);
+      updatePlantCardDOM(plantId);
+      if (currentModalPlantId === plantId) updateModalTracker(plantId);
+      renderPlants();
+      showToast(t(`Proper reg posposat al ${formatDateFriendly(chosenDateMidnight)}!`, `¡Próximo riego pospuesto al ${formatDateFriendly(chosenDateMidnight)}!`, `Next watering scheduled for ${formatDateFriendly(chosenDateMidnight)}!`), "⏳");
+      await syncHistoryToCloud();
+      return;
+    }
+
     await recordActionWithDate(plantId, actionType, isoStr, { potSize: potVal, note: noteVal });
   }
 
@@ -7493,33 +7593,43 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             <div class="tracker-section">
               <!-- PRÒXIM REG (Galeria - Vista llista.png) -->
               <div class="tracker-card ${ws.statusClass}" id="plant-water-box-${plant.id}">
-                <div class="tracker-box-label">💧 ${t('PRÒXIM REG', 'PRÓXIMO RIEGO', 'NEXT WATERING')}</div>
+                <div class="tracker-box-label">${t('PRÒXIM REG', 'PRÓXIMO RIEGO', 'NEXT WATERING')}</div>
                 <div class="tracker-date-row">
-                  <span class="tracker-big-date">${waterParts.dateStr}</span>
-                  <span class="tracker-badge-pill ${ws.status === 'overdue' ? 'is-alert' : ''}">${waterParts.badgeStr}</span>
+                  <span class="tracker-big-date" id="plant-water-date-${plant.id}">${waterParts.dateStr}</span>
+                  <span class="tracker-badge-pill ${ws.status === 'overdue' ? 'is-alert' : ''}" id="plant-water-badge-${plant.id}">${waterParts.badgeStr}</span>
                 </div>
-                <div class="tracker-box-last">${ws.lastText}</div>
+                <div class="tracker-box-last" id="plant-water-last-${plant.id}">${ws.lastText}</div>
                 <div class="tracker-btn-row">
                   <button class="btn-app-water ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
-                    ${ws.isToday ? t('✅ Regat avui', '✅ Regado hoy', '✅ Watered today') : t('💧 Regar avui', '💧 Regar hoy', '💧 Water today')}
+                    ${ws.isToday ? t('Regat avui', 'Regado hoy', 'Watered today') : t('Regar avui', 'Regar hoy', 'Water today')}
                   </button>
-                  <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Registrar reg amb una altra data', 'Registrar riego con otra fecha', 'Log watering with custom date')}">🕒</button>
+                  <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Opcions de reg', 'Opciones de riego', 'Watering options')}" aria-label="Opcions de reg">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  </button>
                 </div>
               </div>
 
               <!-- PRÒXIMA FERTILITZACIÓ (Galeria - Vista llista.png) -->
               <div class="tracker-card ${fs.statusClass}" id="plant-fert-box-${plant.id}">
-                <div class="tracker-box-label">🧪 ${t('PRÒXIMA FERTILITZACIÓ', 'PRÓXIMO ABONO', 'NEXT FERTILIZER')}</div>
+                <div class="tracker-box-label">${t('PRÒXIMA FERTILITZACIÓ', 'PRÓXIMO ABONO', 'NEXT FERTILIZER')}</div>
                 <div class="tracker-date-row">
-                  <span class="tracker-big-date">${fertParts.dateStr}</span>
-                  <span class="tracker-badge-pill ${fs.status === 'overdue' ? 'is-alert' : ''}">${fertParts.badgeStr}</span>
+                  <span class="tracker-big-date" id="plant-fert-date-${plant.id}">${fertParts.dateStr}</span>
+                  <span class="tracker-badge-pill ${fs.status === 'overdue' ? 'is-alert' : ''}" id="plant-fert-badge-${plant.id}">${fertParts.badgeStr}</span>
                 </div>
-                <div class="tracker-box-last">${fs.lastText}</div>
+                <div class="tracker-box-last" id="plant-fert-last-${plant.id}">${fs.lastText}</div>
                 <div class="tracker-btn-row">
                   <button class="btn-app-fert ${fs.isToday ? 'btn-done-today' : ''}" id="plant-fert-btn-${plant.id}" onclick="recordAction('${plant.id}', 'fert', event)">
-                    ${fs.isToday ? t('✅ Abonat avui', '✅ Abonado hoy', '✅ Fertilized today') : t('🧪 Fertilitzar avui', '🧪 Abonar hoy', '🧪 Fertilize today')}
+                    ${fs.isToday ? t('Abonat avui', 'Abonado hoy', 'Fertilized today') : t('Fertilitzar avui', 'Abonar hoy', 'Fertilize today')}
                   </button>
-                  <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Registrar adob amb una altra data', 'Registrar abono con otra fecha', 'Log fertilizing with custom date')}">🕒</button>
+                  <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Opcions d\'adob', 'Opciones de abono', 'Fertilizer options')}" aria-label="Opcions d'adob">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  </button>
                 </div>
                 <div style="margin-top: 8px;">
                   <a href="${getAmazonAffiliateUrl('fertilizer', plant)}" target="_blank" rel="noopener sponsored" class="btn-amz-pill">
@@ -9083,32 +9193,38 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     // Formulari d'edició
     setElText("editPlantZoneLabel", t("Ubicació / Zona:", "Ubicación / Zona:", "Location / Zone:"));
-    setElText("editPlantRoomLabel", t("📍 Habitació / Racó:", "📍 Habitación / Rincón:", "📍 Room / Spot:"));
+    setElText("editPlantRoomLabel", t("Habitació / Racó:", "Habitación / Rincón:", "Room / Spot:"));
     setElText("editPlantDifficultyLabel", t("Dificultat:", "Dificultad:", "Difficulty:"));
 
     // Modal d'Històric
     setElText("historyModalSubtitle", t("Registre complet de regs, adobs, trasplantaments i podes. Tria la data per anotar accions d'avui o de dies passats:", "Registro completo de riegos, abonos, trasplantes y podas. Elige la fecha para anotar acciones de hoy o días pasados:", "Full log of watering, fertilizing, repotting, and pruning. Choose a date to record today's or past tasks:"));
-    setElText("historyDateInputLabel", t("📅 Data del registre:", "📅 Fecha del registro:", "📅 Record date:"));
+    setElText("historyDateInputLabel", t("Data del registre:", "Fecha del registro:", "Record date:"));
     setElText("histPresetTodayBtn", t("Avui", "Hoy", "Today"));
     setElText("histPresetYesterdayBtn", t("Ahir", "Ayer", "Yesterday"));
     setElText("histPreset2DaysBtn", t("Fa 2 dies", "Hace 2 días", "2 days ago"));
-    setElText("btnHistoryAddWater", t("💧 Registrar Reg", "💧 Registrar Riego", "💧 Log Watering"));
-    setElText("btnHistoryAddFert", t("🧪 Registrar Adob", "🧪 Registrar Abono", "🧪 Log Fertilizer"));
-    setElText("btnHistoryAddTransplant", t("🪴 Trasplantament", "🪴 Trasplante", "🪴 Repotting"));
-    setElText("btnHistoryAddPruning", t("✂️ Poda / Neteja", "✂️ Poda / Limpieza", "✂️ Pruning / Cleaning"));
+    setElText("btnHistoryAddWater", t("Registrar reg", "Registrar riego", "Log watering"));
+    setElText("btnHistoryAddFert", t("Registrar adob", "Registrar abono", "Log fertilizer"));
+    setElText("btnHistoryAddTransplant", t("Trasplantament", "Trasplante", "Repotting"));
+    setElText("btnHistoryAddPruning", t("Poda / neteja", "Poda / limpieza", "Pruning / cleaning"));
     setElText("historyModalCloseBtn", t("Tancar", "Cerrar", "Close"));
 
-    // Modal de Data Ràpida Passada
+    // Modal de Data Ràpida i Opcions de Reg
+    setElText("quickWaterTodayBtn", t("Regar avui", "Regar hoy", "Water today"));
+    setElText("quickWaterSnoozeHeading", t("Posposar proper reg", "Posponer próximo riego", "Postpone next watering"));
+    setElText("quickWaterDelay1Btn", t("+1 dia", "+1 día", "+1 day"));
+    setElText("quickWaterDelay2Btn", t("+2 dies", "+2 días", "+2 days"));
+    setElText("quickWaterDelay3Btn", t("+3 dies", "+3 días", "+3 days"));
+    setElText("quickExactDateHeading", t("Triar data exacta", "Elegir fecha exacta", "Choose exact date"));
     setElText("quickDatePresetToday", t("Avui", "Hoy", "Today"));
     setElText("quickDatePresetYesterday", t("Ahir", "Ayer", "Yesterday"));
     setElText("quickDatePreset2Days", t("Fa 2 dies", "Hace 2 días", "2 days ago"));
     setElText("quickDatePreset3Days", t("Fa 3 dies", "Hace 3 días", "3 days ago"));
     setElText("quickDatePreset1Week", t("Fa 1 setmana", "Hace 1 semana", "1 week ago"));
-    setElText("quickActionDateLabel", t("Data exacta:", "Fecha exacta:", "Exact date:"));
-    setElText("quickActionPotLabel", t("🏺 Nova mida o tipus de test (opcional):", "🏺 Nuevo tamaño o tipo de maceta (opcional):", "🏺 New pot size or type (optional):"));
-    setElText("quickActionNoteLabel", t("📝 Nota o detall (opcional):", "📝 Nota o detalle (opcional):", "📝 Note or details (optional):"));
+    setElText("quickActionDateLabel", t("Data:", "Fecha:", "Date:"));
+    setElText("quickActionPotLabel", t("Nova mida o tipus de test (opcional):", "Nuevo tamaño o tipo de maceta (opcional):", "New pot size or type (optional):"));
+    setElText("quickActionNoteLabel", t("Nota o detall (opcional):", "Nota o detalle (opcional):", "Note or details (optional):"));
     setElText("quickActionCancelBtn", t("Cancel·lar", "Cancelar", "Cancel"));
-    setElText("quickActionConfirmBtn", t("💾 Guardar registre", "💾 Guardar registro", "💾 Save record"));
+    setElText("quickActionConfirmBtn", t("Desar data", "Guardar fecha", "Save date"));
   }
 
   // -------------------------------------------------------------
