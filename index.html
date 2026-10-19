@@ -68,6 +68,19 @@
       color: #19281c;
     }
 
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    input, textarea, select {
+      caret-color: var(--accent);
+    }
+
+    button, a, input, select, textarea {
+      -webkit-tap-highlight-color: transparent;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
@@ -82,6 +95,7 @@
       line-height: 1.5;
       padding: 20px 16px 90px;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     /* Scrollbar Botànica */
@@ -681,6 +695,24 @@
     .btn-water-action:hover { background: #183e22; color: #ffffff; }
     .btn-fert-action { background: #0369a1; color: #ffffff; }
     .btn-fert-action:hover { background: #075985; color: #ffffff; }
+    .btn-action-secondary {
+      background: var(--border-subtle);
+      color: var(--text-main);
+      border: 1px solid transparent;
+    }
+    .btn-action-secondary:hover {
+      background: var(--border-strong);
+      color: var(--text-main);
+    }
+    body.dark-mode .btn-action-secondary {
+      background: #1e3324;
+      color: #d1e5d5;
+      border-color: var(--border-subtle);
+    }
+    body.dark-mode .btn-action-secondary:hover {
+      background: #284430;
+      color: #ffffff;
+    }
     .btn-done-today {
       background: #1e592f !important;
       color: #ffffff !important;
@@ -1260,10 +1292,21 @@
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.15s ease;
+      transition: background 0.15s ease, border-color 0.15s ease;
     }
     .btn-cal-nav:hover {
-      background: #e6efe7;
+      background: var(--accent-light);
+      border-color: var(--border-strong);
+    }
+    body.dark-mode .btn-cal-nav {
+      background: #142218;
+      border-color: var(--border-subtle);
+      color: var(--text-main);
+    }
+    body.dark-mode .btn-cal-nav:hover {
+      background: #1e3324;
+      border-color: #35563e;
+      color: #86efac;
     }
     .month-weekdays-row {
       display: grid;
@@ -1533,7 +1576,7 @@
     .history-delete-btn {
       background: #fee2e2; color: #991b1b; border: 1px solid #fecaca;
       padding: 5px 11px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 4px;
+      display: inline-flex; align-items: center; gap: 5px;
       transition: background 0.15s ease, transform 0.1s ease;
     }
     .history-delete-btn:hover {
@@ -1541,6 +1584,16 @@
     }
     .history-delete-btn:active {
       transform: scale(0.96);
+    }
+    body.dark-mode .history-delete-btn {
+      background: rgba(185, 28, 28, 0.22);
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+    body.dark-mode .history-delete-btn:hover {
+      background: rgba(185, 28, 28, 0.35);
+      color: #fecaca;
+      border-color: rgba(239, 68, 68, 0.5);
     }
     .history-empty {
       text-align: center; padding: 28px 16px; color: var(--text-muted); font-size: 0.90rem;
@@ -1550,13 +1603,30 @@
     .toast-notification {
       position: fixed; bottom: 24px; right: 24px;
       background: #182319; color: #ffffff;
-      padding: 12px 20px; border-radius: 10px;
+      padding: 12px 20px; border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.25);
       font-size: 0.90rem; display: flex; align-items: center; gap: 10px;
       z-index: 2000; transform: translateY(100px); opacity: 0;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(8px);
+      max-width: 90vw;
     }
     .toast-notification.show { transform: translateY(0); opacity: 1; }
+    body.dark-mode .toast-notification {
+      background: #1e3324;
+      color: #f0fdf4;
+      border: 1px solid rgba(74, 222, 128, 0.25);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    }
+    @media (max-width: 768px) {
+      .toast-notification {
+        bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+        left: 16px;
+        right: 16px;
+        justify-content: center;
+        border-radius: 9999px;
+      }
+    }
 
     .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); grid-column: 1 / -1; display: none; }
 
@@ -1810,6 +1880,31 @@
 
       --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.32);
       --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    body.dark-mode ::selection {
+      background: #1b4d29;
+      color: #f0fdf4;
+    }
+
+    body.dark-mode ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+    body.dark-mode ::-webkit-scrollbar-thumb {
+      background: #253d2c;
+    }
+    body.dark-mode ::-webkit-scrollbar-thumb:hover {
+      background: #35563e;
+    }
+
+    body.dark-mode .modal-close {
+      background: rgba(22, 38, 27, 0.95);
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+    body.dark-mode .modal-close:hover {
+      background: rgba(30, 51, 36, 1);
+      color: #ffffff;
     }
 
     body.dark-mode header {
@@ -3494,8 +3589,8 @@
       margin-bottom: 8px;
     }
     .settings-card {
-      background: #edf2f6;
-      border: 1px solid #dce5ec;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       border-radius: 14px;
       padding: 14px 16px;
       display: flex;
@@ -3503,8 +3598,8 @@
       gap: 10px;
     }
     body.dark-mode .settings-card {
-      background: #1e2630;
-      border-color: #2d3748;
+      background: var(--bg-card);
+      border-color: var(--border-subtle);
     }
     .settings-card-desc {
       font-size: 0.84rem;
@@ -3535,21 +3630,31 @@
     }
     .theme-segment-btn.active {
       background: var(--bg-surface);
-      border-color: #cbd5e1;
+      border-color: var(--border-strong);
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
       font-weight: 700;
+    }
+    body.dark-mode .theme-segment-btn.active {
+      background: var(--bg-surface);
+      border-color: var(--accent);
+      color: #86efac;
     }
     .settings-select {
       width: 100%;
       padding: 10px 14px;
       border-radius: 8px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--border-subtle);
       background: var(--bg-surface);
       font-size: 0.90rem;
       font-weight: 600;
       color: var(--text-main);
       outline: none;
       cursor: pointer;
+    }
+    body.dark-mode .settings-select {
+      background: #101c13;
+      border-color: var(--border-subtle);
+      color: var(--text-main);
     }
     .settings-row {
       display: flex;
@@ -3573,13 +3678,13 @@
       display: inline-flex;
       align-items: center;
       background: var(--bg-surface);
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--border-subtle);
       border-radius: 8px;
       padding: 4px 10px;
     }
     body.dark-mode .time-picker-wrap {
-      background: #141b24;
-      border-color: #334155;
+      background: #101c13;
+      border-color: var(--border-subtle);
     }
     .time-input {
       border: none;
@@ -3604,7 +3709,7 @@
       gap: 10px;
     }
     .btn-settings-action {
-      background: #8ea89d;
+      background: var(--accent);
       color: #ffffff;
       border: none;
       border-radius: 8px;
@@ -3616,7 +3721,10 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: background 0.15s;
+      transition: background 0.15s, transform 0.1s ease;
+    }
+    .btn-settings-action:active {
+      transform: scale(0.98);
     }
     .btn-settings-action svg {
       width: 17px;
@@ -3626,16 +3734,29 @@
       display: inline-block;
     }
     .btn-settings-action:hover {
-      background: #7d968c;
+      background: var(--accent-hover);
     }
     .btn-settings-action.full-width {
       width: 100%;
     }
     .btn-settings-action.btn-google-play {
-      background: #5f9b65;
+      background: #1e6b35;
     }
     .btn-settings-action.btn-google-play:hover {
-      background: #4e8554;
+      background: #154e26;
+    }
+    body.dark-mode .btn-settings-action {
+      background: #256a38;
+      color: #ffffff;
+    }
+    body.dark-mode .btn-settings-action:hover {
+      background: #2f8547;
+    }
+    body.dark-mode .btn-settings-action.btn-google-play {
+      background: #205c31;
+    }
+    body.dark-mode .btn-settings-action.btn-google-play:hover {
+      background: #2a7a40;
     }
     .legal-links-card {
       gap: 0;
@@ -4041,7 +4162,7 @@
       flex: 1;
     }
     .btn-maint-reg {
-      background: #8ea89d;
+      background: var(--accent);
       color: #ffffff;
       border: none;
       border-radius: 6px;
@@ -4049,12 +4170,22 @@
       font-size: 0.80rem;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: background 0.15s, transform 0.1s ease;
       margin-left: auto;
       flex-shrink: 0;
     }
     .btn-maint-reg:hover {
-      background: #7d968c;
+      background: var(--accent-hover);
+    }
+    .btn-maint-reg:active {
+      transform: scale(0.96);
+    }
+    body.dark-mode .btn-maint-reg {
+      background: #256a38;
+      color: #ffffff;
+    }
+    body.dark-mode .btn-maint-reg:hover {
+      background: #2f8547;
     }
     .maint-item-sub {
       font-size: 0.80rem;
@@ -4257,7 +4388,7 @@
       <div class="empty-state" id="emptyState" style="display:none;">
         <h2 id="emptyStateTitle" style="font-size: 1.25rem; font-family: var(--font-display); font-weight: 600; color: var(--text-main); margin-bottom: 4px;">No s'ha trobat cap planta</h2>
         <p id="emptyStateDesc">Prova de canviar els filtres de cerca o afegeix una nova planta.</p>
-        <button type="button" class="btn-app-water" style="margin-top:14px; align-self:center;" onclick="switchAppTab('add')">➕ Afegir Planta</button>
+        <button type="button" class="btn-app-water" id="emptyStateAddBtn" style="margin-top:14px; align-self:center;" onclick="switchAppTab('add')">Afegir planta</button>
       </div>
     </div>
 
@@ -4342,8 +4473,8 @@
           <div id="fallbackPresetsContainer" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 180px; overflow-y: auto; margin-bottom: 16px;"></div>
 
           <div style="display: flex; justify-content: space-between;">
-            <button class="btn-action" style="background: #e5e7eb; color: #374151;" onclick="resetAIModal()">
-              🔄 Repetir foto
+            <button type="button" class="btn-action btn-action-secondary" onclick="resetAIModal()">
+              Repetir foto
             </button>
           </div>
         </div>
@@ -4411,11 +4542,11 @@
           </div>
 
           <div style="display: flex; gap: 10px; justify-content: space-between;">
-            <button class="btn-action" style="background: #e5e7eb; color: #374151;" onclick="resetAIModal()">
-              🔄 Repetir foto
+            <button type="button" class="btn-action btn-action-secondary" onclick="resetAIModal()">
+              Repetir foto
             </button>
-            <button class="btn-action" style="background: #256a38; color: white; padding: 10px 20px; font-size: 0.92rem;" onclick="confirmSaveAIPlant()">
-              🌿 Afegir al Meu Jardí
+            <button type="button" class="btn-action" style="background: var(--accent); color: white; padding: 10px 20px; font-size: 0.92rem; font-weight: 700;" onclick="confirmSaveAIPlant()">
+              Afegir al meu jardí
             </button>
           </div>
         </div>
@@ -4745,7 +4876,7 @@
             <button type="button" class="btn-app-clock" id="modalSnoozeBtn" title="Posposar reg 1 dia" aria-label="Posposar reg 1 dia">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             </button>
-            <button type="button" id="modalWaterPastBtn" style="display:none;"></button>
+            <button type="button" id="modalWaterPastBtn" style="display:none;" aria-hidden="true"></button>
           </div>
           <div class="detail-care-rules">
             <div class="detail-rule-heading">Pautes de reg</div>
@@ -4807,7 +4938,7 @@
           </div>
           <div class="guide-item-divider"></div>
           <div class="guide-item">
-            <div class="guide-item-title">Consell clau</div>
+            <div class="guide-item-title" id="modalTipSectionTitle">Consell clau</div>
             <div class="guide-item-text" id="modalTip"></div>
           </div>
         </div>
@@ -4903,12 +5034,12 @@
       </div>
 
       <!-- Elements auxiliars per compatibilitat JS -->
-      <div id="addPlantModal" style="display:none;"></div>
-      <div id="preferencesModal" style="display:none;"></div>
-      <div style="display:none;">
-        <button id="modalEditPlantBtn"></button>
-        <button id="modalHistoryBtn"></button>
-        <button id="modalDeletePlantBtn"></button>
+      <div id="addPlantModal" style="display:none;" aria-hidden="true"></div>
+      <div id="preferencesModal" style="display:none;" aria-hidden="true"></div>
+      <div style="display:none;" aria-hidden="true">
+        <button id="modalEditPlantBtn" aria-label="Editar planta"></button>
+        <button id="modalHistoryBtn" aria-label="Històric de cures"></button>
+        <button id="modalDeletePlantBtn" aria-label="Eliminar planta"></button>
         <span id="modalWaterSummerLabel"></span>
         <span id="modalWaterWinterLabel"></span>
         <span id="modalFertSectionTitle"></span>
@@ -5147,7 +5278,7 @@
       <ul class="history-list" id="historyListContainer"></ul>
 
       <div style="margin-top:14px; text-align:right;">
-        <button class="btn-action" id="historyModalCloseBtn" style="background:#e5e7eb; color:#374151;" onclick="closeModal('historyModal')">
+        <button class="btn-action btn-action-secondary" id="historyModalCloseBtn" onclick="closeModal('historyModal')">
           Tancar
         </button>
       </div>
@@ -5216,7 +5347,7 @@
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:8px; margin-top: 16px;">
-        <button type="button" class="btn-action" id="quickActionCancelBtn" style="background:#e5e7eb; color:#374151;" onclick="closeModal('quickActionDateModal')">Cancel·lar</button>
+        <button type="button" class="btn-action btn-action-secondary" id="quickActionCancelBtn" onclick="closeModal('quickActionDateModal')">Cancel·lar</button>
         <button type="button" class="btn-action btn-water-action" id="quickActionConfirmBtn" onclick="confirmQuickActionDate()">Desar data</button>
       </div>
     </div>
@@ -5407,8 +5538,8 @@
           <button type="button" class="btn-action" style="background: var(--bg-tertiary); color: var(--text-main); border: 1px solid var(--border-subtle); padding: 8px 16px;" onclick="closeModal('feedbackModal')" id="feedbackCancelBtn">
             Cancel·lar
           </button>
-          <button type="submit" class="btn-action" style="background: #256a38; color: white; padding: 8px 20px; font-weight: 700;" id="feedbackSubmitBtn">
-            🚀 Enviar Comentari
+          <button type="submit" class="btn-action" style="background: var(--accent); color: white; padding: 8px 20px; font-weight: 700;" id="feedbackSubmitBtn">
+            Enviar comentari
           </button>
         </div>
       </form>
@@ -8746,7 +8877,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             ${item.note ? `<div style="font-size:0.78rem; color:var(--green-mid); margin-top:2px;">📝 ${item.note}</div>` : ''}
           </div>
           <button class="history-delete-btn" onclick="deleteHistoryEntry('${plantId}', '${item.type}', '${item.date}', ${item.originalIndex}, event)">
-            🗑️ ${t('Esborrar', 'Borrar', 'Delete')}
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            ${t('Esborrar', 'Borrar', 'Delete')}
           </button>
         </li>
       `;
@@ -9465,6 +9597,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     setElText("emptyStateTitle", t("No s'ha trobat cap planta", "No se ha encontrado ninguna planta", "No plants found"));
     setElText("emptyStateDesc", t("Prova de canviar els filtres o el text de cerca.", "Prueba a cambiar los filtros o el texto de búsqueda.", "Try adjusting filters or search text."));
+    setElText("emptyStateAddBtn", t("Afegir planta", "Añadir planta", "Add plant"));
 
     // Modal de Preferències / Ajustaments
     setElText("prefModalTitle", t("Ajustaments", "Ajustes", "Settings"));
@@ -9558,7 +9691,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       );
     }
     setElText("feedbackCancelBtn", t("Cancel·lar", "Cancelar", "Cancel"));
-    setElText("feedbackSubmitBtn", t("🚀 Enviar Comentari", "🚀 Enviar Comentario", "🚀 Submit Feedback"));
+    setElText("feedbackSubmitBtn", t("Enviar comentari", "Enviar comentario", "Submit feedback"));
 
     // Botons i etiquetes de la fitxa de planta (#plantModal)
     setElText("modalEditPlantBtn", t("Editar", "Editar", "Edit"));
@@ -9578,6 +9711,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("modalWaterWinterLabel", t("Hivern:", "Invierno:", "Winter:"));
     setElText("modalLightSectionTitle", t("Llum i ubicació", "Luz y ubicación", "Light & placement"));
     setElText("modalSubstrateSectionTitle", t("Substrat recomanat", "Sustrato recomendado", "Recommended soil mix"));
+    setElText("modalTipSectionTitle", t("Consell clau", "Consejo clave", "Key tip"));
     setElText("modalGuideHeading", t("GUIA BÀSICA", "GUÍA BÁSICA", "BASIC GUIDE"));
     setElText("modalSecurityHeading", t("SEGURETAT", "SEGURIDAD", "SAFETY"));
     setElText("modalGalleryHeading", t("GALERIA", "GALERÍA", "GALLERY"));
@@ -9930,7 +10064,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (e.key === "Escape") {
       currentModalPlantId = null;
       currentEditingPlantId = null;
-      document.querySelectorAll(".modal-overlay").forEach(m => m.classList.remove("active"));
+      document.querySelectorAll(".modal-overlay, .notif-quick-overlay").forEach(m => m.classList.remove("active"));
+      const kebabMenu = document.getElementById("detailKebabMenu");
+      if (kebabMenu) kebabMenu.classList.remove("active");
     }
   });
 
