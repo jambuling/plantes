@@ -3263,6 +3263,76 @@
       text-decoration: underline;
     }
 
+    /* FORMULARI EDITAR PLANTA (TARGETES I ROWS) */
+    .edit-form-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 4px 16px;
+      margin-bottom: 16px;
+    }
+    .edit-card-subtitle {
+      font-size: 0.80rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 18px 0 8px 4px;
+      font-family: var(--font-sans);
+    }
+    .edit-field-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .edit-field-row:last-child {
+      border-bottom: none;
+    }
+    .edit-field-row.align-top {
+      align-items: flex-start;
+      padding-top: 10px;
+    }
+    .edit-field-row.align-top label {
+      padding-top: 7px;
+    }
+    .edit-field-row label {
+      flex: 0 0 40%;
+      max-width: 44%;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0;
+      line-height: 1.35;
+      font-family: var(--font-sans);
+      text-transform: none;
+    }
+    .edit-field-row .form-control {
+      flex: 1;
+      min-width: 0;
+      width: auto;
+      padding: 8px 12px;
+      font-size: 0.86rem;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      color: var(--text-main);
+      box-shadow: none;
+      box-sizing: border-box;
+      transition: border-color 0.15s ease;
+    }
+    .edit-field-row .form-control:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+    .edit-field-row textarea.form-control {
+      resize: vertical;
+      min-height: 56px;
+      line-height: 1.4;
+    }
+
     /* PANTALLA CALENDARI (Calendari.png) */
     .calendar-screen-content {
       padding: 6px 2px;
@@ -4867,7 +4937,7 @@
 
       <form id="editPlantForm" onsubmit="saveEditedPlant(event)">
         <!-- FOTO I CANVI DE FOTO -->
-        <div style="margin-bottom: 18px; background: var(--bg-primary); padding: 14px; border-radius: 14px; border: 1px solid var(--border-subtle);">
+        <div class="edit-form-card" style="padding: 14px; margin-bottom: 16px;">
           <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 12px;">
             <div style="width: 72px; height: 72px; border-radius: 12px; overflow: hidden; background: #e8eee6; flex-shrink: 0; box-shadow: var(--shadow-sm); border: 1px solid var(--border-subtle);">
               <img id="editPlantPhotoPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;" alt="Vista prèvia foto">
@@ -4907,143 +4977,132 @@
           </div>
         </div>
 
-        <!-- DADES BÀSIQUES -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="editPlantName">Nom Comú:</label>
-            <input type="text" id="editPlantName" class="form-control" required style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+        <!-- BLOC 1: DADES BÀSIQUES -->
+        <div class="edit-form-card">
+          <div class="edit-field-row">
+            <label for="editPlantName" id="editPlantNameLabel">Nom comú:</label>
+            <input type="text" id="editPlantName" class="form-control" required>
           </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="editPlantScientific">Nom Científic:</label>
-            <input type="text" id="editPlantScientific" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px; font-style: italic;">
+          <div class="edit-field-row">
+            <label for="editPlantScientific" id="editPlantScientificLabel">Nom científic:</label>
+            <input type="text" id="editPlantScientific" class="form-control" style="font-style: italic;">
           </div>
-        </div>
-
-        <!-- ZONA, HABITACIÓ I DIFICULTAT -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="editPlantZone" id="editPlantZoneLabel">Ubicació / Zona:</label>
-            <select id="editPlantZone" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
-              <option value="interior">🏠 Interior</option>
-              <option value="exterior">☀️ Exterior</option>
+          <div class="edit-field-row">
+            <label for="editPlantZone" id="editPlantZoneLabel">Ubicació / zona:</label>
+            <select id="editPlantZone" class="form-control">
+              <option value="interior">Interior</option>
+              <option value="exterior">Exterior</option>
             </select>
           </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="editPlantRoom" id="editPlantRoomLabel">📍 Habitació / Racó:</label>
-            <select id="editPlantRoom" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
-              <option value="salo">🛋️ Saló</option>
-              <option value="cuina">🍳 Cuina</option>
-              <option value="dormitori">🛏️ Dormitori</option>
-              <option value="bany">🚿 Bany</option>
-              <option value="despatx">💼 Despatx</option>
-              <option value="rebedor">🚪 Rebedor</option>
-              <option value="terrassa">🪴 Terrassa</option>
-              <option value="balco">☀️ Balcó</option>
-              <option value="pati">🌿 Pati</option>
-              <option value="altres">📦 Altres</option>
+          <div class="edit-field-row">
+            <label for="editPlantRoom" id="editPlantRoomLabel">Habitació / racó:</label>
+            <select id="editPlantRoom" class="form-control">
+              <option value="salo">Saló</option>
+              <option value="cuina">Cuina</option>
+              <option value="dormitori">Dormitori</option>
+              <option value="bany">Bany</option>
+              <option value="despatx">Despatx</option>
+              <option value="rebedor">Rebedor</option>
+              <option value="terrassa">Terrassa</option>
+              <option value="balco">Balcó</option>
+              <option value="pati">Pati</option>
+              <option value="altres">Altres</option>
             </select>
           </div>
-        </div>
-
-        <div style="margin-bottom: 12px;">
-          <div class="form-group" style="margin-bottom: 0;">
+          <div class="edit-field-row">
             <label for="editPlantDifficulty" id="editPlantDifficultyLabel">Dificultat:</label>
-            <select id="editPlantDifficulty" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
-              <option value="molt_facil">🟢 Molt fàcil</option>
-              <option value="facil">🔵 Fàcil</option>
-              <option value="mitjana">🟡 Mitjana</option>
+            <select id="editPlantDifficulty" class="form-control">
+              <option value="molt_facil">Molt fàcil</option>
+              <option value="facil">Fàcil</option>
+              <option value="mitjana">Mitjana</option>
             </select>
           </div>
         </div>
 
-        <!-- REG -->
-        <div style="background: #f7faf8; padding: 12px; border-radius: 8px; border: 1px solid #d2e4d3; margin-bottom: 12px;">
-          <div style="font-size: 0.80rem; font-weight: 700; color: #1e582e; text-transform: uppercase; margin-bottom: 8px;">💧 Pauta de Reg</div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="editPlantWaterSummer">Freqüència Estiu (dies):</label>
-              <input type="number" id="editPlantWaterSummer" min="1" max="90" required class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="editPlantWaterWinter">Freqüència Hivern (dies):</label>
-              <input type="number" id="editPlantWaterWinter" min="1" max="90" required class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
-            </div>
+        <!-- BLOC 2: PAUTA DE REG -->
+        <div class="edit-card-subtitle" id="editPlantWaterSectionTitle">Pauta de reg</div>
+        <div class="edit-form-card">
+          <div class="edit-field-row">
+            <label for="editPlantWaterSummer" id="editPlantWaterSummerLabel">Freqüència estiu (dies):</label>
+            <input type="number" id="editPlantWaterSummer" min="1" max="90" required class="form-control">
           </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="editPlantWaterDetail">Consell / Detall de reg:</label>
-            <textarea id="editPlantWaterDetail" rows="2" class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.84rem; border: 1px solid var(--border-subtle); border-radius: 6px; resize: vertical;"></textarea>
+          <div class="edit-field-row">
+            <label for="editPlantWaterWinter" id="editPlantWaterWinterLabel">Freqüència hivern (dies):</label>
+            <input type="number" id="editPlantWaterWinter" min="1" max="90" required class="form-control">
+          </div>
+          <div class="edit-field-row align-top">
+            <label for="editPlantWaterDetail" id="editPlantWaterDetailLabel">Consell / detall de reg:</label>
+            <textarea id="editPlantWaterDetail" rows="2" class="form-control"></textarea>
           </div>
         </div>
 
-        <!-- ADOB -->
-        <div style="background: #f5f9fc; padding: 12px; border-radius: 8px; border: 1px solid #cde0ed; margin-bottom: 12px;">
-          <div style="font-size: 0.80rem; font-weight: 700; color: #0369a1; text-transform: uppercase; margin-bottom: 8px;">🧪 Pauta d'Abonament</div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="editPlantFertType">Tipus d'Adob:</label>
-              <input type="text" id="editPlantFertType" class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="editPlantFertDays">Freqüència (dies):</label>
-              <input type="number" id="editPlantFertDays" min="1" max="180" class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
-            </div>
+        <!-- BLOC 3: PAUTA D'ABONAMENT -->
+        <div class="edit-card-subtitle" id="editPlantFertSectionTitle">Pauta d'abonament</div>
+        <div class="edit-form-card">
+          <div class="edit-field-row">
+            <label for="editPlantFertType" id="editPlantFertTypeLabel">Tipus d'adob:</label>
+            <input type="text" id="editPlantFertType" class="form-control">
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="editPlantFertSeason">Temporada activa:</label>
-              <input type="text" id="editPlantFertSeason" class="form-control" placeholder="ex: Primavera i Estiu" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="editPlantFertNotes">Notes d'abonament:</label>
-              <input type="text" id="editPlantFertNotes" class="form-control" style="width: 100%; padding: 7px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
-            </div>
+          <div class="edit-field-row">
+            <label for="editPlantFertDays" id="editPlantFertDaysLabel">Freqüència (dies):</label>
+            <input type="number" id="editPlantFertDays" min="1" max="180" class="form-control">
+          </div>
+          <div class="edit-field-row">
+            <label for="editPlantFertSeason" id="editPlantFertSeasonLabel">Temporada activa:</label>
+            <input type="text" id="editPlantFertSeason" class="form-control" placeholder="ex: Primavera i Estiu">
+          </div>
+          <div class="edit-field-row">
+            <label for="editPlantFertNotes" id="editPlantFertNotesLabel">Notes d'abonament:</label>
+            <input type="text" id="editPlantFertNotes" class="form-control">
           </div>
         </div>
 
-        <!-- LLUM, SUBSTRAT I TEST -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="editPlantLight">☀️ Llum i Ubicació:</label>
-            <input type="text" id="editPlantLight" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+        <!-- BLOC 4: LLUM, SUBSTRAT I TEST -->
+        <div class="edit-form-card">
+          <div class="edit-field-row">
+            <label for="editPlantLight" id="editPlantLightLabel">Llum i ubicació:</label>
+            <input type="text" id="editPlantLight" class="form-control">
           </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="editPlantSubstrate">🪴 Substrat Recomanat:</label>
-            <input type="text" id="editPlantSubstrate" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+          <div class="edit-field-row">
+            <label for="editPlantSubstrate" id="editPlantSubstrateLabel">Substrat recomanat:</label>
+            <input type="text" id="editPlantSubstrate" class="form-control">
+          </div>
+          <div class="edit-field-row">
+            <label for="editPlantPotSize" id="editPlantPotSizeLabel">Mida / tipus de test actual (opcional):</label>
+            <input type="text" id="editPlantPotSize" class="form-control" placeholder="ex: Test terracota 18 cm">
           </div>
         </div>
 
-        <div class="form-group" style="margin-bottom: 12px;">
-          <label for="editPlantPotSize">🏺 Mida / Tipus de Test Actual (opcional):</label>
-          <input type="text" id="editPlantPotSize" class="form-control" placeholder="ex: Test terracota 18 cm" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
-        </div>
-
-        <!-- TOXICITAT I CONSELL -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="editPlantToxic">🐾 Toxicitat Mascotes:</label>
-            <select id="editPlantToxic" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;" onchange="updateEditToxicityLabel(this.value)">
-              <option value="false">🟢 Segura per a mascotes</option>
-              <option value="true">🔴 Tòxica per a mascotes</option>
+        <!-- BLOC 5: TOXICITAT -->
+        <div class="edit-form-card">
+          <div class="edit-field-row">
+            <label for="editPlantToxic" id="editPlantToxicLabel">Toxicitat mascotes:</label>
+            <select id="editPlantToxic" class="form-control" onchange="updateEditToxicityLabel(this.value)">
+              <option value="false">Segura per a mascotes</option>
+              <option value="true">Tòxica per a mascotes</option>
             </select>
           </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="editPlantToxicityDetail">Detall Toxicitat:</label>
-            <input type="text" id="editPlantToxicityDetail" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+          <div class="edit-field-row">
+            <label for="editPlantToxicityDetail" id="editPlantToxicityDetailLabel">Detall toxicitat:</label>
+            <input type="text" id="editPlantToxicityDetail" class="form-control">
           </div>
         </div>
 
-        <div class="form-group" style="margin-bottom: 18px;">
-          <label for="editPlantTip">💡 Consell Clau de Cultiu:</label>
-          <textarea id="editPlantTip" rows="2" class="form-control" style="width: 100%; padding: 8px 10px; font-size: 0.84rem; border: 1px solid var(--border-subtle); border-radius: 6px; resize: vertical;"></textarea>
+        <!-- BLOC 6: CONSELL -->
+        <div class="edit-form-card">
+          <div class="edit-field-row align-top">
+            <label for="editPlantTip" id="editPlantTipLabel">Consell clau de cultiu:</label>
+            <textarea id="editPlantTip" rows="2" class="form-control"></textarea>
+          </div>
         </div>
 
         <!-- BOTONS ACCIÓ -->
         <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
-          <button type="button" class="btn-action" style="background: #e5e7eb; color: #374151;" onclick="closeModal('editPlantModal')">
+          <button type="button" class="btn-action" style="background: var(--border-subtle); color: var(--text-main); padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;" onclick="closeModal('editPlantModal')">
             Cancel·lar
           </button>
-          <button type="submit" class="btn-action" style="background: #256a38; color: white; padding: 9px 20px; font-size: 0.90rem;">
-            Desar Canvis
+          <button type="submit" id="editPlantSubmitBtn" class="btn-action" style="background: #256a38; color: white; padding: 9px 22px; font-size: 0.90rem; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;">
+            Desar canvis
           </button>
         </div>
       </form>
@@ -9537,9 +9596,44 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     ));
 
     // Formulari d'edició
-    setElText("editPlantZoneLabel", t("Ubicació / Zona:", "Ubicación / Zona:", "Location / Zone:"));
-    setElText("editPlantRoomLabel", t("Habitació / Racó:", "Habitación / Rincón:", "Room / Spot:"));
+    setElText("editPlantNameLabel", t("Nom comú:", "Nombre común:", "Common name:"));
+    setElText("editPlantScientificLabel", t("Nom científic:", "Nombre científico:", "Scientific name:"));
+    setElText("editPlantZoneLabel", t("Ubicació / zona:", "Ubicación / zona:", "Location / zone:"));
+    setElText("editPlantRoomLabel", t("Habitació / racó:", "Habitación / rincón:", "Room / spot:"));
     setElText("editPlantDifficultyLabel", t("Dificultat:", "Dificultad:", "Difficulty:"));
+    setElText("editPlantWaterSectionTitle", t("Pauta de reg", "Pauta de riego", "Watering schedule"));
+    setElText("editPlantWaterSummerLabel", t("Freqüència estiu (dies):", "Frecuencia verano (días):", "Summer frequency (days):"));
+    setElText("editPlantWaterWinterLabel", t("Freqüència hivern (dies):", "Frecuencia invierno (días):", "Winter frequency (days):"));
+    setElText("editPlantWaterDetailLabel", t("Consell / detall de reg:", "Consejo / detalle de riego:", "Watering tip / details:"));
+    setElText("editPlantFertSectionTitle", t("Pauta d'abonament", "Pauta de abonado", "Fertilizer schedule"));
+    setElText("editPlantFertTypeLabel", t("Tipus d'adob:", "Tipo de abono:", "Fertilizer type:"));
+    setElText("editPlantFertDaysLabel", t("Freqüència (dies):", "Frecuencia (días):", "Frequency (days):"));
+    setElText("editPlantFertSeasonLabel", t("Temporada activa:", "Temporada activa:", "Active season:"));
+    setElText("editPlantFertNotesLabel", t("Notes d'abonament:", "Notas de abonado:", "Fertilizer notes:"));
+    setElText("editPlantLightLabel", t("Llum i ubicació:", "Luz y ubicación:", "Light and location:"));
+    setElText("editPlantSubstrateLabel", t("Substrat recomanat:", "Sustrato recomendado:", "Recommended soil:"));
+    setElText("editPlantPotSizeLabel", t("Mida / tipus de test actual (opcional):", "Tamaño / tipo de maceta actual (opcional):", "Current pot size / type (optional):"));
+    setElText("editPlantToxicLabel", t("Toxicitat mascotes:", "Toxicidad mascotas:", "Pet toxicity:"));
+    setElText("editPlantToxicityDetailLabel", t("Detall toxicitat:", "Detalle toxicidad:", "Toxicity details:"));
+    setElText("editPlantTipLabel", t("Consell clau de cultiu:", "Consejo clave de cultivo:", "Key growing tip:"));
+    setElText("editPlantSubmitBtn", t("Desar canvis", "Guardar cambios", "Save changes"));
+
+    const zoneEditSel = document.getElementById("editPlantZone");
+    if (zoneEditSel && zoneEditSel.options.length >= 2) {
+      zoneEditSel.options[0].text = t("Interior", "Interior", "Indoor");
+      zoneEditSel.options[1].text = t("Exterior", "Exterior", "Outdoor");
+    }
+    const diffEditSel = document.getElementById("editPlantDifficulty");
+    if (diffEditSel && diffEditSel.options.length >= 3) {
+      diffEditSel.options[0].text = t("Molt fàcil", "Muy fácil", "Very easy");
+      diffEditSel.options[1].text = t("Fàcil", "Fácil", "Easy");
+      diffEditSel.options[2].text = t("Mitjana", "Media", "Moderate");
+    }
+    const toxEditSel = document.getElementById("editPlantToxic");
+    if (toxEditSel && toxEditSel.options.length >= 2) {
+      toxEditSel.options[0].text = t("Segura per a mascotes", "Segura para mascotas", "Pet safe");
+      toxEditSel.options[1].text = t("Tòxica per a mascotes", "Tóxica para mascotas", "Toxic to pets");
+    }
 
     // Modal d'Històric
     setElText("historyModalSubtitle", t("Registre complet de regs, adobs, trasplantaments i podes. Tria la data per anotar accions d'avui o de dies passats:", "Registro completo de riegos, abonos, trasplantes y podas. Elige la fecha para anotar acciones de hoy o días pasados:", "Full log of watering, fertilizing, repotting, and pruning. Choose a date to record today's or past tasks:"));
