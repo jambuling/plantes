@@ -4964,6 +4964,11 @@
             <div class="detail-rule-item">Hivern: <span id="modalWaterWinter"></span></div>
           </div>
           <div class="detail-rule-note" id="modalWaterDetail"></div>
+          <div class="affiliate-recommend-wrap" id="affiliateWaterWrap">
+            <a href="#" class="btn-amz-pill" id="amzWaterMeterLink" target="_blank" rel="noopener sponsored">
+              <span class="amz-tag">AMAZON</span> <span id="amzWaterMeterText">Mesurador d'humitat per no fallar mai el reg ↗</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -4991,7 +4996,7 @@
           </div>
           <div class="detail-rule-note" id="modalFertNotes"></div>
           <div class="affiliate-recommend-wrap" id="affiliateFertWrap">
-            <a href="#" class="btn-amz-pill" id="amzFertLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a adobs a Amazon (afiliat)...');">
+            <a href="#" class="btn-amz-pill" id="amzFertLink" target="_blank" rel="noopener sponsored">
               <span class="amz-tag">AMAZON</span> <span id="amzFertText">Comprar aquest tipus d'adob a Amazon ↗</span>
             </a>
           </div>
@@ -5011,7 +5016,7 @@
             <div class="guide-item-title" id="modalSubstrateSectionTitle">Substrat recomanat</div>
             <div class="guide-item-text" id="modalSubstrate"></div>
             <div class="affiliate-recommend-wrap" id="affiliateSubstrateWrap">
-              <a href="#" class="btn-amz-pill" id="amzSubstrateLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a substrat a Amazon...');">
+              <a href="#" class="btn-amz-pill" id="amzSubstrateLink" target="_blank" rel="noopener sponsored">
                 <span class="amz-tag">AMAZON</span> <span id="amzSubstrateText">Comprar substrat i perlita recomanats ↗</span>
               </a>
             </div>
@@ -5035,7 +5040,7 @@
             </div>
             <div class="maint-item-sub" id="modalTransplantInfo">Últim: Cap registrat</div>
             <div class="affiliate-recommend-wrap" id="affiliateTransplantWrap">
-              <a href="#" class="btn-amz-pill" id="amzTransplantLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a testos a Amazon...');">
+              <a href="#" class="btn-amz-pill" id="amzTransplantLink" target="_blank" rel="noopener sponsored">
                 <span class="amz-tag">AMAZON</span> <span id="amzTransplantText">Veure testos de fang i auto-reg recomanats ↗</span>
               </a>
             </div>
@@ -5050,8 +5055,8 @@
             </div>
             <div class="maint-item-sub" id="modalPruningInfo">Últim: Cap registrat</div>
             <div class="affiliate-recommend-wrap" id="affiliatePruningWrap">
-              <a href="#" class="btn-amz-pill" id="amzPruningLink" target="_blank" rel="noopener sponsored" onclick="event.preventDefault(); showToast('Redirigint a eines de poda a Amazon...');">
-                <span class="amz-tag">AMAZON</span> <span id="amzPruningText">Veure eines de poda i neteja recomanats ↗</span>
+              <a href="#" class="btn-amz-pill" id="amzPruningLink" target="_blank" rel="noopener sponsored">
+                <span class="amz-tag">AMAZON</span> <span id="amzPruningText">Veure eines de poda i neteja recomanades ↗</span>
               </a>
             </div>
           </div>
@@ -5064,6 +5069,11 @@
         <div class="toxicity-alert-box" id="modalToxicityBox">
           <div id="modalToxicityBody"></div>
         </div>
+      </div>
+
+      <!-- AVÍS LEGAL TRANSPARÈNCIA AFILIATS AMAZON -->
+      <div class="affiliate-legal-disclaimer" style="margin: 14px 0 6px; padding: 12px 14px; background: rgba(0,0,0,0.02); border-radius: 10px; border: 1px dashed var(--border-subtle); font-size: 0.72rem; color: var(--text-muted); line-height: 1.45; text-align: center;">
+        <span id="affiliateDisclaimerText">* Recomanacions amb enllaços d'afiliat d'Amazon. Com a afiliats, podem percebre ingressos per compres adscrites que compleixen els requisits aplicables sense cap cost addicional per a tu.</span>
       </div>
 
       <!-- 6. GALERIA (Fixta planta.png) -->
@@ -5126,9 +5136,6 @@
         <span id="modalFertTypeLabel"></span>
         <span id="modalFertFreqLabel"></span>
         <span id="modalFertSeasonLabel"></span>
-        <span id="affiliateDisclaimerText"></span>
-        <a id="amzWaterMeterLink"></a>
-        <span id="amzWaterMeterText"></span>
         <span id="modalGalleryCount"></span>
       </div>
     </div>
@@ -6333,19 +6340,63 @@
     return { dateStr, badgeStr };
   }
 
+  const AMAZON_AFFILIATE_TAG = "foliari-21";
+
   function getAmazonAffiliateUrl(type, plant) {
-    let query = 'adob universal plantes';
+    let query = "plantas interior cuidados";
+    const plantName = (plant && plant.name) ? String(plant.name).toLowerCase() : "";
+    const scientific = (plant && plant.scientific) ? String(plant.scientific).toLowerCase() : "";
+    const combinedName = `${plantName} ${scientific}`;
+
     if (type === 'fertilizer') {
-      const fertType = (plant && plant.fertilizerType) ? plant.fertilizerType : 'adob universal plantes';
-      query = `fertilitzant ${fertType}`;
+      const fertType = (plant && plant.fertilizerType) ? String(plant.fertilizerType).toLowerCase() : "";
+      if (combinedName.includes('orqui') || combinedName.includes('orchid')) {
+        query = "abono orquideas liquido";
+      } else if (combinedName.includes('cactus') || combinedName.includes('suculen') || combinedName.includes('crasa')) {
+        query = "abono cactus y suculentas";
+      } else if (combinedName.includes('bonsai')) {
+        query = "abono bonsai liquido";
+      } else if (combinedName.includes('citrus') || combinedName.includes('limon') || combinedName.includes('llimon') || combinedName.includes('cítric')) {
+        query = "abono citricos arboles frutales";
+      } else if (fertType.includes('flor')) {
+        query = "abono plantas con flor fertilizante";
+      } else if (fertType.includes('líquid') || fertType.includes('liquido') || fertType.includes('verd') || fertType.includes('verde')) {
+        query = "abono liquido plantas verdes interior";
+      } else if (fertType.includes('universal')) {
+        query = "abono universal plantas liquido";
+      } else {
+        query = "abono fertilizante plantas interior";
+      }
     } else if (type === 'substrate') {
-      query = 'substrat universal perlita plantes';
-    } else if (type === 'moisture') {
-      query = 'mesurador humitat terra plantes';
-    } else if (type === 'pot') {
-      query = 'test fang auto reg plantes';
+      const subType = (plant && plant.substrate) ? String(plant.substrate).toLowerCase() : "";
+      if (combinedName.includes('orqui') || combinedName.includes('orchid')) {
+        query = "sustrato corteza orquideas";
+      } else if (combinedName.includes('cactus') || combinedName.includes('suculen')) {
+        query = "sustrato cactus y suculentas perlita drenante";
+      } else if (combinedName.includes('bonsai')) {
+        query = "sustrato akadama bonsai";
+      } else if (combinedName.includes('carnivor')) {
+        query = "sustrato turba rubia plantas carnivoras";
+      } else if (subType.includes('perlita') || subType.includes('drenat') || subType.includes('drenaje')) {
+        query = "sustrato plantas interior con perlita";
+      } else {
+        query = "sustrato universal plantas interior perlita";
+      }
+    } else if (type === 'moisture' || type === 'water') {
+      query = "medidor humedad suelo plantas detector riego";
+    } else if (type === 'pot' || type === 'transplant') {
+      if (plant && plant.zone === 'exterior') {
+        query = "macetas exterior barro con plato drenaje plantas";
+      } else {
+        query = "macetas autorriego plantas interior con drenaje";
+      }
+    } else if (type === 'pruning') {
+      query = "tijeras podar plantas interior limpieza hojas";
+    } else if (type === 'light') {
+      query = "luz cultivo plantas led espectro completo interior";
     }
-    return `https://www.amazon.es/s?k=${encodeURIComponent(query)}&tag=foliari-21`;
+
+    return `https://www.amazon.es/s?k=${encodeURIComponent(query)}&tag=${AMAZON_AFFILIATE_TAG}`;
   }
 
 
@@ -8543,7 +8594,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                   </button>
                 </div>
                 <div style="margin-top: 8px;">
-                  <a href="${getAmazonAffiliateUrl('fertilizer', plant)}" target="_blank" rel="noopener sponsored" class="btn-amz-pill">
+                  <a href="${getAmazonAffiliateUrl('fertilizer', plant)}" target="_blank" rel="noopener sponsored" class="btn-amz-pill" onclick="event.stopPropagation();">
                     <span class="amz-tag">AMAZON</span>
                     <span>${t("Comprar aquest tipus d'adob a Amazon ↗", "Comprar este tipo de abono en Amazon ↗", "Buy this fertilizer on Amazon ↗")}</span>
                   </a>
@@ -8904,7 +8955,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       }
     }
 
-    // Set Amazon affiliate links
+    // Set Amazon affiliate links (foliari-21)
     const amzFert = document.getElementById("amzFertLink");
     if (amzFert) amzFert.href = getAmazonAffiliateUrl('fertilizer', plant);
     const amzTransplant = document.getElementById("amzTransplantLink");
@@ -8913,6 +8964,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (amzSubstrate) amzSubstrate.href = getAmazonAffiliateUrl('substrate', plant);
     const amzWaterMeter = document.getElementById("amzWaterMeterLink");
     if (amzWaterMeter) amzWaterMeter.href = getAmazonAffiliateUrl('moisture', plant);
+    const amzPruning = document.getElementById("amzPruningLink");
+    if (amzPruning) amzPruning.href = getAmazonAffiliateUrl('pruning', plant);
 
     const modalDeleteBtn = document.getElementById("modalDeletePlantBtn");
     if (modalDeleteBtn) modalDeleteBtn.onclick = () => deletePlant(plant.id);
@@ -10168,15 +10221,16 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("modalGalleryCameraBtn", t("Fer foto", "Hacer foto", "Take photo"));
     setElText("modalGalleryUploadBtn", t("Pujar foto", "Subir foto", "Upload photo"));
 
-    // Enllaços d'afiliació Amazon
+    // Enllaços d'afiliació Amazon (foliari-21)
     setElText("amzTransplantText", t("Veure testos de fang i auto-reg recomanats ↗", "Ver macetas de barro y autorriego recomendadas ↗", "Recommended terracotta & self-watering pots ↗"));
     setElText("amzFertText", t("Comprar aquest tipus d'adob a Amazon ↗", "Comprar este tipo de abono en Amazon ↗", "Find recommended fertilizer on Amazon ↗"));
     setElText("amzWaterMeterText", t("Mesurador d'humitat per no fallar mai el reg ↗", "Medidor de humedad para no fallar el riego ↗", "Soil moisture meter to water with confidence ↗"));
     setElText("amzSubstrateText", t("Comprar substrat i perlita recomanats ↗", "Comprar sustrato y perlita recomendados ↗", "Find recommended soil mix & perlite ↗"));
+    setElText("amzPruningText", t("Veure eines de poda i neteja recomanades ↗", "Ver herramientas de poda y limpieza recomendadas ↗", "Recommended pruning & cleaning tools ↗"));
     setElText("affiliateDisclaimerText", t(
-      "* Recomanacions amb enllaços d'afiliat d'Amazon. Com a afiliats, podem percebre ingressos per compres adscrites sense cap cost extra per a tu.",
-      "* Recomendaciones con enlaces de afiliado de Amazon. Como afiliados, podemos obtener ingresos por compras adscritas sin ningún coste extra para ti.",
-      "* Recommendations with Amazon affiliate links. As an associate, we may earn from qualifying purchases at no extra cost to you."
+      "* Recomanacions amb enllaços d'afiliat d'Amazon. Com a afiliats, podem percebre ingressos per compres adscrites que compleixen els requisits aplicables sense cap cost extra per a tu.",
+      "* Recomendaciones con enlaces de afiliado de Amazon. Como afiliados, podemos obtener ingresos por compras adscritas que cumplen los requisitos aplicables sin ningún coste extra para ti.",
+      "* Recommendations with Amazon affiliate links. As an Amazon Associate, we earn from qualifying purchases at no extra cost to you."
     ));
 
     // Formulari d'edició
