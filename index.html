@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>El Meu Jardí · Registre, Històric i Alertes</title>
+  <title>Foliari | App de cuidado de plantas y recordatorios de riego</title>
+  <meta name="description" content="Organiza el riego, luz y sustrato de tus plantas de interior y exterior. Recibe alertas personalizadas y mantén tu hogar verde con Foliari.">
   
   <!-- Favicon Fulla Botànica -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="alternate icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+  <link rel="alternate icon" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon.svg">
-  <meta name="theme-color" content="#256a38">
+  <meta name="theme-color" content="#3d6e71">
 
   <!-- Fonts Botàniques Editorials: Fraunces (titulars botànics) + Plus Jakarta Sans (interfície neta i humana) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2330,7 +2331,7 @@
       --app-nav-active: #1e2610;
       --app-info-bg: #edf2f6;
       --app-info-border: #dbe4ec;
-      --app-loading-bg: #2f5d60;
+      --app-loading-bg: #3d6e71;
       --app-amazon-orange: #ea580c;
       --app-amazon-hover: #c2410c;
       --app-toxic-bg: #fde8e8;
@@ -2355,66 +2356,129 @@
       position: fixed;
       inset: 0;
       z-index: 999999;
-      background-color: var(--app-loading-bg);
+      background-color: #ffffff;
+      padding: 6px;
+      box-sizing: border-box;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.55s ease;
+      align-items: stretch;
+      justify-content: stretch;
+      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s ease;
+      cursor: pointer;
     }
     .app-loading-screen.loaded {
       opacity: 0;
+      transform: scale(1.008);
       visibility: hidden;
       pointer-events: none;
     }
-    .loading-content {
-      text-align: center;
+    .loading-inner-card {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      background-color: var(--app-loading-bg);
+      border-radius: 28px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      justify-content: center;
+      padding: 32px 24px;
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    }
+    .loading-center-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 440px;
+      gap: 36px;
+      margin: auto 0;
     }
     .loading-logo-wrap {
-      width: 120px;
-      height: 150px;
+      width: 100%;
+      max-width: 250px;
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: loadingPulse 2.2s ease-in-out infinite;
+      animation: loadingLogoFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
-    .loading-droplet-svg {
+    .loading-logo-svg {
       width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.25));
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.18));
     }
-    .loading-brand-title {
-      font-family: var(--font-display);
-      font-size: 3.2rem;
-      font-weight: 500;
-      color: var(--app-lime);
-      letter-spacing: -0.02em;
-      line-height: 1;
-    }
-    .loading-dots {
+    .loading-quote-card {
+      width: 100%;
+      max-width: 360px;
       display: flex;
-      gap: 8px;
-      margin-top: 4px;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: loadingQuoteFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
     }
-    .loading-dots span {
-      width: 8px;
-      height: 8px;
-      background-color: var(--app-lime);
-      border-radius: 50%;
-      animation: loadingDotBounce 1.4s infinite ease-in-out both;
+    .loading-quote-text {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.28rem;
+      font-weight: 400;
+      line-height: 1.48;
+      color: #ffffff;
+      margin: 0 0 14px 0;
+      padding: 0;
+      letter-spacing: -0.01em;
+      text-wrap: balance;
     }
-    .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-    .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-    @keyframes loadingPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+    .loading-quote-author {
+      align-self: flex-end;
+      font-family: var(--font-sans);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.92);
+      margin: 0;
+      padding-right: 6px;
     }
-    @keyframes loadingDotBounce {
-      0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
-      40% { transform: scale(1); opacity: 1; }
+    @keyframes loadingLogoFadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(16px) scale(0.96);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    @keyframes loadingQuoteFadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .loading-inner-card {
+        border-radius: 22px;
+        padding: 24px 18px;
+      }
+      .loading-center-group {
+        gap: 28px;
+      }
+      .loading-logo-wrap {
+        max-width: 210px;
+      }
+      .loading-quote-text {
+        font-size: 1.15rem;
+        line-height: 1.42;
+      }
     }
 
     /* CONTENIDOR NADIU APP SHELL */
@@ -2510,6 +2574,23 @@
       overflow: hidden;
       text-overflow: ellipsis;
       padding: 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-logo-svg {
+      height: 28px;
+      width: auto;
+      max-width: 140px;
+      display: block;
+    }
+    .header-section-title {
+      font-family: var(--font-sans);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--app-lime);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
     }
     .app-header.header-plants-view .header-left {
       display: none !important;
@@ -2517,6 +2598,9 @@
     .app-header.header-plants-view .app-brand-title {
       text-align: left !important;
       padding-left: 2px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
     }
     .header-right {
       width: 38px;
@@ -4303,23 +4387,16 @@
 <body>
 
 <!-- PANTALLA D'ENTRADA LOADING (Loading.png - Abans de res) -->
-<div id="appLoadingScreen" class="app-loading-screen" aria-label="Carregant Foliari">
-  <div class="loading-content">
-    <div class="loading-logo-wrap">
-      <svg class="loading-droplet-svg" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M60 12 C60 12 18 64 18 96 C18 119.2 36.8 138 60 138 C83.2 138 102 119.2 102 96 C102 64 60 12 60 12 Z" fill="#204649" stroke="#c8f53c" stroke-width="3.5"/>
-        <path d="M60 22 C55 6 38 4 36 16 C34 28 48 28 60 22 Z" fill="#c8f53c"/>
-        <path d="M60 16 C60 -2 68 -4 74 6 C80 16 68 22 60 16 Z" fill="#b8ea3a"/>
-        <path d="M60 24 C68 12 84 14 82 26 C80 36 68 32 60 24 Z" fill="#c8f53c"/>
-        <path d="M36 102 C42 94 50 90 60 90 C70 90 78 94 84 102 C76 110 66 114 60 114 C54 114 44 110 36 102 Z" fill="#152f31"/>
-        <path d="M60 90 L60 66" stroke="#c8f53c" stroke-width="3" stroke-linecap="round"/>
-        <path d="M60 76 C52 70 48 78 60 82" fill="#c8f53c"/>
-        <path d="M60 70 C68 64 72 72 60 76" fill="#c8f53c"/>
-      </svg>
-    </div>
-    <div class="loading-brand-title">foliari</div>
-    <div class="loading-dots">
-      <span></span><span></span><span></span>
+<div id="appLoadingScreen" class="app-loading-screen" aria-label="Carregant Foliari" onclick="dismissLoadingScreen()">
+  <div class="loading-inner-card">
+    <div class="loading-center-group">
+      <div class="loading-logo-wrap">
+        <img src="logo_portada.svg" alt="Foliari" class="loading-logo-svg">
+      </div>
+      <div class="loading-quote-card">
+        <p class="loading-quote-text" id="loadingQuoteText"></p>
+        <p class="loading-quote-author" id="loadingQuoteAuthor"></p>
+      </div>
     </div>
   </div>
 </div>
@@ -4334,7 +4411,10 @@
       </button>
     </div>
 
-    <div class="app-brand-title" id="appBrandLogo" onclick="switchAppTab('plants')">foliari</div>
+    <div class="app-brand-title" id="appBrandLogo" onclick="switchAppTab('plants')">
+      <img src="logo.svg" alt="Foliari" class="header-logo-svg" id="headerLogoSvg">
+      <span class="header-section-title" id="headerSectionTitle" style="display: none;">foliari</span>
+    </div>
 
     <div class="header-right">
       <button type="button" class="btn-header-bell" id="headerBellBtn" onclick="toggleQuickNotifPanel(event)" aria-label="Notificacions i alertes">
@@ -5578,6 +5658,365 @@
 <script>
 
   // =============================================================
+  // IDIOMA I DETECCIO INICIAL (SISTEMA / PREFERÈNCIES)
+  // =============================================================
+  function detectInitialAppLanguage() {
+    try {
+      const savedLang = localStorage.getItem("registre_plantes_lang");
+      if (savedLang === "es" || savedLang === "ca" || savedLang === "en") {
+        return savedLang;
+      }
+    } catch (e) {}
+
+    // Primera vegada: agafar idioma del sistema/navegador
+    try {
+      const browserLangs = (typeof navigator !== 'undefined' && navigator.languages && navigator.languages.length)
+        ? navigator.languages
+        : [typeof navigator !== 'undefined' ? (navigator.language || navigator.userLanguage || "") : ""];
+      for (const raw of browserLangs) {
+        if (!raw) continue;
+        const lower = raw.toLowerCase();
+        if (lower.startsWith("ca")) return "ca";
+        if (lower.startsWith("es")) return "es";
+        if (lower.startsWith("en")) return "en";
+      }
+    } catch (e) {}
+    return "es";
+  }
+
+  let currentLang = detectInitialAppLanguage();
+
+  function t(ca, es, en) {
+    if (currentLang === "en") return en || es || ca;
+    if (currentLang === "es") return es || ca;
+    return ca;
+  }
+
+  function getLocale() {
+    if (currentLang === "en") return "en-US";
+    if (currentLang === "es") return "es-ES";
+    return "ca-ES";
+  }
+
+  // =============================================================
+  // FRASES ALEATÒRIES PER A LA PANTALLA D'ENTRADA (FRASES.md)
+  // =============================================================
+  const FOLIARI_QUOTES = [
+    {
+      text: {
+        ca: "Quan plantem arbres, plantem les llavors de la pau i de l'esperança.",
+        es: "Cuando plantamos árboles, plantamos las semillas de la paz y de la esperanza.",
+        en: "When we plant trees, we plant the seeds of peace and hope."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "Utilitza les plantes per donar vida.",
+        es: "Utiliza las plantas para dar vida.",
+        en: "Use plants to bring life."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "Adopta el ritme de la natura: el seu secret és la paciència.",
+        es: "Adopta el ritmo de la naturaleza: su secreto es la paciencia.",
+        en: "Adopt the pace of nature: her secret is patience."
+      },
+      author: { ca: "Ralph Waldo Emerson", es: "Ralph Waldo Emerson", en: "Ralph Waldo Emerson" }
+    },
+    {
+      text: {
+        ca: "Les plantes tenen vida, escolten, senten, respiren, s'alimenten i algunes tenen cèl·lules que es reprodueixen indefinidament.",
+        es: "Las plantas tienen vida, escuchan, sienten, respiran, se alimentan y algunas de ellas tienen células que se reproducen indefinidamente.",
+        en: "Plants have life, they listen, feel, breathe, feed, and some have cells that reproduce indefinitely."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "El secret no és córrer darrere de les papallones… És cuidar el jardí perquè elles vinguin a tu.",
+        es: "El secreto no es correr detrás de las mariposas… Es cuidar el jardín para que ellas vengan a ti.",
+        en: "The secret is not to chase butterflies… It is to care for the garden so they come to you."
+      },
+      author: { ca: "Mário Quintana", es: "Mário Quintana", en: "Mário Quintana" }
+    },
+    {
+      text: {
+        ca: "Si sabés que el món s'acaba demà, avui encara plantaria un arbre.",
+        es: "Si supiera que el mundo se acaba mañana, hoy todavía plantaría un árbol.",
+        en: "Even if I knew the world would end tomorrow, I would still plant a tree today."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "L'amor per la jardineria és una llavor que, un cop sembrada, mai no mor.",
+        es: "El amor por la jardinería es una semilla que, una vez sembrada, nunca muere.",
+        en: "The love of gardening is a seed once sown that never dies."
+      },
+      author: { ca: "Gertrude Jekyll", es: "Gertrude Jekyll", en: "Gertrude Jekyll" }
+    },
+    {
+      text: {
+        ca: "Un jardí és un gran mestre: ensenya paciència i atenció, fomenta el treball i l'austeritat i, sobretot, inspira una confiança absoluta.",
+        es: "Un jardín es un gran maestro: enseña paciencia y atención, fomenta el trabajo y la austeridad y, sobre todo, inspira una confianza absoluta.",
+        en: "A garden is a grand teacher: it teaches patience and careful watchfulness, fosters industry and thrift, and above all, entire trust."
+      },
+      author: { ca: "Gertrude Jekyll", es: "Gertrude Jekyll", en: "Gertrude Jekyll" }
+    },
+    {
+      text: {
+        ca: "Les plantes tenen, igual que els animals, sensibilitat, aquest atribut essencial de la vida.",
+        es: "Las plantas tienen, al igual que los animales, sensibilidad, ese atributo esencial de la vida.",
+        en: "Plants possess, just like animals, sensitivity—that essential attribute of life."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "El verd és el primer color del món i aquell d'on neix la seva bellesa.",
+        es: "El verde es el primer color del mundo y aquel del que nace su hermosura.",
+        en: "Green is the prime color of the world, and that from which its loveliness arises."
+      },
+      author: { ca: "Pedro Calderón de la Barca", es: "Pedro Calderón de la Barca", en: "Pedro Calderón de la Barca" }
+    },
+    {
+      text: {
+        ca: "Hi ha més plaer a crear un jardí que a contemplar el paradís.",
+        es: "Hay más placer en hacer un jardín que en contemplar el paraíso.",
+        en: "There is more pleasure in making a garden than in contemplating paradise."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "Els arbres mediten a l'hivern; gràcies a això, floreixen a la primavera, donen ombra i fruits a l'estiu i es desprenen del superflu a la tardor.",
+        es: "Los árboles meditan en invierno; gracias a ello, florecen en primavera, dan sombra y frutos en verano y se despojan de lo superfluo en otoño.",
+        en: "Trees meditate in winter; thus they bloom in spring, give shade and fruit in summer, and shed the superfluous in autumn."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "La bellesa d'una flor prové de les seves arrels.",
+        es: "La belleza de una flor proviene de sus raíces.",
+        en: "The beauty of a flower comes from its roots."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "Si tens dos cèntims, gasta'n un en pa i un altre en una flor. El pa et donarà vida i la flor et donarà una raó per viure.",
+        es: "Si tienes dos céntimos, gasta uno en pan y otro en una flor. El pan te dará vida y la flor te dará una razón para vivir.",
+        en: "If you have two pennies, spend one on bread and one on a flower. Bread gives you life, and the flower gives you a reason to live."
+      },
+      author: { ca: "Proverbi popular", es: "Proverbio popular", en: "Folk proverb" }
+    },
+    {
+      text: {
+        ca: "Aprèn a cultivar el teu propi jardí i a decorar la teva ànima, en lloc d'esperar que algú et porti flors.",
+        es: "Aprende a cultivar tu propio jardín y a decorar tu alma, en lugar de esperar a que alguien te traiga flores.",
+        en: "Learn to cultivate your own garden and decorate your soul, rather than waiting for someone to bring you flowers."
+      },
+      author: { ca: "Anònim", es: "Anónimo", en: "Anonymous" }
+    },
+    {
+      text: {
+        ca: "Moltes són les lliçons que es poden extreure de l'estudi de les plantes si hom cerca el veritable esperit de la saviesa.",
+        es: "Muchas son las lecciones que se pueden extraer del estudio de las plantas si se procura el verdadero espíritu de la sabiduría.",
+        en: "Many are the lessons that can be drawn from the study of plants if one seeks the true spirit of wisdom."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "Les flors sempre fan millors les persones, les fan més felices i amables: són la llum del sol, l'aliment i la medicina de l'ànima.",
+        es: "Las flores siempre hacen mejor a las personas, las hacen más felices y más amables: son la luz del sol, el alimento y la medicina del alma.",
+        en: "Flowers always make people better, happier, and more helpful; they are sunshine, food and medicine for the soul."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "Cap ocupació no em resulta tan agradable com el cultiu de la terra, i no hi ha cultiu comparable al del jardí.",
+        es: "Ninguna ocupación me resulta tan agradable como el cultivo de la tierra, y no hay cultivo comparable al del jardín.",
+        en: "No occupation is so delightful to me as the culture of the earth, and no culture comparable to that of the garden."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "Sembra julivert al maig i en tindràs per tot l'any.",
+        es: "Siembra perejil en mayo y tendrás para todo el año.",
+        en: "Sow parsley in May and you will have it all year round."
+      },
+      author: { ca: "Refrany popular", es: "Refrán popular", en: "Traditional saying" }
+    },
+    {
+      text: {
+        ca: "Si realment estimes la natura, trobaràs la bellesa a tot arreu.",
+        es: "Si realmente amas la naturaleza, encontrarás la belleza en todas partes.",
+        en: "If you truly love nature, you will find beauty everywhere."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "Planta arbres. Ens donen dos dels elements més crucials per a la nostra supervivència: oxigen i llibres.",
+        es: "Planta árboles. Nos dan dos de los elementos más cruciales para nuestra supervivencia: oxígeno y libros.",
+        en: "Plant trees. They give us two of the most crucial elements for our survival: oxygen and books."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "Un arbre és el nostre contacte més íntim amb la natura.",
+        es: "Un árbol es nuestro contacto más íntimo con la naturaleza.",
+        en: "A tree is our most intimate contact with nature."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "La natura mai no va trair el cor que la va estimar.",
+        es: "La naturaleza nunca traicionó al corazón que la amó.",
+        en: "Nature never did betray the heart that loved her."
+      },
+      author: { ca: "William Wordsworth", es: "William Wordsworth", en: "William Wordsworth" }
+    },
+    {
+      text: {
+        ca: "Els jardins són a la ciutat com els pulmons al cos humà.",
+        es: "Los jardines están en la ciudad como los pulmones en el cuerpo humano.",
+        en: "Gardens are to the city what lungs are to the human body."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "Si vols ser feliç tota la vida, planta un jardí.",
+        es: "Si quieres ser feliz toda la vida, planta un jardín.",
+        en: "If you want to be happy for a lifetime, plant a garden."
+      },
+      author: { ca: "Proverbi popular", es: "Proverbio popular", en: "Folk proverb" }
+    },
+    {
+      text: {
+        ca: "Els arbres que triguen a créixer donen la millor fruita.",
+        es: "Los árboles que tardan en crecer llevan la mejor fruta.",
+        en: "Trees that are slow to grow bear the best fruit."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "Sempre hi ha flors per a aquells que volen veure-les.",
+        es: "Siempre hay flores para aquellos que quieren verlas.",
+        en: "There are always flowers for those who want to see them."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "La natura no és un lloc per visitar. És la nostra llar.",
+        es: "La naturaleza no es un lugar para visitar. Es el hogar.",
+        en: "Nature is not a place to visit. It is home."
+      },
+      author: { ca: "Gary Snyder", es: "Gary Snyder", en: "Gary Snyder" }
+    },
+    {
+      text: {
+        ca: "Avui he crescut més alt per haver caminat amb els arbres.",
+        es: "Hoy he crecido más alto por caminar con los árboles.",
+        en: "Today I have grown taller from walking with the trees."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "A la natura només se la pot vèncer obeint-la.",
+        es: "A la naturaleza solo se la puede vencer obedeciéndola.",
+        en: "Nature to be commanded must be obeyed."
+      },
+      author: { ca: "Francis Bacon", es: "Francis Bacon", en: "Francis Bacon" }
+    },
+    {
+      text: {
+        ca: "Si tens un jardí i una biblioteca, tens tot el que necessites.",
+        es: "Si tienes un jardín y una biblioteca, tienes todo lo que necesitas.",
+        en: "If you have a garden and a library, you have everything you need."
+      },
+      author: { ca: "", es: "", en: "" }
+    },
+    {
+      text: {
+        ca: "La poesia de la terra mai no mor.",
+        es: "La poesía de la tierra nunca muere.",
+        en: "The poetry of earth is never dead."
+      },
+      author: { ca: "John Keats", es: "John Keats", en: "John Keats" }
+    },
+    {
+      text: {
+        ca: "Tria només una mestra: la natura.",
+        es: "Escoge solo una maestra: la naturaleza.",
+        en: "Choose only one teacher: nature."
+      },
+      author: { ca: "", es: "", en: "" }
+    }
+  ];
+
+  // PANTALLA DE CÀRREGA LOADING (Loading.png & FRASES.md)
+  let loadingDismissed = false;
+  function dismissLoadingScreen() {
+    if (loadingDismissed) return;
+    loadingDismissed = true;
+    const screen = document.getElementById('appLoadingScreen');
+    if (screen) {
+      screen.classList.add('loaded');
+      setTimeout(() => {
+        screen.style.display = 'none';
+      }, 620);
+    }
+  }
+
+  function initLoadingScreen() {
+    const quoteEl = document.getElementById('loadingQuoteText');
+    const authorEl = document.getElementById('loadingQuoteAuthor');
+    if (!quoteEl || !authorEl || !FOLIARI_QUOTES.length) return;
+
+    const randomIndex = Math.floor(Math.random() * FOLIARI_QUOTES.length);
+    const item = FOLIARI_QUOTES[randomIndex];
+
+    const quoteStr = item.text[currentLang] || item.text.es || item.text.ca;
+    const authorStr = item.author[currentLang] || item.author.es || item.author.ca || "";
+
+    quoteEl.textContent = `«${quoteStr}»`;
+    if (authorStr && authorStr.trim()) {
+      authorEl.textContent = `— ${authorStr.trim().toUpperCase()}`;
+      authorEl.style.display = 'block';
+    } else {
+      authorEl.textContent = '';
+      authorEl.style.display = 'none';
+    }
+
+    // Temps de lectura adaptat al nombre de paraules
+    const words = quoteStr.split(/\s+/).filter(Boolean).length;
+    const readingTime = Math.max(3800, Math.min(6500, 2700 + words * 110));
+
+    window.addEventListener('load', () => {
+      setTimeout(dismissLoadingScreen, readingTime);
+    });
+    // Fallback de seguretat
+    setTimeout(dismissLoadingScreen, readingTime + 800);
+  }
+
+  // Inicialitza la pantalla de càrrega immediatament
+  initLoadingScreen();
+
+  // =============================================================
   // NAVEGACIÓ I CONTROL D'APP PER SMARTPHONE (FOLIARI)
   // =============================================================
   let currentAppTab = "plants"; // 'plants', 'add', 'calendar', 'settings'
@@ -5609,6 +6048,8 @@
 
     const backBtn = document.getElementById('headerBackBtn');
     const brandLogo = document.getElementById('appBrandLogo');
+    const logoSvg = document.getElementById('headerLogoSvg');
+    const sectionTitle = document.getElementById('headerSectionTitle');
 
     if (backBtn) {
       backBtn.style.display = (tabName === 'plants') ? 'none' : 'flex';
@@ -5616,22 +6057,27 @@
 
     if (brandLogo) {
       if (tabName === 'plants') {
-        brandLogo.textContent = 'foliari';
-        brandLogo.style.fontFamily = 'var(--font-display)';
-        brandLogo.style.fontSize = '1.85rem';
-        brandLogo.style.fontWeight = '600';
+        if (logoSvg) logoSvg.style.display = 'block';
+        if (sectionTitle) sectionTitle.style.display = 'none';
         brandLogo.style.textAlign = 'left';
+        brandLogo.style.display = 'flex';
+        brandLogo.style.alignItems = 'center';
+        brandLogo.style.justifyContent = 'flex-start';
       } else {
         const titles = {
           add: t('Afegir planta', 'Añadir planta', 'Add plant'),
           calendar: t('Calendari', 'Calendario', 'Calendar'),
           settings: t('Ajustaments', 'Ajustes', 'Settings')
         };
-        brandLogo.textContent = titles[tabName] || 'foliari';
-        brandLogo.style.fontFamily = 'var(--font-sans)';
-        brandLogo.style.fontSize = '1.35rem';
-        brandLogo.style.fontWeight = '700';
+        if (logoSvg) logoSvg.style.display = 'none';
+        if (sectionTitle) {
+          sectionTitle.textContent = titles[tabName] || 'foliari';
+          sectionTitle.style.display = 'inline-block';
+        }
         brandLogo.style.textAlign = 'center';
+        brandLogo.style.display = 'flex';
+        brandLogo.style.alignItems = 'center';
+        brandLogo.style.justifyContent = 'center';
       }
     }
 
@@ -5660,21 +6106,6 @@
   function openPreferencesModal() {
     switchAppTab('settings');
   }
-
-  // PANTALLA DE CÀRREGA LOADING (Loading.png)
-  function dismissLoadingScreen() {
-    const screen = document.getElementById('appLoadingScreen');
-    if (screen) {
-      screen.classList.add('loaded');
-      setTimeout(() => {
-        screen.style.display = 'none';
-      }, 600);
-    }
-  }
-  window.addEventListener('load', () => {
-    setTimeout(dismissLoadingScreen, 1200);
-  });
-  setTimeout(dismissLoadingScreen, 2500);
 
   // MODAL D'ALERTES I NOTIFICACIONS RÀPIDES
   function toggleQuickNotifPanel(eventOrForce, forceState) {
@@ -7643,25 +8074,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   // -------------------------------------------------------------
-  // IDIOMA I TRADUCCIÓ (CA / ES / EN) I ARQUITECTURA DE CLAVS
+  // DICCIONARI BOTÀNIC I VOCABULARI (CA / ES / EN)
+  // (Nota: currentLang, detectInitialAppLanguage, t() i getLocale()
+  // estan inicialitzats a l'inici de l'script per a la pantalla de càrrega)
   // -------------------------------------------------------------
-  let currentLang = "ca";
-  try {
-    const savedLang = localStorage.getItem("registre_plantes_lang");
-    if (savedLang === "es" || savedLang === "ca" || savedLang === "en") currentLang = savedLang;
-  } catch (e) {}
-
-  function t(ca, es, en) {
-    if (currentLang === "en") return en || es || ca;
-    if (currentLang === "es") return es || ca;
-    return ca;
-  }
-
-  function getLocale() {
-    if (currentLang === "en") return "en-US";
-    if (currentLang === "es") return "es-ES";
-    return "ca-ES";
-  }
 
   // Diccionari de traducció per claus i textos de contingut botànic
   const plantVocabulary = {
@@ -9492,22 +9908,55 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   function applyStaticTranslations() {
-    document.title = t("🌱 Guia i Registre de Cures de Plantes", "🌱 Guía y Registro de Cuidados de Plantas", "🌱 Plant Care Guide & Tracker");
+    document.title = t(
+      "Foliari | App de cura de plantes i recordatoris de reg",
+      "Foliari | App de cuidado de plantas y recordatorios de riego",
+      "Foliari | Plant care & watering reminder app"
+    );
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", t(
+        "Organitza el reg, llum i substrat de les teves plantes d'interior i exterior. Rep alertes personalitzades i mantén la teva llar verda amb Foliari.",
+        "Organiza el riego, luz y sustrato de tus plantas de interior y exterior. Recibe alertas personalizadas y mantén tu hogar verde con Foliari.",
+        "Organize watering, light, and substrate for your indoor and outdoor plants. Get personalized reminders and keep your home green with Foliari."
+      ));
+    }
 
     const setElText = (id, text) => {
       const el = document.getElementById(id);
       if (el) el.innerText = text;
     };
 
-    if (typeof currentAppTab !== "undefined" && currentAppTab !== 'plants') {
-      const brandLogo = document.getElementById('appBrandLogo');
-      if (brandLogo) {
+    const logoSvg = document.getElementById('headerLogoSvg');
+    const sectionTitle = document.getElementById('headerSectionTitle');
+    const brandLogo = document.getElementById('appBrandLogo');
+    if (typeof currentAppTab !== "undefined") {
+      if (currentAppTab === 'plants') {
+        if (logoSvg) logoSvg.style.display = 'block';
+        if (sectionTitle) sectionTitle.style.display = 'none';
+        if (brandLogo) {
+          brandLogo.style.textAlign = 'left';
+          brandLogo.style.display = 'flex';
+          brandLogo.style.alignItems = 'center';
+          brandLogo.style.justifyContent = 'flex-start';
+        }
+      } else {
         const titles = {
           add: t('Afegir planta', 'Añadir planta', 'Add plant'),
           calendar: t('Calendari', 'Calendario', 'Calendar'),
           settings: t('Ajustaments', 'Ajustes', 'Settings')
         };
-        brandLogo.textContent = titles[currentAppTab] || 'foliari';
+        if (logoSvg) logoSvg.style.display = 'none';
+        if (sectionTitle) {
+          sectionTitle.textContent = titles[currentAppTab] || 'foliari';
+          sectionTitle.style.display = 'inline-block';
+        }
+        if (brandLogo) {
+          brandLogo.style.textAlign = 'center';
+          brandLogo.style.display = 'flex';
+          brandLogo.style.alignItems = 'center';
+          brandLogo.style.justifyContent = 'center';
+        }
       }
     }
 
