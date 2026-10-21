@@ -20,7 +20,105 @@
   <!-- Supabase JS Client via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <!-- Phosphor Icons (Thin) -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css" />
+
   <style>
+    /* Phosphor Icons Base & Sizing Helpers */
+    i[class*="ph-"] {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      line-height: 1;
+      font-style: normal;
+    }
+    .btn-header-back i[class*="ph-"] {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    .search-icon i[class*="ph-"] {
+      font-size: 18px;
+      line-height: 1;
+    }
+    .filter-icon-svg {
+      font-size: 26px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .add-dashed-icon i[class*="ph-"] {
+      font-size: 38px;
+      line-height: 1;
+    }
+    .add-dashed-card.compact .add-dashed-icon i[class*="ph-"] {
+      font-size: 28px;
+      line-height: 1;
+    }
+    .theme-segment-btn i[class*="ph-"] {
+      font-size: 24px;
+      line-height: 1;
+    }
+    .nav-tab-icon i[class*="ph-"] {
+      font-size: 24px;
+      line-height: 1;
+    }
+    .btn-close-notif-panel i[class*="ph-"],
+    .modal-close i[class*="ph-"] {
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+    .carousel-arrow i[class*="ph-"] {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+    .btn-detail-kebab-circle i[class*="ph-"] {
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+    .btn-app-clock i[class*="ph-"] {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .pref-option-btn i[class*="ph-"] {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .lightbox-btn i[class*="ph-"] {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+    .lightbox-nav-btn i[class*="ph-"] {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+    .gallery-delete-btn i[class*="ph-"] {
+      font-size: 11px;
+      line-height: 1;
+    }
+    .history-delete-btn i[class*="ph-"] {
+      font-size: 14px;
+      line-height: 1;
+    }
+    .btn-cal-nav i[class*="ph-"] {
+      font-size: 12px;
+      line-height: 1;
+    }
+    .insta-status-badge.is-overdue i[class*="ph-"] {
+      font-size: 11px;
+      line-height: 1;
+      color: #ffffff;
+    }
+    .insta-add-icon-wrap i[class*="ph-"] {
+      font-size: 24px;
+      line-height: 1;
+    }
+    .gallery-add-card .insta-add-icon-wrap i[class*="ph-"] {
+      font-size: 18px;
+      line-height: 1;
+    }
+
     :root {
       --font-display: 'Fraunces', Georgia, serif;
       --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -1862,10 +1960,13 @@
       transform: scale(0.92);
     }
     .header-bell-icon {
-      stroke: var(--app-lime) !important;
-      width: 22px;
-      height: 22px;
-      display: block;
+      color: var(--app-lime) !important;
+      stroke: none !important;
+      font-size: 24px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .bell-badge-dot {
       position: absolute;
@@ -2002,11 +2103,16 @@
       gap: 7px;
       transition: color 0.15s, opacity 0.15s;
     }
-    .btn-notif-settings svg {
-      width: 15px;
-      height: 15px;
-      stroke: currentColor;
-      display: inline-block;
+    .btn-notif-settings svg,
+    .btn-notif-settings i[class*="ph-"] {
+      font-size: 16px;
+      line-height: 1;
+      width: auto;
+      height: auto;
+      color: currentColor;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
     }
     .btn-notif-settings:hover {
@@ -2919,12 +3025,17 @@
     .btn-settings-action:active {
       transform: scale(0.98);
     }
-    .btn-settings-action svg {
-      width: 17px;
-      height: 17px;
-      stroke: currentColor;
+    .btn-settings-action svg,
+    .btn-settings-action i[class*="ph-"] {
+      font-size: 18px;
+      line-height: 1;
+      width: auto;
+      height: auto;
+      color: currentColor;
       flex-shrink: 0;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .btn-settings-action:hover {
       background: var(--accent-hover);
@@ -3541,7 +3652,7 @@
   <header class="app-header header-plants-view" id="appHeader">
     <div class="header-left">
       <button type="button" class="btn-header-back" id="headerBackBtn" onclick="handleHeaderBack()" aria-label="Enrere" style="display:none;">
-        ‹
+        <i class="ph-thin ph-caret-left"></i>
       </button>
     </div>
 
@@ -3552,10 +3663,7 @@
 
     <div class="header-right">
       <button type="button" class="btn-header-bell" id="headerBellBtn" onclick="toggleQuickNotifPanel(event)" aria-label="Notificacions i alertes">
-        <svg class="header-bell-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
+        <i class="ph-thin ph-bell header-bell-icon"></i>
         <span class="bell-badge-dot" id="headerBellBadgeDot" style="display:none;"></span>
       </button>
     </div>
@@ -3570,20 +3678,12 @@
       <div class="app-search-row">
         <div class="search-box">
           <span class="search-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+            <i class="ph-thin ph-magnifying-glass"></i>
           </span>
           <input type="text" id="searchInput" placeholder="Cerca per nom comú o científic...">
         </div>
         <button type="button" class="btn-filter-trigger" id="openFilterModalBtn" onclick="openFilterModal()" title="Filtres i Vista" aria-label="Filtres i Vista">
-          <svg class="filter-icon-svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="7" x2="21" y2="7"></line>
-            <line x1="16" y1="3.5" x2="16" y2="10.5"></line>
-            <line x1="3" y1="17" x2="21" y2="17"></line>
-            <line x1="8" y1="13.5" x2="8" y2="20.5"></line>
-          </svg>
+          <i class="ph-thin ph-faders filter-icon-svg"></i>
           <span id="filterModalBtnText" class="filter-btn-label" style="display:none;"></span>
           <span class="filter-count-badge" id="filterCountBadge" style="display:none;">0</span>
         </button>
@@ -3632,10 +3732,7 @@
           <div class="add-dashed-grid">
             <button type="button" class="add-dashed-card" onclick="document.getElementById('aiCameraInput').click()">
               <div class="add-dashed-icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                  <circle cx="12" cy="13" r="4"></circle>
-                </svg>
+                <i class="ph-thin ph-camera"></i>
               </div>
               <div class="add-dashed-title" id="aiSourceCameraTitle">Nova foto</div>
               <div class="add-dashed-desc" id="aiSourceCameraDesc">Obre la càmera del mòbil</div>
@@ -3643,11 +3740,7 @@
 
             <button type="button" class="add-dashed-card" onclick="document.getElementById('aiGalleryInput').click()">
               <div class="add-dashed-icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                  <polyline points="21 15 16 10 5 21"></polyline>
-                </svg>
+                <i class="ph-thin ph-image"></i>
               </div>
               <div class="add-dashed-title" id="aiSourceGalleryTitle">Triar de la galeria</div>
               <div class="add-dashed-desc" id="aiSourceGalleryDesc">Tria una foto desada</div>
@@ -3785,9 +3878,9 @@
           <div class="calendar-panel-header">
             <div class="calendar-panel-title" id="calendarMonthTitle">Calendari mensual</div>
             <div class="month-nav-group">
-              <button type="button" class="btn-cal-nav" id="calPrevMonthBtn" onclick="changeCalendarMonth(-1)">‹ Anterior</button>
+              <button type="button" class="btn-cal-nav" id="calPrevMonthBtn" onclick="changeCalendarMonth(-1)"><i class="ph-thin ph-caret-left"></i> Anterior</button>
               <button type="button" class="btn-cal-nav" id="calTodayBtn" onclick="resetCalendarToToday()">Avui</button>
-              <button type="button" class="btn-cal-nav" id="calNextMonthBtn" onclick="changeCalendarMonth(1)">Següent ›</button>
+              <button type="button" class="btn-cal-nav" id="calNextMonthBtn" onclick="changeCalendarMonth(1)">Següent <i class="ph-thin ph-caret-right"></i></button>
             </div>
           </div>
           <div class="month-weekdays-row" id="monthWeekdaysRow">
@@ -3816,15 +3909,15 @@
           <div class="settings-card">
             <div class="theme-segmented-control">
               <button type="button" class="theme-segment-btn active" id="prefThemeSystemBtn" onclick="setThemePreference('system')">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                <i class="ph-thin ph-device-mobile"></i>
                 <span id="prefThemeSystemText">Sistema</span>
               </button>
               <button type="button" class="theme-segment-btn" id="prefThemeLightBtn" onclick="setThemePreference('light')">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                <i class="ph-thin ph-sun"></i>
                 <span id="prefThemeLightText">Mode Clar</span>
               </button>
               <button type="button" class="theme-segment-btn" id="prefThemeDarkBtn" onclick="setThemePreference('dark')">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <i class="ph-thin ph-moon"></i>
                 <span id="prefThemeDarkText">Mode Fosc</span>
               </button>
             </div>
@@ -3875,19 +3968,11 @@
             </p>
             <div class="settings-btn-grid">
               <button type="button" class="btn-settings-action" onclick="exportDataBackup()" id="prefExportBtn">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
+                <i class="ph-thin ph-download-simple" aria-hidden="true"></i>
                 <span id="prefExportText">Exportar còpia</span>
               </button>
               <button type="button" class="btn-settings-action" onclick="document.getElementById('importBackupFileInput').click()" id="prefImportBtn">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="17 8 12 3 7 8"></polyline>
-                  <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
+                <i class="ph-thin ph-upload-simple" aria-hidden="true"></i>
                 <span id="prefImportText">Restaurar còpia</span>
               </button>
             </div>
@@ -3903,9 +3988,7 @@
               Tens alguna idea per millorar l'app o has trobat alguna errada? Digue'ns-ho per seguir millorant.
             </p>
             <button type="button" class="btn-settings-action full-width" onclick="openFeedbackModal()" id="prefFeedbackBtn">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
+              <i class="ph-thin ph-chat-circle-dots" aria-hidden="true"></i>
               <span id="prefFeedbackBtnText">Enviar suggeriments o dubtes</span>
             </button>
           </div>
@@ -3919,9 +4002,7 @@
               T'agrada l'aplicació? Una ressenya de 5 estrelles ens ajuda moltíssim a continuar millorant!
             </p>
             <button type="button" class="btn-settings-action btn-google-play full-width" onclick="rateOnGooglePlay()" id="prefRateBtn">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-              </svg>
+              <i class="ph-thin ph-star" aria-hidden="true"></i>
               <span id="prefRateBtnText">Valorar a Google Play</span>
             </button>
           </div>
@@ -3954,42 +4035,28 @@
   <nav class="bottom-nav-bar" id="bottomNavBar">
     <button type="button" class="nav-tab active" id="navTabPlants" onclick="switchAppTab('plants')">
       <div class="nav-tab-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
-          <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
-        </svg>
+        <i class="ph-thin ph-potted-plant"></i>
       </div>
       <span class="nav-tab-label">Les meves plantes</span>
     </button>
 
     <button type="button" class="nav-tab" id="navTabAdd" onclick="switchAppTab('add')">
       <div class="nav-tab-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
+        <i class="ph-thin ph-plus"></i>
       </div>
       <span class="nav-tab-label">Afegir planta</span>
     </button>
 
     <button type="button" class="nav-tab" id="navTabCalendar" onclick="switchAppTab('calendar')">
       <div class="nav-tab-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-          <line x1="16" y1="2" x2="16" y2="6"></line>
-          <line x1="8" y1="2" x2="8" y2="6"></line>
-          <line x1="3" y1="10" x2="21" y2="10"></line>
-        </svg>
+        <i class="ph-thin ph-calendar"></i>
       </div>
       <span class="nav-tab-label">Calendari</span>
     </button>
 
     <button type="button" class="nav-tab" id="navTabSettings" onclick="switchAppTab('settings')">
       <div class="nav-tab-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-        </svg>
+        <i class="ph-thin ph-gear"></i>
       </div>
       <span class="nav-tab-label">Ajustaments</span>
     </button>
@@ -4002,15 +4069,12 @@
   <div class="notif-quick-card">
     <div class="notif-panel-header">
       <span id="notifPanelTitle" style="font-weight:700; font-size:1.05rem; color:var(--text-main);">Alertes de cures</span>
-      <button type="button" class="btn-close-notif-panel" onclick="toggleQuickNotifPanel(false)" aria-label="Tancar">&times;</button>
+      <button type="button" class="btn-close-notif-panel" onclick="toggleQuickNotifPanel(false)" aria-label="Tancar"><i class="ph-thin ph-x"></i></button>
     </div>
     <div class="notif-panel-body" id="notifPanelBody"></div>
     <div class="notif-panel-footer">
       <button type="button" class="btn-notif-settings" id="notifPanelSettingsBtn" onclick="switchAppTab('settings'); toggleQuickNotifPanel(false);">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-        </svg>
+        <i class="ph-thin ph-gear" aria-hidden="true"></i>
         <span id="notifPanelSettingsLabel">Ajustaments de notificacions</span>
       </button>
     </div>
@@ -4024,16 +4088,13 @@
     <header class="app-header plant-detail-top-bar">
       <div class="header-left">
         <button type="button" class="btn-header-back" onclick="closeModal('plantModal')" aria-label="Tancar fitxa">
-          ‹
+          <i class="ph-thin ph-caret-left"></i>
         </button>
       </div>
       <div class="plant-detail-header-title" id="detailTopTitle"></div>
       <div class="header-right">
         <button type="button" class="btn-header-bell" onclick="toggleQuickNotifPanel(event)" aria-label="Notificacions">
-          <svg class="header-bell-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
+          <i class="ph-thin ph-bell header-bell-icon"></i>
           <span class="bell-badge-dot" id="detailBellBadgeDot" style="display:none;"></span>
         </button>
       </div>
@@ -4041,9 +4102,9 @@
 
     <!-- Carrusel de fotos amb fletxes superposades -->
     <div class="modal-image-wrap">
-      <button type="button" class="carousel-arrow prev" id="modalPhotoPrevBtn" onclick="stepModalGalleryPhoto(-1)" aria-label="Foto anterior">‹</button>
+      <button type="button" class="carousel-arrow prev" id="modalPhotoPrevBtn" onclick="stepModalGalleryPhoto(-1)" aria-label="Foto anterior"><i class="ph-thin ph-caret-left"></i></button>
       <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta" onclick="openPhotoLightbox()" title="Fer zoom a la foto">
-      <button type="button" class="carousel-arrow next" id="modalPhotoNextBtn" onclick="stepModalGalleryPhoto(1)" aria-label="Foto següent">›</button>
+      <button type="button" class="carousel-arrow next" id="modalPhotoNextBtn" onclick="stepModalGalleryPhoto(1)" aria-label="Foto següent"><i class="ph-thin ph-caret-right"></i></button>
       <div class="modal-photo-caption-badge">
         <span class="modal-photo-date-pill" id="modalPhotoDatePill" style="display:none;"></span>
       </div>
@@ -4056,7 +4117,7 @@
         <h2 id="modalTitle" class="plant-name-detail"></h2>
         <div class="detail-kebab-wrap">
           <button type="button" class="btn-detail-kebab-circle" onclick="togglePlantKebabMenu(event)" aria-label="Opcions de planta">
-            ⋮
+            <i class="ph-thin ph-dots-three-vertical"></i>
           </button>
           <div class="detail-kebab-menu" id="detailKebabMenu">
             <button type="button" onclick="triggerEditFromDetail(event)">Editar planta</button>
@@ -4082,7 +4143,7 @@
           <div class="tracker-btn-row">
             <button class="btn-app-water" id="modalWaterBtn">Regar avui</button>
             <button type="button" class="btn-app-clock" id="modalSnoozeBtn" title="Posposar reg 1 dia" aria-label="Posposar reg 1 dia">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <i class="ph-thin ph-clock"></i>
             </button>
             <button type="button" id="modalWaterPastBtn" style="display:none;" aria-hidden="true"></button>
           </div>
@@ -4113,7 +4174,7 @@
           <div class="tracker-btn-row">
             <button class="btn-app-fert" id="modalFertBtn">Fertilitzar avui</button>
             <button type="button" class="btn-app-clock" id="modalFertPastBtn" onclick="openQuickDateModal(currentModalPlantId, 'fert', event)" title="Opcions d'adob" aria-label="Opcions d'adob">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <i class="ph-thin ph-clock"></i>
             </button>
           </div>
           <div class="detail-care-rules">
@@ -4217,15 +4278,12 @@
         <div class="notif-quick-card" style="max-width: 420px;">
           <div class="notif-panel-header">
             <span id="gallerySourceModalTitle" style="font-weight:700; font-size:1.15rem; color:var(--text-main); font-family:var(--font-sans);">Nova fotografia</span>
-            <button type="button" class="btn-close-notif-panel" onclick="closeGalleryPhotoSourcePicker()" aria-label="Tancar">&times;</button>
+            <button type="button" class="btn-close-notif-panel" onclick="closeGalleryPhotoSourcePicker()" aria-label="Tancar"><i class="ph-thin ph-x"></i></button>
           </div>
           <div class="add-dashed-grid" style="margin: 10px 0 16px;">
             <button type="button" class="add-dashed-card" onclick="triggerGalleryCamera()">
               <div class="add-dashed-icon">
-                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                  <circle cx="12" cy="13" r="4"></circle>
-                </svg>
+                <i class="ph-thin ph-camera"></i>
               </div>
               <div class="add-dashed-title" id="gallerySourceCameraTitle">Nova foto</div>
               <div class="add-dashed-desc" id="gallerySourceCameraDesc">Obre la càmera del mòbil</div>
@@ -4233,11 +4291,7 @@
 
             <button type="button" class="add-dashed-card" onclick="triggerGalleryFile()">
               <div class="add-dashed-icon">
-                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                  <polyline points="21 15 16 10 5 21"></polyline>
-                </svg>
+                <i class="ph-thin ph-image"></i>
               </div>
               <div class="add-dashed-title" id="gallerySourceGalleryTitle">Triar de la galeria</div>
               <div class="add-dashed-desc" id="gallerySourceGalleryDesc">Tria una foto desada</div>
@@ -4273,7 +4327,7 @@
 <!-- MODAL EDITAR PLANTA -->
 <div class="modal-overlay" id="editPlantModal">
   <div class="modal-card" style="max-width: 580px; max-height: 88vh; overflow-y: auto;">
-    <button class="modal-close" onclick="closeModal('editPlantModal')" aria-label="Tancar finestra">&times;</button>
+    <button class="modal-close" onclick="closeModal('editPlantModal')" aria-label="Tancar finestra"><i class="ph-thin ph-x"></i></button>
     <div class="modal-content" style="padding: 24px;">
       <h2 id="editPlantModalTitle" style="font-size: 1.45rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-sans); font-weight: 700;">
         Editar planta
@@ -4301,10 +4355,7 @@
           <div class="add-dashed-grid">
             <button type="button" class="add-dashed-card compact" onclick="document.getElementById('editPhotoCameraInput').click()">
               <div class="add-dashed-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                  <circle cx="12" cy="13" r="4"></circle>
-                </svg>
+                <i class="ph-thin ph-camera"></i>
               </div>
               <div class="add-dashed-title" id="editPlantCameraTitle">Nova foto</div>
               <div class="add-dashed-desc" id="editPlantCameraDesc">Obre la càmera</div>
@@ -4312,11 +4363,7 @@
 
             <button type="button" class="add-dashed-card compact" onclick="document.getElementById('editPhotoGalleryInput').click()">
               <div class="add-dashed-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                  <polyline points="21 15 16 10 5 21"></polyline>
-                </svg>
+                <i class="ph-thin ph-image"></i>
               </div>
               <div class="add-dashed-title" id="editPlantGalleryTitle">Triar de la galeria</div>
               <div class="add-dashed-desc" id="editPlantGalleryDesc">Tria una foto</div>
@@ -4461,7 +4508,7 @@
 <!-- MODAL HISTÒRIC -->
 <div class="modal-overlay" id="historyModal">
   <div class="modal-card" style="max-width: 560px;">
-    <button class="modal-close" onclick="closeModal('historyModal')" aria-label="Tancar finestra">&times;</button>
+    <button class="modal-close" onclick="closeModal('historyModal')" aria-label="Tancar finestra"><i class="ph-thin ph-x"></i></button>
     <div class="modal-content" style="padding: 24px;">
       <h2 id="historyPlantTitle" style="font-size: 1.35rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-sans); font-weight: 700;"></h2>
       <p id="historyModalSubtitle" style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px;">Registre complet de regs, adobs, trasplantaments i podes. Tria la data per anotar accions d'avui o de dies passats:</p>
@@ -4505,7 +4552,7 @@
 <!-- MODAL RÀPID DE DATA PASSADA / MANTENIMENT -->
 <div class="modal-overlay" id="quickActionDateModal">
   <div class="modal-card" style="max-width: 430px;">
-    <button class="modal-close" onclick="closeModal('quickActionDateModal')" aria-label="Tancar finestra">&times;</button>
+    <button class="modal-close" onclick="closeModal('quickActionDateModal')" aria-label="Tancar finestra"><i class="ph-thin ph-x"></i></button>
     <div class="modal-content" style="padding: 22px 24px;">
       <h3 id="quickDateModalTitle" style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-sans); font-weight: 700;">Opcions de reg</h3>
       <p id="quickDateModalSubtitle" style="font-size: 0.83rem; color: var(--text-muted); margin-bottom: 14px;"></p>
@@ -4573,7 +4620,7 @@
 <!-- MODAL FILTRES I VISUALITZACIÓ -->
 <div class="modal-overlay" id="filterModal">
   <div class="modal-card filter-modal-card" style="max-width: 500px; width: 94vw; max-height: 88vh; overflow-y: auto;">
-    <button class="modal-close" onclick="closeModal('filterModal')" aria-label="Tancar finestra">&times;</button>
+    <button class="modal-close" onclick="closeModal('filterModal')" aria-label="Tancar finestra"><i class="ph-thin ph-x"></i></button>
     <div class="modal-content filter-modal-content" style="padding: 22px 20px;">
       <h2 id="filterModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 4px; font-family: var(--font-sans); font-weight: 700;">
         Filtres i visualització
@@ -4587,23 +4634,11 @@
         <span class="pref-section-label" id="filterViewSectionLabel">Tipus de visualització</span>
         <div class="pref-options-grid filter-view-grid">
           <button type="button" class="pref-option-btn active" id="viewGridBtn" onclick="setActiveViewMode('grid')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="8" y1="6" x2="21" y2="6"></line>
-              <line x1="8" y1="12" x2="21" y2="12"></line>
-              <line x1="8" y1="18" x2="21" y2="18"></line>
-              <line x1="3" y1="6" x2="3.01" y2="6"></line>
-              <line x1="3" y1="12" x2="3.01" y2="12"></line>
-              <line x1="3" y1="18" x2="3.01" y2="18"></line>
-            </svg>
+            <i class="ph-thin ph-list"></i>
             <span id="viewGridBtnText">Vista llista</span>
           </button>
           <button type="button" class="pref-option-btn" id="viewTableBtn" onclick="setActiveViewMode('photos')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-            </svg>
+            <i class="ph-thin ph-squares-four"></i>
             <span id="viewTableBtnText">Vista graella</span>
           </button>
         </div>
@@ -4687,7 +4722,7 @@
 <!-- MODAL NOTES LEGALS I POLÍTICA DE PRIVACITAT -->
 <div class="modal-overlay" id="legalModal">
   <div class="modal-card" style="max-width: 620px; max-height: 88vh; overflow-y: auto;">
-    <button class="modal-close" onclick="closeModal('legalModal')" aria-label="Tancar finestra">&times;</button>
+    <button class="modal-close" onclick="closeModal('legalModal')" aria-label="Tancar finestra"><i class="ph-thin ph-x"></i></button>
     <div class="modal-content" style="padding: 26px;">
       <h2 id="legalModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 6px; font-family: var(--font-sans); font-weight: 700;">
         Informació legal i privacitat
@@ -4718,7 +4753,7 @@
 <!-- MODAL FORMULARI DE FEEDBACK I SUGGERIMENTS -->
 <div class="modal-overlay" id="feedbackModal">
   <div class="modal-card" style="max-width: 540px; max-height: 88vh; overflow-y: auto;">
-    <button class="modal-close" onclick="closeModal('feedbackModal')" aria-label="Tancar finestra">&times;</button>
+    <button class="modal-close" onclick="closeModal('feedbackModal')" aria-label="Tancar finestra"><i class="ph-thin ph-x"></i></button>
     <div class="modal-content" style="padding: 24px;">
       <h2 id="feedbackModalTitle" style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 6px; font-family: var(--font-sans); font-weight: 700;">
         Envia'ns el teu feedback
@@ -4768,23 +4803,23 @@
   <div class="lightbox-topbar">
     <div class="lightbox-caption" id="lightboxCaption"></div>
     <div class="lightbox-controls">
-      <button type="button" class="lightbox-btn" onclick="adjustLightboxZoom(-0.5)" title="Reduir zoom" aria-label="Reduir zoom">➖</button>
+      <button type="button" class="lightbox-btn" onclick="adjustLightboxZoom(-0.5)" title="Reduir zoom" aria-label="Reduir zoom"><i class="ph-thin ph-minus"></i></button>
       <button type="button" class="lightbox-btn" id="lightboxZoomLevelBtn" onclick="resetLightboxZoom()" title="Restablir zoom">100%</button>
-      <button type="button" class="lightbox-btn" onclick="adjustLightboxZoom(0.5)" title="Ampliar zoom" aria-label="Ampliar zoom">➕</button>
-      <button type="button" class="lightbox-btn lightbox-close-btn" id="lightboxCloseBtn" onclick="closePhotoLightbox()" title="Tancar visor" aria-label="Tancar">✕</button>
+      <button type="button" class="lightbox-btn" onclick="adjustLightboxZoom(0.5)" title="Ampliar zoom" aria-label="Ampliar zoom"><i class="ph-thin ph-plus"></i></button>
+      <button type="button" class="lightbox-btn lightbox-close-btn" id="lightboxCloseBtn" onclick="closePhotoLightbox()" title="Tancar visor" aria-label="Tancar"><i class="ph-thin ph-x"></i></button>
     </div>
   </div>
   <div class="lightbox-stage" id="lightboxStage" onclick="handleLightboxStageClick(event)">
-    <button type="button" class="lightbox-nav-btn prev" id="lightboxPrevBtn" onclick="stepLightboxPhoto(-1, event)" style="display:none;" aria-label="Foto anterior">&#8249;</button>
+    <button type="button" class="lightbox-nav-btn prev" id="lightboxPrevBtn" onclick="stepLightboxPhoto(-1, event)" style="display:none;" aria-label="Foto anterior"><i class="ph-thin ph-caret-left"></i></button>
     <img id="lightboxImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto ampliada">
-    <button type="button" class="lightbox-nav-btn next" id="lightboxNextBtn" onclick="stepLightboxPhoto(1, event)" style="display:none;" aria-label="Foto següent">&#8250;</button>
+    <button type="button" class="lightbox-nav-btn next" id="lightboxNextBtn" onclick="stepLightboxPhoto(1, event)" style="display:none;" aria-label="Foto següent"><i class="ph-thin ph-caret-right"></i></button>
   </div>
 </div>
 
 
 <!-- TOAST -->
 <div class="toast-notification" id="toastNotification">
-  <span id="toastIcon">🌱</span>
+  <span id="toastIcon"><i class="ph-thin ph-potted-plant"></i></span>
   <span id="toastMsg">Acció registrada correctament</span>
 </div>
 
@@ -5273,10 +5308,7 @@
       const settingsBtn = document.getElementById('notifPanelSettingsBtn');
       if (settingsBtn) {
         settingsBtn.innerHTML = `
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-          </svg>
+          <i class="ph-thin ph-gear" aria-hidden="true"></i>
           <span id="notifPanelSettingsLabel">${t('Ajustaments de notificacions', 'Ajustes de notificaciones', 'Notification settings')}</span>
         `;
       }
@@ -6515,7 +6547,7 @@
       if (modalFertPastBtn) {
         modalFertPastBtn.title = t("Opcions d'adob", "Opciones de abono", "Fertilizer options");
         modalFertPastBtn.setAttribute("aria-label", t("Opcions d'adob", "Opciones de abono", "Fertilizer options"));
-        modalFertPastBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+        modalFertPastBtn.innerHTML = `<i class="ph-thin ph-clock"></i>`;
         modalFertPastBtn.onclick = (e) => openQuickDateModal(plantId, 'fert', e);
       }
     }
@@ -7535,10 +7567,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                     ${ws.isToday ? t('Regat avui', 'Regado hoy', 'Watered today') : t('Regar avui', 'Regar hoy', 'Water today')}
                   </button>
                   <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Opcions de reg', 'Opciones de riego', 'Watering options')}" aria-label="Opcions de reg">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
+                    <i class="ph-thin ph-clock"></i>
                   </button>
                 </div>
               </div>
@@ -7558,10 +7587,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
                     ${fs.isToday ? t('Abonat avui', 'Abonado hoy', 'Fertilized today') : t('Fertilitzar avui', 'Abonar hoy', 'Fertilize today')}
                   </button>
                   <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Opcions d\'adob', 'Opciones de abono', 'Fertilizer options')}" aria-label="Opcions d'adob">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
+                    <i class="ph-thin ph-clock"></i>
                   </button>
                 </div>
               </div>
@@ -7576,7 +7602,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const st = getPlantGridStatus(plant);
     let badgeHtml = '';
     if (st === 'overdue') {
-      badgeHtml = `<div class="insta-status-badge is-overdue" title="${t('Manteniment endarrerit', 'Mantenimiento atrasado', 'Maintenance overdue')}"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10h2v4h-2zm0 6h2v2h-2z"/></svg></div>`;
+      badgeHtml = `<div class="insta-status-badge is-overdue" title="${t('Manteniment endarrerit', 'Mantenimiento atrasado', 'Maintenance overdue')}"><i class="ph-thin ph-warning"></i></div>`;
     } else if (st === 'today') {
       badgeHtml = `<div class="insta-status-badge is-today" title="${t('Toca manteniment avui', 'Toca mantenimiento hoy', 'Maintenance due today')}"></div>`;
     } else if (st === 'due_soon') {
@@ -7598,10 +7624,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     return `
       <div class="insta-grid-item insta-grid-add-card" onclick="switchAppTab('add')" title="${t('Afegir planta', 'Añadir planta', 'Add plant')}" role="button" tabindex="0">
         <div class="insta-add-icon-wrap">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
+          <i class="ph-thin ph-plus"></i>
         </div>
         <span class="insta-add-label">${t('Afegir planta', 'Añadir planta', 'Add plant')}</span>
       </div>
@@ -7914,7 +7937,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           <div class="insta-grid-item ${isCurrent ? 'active' : ''}" onclick="selectModalGalleryPhoto(${idx})" title="Foto ${idx + 1} de ${plant.name}">
             <img class="insta-grid-img" src="${item.url}" alt="Foto ${idx + 1} de ${plant.name}" loading="lazy">
             ${dateStr ? `<span class="gallery-date-overlay">${dateStr}</span>` : ''}
-            ${canDelete ? `<button type="button" class="gallery-delete-btn" onclick="deleteGalleryPhoto('${plant.id}', '${item.id}', event)" title="Eliminar foto" aria-label="Eliminar foto">&times;</button>` : ''}
+            ${canDelete ? `<button type="button" class="gallery-delete-btn" onclick="deleteGalleryPhoto('${plant.id}', '${item.id}', event)" title="Eliminar foto" aria-label="Eliminar foto"><i class="ph-thin ph-x"></i></button>` : ''}
           </div>
         `;
       }).join('');
@@ -7922,10 +7945,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const addPhotoCard = `
         <div class="insta-grid-item insta-grid-add-card gallery-add-card" onclick="openGalleryPhotoSourcePicker()" title="${t('Afegir nova foto', 'Añadir nueva foto', 'Add new photo')}" role="button" tabindex="0">
           <div class="insta-add-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
+            <i class="ph-thin ph-plus"></i>
           </div>
           <span class="insta-add-label">${t('+ Nova foto', '+ Nueva foto', '+ New photo')}</span>
         </div>
@@ -8529,7 +8549,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             ${item.note ? `<div style="font-size:0.78rem; color:var(--green-mid); margin-top:2px;">📝 ${item.note}</div>` : ''}
           </div>
           <button class="history-delete-btn" onclick="deleteHistoryEntry('${plantId}', '${item.type}', '${item.date}', ${item.originalIndex}, event)">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <i class="ph-thin ph-trash" aria-hidden="true"></i>
             ${t('Esborrar', 'Borrar', 'Delete')}
           </button>
         </li>
@@ -9337,9 +9357,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("closeFilterBtn", t("Fet", "Listo", "Done"));
 
     setElText("weeklyCalendarTitle", t("Previsió setmanal (propers 7 dies)", "Previsión semanal (próximos 7 días)", "Weekly forecast (next 7 days)"));
-    setElText("calPrevMonthBtn", t("‹ Anterior", "‹ Anterior", "‹ Prev"));
+    const prevMonthBtn = document.getElementById("calPrevMonthBtn");
+    if (prevMonthBtn) prevMonthBtn.innerHTML = `<i class="ph-thin ph-caret-left"></i> ${t("Anterior", "Anterior", "Prev")}`;
     setElText("calTodayBtn", t("Avui", "Hoy", "Today"));
-    setElText("calNextMonthBtn", t("Següent ›", "Siguiente ›", "Next ›"));
+    const nextMonthBtn = document.getElementById("calNextMonthBtn");
+    if (nextMonthBtn) nextMonthBtn.innerHTML = `${t("Següent", "Siguiente", "Next")} <i class="ph-thin ph-caret-right"></i>`;
 
     const wkRow = document.getElementById("monthWeekdaysRow");
     if (wkRow && wkRow.children.length === 7) {
@@ -9832,7 +9854,16 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   function showToast(msg, icon = "🌱") {
     const toast = document.getElementById("toastNotification");
     document.getElementById("toastMsg").innerText = msg;
-    document.getElementById("toastIcon").innerText = icon;
+    const iconEl = document.getElementById("toastIcon");
+    if (iconEl) {
+      if (typeof icon === "string" && icon.startsWith("ph-")) {
+        iconEl.innerHTML = `<i class="ph-thin ${icon}"></i>`;
+      } else if (icon === "🌱") {
+        iconEl.innerHTML = `<i class="ph-thin ph-potted-plant"></i>`;
+      } else {
+        iconEl.innerText = icon;
+      }
+    }
     toast.classList.add("show");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
