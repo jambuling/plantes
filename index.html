@@ -2394,8 +2394,35 @@
       justify-content: center;
       width: 100%;
       max-width: 440px;
-      gap: 36px;
+      gap: 52px;
       margin: auto 0;
+    }
+    .loading-spinner-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      animation: loadingSpinnerFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+    }
+    .loading-spinner-svg {
+      width: 100%;
+      height: 100%;
+      animation: loadingSpin 1.25s linear infinite;
+    }
+    @keyframes loadingSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes loadingSpinnerFade {
+      0% {
+        opacity: 0;
+        transform: scale(0.85);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
     .loading-logo-wrap {
       width: 100%;
@@ -2470,7 +2497,11 @@
         padding: 24px 18px;
       }
       .loading-center-group {
-        gap: 28px;
+        gap: 38px;
+      }
+      .loading-spinner-wrap {
+        width: 38px;
+        height: 38px;
       }
       .loading-logo-wrap {
         max-width: 210px;
@@ -3268,6 +3299,44 @@
     }
     .insta-plant-name {
       display: none !important;
+    }
+    .insta-status-badge {
+      position: absolute;
+      right: 7px;
+      bottom: 7px;
+      z-index: 5;
+      box-shadow: 0 1.5px 5px rgba(0, 0, 0, 0.45);
+      pointer-events: none;
+    }
+    .insta-status-badge.is-due-soon {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #f59e0b;
+      border: 2px solid #ffffff;
+    }
+    .insta-status-badge.is-today {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #ef4444;
+      border: 2px solid #ffffff;
+    }
+    .insta-status-badge.is-overdue {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background-color: #dc2626;
+      border: 2px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      animation: pulseAlarm 2s infinite ease-in-out;
+    }
+    @keyframes pulseAlarm {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
     }
 
     /* TARGETA AFEGIR PLANTA A LA GRAELLA */
@@ -4393,6 +4462,12 @@
       <div class="loading-logo-wrap">
         <img src="logo_portada.svg" alt="Foliari" class="loading-logo-svg">
       </div>
+      <div class="loading-spinner-wrap" aria-hidden="true">
+        <svg class="loading-spinner-svg" viewBox="0 0 50 50">
+          <circle cx="25" cy="25" r="20" fill="none" stroke="rgba(255, 255, 255, 0.16)" stroke-width="3.5" />
+          <circle cx="25" cy="25" r="20" fill="none" stroke="#bcd361" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="75 140" />
+        </svg>
+      </div>
       <div class="loading-quote-card">
         <p class="loading-quote-text" id="loadingQuoteText"></p>
         <p class="loading-quote-author" id="loadingQuoteAuthor"></p>
@@ -4515,22 +4590,6 @@
             <button type="button" class="btn-manual-add" onclick="openEditPlantModal(null)" style="background: none; border: 1px dashed var(--border-strong); padding: 10px 18px; border-radius: 10px; color: var(--text-muted); cursor: pointer; font-size: 0.88rem; font-family: inherit;">
               O afegir les dades manualment sense foto
             </button>
-          </div>
-
-          <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px 14px; font-size: 0.82rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
-            <span>🤖 IA Botànica Automàtica</span>
-            <button type="button" onclick="toggleAICfgPanel()" style="background:none; border:none; color: var(--accent); cursor: pointer; text-decoration: underline; font-size: 0.8rem; font-weight:600;">
-              ⚙️ Configuració Clau IA
-            </button>
-          </div>
-
-          <div id="aiCfgPanel" style="display:none; margin-top: 10px; padding: 14px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px;">
-            <label style="font-size: 0.80rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 6px;">Clau API Gemini (Google AI Studio):</label>
-            <div style="display: flex; gap: 8px;">
-              <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy..." class="form-control" style="font-size: 0.84rem; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-subtle); flex: 1;">
-              <button type="button" class="btn-action" style="background: #256a38; color: white; padding: 8px 16px; white-space: nowrap; font-size: 0.82rem; border-radius: 8px; font-weight: 600;" onclick="saveGeminiApiKey()">Desar</button>
-            </div>
-            <span style="font-size: 0.74rem; color: var(--text-muted); display: block; margin-top: 6px;">Permet identificació visual autònoma directament de la imatge.</span>
           </div>
         </div>
 
@@ -6226,7 +6285,9 @@
     let hasAlert = false;
     for (const plant of (plantsCatalog || [])) {
       const ws = computeWaterStatus(plant);
-      if (ws.status === 'overdue' || ws.status === 'due_soon') {
+      const fs = computeFertStatus(plant);
+      // Alerta: només si hi ha plantes amb reg o adob endarrerit o vençut avui
+      if (ws.status === 'overdue' || (fs.canFertilize && fs.status === 'overdue')) {
         hasAlert = true;
         break;
       }
@@ -7732,14 +7793,17 @@
 
   function toggleAICfgPanel() {
     const p = document.getElementById("aiCfgPanel");
+    if (!p) return;
     p.style.display = (p.style.display === "none" || !p.style.display) ? "block" : "none";
     if (p.style.display === "block" && aiAppConfig.gemini_key) {
-      document.getElementById("geminiApiKeyInput").value = aiAppConfig.gemini_key;
+      const inp = document.getElementById("geminiApiKeyInput");
+      if (inp) inp.value = aiAppConfig.gemini_key;
     }
   }
 
   async function saveGeminiApiKey() {
-    const val = document.getElementById("geminiApiKeyInput").value.trim();
+    const inp = document.getElementById("geminiApiKeyInput");
+    const val = inp ? inp.value.trim() : "";
     if (!val) return;
     aiAppConfig.gemini_key = val;
     try {
@@ -8607,14 +8671,27 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     }).join('');
 
     if (instaGridEl) {
-      const itemsHtml = filtered.map(plant => `
-        <div class="insta-grid-item" onclick="openPlantModal('${plant.id}')" title="${plant.name}">
-          <img class="insta-grid-img" src="${plant.photo}" alt="${plant.name}" loading="lazy">
-          <div class="insta-gradient-overlay">
-            <span class="insta-plant-name">${plant.name}</span>
+      const itemsHtml = filtered.map(plant => {
+        const st = getPlantGridStatus(plant);
+        let badgeHtml = '';
+        if (st === 'overdue') {
+          badgeHtml = `<div class="insta-status-badge is-overdue" title="${t('Manteniment endarrerit', 'Mantenimiento atrasado', 'Maintenance overdue')}"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10h2v4h-2zm0 6h2v2h-2z"/></svg></div>`;
+        } else if (st === 'today') {
+          badgeHtml = `<div class="insta-status-badge is-today" title="${t('Toca manteniment avui', 'Toca mantenimiento hoy', 'Maintenance due today')}"></div>`;
+        } else if (st === 'due_soon') {
+          badgeHtml = `<div class="insta-status-badge is-due-soon" title="${t('Manteniment properament', 'Mantenimiento próximo', 'Maintenance due soon')}"></div>`;
+        }
+
+        return `
+          <div class="insta-grid-item" onclick="openPlantModal('${plant.id}')" title="${plant.name}">
+            <img class="insta-grid-img" src="${plant.photo}" alt="${plant.name}" loading="lazy">
+            ${badgeHtml}
+            <div class="insta-gradient-overlay">
+              <span class="insta-plant-name">${plant.name}</span>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
 
       const addCardHtml = `
         <div class="insta-grid-item insta-grid-add-card" onclick="switchAppTab('add')" title="${t('Afegir planta', 'Añadir planta', 'Add plant')}" role="button" tabindex="0">
@@ -8630,6 +8707,34 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
       instaGridEl.innerHTML = itemsHtml + addCardHtml;
     }
+  }
+
+  function getPlantGridStatus(plant) {
+    const ws = computeWaterStatus(plant);
+    const fs = computeFertStatus(plant);
+
+    // 1. S'ha passat el dia de manteniment (endarrerit) -> Senyal d'alarma
+    const isWaterOverdue = ws.daysLeft !== null && ws.daysLeft < 0;
+    const isFertOverdue = fs.canFertilize && fs.daysLeft !== null && fs.daysLeft < 0;
+    if (isWaterOverdue || isFertOverdue) {
+      return 'overdue';
+    }
+
+    // 2. Toca manteniment avui (daysLeft === 0) -> Cercle vermell
+    const isWaterToday = ws.daysLeft === 0;
+    const isFertToday = fs.canFertilize && fs.daysLeft === 0;
+    if (isWaterToday || isFertToday) {
+      return 'today';
+    }
+
+    // 3. Aviat necessitarà manteniment (1 o 2 dies) -> Cercle groc
+    const isWaterSoon = ws.daysLeft !== null && ws.daysLeft > 0 && ws.daysLeft <= 2;
+    const isFertSoon = fs.canFertilize && fs.daysLeft !== null && fs.daysLeft > 0 && fs.daysLeft <= 2;
+    if (isWaterSoon || isFertSoon) {
+      return 'due_soon';
+    }
+
+    return 'ok';
   }
 
   function getBadgeColor(st) {
