@@ -556,112 +556,142 @@
     .history-item.transplant { background: #fef9f3; }
     .history-item.pruning { background: #f3f8f4; }
 
-    /* VISTA DE CALENDARI SETMANAL I MENSUAL */
+    /* VISTA DE CALENDARI SETMANAL I MENSUAL (Calendari.png) */
     .calendar-container {
       display: none;
       flex-direction: column;
-      gap: 22px;
+      gap: 28px;
+      width: 100%;
     }
     .calendar-container.active {
       display: flex;
     }
     .calendar-panel {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 20px;
-      box-shadow: var(--shadow-sm);
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      width: 100%;
     }
     .calendar-panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 14px;
+      gap: 10px;
+      margin-bottom: 12px;
+      width: 100%;
     }
     .calendar-panel-title {
       font-family: var(--font-sans);
-      font-size: 1.15rem;
-      font-weight: 700;
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
       color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+    #calendarMonthTitle {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
     }
     .week-strip-grid {
       display: grid;
       grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 10px;
+      width: 100%;
     }
     .week-day-card {
-      background: #f9fbf9;
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 10px;
-      min-height: 120px;
+      background: var(--app-info-bg);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 12px 14px;
+      min-height: 105px;
       min-width: 0;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       gap: 6px;
+      box-sizing: border-box;
     }
     .week-day-card.today,
     .week-day-card.is-today {
-      background: #f0f9f2;
-      border: 2px solid #245831;
-      box-shadow: 0 3px 10px rgba(36, 88, 49, 0.1);
+      background: #ffffff;
+      border: 1.5px solid #165b4c;
+      box-shadow: 0 2px 8px rgba(22, 91, 76, 0.08);
+    }
+    body.dark-mode .week-day-card.today,
+    body.dark-mode .week-day-card.is-today {
+      background: #101c13;
+      border-color: #38a156;
     }
     .week-day-header {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-main);
       text-transform: uppercase;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 5px;
+      border-bottom: none;
+      padding-bottom: 0;
     }
     .week-day-card.today .week-day-header,
     .week-day-card.is-today .week-day-header {
-      color: #1e582e;
+      color: #165b4c;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 8px;
+      margin-bottom: 4px;
+    }
+    body.dark-mode .week-day-card.today .week-day-header,
+    body.dark-mode .week-day-card.is-today .week-day-header {
+      color: #86efac;
+      border-bottom-color: rgba(255,255,255,0.1);
     }
     .week-day-num {
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: var(--text-main);
       text-transform: none;
     }
+    .week-day-card.today .week-day-num,
+    .week-day-card.is-today .week-day-num {
+      color: #165b4c;
+    }
+    body.dark-mode .week-day-card.today .week-day-num,
+    body.dark-mode .week-day-card.is-today .week-day-num {
+      color: #86efac;
+    }
     .month-nav-group {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     .btn-cal-nav {
-      background: var(--bg-primary);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-main);
-      padding: 6px 12px;
-      border-radius: 7px;
-      font-size: 0.82rem;
-      font-weight: 600;
+      background: #9ab0a6;
+      border: none;
+      color: #16261d;
+      padding: 6px 11px;
+      border-radius: 6px;
+      font-size: 0.80rem;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.15s ease, border-color 0.15s ease;
+      transition: background 0.15s ease, opacity 0.15s ease;
     }
     .btn-cal-nav:hover {
-      background: var(--accent-light);
-      border-color: var(--border-strong);
+      background: #879f94;
     }
     body.dark-mode .btn-cal-nav {
-      background: #142218;
-      border-color: var(--border-subtle);
-      color: var(--text-main);
+      background: #374740;
+      color: #e2e8f0;
     }
     body.dark-mode .btn-cal-nav:hover {
-      background: #1e3324;
-      border-color: #35563e;
-      color: #86efac;
+      background: #465a51;
     }
     .month-weekdays-row {
       display: grid;
@@ -726,46 +756,59 @@
       min-width: 0;
     }
     .cal-empty-day {
-      font-size: 0.73rem;
+      font-size: 0.84rem;
       color: var(--text-muted);
-      font-style: italic;
+      font-style: normal;
       padding-top: 4px;
     }
     .cal-event-chip {
-      display: block;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       max-width: 100%;
       min-width: 0;
-      padding: 4px 6px;
-      border-radius: 6px;
-      font-size: 0.72rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.86rem;
       font-weight: 600;
       cursor: pointer;
-      background: #e5f3e8;
-      color: #184925;
-      border: 1px solid #c3e2c9;
+      background: #ddead4;
+      color: #1e3a1e;
+      border: none;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       transition: transform 0.1s ease;
+      box-sizing: border-box;
+    }
+    body.dark-mode .cal-event-chip {
+      background: #1b3824;
+      color: #bbf7d0;
     }
     .cal-event-chip:hover {
       transform: scale(1.02);
     }
     .cal-event-chip.overdue,
     .cal-event-chip.overdue-water {
-      background: #fef3c7;
-      color: #92400e;
-      border-color: #fcd34d;
+      background: #fed7aa;
+      color: #7c2d12;
+    }
+    body.dark-mode .cal-event-chip.overdue,
+    body.dark-mode .cal-event-chip.overdue-water {
+      background: rgba(180, 83, 9, 0.35);
+      color: #fdba74;
     }
     .cal-event-chip.fert {
       background: #f3e8ff;
       color: #6b21a8;
-      border-color: #d8b4fe;
+    }
+    body.dark-mode .cal-event-chip.fert {
+      background: #381e4a;
+      color: #d8b4fe;
     }
     .cal-event-chip.done {
       background: #dcfce7;
       color: #166534;
-      border-color: #86efac;
     }
     .cal-event-chip img {
       width: 16px;
@@ -776,10 +819,11 @@
     }
     @media (max-width: 768px) {
       .calendar-panel {
-        padding: 14px 12px;
+        padding: 0 !important;
       }
       .week-strip-grid {
         grid-template-columns: 1fr;
+        gap: 8px;
       }
       .week-day-card {
         min-height: auto;
@@ -789,30 +833,51 @@
       }
       .month-calendar-grid {
         grid-template-columns: 1fr;
-        gap: 6px;
+        gap: 5px;
       }
       .month-day-cell {
+        background: var(--app-info-bg);
+        border: none;
+        border-radius: 8px;
         min-height: auto;
-        padding: 8px 10px;
-      }
-      .month-day-cell.no-events:not(.today) {
-        padding: 6px 10px;
-        background: #f6f9f6;
-        opacity: 0.72;
-      }
-      .month-day-cell.no-events:not(.today) .month-day-number {
-        margin-bottom: 0;
-      }
-      .mobile-weekday {
-        display: inline;
-        text-transform: uppercase;
-        font-size: 0.72rem;
-        color: var(--text-muted);
-        margin-right: 4px;
+        padding: 9px 14px;
+        font-size: 0.86rem;
+        font-weight: 600;
+        color: var(--text-main);
       }
       .month-day-cell.other-month,
       .month-day-cell.empty {
-        display: none;
+        display: none !important;
+      }
+      .month-day-cell.today,
+      .month-day-cell.is-today {
+        background: #ffffff;
+        border: 1.5px solid #165b4c;
+        border-radius: 10px;
+        padding: 10px 14px;
+      }
+      body.dark-mode .month-day-cell.today,
+      body.dark-mode .month-day-cell.is-today {
+        background: #101c13;
+        border-color: #38a156;
+      }
+      .month-day-number {
+        font-size: 0.86rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 0;
+      }
+      .mobile-weekday {
+        display: inline !important;
+        font-weight: 700;
+        margin-right: 2px;
+      }
+      .mobile-weekday-today {
+        font-weight: 800;
+        color: #165b4c;
+      }
+      body.dark-mode .mobile-weekday-today {
+        color: #86efac;
       }
     }
 
@@ -1965,7 +2030,7 @@
     .app-view.active {
       display: block;
     }
-    #viewPlants {
+    #viewPlants, #viewCalendar {
       padding: 8px 14px calc(24px + env(safe-area-inset-bottom, 0px)) 14px;
       box-sizing: border-box;
       background: var(--bg-surface);
@@ -3709,8 +3774,8 @@
         <!-- PREVISIÓ SETMANAL (7 DIES) -->
         <div class="calendar-panel">
           <div class="calendar-panel-header">
-            <div class="calendar-panel-title" id="weeklyCalendarTitle">Propers 7 dies</div>
-            <span id="weeklyCalendarHint" style="font-size: 0.80rem; color: var(--text-muted);">Fes clic a qualsevol planta per obrir la seva fitxa</span>
+            <div class="calendar-panel-title" id="weeklyCalendarTitle">Previsió setmanal (propers 7 dies)</div>
+            <span id="weeklyCalendarHint" style="display:none;"></span>
           </div>
           <div class="week-strip-grid" id="weeklyCalendarGrid"></div>
         </div>
@@ -3720,9 +3785,9 @@
           <div class="calendar-panel-header">
             <div class="calendar-panel-title" id="calendarMonthTitle">Calendari mensual</div>
             <div class="month-nav-group">
-              <button type="button" class="btn-cal-nav" id="calPrevMonthBtn" onclick="changeCalendarMonth(-1)">‹ Mes anterior</button>
+              <button type="button" class="btn-cal-nav" id="calPrevMonthBtn" onclick="changeCalendarMonth(-1)">‹ Anterior</button>
               <button type="button" class="btn-cal-nav" id="calTodayBtn" onclick="resetCalendarToToday()">Avui</button>
-              <button type="button" class="btn-cal-nav" id="calNextMonthBtn" onclick="changeCalendarMonth(1)">Mes següent ›</button>
+              <button type="button" class="btn-cal-nav" id="calNextMonthBtn" onclick="changeCalendarMonth(1)">Següent ›</button>
             </div>
           </div>
           <div class="month-weekdays-row" id="monthWeekdaysRow">
@@ -8558,7 +8623,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       ? ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
       : (currentLang === "es"
           ? ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
-          : ["Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds"]);
+          : ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"]);
     const monthNames = currentLang === "en"
       ? ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
       : (currentLang === "es"
@@ -8571,7 +8636,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const d = new Date(todayMidnight);
       d.setDate(d.getDate() + i);
       const events = getProjectedEventsForDate(d);
-      const dayLabel = i === 0 ? t("Avui", "Hoy", "Today") : (i === 1 ? t("Demà", "Mañana", "Tomorrow") : dayNamesShort[d.getDay()]);
+      const weekDayName = (currentLang === "ca" && d.getDay() === 2) ? "DT" : dayNamesShort[d.getDay()].toUpperCase();
+      const dayLabel = i === 0 ? t("AVUI", "HOY", "TODAY") : (i === 1 ? t("DEMÀ", "MAÑANA", "TOMORROW") : weekDayName);
       const dateStr = d.toLocaleDateString(getLocale(), { day: "numeric", month: "short" });
 
       weekCardsHtml.push(`
@@ -8597,7 +8663,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     // 2. Renderitzar Calendari Mensual
     if (monthTitle) {
-      monthTitle.innerText = `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
+      monthTitle.innerText = `${monthNames[currentCalendarMonth].toUpperCase()} ${currentCalendarYear}`;
     }
 
     const firstDayOfMonth = new Date(currentCalendarYear, currentCalendarMonth, 1);
@@ -8626,17 +8692,15 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       cellsHtml.push(`
         <div class="month-day-cell ${isToday ? 'today' : ''} ${events.length === 0 ? 'no-events' : ''}">
           <div class="month-day-number">
-            <span><span class="mobile-weekday">${weekdayShort}</span>${day}${isToday ? ` <span class="mobile-weekday" style="color:#1e582e; font-weight:800;">· ${t('Avui', 'Hoy', 'Today')}</span>` : ''}</span>
-            ${events.length > 0 ? `<span style="font-size:0.68rem; color:var(--text-muted); font-weight:600;">${events.length}</span>` : ''}
+            <span><span class="mobile-weekday">${weekdayShort} </span>${day}${isToday ? ` <span class="mobile-weekday-today"> - ${t('AVUI', 'HOY', 'TODAY')}</span>` : ''}</span>
           </div>
           ${events.length > 0 ? `
           <div class="cal-events-list">
-            ${events.slice(0, 4).map(ev => `
+            ${events.map(ev => `
               <span class="cal-event-chip ${ev.urgent ? 'overdue-water' : ev.type}" onclick="openPlantModal('${ev.plant.id}')" title="${ev.plant.name}">
                 ${ev.label}
               </span>
             `).join('')}
-            ${events.length > 4 ? `<span style="font-size:0.68rem; color:var(--text-muted); padding-left:4px;">+${events.length - 4} ${t('més', 'más', 'more')}</span>` : ''}
           </div>
           ` : ''}
         </div>
@@ -9272,11 +9336,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("resetFiltersBtn", t("Restablir filtres", "Restablecer filtros", "Reset filters"));
     setElText("closeFilterBtn", t("Fet", "Listo", "Done"));
 
-    setElText("weeklyCalendarTitle", t("Propers 7 dies", "Próximos 7 días", "Next 7 days"));
-    setElText("weeklyCalendarHint", t("Clica una planta per obrir la fitxa", "Haz clic en una planta para abrir la ficha", "Click any plant to view details"));
-    setElText("calPrevMonthBtn", t("◀ Anterior", "◀ Anterior", "◀ Prev"));
+    setElText("weeklyCalendarTitle", t("Previsió setmanal (propers 7 dies)", "Previsión semanal (próximos 7 días)", "Weekly forecast (next 7 days)"));
+    setElText("calPrevMonthBtn", t("‹ Anterior", "‹ Anterior", "‹ Prev"));
     setElText("calTodayBtn", t("Avui", "Hoy", "Today"));
-    setElText("calNextMonthBtn", t("Següent ▶", "Siguiente ▶", "Next ▶"));
+    setElText("calNextMonthBtn", t("Següent ›", "Siguiente ›", "Next ›"));
 
     const wkRow = document.getElementById("monthWeekdaysRow");
     if (wkRow && wkRow.children.length === 7) {
