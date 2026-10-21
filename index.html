@@ -299,61 +299,6 @@
       outline: none;
     }
 
-    /* GRID */
-    .plants-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-      gap: 20px;
-    }
-
-    .plant-card {
-      background: var(--bg-card);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-subtle);
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.2s;
-      position: relative;
-    }
-
-    .plant-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--border-strong);
-    }
-
-    /* Targeta en estat de revisió: to botànic càlid subtil, mai border-left gruixut */
-    .plant-card.alert-water {
-      border-color: var(--status-overdue-border);
-      background: linear-gradient(180deg, #fffcfb 0%, #ffffff 100%);
-    }
-
-    .card-image-wrap {
-      position: relative;
-      width: 100%;
-      height: 230px;
-      background: #e8eee6;
-      overflow: hidden;
-      cursor: pointer;
-    }
-
-    .card-image-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.35s ease;
-    }
-
-    .plant-card:hover .card-image-wrap img { transform: scale(1.03); }
-
-    .tracker-section {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-    }
-
     .badge {
       font-size: 0.72rem;
       font-weight: 600;
@@ -372,116 +317,6 @@
     .badge-diff-easy { background: #e0f2fe; color: #075985; border: 1px solid #bae6fd; }
     .badge-diff-medium { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
 
-    .card-body {
-      padding: 16px 18px 16px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      gap: 12px;
-    }
-
-    .plant-name {
-      font-family: var(--font-display);
-      font-size: 2.2rem;
-      font-weight: 600;
-      color: var(--text-main);
-      margin-bottom: 2px;
-      line-height: 1.1;
-      letter-spacing: -0.01em;
-    }
-
-    .plant-scientific {
-      font-family: var(--font-display);
-      font-size: 0.9rem;
-      font-style: italic;
-      color: var(--text-muted);
-    }
-
-    .tracker-card {
-      border-radius: 8px;
-      padding: 8px 11px;
-      border: 1px solid var(--border-subtle);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      transition: all 0.2s ease;
-      background: #ffffff;
-    }
-
-    .tracker-card.status-overdue {
-      background: var(--status-overdue-bg);
-      border-color: var(--status-overdue-border);
-      color: var(--status-overdue-text);
-    }
-    .tracker-card.status-due-soon {
-      background: var(--status-due-soon-bg);
-      border-color: var(--status-due-soon-border);
-      color: var(--status-due-soon-text);
-    }
-    .tracker-card.status-ok {
-      background: var(--status-ok-bg);
-      border-color: var(--status-ok-border);
-      color: var(--status-ok-text);
-    }
-    .tracker-card.status-none {
-      background: var(--status-none-bg);
-      border-color: var(--status-none-border);
-      color: var(--status-none-text);
-    }
-    .tracker-card.status-winter {
-      background: var(--status-winter-bg);
-      border-color: var(--status-winter-border);
-      color: var(--status-winter-text);
-    }
-
-    .btn-action {
-      border: none;
-      padding: 6px 12px;
-      border-radius: 7px;
-      font-size: 0.80rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      transition: transform 0.1s ease, background 0.15s ease;
-      white-space: nowrap;
-      font-family: inherit;
-    }
-    .btn-action:active { transform: scale(0.96); }
-    .btn-water-action { background: #245831; color: #ffffff; }
-    .btn-water-action:hover { background: #183e22; color: #ffffff; }
-    .btn-fert-action { background: #0369a1; color: #ffffff; }
-    .btn-fert-action:hover { background: #075985; color: #ffffff; }
-    .btn-action-secondary {
-      background: var(--border-subtle);
-      color: var(--text-main);
-      border: 1px solid transparent;
-    }
-    .btn-action-secondary:hover {
-      background: var(--border-strong);
-      color: var(--text-main);
-    }
-    body.dark-mode .btn-action-secondary {
-      background: #1e3324;
-      color: #d1e5d5;
-      border-color: var(--border-subtle);
-    }
-    body.dark-mode .btn-action-secondary:hover {
-      background: #284430;
-      color: #ffffff;
-    }
-    .btn-done-today {
-      background: #1e592f !important;
-      color: #ffffff !important;
-      border: 1px solid #164624 !important;
-      box-shadow: 0 1px 3px rgba(22, 70, 36, 0.2);
-    }
-    .btn-done-today:hover {
-      background: #164624 !important;
-      color: #ffffff !important;
-    }
     @keyframes successPulse {
       0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45); }
       40% { transform: scale(1.02); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
@@ -1115,24 +950,9 @@
         width: 100%;
         justify-content: center;
       }
-      .plants-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
       .plant-card {
         width: 100%;
         max-width: 100%;
-      }
-      .card-image-wrap {
-        height: 220px;
-      }
-      .card-body {
-        padding: 14px 14px 16px;
-      }
-      .tracker-card {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
       }
 
       /* Fitxa completa de planta a smartphone: foto a dalt ocupant tot l'ample i més alçada */
@@ -1836,7 +1656,7 @@
       max-width: 600px;
       width: 100%;
       min-height: 100vh;
-      background: var(--bg-primary);
+      background: var(--bg-surface);
       display: flex;
       flex-direction: column;
       position: relative;
@@ -2146,8 +1966,9 @@
       display: block;
     }
     #viewPlants {
-      padding: 6px 6px calc(24px + env(safe-area-inset-bottom, 0px)) 6px;
+      padding: 8px 14px calc(24px + env(safe-area-inset-bottom, 0px)) 14px;
       box-sizing: border-box;
+      background: var(--bg-surface);
     }
     @keyframes viewSlideIn {
       from { opacity: 0; transform: translateY(6px); }
@@ -2158,8 +1979,8 @@
     .app-search-row {
       display: flex;
       align-items: center;
-      gap: 6px;
-      margin-bottom: 8px;
+      gap: 8px;
+      margin-bottom: 14px;
       width: 100%;
       box-sizing: border-box;
     }
@@ -2329,57 +2150,72 @@
     .plants-grid {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 36px;
       width: 100%;
     }
     .plant-card {
-      background: var(--bg-card);
-      border-radius: 18px;
-      border: 1px solid var(--border-subtle);
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      overflow: visible !important;
+      box-shadow: none !important;
       display: flex;
       flex-direction: column;
-      transition: transform 0.2s, box-shadow 0.2s;
+      width: 100%;
+      padding: 0;
+      transition: none;
+    }
+    .plant-card:hover {
+      transform: none !important;
+      box-shadow: none !important;
     }
     .plant-card .card-image-wrap {
       width: 100%;
-      aspect-ratio: 1 / 1;
-      height: auto;
-      max-height: 440px;
+      aspect-ratio: 3 / 4 !important;
+      height: auto !important;
+      max-height: none !important;
+      border-radius: 14px !important;
       position: relative;
       overflow: hidden;
       cursor: pointer;
       background: #eef2f5;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .plant-card .card-image-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      border-radius: 14px !important;
+      display: block;
+      transition: transform 0.25s ease;
     }
     .plant-card:hover .card-image-wrap img {
-      transform: scale(1.02);
+      transform: scale(1.015);
     }
     .plant-card .card-body {
-      padding: 16px;
+      padding: 16px 0 0 0;
       display: flex;
       flex-direction: column;
+      width: 100%;
+      box-sizing: border-box;
     }
     .plant-card .plant-name {
       font-family: var(--font-display);
-      font-size: 1.55rem;
+      font-size: 1.85rem;
       font-weight: 600;
       color: var(--text-main);
       line-height: 1.15;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
       cursor: pointer;
     }
     .plant-card .plant-scientific {
       font-style: italic;
-      font-size: 0.90rem;
+      font-size: 0.95rem;
       color: var(--text-muted);
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       cursor: pointer;
     }
 
@@ -2387,8 +2223,25 @@
     .tracker-section {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
       width: 100%;
+    }
+    .tracker-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+    .tracker-section-label {
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: var(--text-main);
+      text-transform: uppercase;
+      display: block;
+      text-align: left;
+      margin: 0;
+      padding-left: 1px;
     }
     .tracker-card {
       background: var(--app-info-bg) !important;
@@ -2402,20 +2255,6 @@
       gap: 6px;
       width: 100%;
       box-sizing: border-box;
-    }
-    .tracker-box-label {
-      font-size: 0.74rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      color: var(--text-main);
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 5px;
-      text-align: left;
-      align-self: flex-start;
-      margin-bottom: 2px;
     }
     .tracker-date-row {
       display: flex;
@@ -7618,50 +7457,54 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
           <div class="tracker-section">
             <!-- PRÒXIM REG (Galeria - Vista llista.png) -->
-            <div class="tracker-card ${ws.statusClass}" id="plant-water-box-${plant.id}">
-              <div class="tracker-box-label">${t('PRÒXIM REG', 'PRÓXIMO RIEGO', 'NEXT WATERING')}</div>
-              <div class="tracker-date-row">
-                <span class="tracker-big-date" id="plant-water-date-${plant.id}">${waterParts.dateStr}</span>
-                <span class="tracker-badge-pill ${ws.status === 'overdue' ? 'is-alert' : ''}" id="plant-water-badge-${plant.id}">${waterParts.badgeStr}</span>
-              </div>
-              <div class="tracker-box-last" id="plant-water-last-${plant.id}">${ws.lastText}</div>
-              <div class="tracker-btn-row">
-                <button class="btn-app-water ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
-                  ${ws.isToday ? t('Regat avui', 'Regado hoy', 'Watered today') : t('Regar avui', 'Regar hoy', 'Water today')}
-                </button>
-                <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Opcions de reg', 'Opciones de riego', 'Watering options')}" aria-label="Opcions de reg">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                </button>
+            <div class="tracker-group">
+              <div class="tracker-section-label">${t('PRÒXIM REG', 'PRÓXIMO RIEGO', 'NEXT WATERING')}</div>
+              <div class="tracker-card ${ws.statusClass}" id="plant-water-box-${plant.id}">
+                <div class="tracker-date-row">
+                  <span class="tracker-big-date" id="plant-water-date-${plant.id}">${waterParts.dateStr}</span>
+                  <span class="tracker-badge-pill ${ws.status === 'overdue' ? 'is-alert' : ''}" id="plant-water-badge-${plant.id}">${waterParts.badgeStr}</span>
+                </div>
+                <div class="tracker-box-last" id="plant-water-last-${plant.id}">${ws.lastText}</div>
+                <div class="tracker-btn-row">
+                  <button class="btn-app-water ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
+                    ${ws.isToday ? t('Regat avui', 'Regado hoy', 'Watered today') : t('Regar avui', 'Regar hoy', 'Water today')}
+                  </button>
+                  <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Opcions de reg', 'Opciones de riego', 'Watering options')}" aria-label="Opcions de reg">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
 
             <!-- PRÒXIMA FERTILITZACIÓ (Galeria - Vista llista.png) -->
-            <div class="tracker-card ${fs.statusClass}" id="plant-fert-box-${plant.id}">
-              <div class="tracker-box-label">${t('PRÒXIMA FERTILITZACIÓ', 'PRÓXIMO ABONO', 'NEXT FERTILIZER')}</div>
-              <div class="tracker-date-row">
-                <span class="tracker-big-date" id="plant-fert-date-${plant.id}">${fertParts.dateStr}</span>
-                <span class="tracker-badge-pill ${fs.status === 'overdue' ? 'is-alert' : ''}" id="plant-fert-badge-${plant.id}">${fertParts.badgeStr}</span>
-              </div>
-              <div class="tracker-box-last" id="plant-fert-last-${plant.id}">${fs.lastText}</div>
-              <div class="tracker-btn-row">
-                <button class="btn-app-fert ${fs.isToday ? 'btn-done-today' : ''}" id="plant-fert-btn-${plant.id}" onclick="recordAction('${plant.id}', 'fert', event)">
-                  ${fs.isToday ? t('Abonat avui', 'Abonado hoy', 'Fertilized today') : t('Fertilitzar avui', 'Abonar hoy', 'Fertilize today')}
-                </button>
-                <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Opcions d\'adob', 'Opciones de abono', 'Fertilizer options')}" aria-label="Opcions d'adob">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                </button>
-              </div>
-              <div style="margin-top: 8px;">
-                <a href="${getAmazonAffiliateUrl('fertilizer', plant)}" target="_blank" rel="noopener sponsored" class="btn-amz-pill" onclick="event.stopPropagation();">
-                  <span class="amz-tag">AMAZON</span>
-                  <span>${t("Comprar aquest tipus d'adob a Amazon ↗", "Comprar este tipo de abono en Amazon ↗", "Buy this fertilizer on Amazon ↗")}</span>
-                </a>
+            <div class="tracker-group">
+              <div class="tracker-section-label">${t('PRÒXIMA FERTILITZACIÓ', 'PRÓXIMO ABONO', 'NEXT FERTILIZER')}</div>
+              <div class="tracker-card ${fs.statusClass}" id="plant-fert-box-${plant.id}">
+                <div class="tracker-date-row">
+                  <span class="tracker-big-date" id="plant-fert-date-${plant.id}">${fertParts.dateStr}</span>
+                  <span class="tracker-badge-pill ${fs.status === 'overdue' ? 'is-alert' : ''}" id="plant-fert-badge-${plant.id}">${fertParts.badgeStr}</span>
+                </div>
+                <div class="tracker-box-last" id="plant-fert-last-${plant.id}">${fs.lastText}</div>
+                <div class="tracker-btn-row">
+                  <button class="btn-app-fert ${fs.isToday ? 'btn-done-today' : ''}" id="plant-fert-btn-${plant.id}" onclick="recordAction('${plant.id}', 'fert', event)">
+                    ${fs.isToday ? t('Abonat avui', 'Abonado hoy', 'Fertilized today') : t('Fertilitzar avui', 'Abonar hoy', 'Fertilize today')}
+                  </button>
+                  <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Opcions d\'adob', 'Opciones de abono', 'Fertilizer options')}" aria-label="Opcions d'adob">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  </button>
+                </div>
+                <div style="margin-top: 8px;">
+                  <a href="${getAmazonAffiliateUrl('fertilizer', plant)}" target="_blank" rel="noopener sponsored" class="btn-amz-pill" onclick="event.stopPropagation();">
+                    <span class="amz-tag">AMAZON</span>
+                    <span>${t("Comprar aquest tipus d'adob a Amazon ↗", "Comprar este tipo de abono en Amazon ↗", "Buy this fertilizer on Amazon ↗")}</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
