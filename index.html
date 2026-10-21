@@ -119,16 +119,6 @@
       overflow: hidden;
     }
 
-    .header-content { position: relative; z-index: 2; }
-
-    .header-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
     h1 {
       font-family: var(--font-display);
       font-size: 2.25rem;
@@ -136,50 +126,6 @@
       letter-spacing: -0.015em;
       margin-bottom: 4px;
       line-height: 1.2;
-    }
-
-    .header-subtitle {
-      font-size: 0.96rem;
-      color: #d1e5d5;
-      max-width: 680px;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .btn-header {
-      background: rgba(255, 255, 255, 0.18);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      backdrop-filter: blur(8px);
-      padding: 8px 14px;
-      border-radius: var(--radius-sm);
-      font-size: 0.83rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-      font-family: inherit;
-    }
-
-    .btn-header:hover { background: rgba(255, 255, 255, 0.28); }
-
-    .btn-header.btn-add-plant {
-      background: #22c55e;
-      border-color: #4ade80;
-      color: #0b2e13;
-      font-weight: 700;
-    }
-    .btn-header.btn-add-plant:hover { background: #15803d; color: #ffffff; }
-
-    .btn-header.supabase-connected {
-      background: #059669;
-      border-color: #34d399;
     }
 
     .stats-bar {
@@ -342,8 +288,6 @@
       }
     }
 
-    .filters-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-
     select {
       padding: 9px 12px;
       border-radius: var(--radius-sm);
@@ -353,31 +297,6 @@
       color: var(--text-main);
       cursor: pointer;
       outline: none;
-    }
-
-    .view-toggle {
-      display: flex;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      overflow: hidden;
-    }
-
-    .view-toggle button {
-      padding: 8px 12px;
-      border: none;
-      background: var(--bg-surface);
-      cursor: pointer;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      color: var(--text-muted);
-    }
-
-    .view-toggle button.active {
-      background: var(--accent);
-      color: white;
-      font-weight: 600;
     }
 
     /* GRID */
@@ -429,28 +348,6 @@
 
     .plant-card:hover .card-image-wrap img { transform: scale(1.03); }
 
-    .card-badges {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      right: 10px;
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-      pointer-events: none;
-    }
-
-    .card-badges-bottom {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      pointer-events: none;
-      z-index: 2;
-    }
-
     .tracker-section {
       display: flex;
       flex-direction: column;
@@ -483,13 +380,6 @@
       gap: 12px;
     }
 
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
     .plant-name {
       font-family: var(--font-display);
       font-size: 2.2rem;
@@ -505,17 +395,6 @@
       font-size: 0.9rem;
       font-style: italic;
       color: var(--text-muted);
-    }
-
-    /* CAPSULA DE CURA DESTIL·LADA (0 Fatiga Visual) */
-    .care-capsule {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      background: var(--bg-primary);
-      padding: 10px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border-subtle);
     }
 
     .tracker-card {
@@ -554,127 +433,6 @@
       background: var(--status-winter-bg);
       border-color: var(--status-winter-border);
       color: var(--status-winter-text);
-    }
-
-    .tracker-info {
-      flex: 1;
-      font-size: 0.81rem;
-      line-height: 1.55;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .tracker-title {
-      font-weight: 600;
-      font-size: 0.84rem;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      line-height: 1.45;
-    }
-    .tracker-next-date {
-      font-weight: 500;
-      display: block;
-      margin-top: 0;
-      color: var(--text-muted);
-      font-size: 0.78rem;
-      line-height: 1.45;
-    }
-    .tracker-last-date {
-      font-size: 0.74rem;
-      opacity: 0.85;
-      display: block;
-      line-height: 1.4;
-    }
-
-    .card-footer-links {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 4px;
-      font-size: 0.80rem;
-    }
-
-    .btn-detail-link {
-      background: transparent;
-      border: none;
-      color: var(--accent);
-      font-weight: 600;
-      font-size: 0.80rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 0;
-      transition: color 0.15s ease;
-      font-family: inherit;
-    }
-    .btn-detail-link:hover {
-      color: var(--accent-hover);
-      text-decoration: underline;
-    }
-
-    .btn-history-link {
-      background: transparent;
-      border: none;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: background 0.15s ease;
-      font-family: inherit;
-    }
-    .btn-history-link:hover {
-      background: var(--bg-primary);
-      color: var(--text-main);
-    }
-
-    .tracker-btn-group { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
-
-    /* Tracker a la fitxa detallada modal: botons per sota del text, alineats a la dreta */
-    #modalTrackerSection .tracker-card {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 10px;
-    }
-
-    #modalTrackerSection .tracker-info {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      line-height: 1.6;
-    }
-
-    #modalTrackerSection .tracker-title {
-      font-size: 0.88rem;
-      line-height: 1.45;
-    }
-
-    #modalTrackerSection .tracker-next-date {
-      font-size: 0.82rem;
-      line-height: 1.45;
-      margin-top: 0;
-    }
-
-    #modalTrackerSection .tracker-last-date {
-      font-size: 0.77rem;
-      line-height: 1.4;
-    }
-
-    #modalTrackerSection .tracker-btn-group {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      width: 100%;
-      margin-top: 4px;
-    }
-
-    #modalTrackerSection .tracker-btn-group .btn-action {
-      width: auto !important;
-      padding: 6px 14px;
     }
 
     .btn-action {
@@ -911,23 +669,6 @@
       right: 14px;
       z-index: 20;
     }
-    .modal-header { margin-bottom: 18px; }
-    .modal-section { margin-bottom: 16px; }
-    .modal-section-title {
-      font-size: 0.80rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.05em; color: var(--accent); margin-bottom: 6px;
-    }
-    .modal-box-highlight {
-      background: #f4f8f4; border: 1px solid #d2e4d3; border-radius: var(--radius-sm);
-      padding: 12px 14px; font-size: 0.86rem;
-    }
-    .modal-box-highlight p { margin-bottom: 4px; }
-    .tip-box {
-      background: #fdfaf3; border: 1px solid #ebdcb5;
-      padding: 12px 14px; border-radius: var(--radius-sm);
-      font-size: 0.85rem; color: #634304; margin-top: 14px;
-      line-height: 1.45;
-    }
 
     /* GALERIA D'EVOLUCIÓ A LA FITXA DE LA PLANTA */
     .modal-photo-caption-badge {
@@ -951,124 +692,6 @@
       font-weight: 600;
       border: 1px solid rgba(255,255,255,0.18);
       box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    }
-    .modal-photo-nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.88);
-      color: #1a241b;
-      border: 1px solid rgba(0,0,0,0.12);
-      font-size: 1.2rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 6;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      transition: background 0.15s ease, transform 0.15s ease;
-    }
-    .modal-photo-nav-btn:hover {
-      background: #ffffff;
-      transform: translateY(-50%) scale(1.06);
-    }
-    .modal-photo-nav-btn.prev { left: 10px; }
-    .modal-photo-nav-btn.next { right: 10px; }
-
-    .gallery-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-    .gallery-upload-btns {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .btn-gallery-upload {
-      background: #245831;
-      color: #ffffff;
-      border: none;
-      padding: 5px 11px;
-      border-radius: 7px;
-      font-size: 0.76rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: background 0.15s ease, transform 0.1s ease;
-      font-family: inherit;
-    }
-    .btn-gallery-upload:hover {
-      background: #183e22;
-    }
-    .btn-gallery-upload.secondary {
-      background: #eaf4ec;
-      color: #1e582e;
-      border: 1px solid #c2dec6;
-    }
-    .btn-gallery-upload.secondary:hover {
-      background: #d8ecdc;
-    }
-    .plant-gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
-      gap: 10px;
-      max-height: 255px;
-      overflow-y: auto;
-      padding: 4px 2px;
-    }
-    .gallery-item-card {
-      background: #f7faf7;
-      border: 2px solid var(--border-subtle);
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      position: relative;
-      transition: all 0.15s ease;
-      display: flex;
-      flex-direction: column;
-    }
-    .gallery-item-card:hover {
-      border-color: #7ab387;
-      transform: translateY(-1px);
-    }
-    .gallery-item-card.active {
-      border-color: #245831;
-      box-shadow: 0 0 0 2px rgba(36, 88, 49, 0.22);
-    }
-    .gallery-item-thumb-wrap {
-      position: relative;
-      width: 100%;
-      height: 86px;
-      background: #e5ece6;
-      overflow: hidden;
-    }
-    .gallery-item-thumb-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .gallery-badge-featured {
-      position: absolute;
-      top: 5px;
-      left: 5px;
-      background: rgba(36, 88, 49, 0.92);
-      color: #ffffff;
-      font-size: 0.65rem;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-      letter-spacing: 0.02em;
     }
     .gallery-delete-btn {
       position: absolute;
@@ -1094,111 +717,7 @@
       background: #dc2626;
       transform: scale(1.08);
     }
-    .gallery-item-meta {
-      padding: 5px 7px;
-      font-size: 0.72rem;
-      color: var(--text-main);
-      font-weight: 600;
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      background: var(--bg-surface);
-      border-top: 1px solid var(--border-subtle);
-    }
 
-    /* BOTONS EXTRA DE REG / ADOB (SNOOZE +1D I DATA PASSADA) */
-    .tracker-btn-group {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      align-items: center;
-    }
-    .btn-snooze-action {
-      background: #fef3c7;
-      color: #92400e;
-      border: 1px solid #fcd34d;
-      padding: 6px 10px;
-      border-radius: 7px;
-      font-size: 0.76rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      transition: all 0.15s ease;
-    }
-    .btn-snooze-action:hover {
-      background: #fde68a;
-      color: #78350f;
-    }
-    .btn-date-action {
-      background: rgba(255, 255, 255, 0.85);
-      color: var(--text-main);
-      border: 1px solid var(--border-strong);
-      padding: 6px 9px;
-      border-radius: 7px;
-      font-size: 0.76rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      transition: all 0.15s ease;
-    }
-    .btn-date-action:hover {
-      background: #ffffff;
-      border-color: var(--accent);
-    }
-
-    /* SECCIÓ MANTENIMENT (TRASPLANTAMENT I PODA) */
-    .maint-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .maint-card {
-      background: #f8faf8;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 8px;
-    }
-    .maint-card-title {
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .maint-card-info {
-      font-size: 0.80rem;
-      color: var(--text-muted);
-      line-height: 1.45;
-    }
-    .maint-card-info strong {
-      color: var(--text-main);
-    }
-    .btn-maint-action {
-      background: #edf5ee;
-      color: #1e582e;
-      border: 1px solid #c3dfc7;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 0.76rem;
-      font-weight: 600;
-      cursor: pointer;
-      align-self: flex-start;
-      transition: background 0.15s ease;
-    }
-    .btn-maint-action:hover {
-      background: #dcece0;
-    }
     .history-item.transplant { background: #fef9f3; }
     .history-item.pruning { background: #f3f8f4; }
 
@@ -1421,9 +940,6 @@
       flex-shrink: 0;
     }
     @media (max-width: 768px) {
-      .maint-grid {
-        grid-template-columns: 1fr;
-      }
       .calendar-panel {
         padding: 14px 12px;
       }
@@ -1488,54 +1004,7 @@
     .form-control:focus {
       border-color: var(--accent);
     }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
 
-    .source-options-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    @media (max-width: 520px) {
-      .source-options-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    .btn-source-option {
-      border: 2px dashed #256a38;
-      border-radius: 14px;
-      background: #f4faf5;
-      padding: 22px 14px;
-      text-align: center;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-      font-family: inherit;
-    }
-    .btn-source-option:hover {
-      background: #eaf5ec;
-      border-color: #1e582e;
-      transform: translateY(-2px);
-    }
-    .btn-source-camera {
-      border-color: #256a38;
-      background: #edf6ef;
-    }
-    .btn-source-gallery {
-      border-color: #0284c7;
-      background: #f0f9ff;
-    }
-    .btn-source-gallery:hover {
-      background: #e0f2fe;
-      border-color: #0369a1;
-    }
     .preset-chip-btn {
       background: #f4f8f4;
       border: 1px solid #cce0cd;
@@ -1551,14 +1020,6 @@
       background: #256a38;
       color: #ffffff;
       border-color: #256a38;
-    }
-    .photo-preview {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: var(--radius-sm);
-      display: none;
-      margin-top: 10px;
     }
 
     /* HISTÒRIC LIST */
@@ -1673,14 +1134,6 @@
         align-items: stretch;
         gap: 8px;
       }
-      .tracker-btn-group {
-        align-items: stretch;
-      }
-      .tracker-btn-group .btn-action {
-        width: 100%;
-        justify-content: center;
-        padding: 9px 12px;
-      }
 
       /* Fitxa completa de planta a smartphone: foto a dalt ocupant tot l'ample i més alçada */
       #plantModal .modal-card {
@@ -1718,33 +1171,6 @@
     /* =============================================================
        PUNT 9: ZOOM A PANTALLA COMPLETA (LIGHTBOX)
        ============================================================= */
-    #modalImg {
-      cursor: default;
-    }
-    .modal-zoom-hint-btn {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      background: rgba(18, 36, 22, 0.72);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(6px);
-      padding: 6px 11px;
-      border-radius: 999px;
-      font-size: 0.76rem;
-      font-weight: 600;
-      cursor: pointer;
-      z-index: 6;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      transition: background 0.2s ease, transform 0.15s ease;
-    }
-    .modal-zoom-hint-btn:hover {
-      background: rgba(18, 36, 22, 0.92);
-      transform: scale(1.04);
-    }
-
     .lightbox-overlay {
       position: fixed !important;
       inset: 0 !important;
@@ -1955,18 +1381,6 @@
       color-scheme: dark;
     }
 
-    body.dark-mode .view-toggle {
-      background: #101c13;
-      border-color: var(--border-subtle);
-    }
-    body.dark-mode .view-toggle button {
-      color: var(--text-muted);
-    }
-    body.dark-mode .view-toggle button.active {
-      background: var(--accent);
-      color: #ffffff;
-    }
-
     body.dark-mode .badge-zone {
       background: rgba(20, 34, 24, 0.92);
       color: #e2f1e5;
@@ -2003,26 +1417,13 @@
       background: var(--bg-surface);
       color: var(--text-main);
     }
-    body.dark-mode .modal-box-highlight,
-    body.dark-mode .maint-card,
     body.dark-mode .week-day-card,
     body.dark-mode .month-day-cell,
-    body.dark-mode .gallery-item-card,
     body.dark-mode .history-item {
       background: #192b1e !important;
       border-color: var(--border-subtle) !important;
       color: var(--text-main);
     }
-    body.dark-mode .gallery-item-meta {
-      background: #142218 !important;
-      color: var(--text-main) !important;
-      border-top-color: var(--border-subtle) !important;
-    }
-    body.dark-mode .gallery-item-card.active {
-      border-color: #4ade80 !important;
-      box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.25);
-    }
-    body.dark-mode .btn-gallery-upload.secondary,
     body.dark-mode #modalGalleryCount {
       background: #1e3324 !important;
       color: #86efac !important;
@@ -2040,11 +1441,6 @@
     body.dark-mode .month-day-cell.no-events:not(.today) {
       background: #122016 !important;
     }
-    body.dark-mode .tip-box {
-      background: rgba(202, 138, 4, 0.16);
-      border-color: rgba(250, 204, 21, 0.35);
-      color: #fef08a;
-    }
     body.dark-mode .cal-event-chip {
       background: #203d28;
       color: #bbf7d0;
@@ -2060,14 +1456,6 @@
       color: #e9d5ff;
       border-color: rgba(192, 132, 252, 0.45);
     }
-    body.dark-mode .btn-snooze-action {
-      background: rgba(202, 138, 4, 0.22);
-      color: #fde047;
-      border-color: rgba(250, 204, 21, 0.4);
-    }
-    body.dark-mode .btn-date-action,
-    body.dark-mode .btn-maint-action,
-    body.dark-mode .btn-history-link,
     body.dark-mode .preset-chip-btn {
       background: #1e3324;
       color: #d1e5d5;
@@ -2191,63 +1579,6 @@
     .pref-select:focus {
       border-color: var(--accent);
     }
-    .pref-backup-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .btn-pref-backup {
-      background: var(--bg-primary);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-main);
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.15s ease;
-      font-family: inherit;
-    }
-    .btn-pref-backup:hover {
-      background: var(--bg-tertiary);
-      border-color: var(--accent);
-    }
-    .app-footer {
-      margin-top: 45px;
-      padding: 22px 10px;
-      text-align: center;
-      border-top: 1px solid var(--border-subtle);
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-    .app-footer-links {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .app-footer-link {
-      color: var(--text-muted);
-      text-decoration: underline;
-      cursor: pointer;
-      transition: color 0.15s ease;
-      background: none;
-      border: none;
-      font-family: inherit;
-      font-size: 0.82rem;
-      padding: 0;
-    }
-    .app-footer-link:hover {
-      color: var(--accent);
-    }
 
     /* BOTÓ D'ACCIÓ EN BLOC PER REGAR */
     .btn-bulk-water {
@@ -2298,54 +1629,7 @@
       flex-wrap: wrap;
       gap: 8px;
     }
-    .affiliate-link-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      text-decoration: none;
-      background: #fff7ed;
-      color: #9a3412;
-      border: 1px solid #fed7aa;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      font-family: inherit;
-    }
-    .affiliate-link-btn:hover {
-      background: #ffedd5;
-      border-color: #fdba74;
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.15);
-    }
-    .affiliate-link-btn .amz-tag {
-      background: #ea580c;
-      color: #ffffff;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 1px 5px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-    body.dark-mode .affiliate-link-btn {
-      background: rgba(154, 52, 18, 0.22);
-      color: #fdba74;
-      border-color: rgba(251, 146, 60, 0.35);
-    }
-    body.dark-mode .affiliate-link-btn:hover {
-      background: rgba(154, 52, 18, 0.35);
-      border-color: #fb923c;
-    }
-    .affiliate-notice-badge {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-top: 6px;
-      font-style: italic;
-    }
-  
+
     /* =============================================================
        DISSENY NADIU APP PER SMARTPHONE (FOLIARI)
        ============================================================= */
@@ -2976,29 +2260,6 @@
       font-weight: 700;
       border: 1.5px solid var(--bg-primary);
     }
-    body.dark-mode .btn-source-option {
-      background: #172033;
-      border-color: #334155;
-      color: var(--text-main);
-    }
-    body.dark-mode .btn-source-camera {
-      border-color: #2e5638;
-      background: #15281b;
-    }
-    body.dark-mode .btn-source-camera strong {
-      color: #86efac !important;
-    }
-    body.dark-mode .btn-source-gallery {
-      border-color: #0369a1;
-      background: #0f2338;
-    }
-    body.dark-mode .btn-source-gallery strong {
-      color: #7dd3fc !important;
-    }
-    .btn-tune-trigger {
-      display: none;
-    }
-
     /* BARRA INFERIOR DE NAVEGACIÓ (Bottom Nav Bar - #bbf23d) */
     .bottom-nav-bar {
       position: fixed;
@@ -3127,12 +2388,6 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
-      width: 100%;
-    }
-    .tracker-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
       width: 100%;
     }
     .tracker-card {
@@ -3608,151 +2863,6 @@
       padding: 10px 12px;
     }
 
-    /* PANTALLA CALENDARI (Calendari.png) */
-    .calendar-screen-content {
-      padding: 6px 2px;
-    }
-    .cal-section-title {
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      color: var(--text-main);
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-    .cal-week-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .cal-day-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .cal-day-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .cal-day-title {
-      font-size: 0.88rem;
-      font-weight: 800;
-      color: var(--text-main);
-      text-transform: uppercase;
-    }
-    .cal-day-date {
-      font-size: 0.86rem;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-    .cal-day-tasks {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .cal-task-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #dcece0;
-      color: #1e582e;
-      font-size: 0.84rem;
-      font-weight: 700;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-    .cal-task-pill:hover {
-      opacity: 0.85;
-    }
-    body.dark-mode .cal-task-pill {
-      background: #1b3824;
-      color: #86efac;
-    }
-    .cal-empty-text {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-    .cal-month-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 24px;
-      margin-bottom: 12px;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .cal-month-title {
-      font-size: 0.92rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      color: var(--text-main);
-      text-transform: uppercase;
-    }
-    .cal-month-nav {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-cal-pill {
-      background: #8ea89d;
-      color: #ffffff;
-      border: none;
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .btn-cal-pill:hover {
-      background: #7d968c;
-    }
-    .cal-days-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .cal-day-row {
-      background: #f4f7f5;
-      border-radius: 10px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 42px;
-    }
-    body.dark-mode .cal-day-row {
-      background: #1e262c;
-    }
-    .cal-day-row.today {
-      border: 1.5px solid #5f9b65;
-      background: #edf5ee;
-    }
-    body.dark-mode .cal-day-row.today {
-      background: #1b3024;
-      border-color: #86efac;
-    }
-    .cal-day-row-label {
-      font-size: 0.84rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-    .cal-day-row.today .cal-day-row-label {
-      font-weight: 800;
-      color: #1e582e;
-    }
-    body.dark-mode .cal-day-row.today .cal-day-row-label {
-      color: #86efac;
-    }
-
     /* PANTALLA AJUSTAMENTS (Preferencies.png) */
     .settings-screen-content {
       padding: 6px 2px;
@@ -4050,7 +3160,6 @@
       padding: 0 8px;
       line-height: 1.2;
     }
-    .btn-detail-back,
     .plant-detail-top-bar .btn-header-back {
       background: rgba(255, 255, 255, 0.12) !important;
       border: none !important;
@@ -4069,15 +3178,12 @@
       transition: background 0.15s, transform 0.15s;
       -webkit-tap-highlight-color: transparent;
     }
-    .btn-detail-back:hover,
     .plant-detail-top-bar .btn-header-back:hover {
       background: rgba(255, 255, 255, 0.22) !important;
     }
-    .btn-detail-back:active,
     .plant-detail-top-bar .btn-header-back:active {
       transform: scale(0.92);
     }
-    .btn-detail-bell,
     .plant-detail-top-bar .btn-header-bell {
       background: none !important;
       background-color: transparent !important;
@@ -4096,12 +3202,10 @@
       transition: opacity 0.15s, transform 0.15s;
       -webkit-tap-highlight-color: transparent;
     }
-    .btn-detail-bell:hover,
     .plant-detail-top-bar .btn-header-bell:hover {
       opacity: 0.8;
       background: none !important;
     }
-    .btn-detail-bell:active,
     .plant-detail-top-bar .btn-header-bell:active {
       transform: scale(0.92);
     }
@@ -6226,14 +5330,6 @@
     switchAppTab('plants');
   }
 
-  function openAddPlantModal() {
-    switchAppTab('add');
-  }
-
-  function openPreferencesModal() {
-    switchAppTab('settings');
-  }
-
   // MODAL D'ALERTES I NOTIFICACIONS RÀPIDES
   function toggleQuickNotifPanel(eventOrForce, forceState) {
     if (eventOrForce && eventOrForce.stopPropagation) {
@@ -6394,33 +5490,6 @@
     }
     closePlantKebabMenu();
     if (currentModalPlantId) deletePlant(currentModalPlantId);
-  }
-
-  // HELPER FORMAT DATA AMIGABLE (Galeria - Vista llista.png)
-  function formatAppDueDate(dateObj, daysLeft) {
-    if (!dateObj || isNaN(dateObj.getTime())) return "-";
-    const weekday = dateObj.toLocaleDateString(getLocale(), { weekday: 'long' });
-    const day = dateObj.getDate();
-    const month = dateObj.toLocaleDateString(getLocale(), { month: 'long' });
-    const formattedDate = `${weekday}, ${day} ${currentLang === 'ca' ? "d'" : (currentLang === 'es' ? "de " : "")}${month}`;
-
-    if (daysLeft === null || daysLeft === undefined) {
-      return formattedDate;
-    }
-    if (daysLeft < 0) {
-      const overdueDays = Math.abs(daysLeft);
-      if (overdueDays === 1) {
-        return `${t('Ahir', 'Ayer', 'Yesterday')} (${formattedDate})`;
-      }
-      return `${t(`Fa ${overdueDays} dies`, `Hace ${overdueDays} días`, `${overdueDays} days ago`)} (${formattedDate})`;
-    }
-    if (daysLeft === 0) {
-      return `${t('Avui', 'Hoy', 'Today')} (${formattedDate})`;
-    }
-    if (daysLeft === 1) {
-      return `${t('Demà', 'Mañana', 'Tomorrow')} (${formattedDate})`;
-    }
-    return `${t(`En ${daysLeft} dies`, `En ${daysLeft} días`, `In ${daysLeft} days`)} (${formattedDate})`;
   }
 
   // HELPER FORMAT DATA COMPOSAT (Galeria - Vista llista.png i Fixta planta.png)
@@ -7008,7 +6077,6 @@
   // -------------------------------------------------------------
   const STORAGE_CATALOG_KEY = "registre_plantes_catalog_v4";
   const STORAGE_HISTORY_KEY = "registre_plantes_history_v4";
-  const SUPABASE_CONFIG_KEY = "registre_plantes_supabase_cfg";
 
   const DEFAULT_SUPABASE_URL = "https://uxspngtnsfabmsanyumd.supabase.co";
   const DEFAULT_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4c3BuZ3Ruc2ZhYm1zYW55dW1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NTQ3NzUsImV4cCI6MjEwNzAzMDc3NX0.Wf6vPtmDPkdZhuznb0CN31UYw-zBKoMdWzwrzQNreCw";
@@ -7852,40 +6920,6 @@
   let currentAIIdentifiedPlant = null;
   let currentAIPhotoBase64 = null;
 
-  function toggleAICfgPanel() {
-    const p = document.getElementById("aiCfgPanel");
-    if (!p) return;
-    p.style.display = (p.style.display === "none" || !p.style.display) ? "block" : "none";
-    if (p.style.display === "block" && aiAppConfig.gemini_key) {
-      const inp = document.getElementById("geminiApiKeyInput");
-      if (inp) inp.value = aiAppConfig.gemini_key;
-    }
-  }
-
-  async function saveGeminiApiKey() {
-    const inp = document.getElementById("geminiApiKeyInput");
-    const val = inp ? inp.value.trim() : "";
-    if (!val) return;
-    aiAppConfig.gemini_key = val;
-    try {
-      localStorage.setItem("registre_plantes_gemini_key", val);
-    } catch(e) {}
-
-    if (supabaseClient && isCloudConnected) {
-      try {
-        await supabaseClient
-          .from('plantes_history')
-          .upsert({ id: 'app_config', data: aiAppConfig, updated_at: new Date().toISOString() });
-      } catch(e) {}
-    }
-    showToast("Clau de Gemini desada amb èxit!", "🔑");
-    toggleAICfgPanel();
-  }
-
-  function openAddPlantModal() {
-    switchAppTab('add');
-  }
-
   function resetAIModal() {
     currentAIIdentifiedPlant = null;
     currentAIPhotoBase64 = null;
@@ -8255,28 +7289,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   // estan inicialitzats a l'inici de l'script per a la pantalla de càrrega)
   // -------------------------------------------------------------
 
-  // Diccionari de traducció per claus i textos de contingut botànic
-  const plantVocabulary = {
-    // Ubicacions
-    "interior": { ca: "🏠 Interior", es: "🏠 Interior", en: "🏠 Indoor" },
-    "exterior": { ca: "☀️ Exterior", es: "☀️ Exterior", en: "☀️ Outdoor" },
-    // Dificultats
-    "molt_facil": { ca: "Molt fàcil", es: "Muy fácil", en: "Very easy" },
-    "facil": { ca: "Fàcil", es: "Fácil", en: "Easy" },
-    "mitjana": { ca: "Mitjana", es: "Media", en: "Moderate" },
-    // Toxicitat
-    "safe": { ca: "🟢 Segura per mascotes.", es: "🟢 Segura para mascotas.", en: "🟢 Pet friendly." },
-    "toxic": { ca: "🔴 Tòxica en cas d'ingesta per mascotes.", es: "🔴 Tóxica en caso de ingesta por mascotas.", en: "🔴 Toxic if ingested by pets." },
-    // Temporades d'adob
-    "spring_summer": { ca: "Primavera i Estiu", es: "Primavera y Verano", en: "Spring and Summer" },
-    "all_year": { ca: "Tot l'any", es: "Todo el año", en: "All year round" },
-    // Llums típics
-    "light_indirect_bright": { ca: "Llum indirecta molt brillant", es: "Luz indirecta muy brillante", en: "Very bright indirect light" },
-    "light_indirect_moderate": { ca: "Llum indirecta moderada", es: "Luz indirecta moderada", en: "Moderate indirect light" },
-    "light_low_tolerant": { ca: "Molt adaptable: tolera espais foscos o amb poca llum", es: "Muy adaptable: tolera poca luz", en: "Very adaptable: tolerates low light" },
-    "light_direct_sun": { ca: "Sol directe abundant", es: "Sol directo abundante", en: "Full direct sun" }
-  };
-
   const roomVocabulary = {
     "salo": { ca: "Saló", es: "Salón", en: "Living Room" },
     "cuina": { ca: "Cuina", es: "Cocina", en: "Kitchen" },
@@ -8296,13 +7308,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       return roomVocabulary[key][currentLang];
     }
     return roomVocabulary["salo"][currentLang] || "Saló";
-  }
-
-  function trKey(key, fallback = "") {
-    if (plantVocabulary[key] && plantVocabulary[key][currentLang]) {
-      return plantVocabulary[key][currentLang];
-    }
-    return fallback || key;
   }
 
   function trText(str) {
@@ -10048,10 +9053,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   // -------------------------------------------------------------
   // PREFERÈNCIES: MODE CLAR/FOSC I IDIOMA (CATALÀ / ESPAÑOL)
   // -------------------------------------------------------------
-  function openPreferencesModal() {
-    switchAppTab('settings');
-  }
-
   let currentTheme = "system"; // 'system', 'light', 'dark'
 
   function getStoredThemePreference() {
@@ -10368,10 +9369,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       }
     }
 
-    setElText("appMainTitle", t("🌱 Les Meves Plantes i Seguiment de Reg", "🌱 Mis Plantas y Seguimiento de Riego", "🌱 My Plants & Care Tracker"));
-    setElText("appMainSubtitle", t("Guia botànica personal amb control intel·ligent de reg, adob i avisos per temporada.", "Guía botánica personal con control inteligente de riego, abono y avisos por temporada.", "Personal botanical guide with intelligent watering, fertilizer schedules, and seasonal care."));
-    setElText("addPlantHeaderBtn", t("➕ Afegir Planta", "➕ Añadir Planta", "➕ Add Plant"));
-    setElText("prefHeaderBtnLabel", t("Preferències", "Preferencias", "Settings"));
+    setElText("calendarScreenTitle", t("Calendari", "Calendario", "Calendar"));
+    setElText("addScreenMainTitle", t("Afegir planta", "Añadir planta", "Add plant"));
 
     const searchInp = document.getElementById("searchInput");
     if (searchInp) searchInp.placeholder = t("Cerca per nom comú o científic...", "Buscar por nombre común o científico...", "Search by common or scientific name...");
@@ -10456,9 +9455,8 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("emptyStateDesc", t("Prova de canviar els filtres o el text de cerca.", "Prueba a cambiar los filtros o el texto de búsqueda.", "Try adjusting filters or search text."));
     setElText("emptyStateAddBtn", t("Afegir planta", "Añadir planta", "Add plant"));
 
-    // Modal de Preferències / Ajustaments
-    setElText("prefModalTitle", t("Ajustaments", "Ajustes", "Settings"));
-    setElText("prefModalSubtitle", t("Personalitza l'aparença visual, l'idioma i gestiona les teves dades.", "Personaliza la apariencia visual, el idioma y gestiona tus datos.", "Customize appearance, language, and manage your plant data."));
+    // Preferències / Ajustaments
+    setElText("settingsScreenTitle", t("Ajustaments", "Ajustes", "Settings"));
     setElText("prefThemeSectionLabel", t("Tema", "Tema", "Theme"));
     setElText("prefThemeSystemText", t("Sistema", "Sistema", "System"));
     setElText("prefThemeLightText", t("Mode Clar", "Modo Claro", "Light Mode"));
@@ -10493,7 +9491,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("prefLegalSectionLabel", t("Legalitat i privacitat", "Legalidad y privacidad", "Legal & privacy"));
     setElText("prefLegalTermsText", t("Avís Legal i Condicions", "Aviso Legal y Condiciones", "Terms of Service"));
     setElText("prefLegalPrivacyText", t("Política de Privacitat", "Política de Privacidad", "Privacy Policy"));
-    setElText("prefCloseBtn", t("Fet", "Listo", "Done"));
 
     // Modal Legal
     setElText("legalModalTitle", t("Informació legal i privacitat", "Información legal y privacidad", "Legal information & privacy"));
@@ -10563,7 +9560,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("modalFertTypeLabel", t("Tipus:", "Tipo:", "Type:"));
     setElText("modalFertFreqLabel", t("Freqüència:", "Frecuencia:", "Frequency:"));
     setElText("modalFertSeasonLabel", t("Temporada activa:", "Temporada activa:", "Active season:"));
-    setElText("modalWaterSectionTitle", t("Pauta de reg", "Pauta de riego", "Watering routine"));
     setElText("modalWaterSummerLabel", t("Estiu:", "Verano:", "Summer:"));
     setElText("modalWaterWinterLabel", t("Hivern:", "Invierno:", "Winter:"));
     setElText("modalLightSectionTitle", t("Llum i ubicació", "Luz y ubicación", "Light & placement"));
@@ -10572,9 +9568,6 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("modalGuideHeading", t("GUIA BÀSICA", "GUÍA BÁSICA", "BASIC GUIDE"));
     setElText("modalSecurityHeading", t("SEGURETAT", "SEGURIDAD", "SAFETY"));
     setElText("modalGalleryHeading", t("GALERIA", "GALERÍA", "GALLERY"));
-    setElText("modalGalleryTitleText", t("Galeria d'evolució", "Galería de evolución", "Growth gallery"));
-    setElText("modalGalleryCameraBtn", t("Fer foto", "Hacer foto", "Take photo"));
-    setElText("modalGalleryUploadBtn", t("Pujar foto", "Subir foto", "Upload photo"));
 
     // Enllaços d'afiliació Amazon (foliari-21)
     setElText("amzTransplantText", t("Veure testos de fang i auto-reg recomanats ↗", "Ver macetas de barro y autorriego recomendadas ↗", "Recommended terracotta & self-watering pots ↗"));
