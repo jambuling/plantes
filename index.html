@@ -1746,29 +1746,41 @@
     }
 
     .lightbox-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(8, 14, 10, 0.94);
-      backdrop-filter: blur(8px);
-      z-index: 2500;
+      position: fixed !important;
+      inset: 0 !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      width: 100dvw !important;
+      height: 100vh !important;
+      height: 100dvh !important;
+      background: rgba(6, 12, 8, 0.96) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      z-index: 9999999 !important;
       display: none;
       flex-direction: column;
       user-select: none;
+      -webkit-user-select: none;
+      box-sizing: border-box;
     }
     .lightbox-overlay.active {
-      display: flex;
+      display: flex !important;
     }
     .lightbox-topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 20px;
+      padding: max(14px, env(safe-area-inset-top, 14px)) 20px 14px 20px;
       color: #ffffff;
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.45);
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-      z-index: 10;
+      z-index: 20;
       gap: 12px;
       flex-wrap: wrap;
+      flex-shrink: 0;
     }
     .lightbox-caption {
       font-size: 0.92rem;
@@ -1789,10 +1801,24 @@
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.15s ease;
+      transition: background 0.15s ease, transform 0.1s ease;
     }
     .lightbox-btn:hover {
       background: rgba(255, 255, 255, 0.26);
+    }
+    .lightbox-btn:active {
+      transform: scale(0.96);
+    }
+    .lightbox-close-btn {
+      background: rgba(220, 38, 38, 0.75) !important;
+      border: 1px solid rgba(248, 113, 113, 0.6) !important;
+      color: #ffffff !important;
+      font-size: 1.05rem !important;
+      font-weight: 700 !important;
+      padding: 6px 14px !important;
+    }
+    .lightbox-close-btn:hover {
+      background: #dc2626 !important;
     }
     .lightbox-stage {
       flex: 1;
@@ -5734,10 +5760,10 @@
   <div class="lightbox-topbar">
     <div class="lightbox-caption" id="lightboxCaption"></div>
     <div class="lightbox-controls">
-      <button type="button" class="lightbox-btn" onclick="adjustLightboxZoom(-0.5)" title="Reduir zoom">➖</button>
+      <button type="button" class="lightbox-btn" onclick="adjustLightboxZoom(-0.5)" title="Reduir zoom" aria-label="Reduir zoom">➖</button>
       <button type="button" class="lightbox-btn" id="lightboxZoomLevelBtn" onclick="resetLightboxZoom()" title="Restablir zoom">100%</button>
-      <button type="button" class="lightbox-btn" onclick="adjustLightboxZoom(0.5)" title="Ampliar zoom">➕</button>
-      <button type="button" class="lightbox-btn" style="background:rgba(220, 38, 38, 0.35); border-color:rgba(248, 113, 113, 0.5);" onclick="closePhotoLightbox()">✕ Tancar</button>
+      <button type="button" class="lightbox-btn" onclick="adjustLightboxZoom(0.5)" title="Ampliar zoom" aria-label="Ampliar zoom">➕</button>
+      <button type="button" class="lightbox-btn lightbox-close-btn" id="lightboxCloseBtn" onclick="closePhotoLightbox()" title="Tancar visor" aria-label="Tancar">✕</button>
     </div>
   </div>
   <div class="lightbox-stage" id="lightboxStage" onclick="handleLightboxStageClick(event)">
@@ -9799,19 +9825,32 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   let lightboxDragStartY = 0;
   let lightboxHasDragged = false;
 
-  function openPhotoLightbox() {
-    if (!currentModalPlantId) return;
-    const plant = plantsCatalog.find(p => p.id === currentModalPlantId);
+  function openPhotoLightbox(optPlantId, optIndex) {
+    const targetId = optPlantId || currentModalPlantId;
+    if (!targetId) return;
+    const plant = plantsCatalog.find(p => p.id === targetId);
     if (!plant) return;
+
+    currentModalPlantId = targetId;
+    if (typeof optIndex === 'number') {
+      currentModalGalleryIndex = optIndex;
+    }
 
     resetLightboxZoom();
     updateLightboxView(plant);
-    document.getElementById("photoLightboxModal").classList.add("active");
+    const lb = document.getElementById("photoLightboxModal");
+    if (lb) {
+      lb.classList.add("active");
+      lb.style.display = "flex";
+    }
   }
 
   function closePhotoLightbox() {
     const lb = document.getElementById("photoLightboxModal");
-    if (lb) lb.classList.remove("active");
+    if (lb) {
+      lb.classList.remove("active");
+      lb.style.display = "none";
+    }
     resetLightboxZoom();
   }
 
@@ -9839,6 +9878,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       const showNav = gallery.length > 1;
       prevBtn.style.display = showNav ? "flex" : "none";
       nextBtn.style.display = showNav ? "flex" : "none";
+    }
+
+    const closeBtn = document.getElementById("lightboxCloseBtn");
+    if (closeBtn) {
+      closeBtn.title = t("Tancar visor", "Cerrar visor", "Close lightbox");
     }
   }
 
@@ -9912,12 +9956,14 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const lbImg = document.getElementById("lightboxImg");
     if (!stage || !lbImg) return;
 
+    // Roda del ratolí per ampliar/reduir
     stage.addEventListener("wheel", (e) => {
       e.preventDefault();
       const delta = e.deltaY < 0 ? 0.25 : -0.25;
       adjustLightboxZoom(delta);
     }, { passive: false });
 
+    // Ratolí: arrossegar imatge quan hi ha zoom
     lbImg.addEventListener("mousedown", (e) => {
       if (lightboxZoom <= 1) return;
       e.preventDefault();
@@ -9937,6 +9983,65 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     window.addEventListener("mouseup", () => {
       isLightboxDragging = false;
+    });
+
+    // Tàctil: suport per a smartphones (touchstart, touchmove, touchend)
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let lastTouchTapTime = 0;
+
+    lbImg.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+        if (lightboxZoom > 1) {
+          isLightboxDragging = true;
+          lightboxHasDragged = false;
+          lightboxDragStartX = touch.clientX - lightboxPanX;
+          lightboxDragStartY = touch.clientY - lightboxPanY;
+        }
+      }
+    }, { passive: true });
+
+    lbImg.addEventListener("touchmove", (e) => {
+      if (isLightboxDragging && e.touches.length === 1) {
+        const touch = e.touches[0];
+        const dist = Math.hypot(touch.clientX - touchStartX, touch.clientY - touchStartY);
+        if (dist > 6) {
+          lightboxHasDragged = true;
+        }
+        lightboxPanX = touch.clientX - lightboxDragStartX;
+        lightboxPanY = touch.clientY - lightboxDragStartY;
+        applyLightboxTransform();
+      }
+    }, { passive: true });
+
+    lbImg.addEventListener("touchend", (e) => {
+      isLightboxDragging = false;
+      const now = Date.now();
+      if (!lightboxHasDragged && (now - lastTouchTapTime < 320)) {
+        // Doble toc ràpid per fer zoom
+        if (lightboxZoom === 1) {
+          lightboxZoom = 2.2;
+        } else {
+          lightboxZoom = 1;
+          lightboxPanX = 0;
+          lightboxPanY = 0;
+        }
+        applyLightboxTransform();
+      }
+      lastTouchTapTime = now;
+    });
+
+    // Tecla Escape per tancar
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        const lb = document.getElementById("photoLightboxModal");
+        if (lb && (lb.classList.contains("active") || lb.style.display === "flex")) {
+          closePhotoLightbox();
+        }
+      }
     });
   })();
 
@@ -10785,14 +10890,21 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   }
 
   function closeModal(modalId) {
-    if (modalId === 'plantModal') currentModalPlantId = null;
+    if (modalId === 'plantModal') {
+      currentModalPlantId = null;
+      closePhotoLightbox();
+    }
     if (modalId === 'editPlantModal') currentEditingPlantId = null;
-    document.getElementById(modalId).classList.remove("active");
+    const m = document.getElementById(modalId);
+    if (m) m.classList.remove("active");
   }
 
   window.onclick = function(e) {
     if (e.target.classList.contains('modal-overlay')) {
-      if (e.target.id === 'plantModal') currentModalPlantId = null;
+      if (e.target.id === 'plantModal') {
+        currentModalPlantId = null;
+        closePhotoLightbox();
+      }
       if (e.target.id === 'editPlantModal') currentEditingPlantId = null;
       e.target.classList.remove('active');
     }
