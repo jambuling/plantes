@@ -4165,7 +4165,7 @@
       object-fit: cover !important;
       object-position: center !important;
       display: block;
-      cursor: pointer;
+      cursor: zoom-in !important;
       border-radius: 12px;
     }
     .carousel-arrow {
@@ -4315,7 +4315,7 @@
       flex: 1;
     }
     .btn-maint-reg {
-      background: var(--accent);
+      background: #5f9b65;
       color: #ffffff;
       border: none;
       border-radius: 6px;
@@ -4328,17 +4328,17 @@
       flex-shrink: 0;
     }
     .btn-maint-reg:hover {
-      background: var(--accent-hover);
+      background: #4e8554;
     }
     .btn-maint-reg:active {
       transform: scale(0.96);
     }
     body.dark-mode .btn-maint-reg {
-      background: #256a38;
+      background: #5f9b65;
       color: #ffffff;
     }
     body.dark-mode .btn-maint-reg:hover {
-      background: #2f8547;
+      background: #4e8554;
     }
     .maint-item-sub {
       font-size: 0.80rem;
@@ -4385,7 +4385,7 @@
       overflow: hidden;
       position: relative;
       background: var(--bg-surface);
-      cursor: pointer;
+      cursor: zoom-in;
       box-shadow: 0 1px 3px rgba(0,0,0,0.06);
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
@@ -4451,6 +4451,31 @@
       padding: 0 2px !important;
     }
 
+    /* SPINNER SCROLL INFINIT */
+    .infinite-scroll-dot-spinner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 0;
+    }
+    .infinite-scroll-dot-spinner .is-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: isDotBounce 0.6s infinite alternate ease-in-out;
+    }
+    .infinite-scroll-dot-spinner .is-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .infinite-scroll-dot-spinner .is-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes isDotBounce {
+      from { transform: translateY(0); opacity: 0.35; }
+      to { transform: translateY(-7px); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -4538,6 +4563,16 @@
 
       <!-- VISTA GRAELLA 3 COLUMNES (Galeria - Vista graella.png) -->
       <div class="insta-grid" id="plantsTableContainer" style="display:none;"></div>
+
+      <!-- SCROLL INFINIT: SENTINELLA I SPINNER -->
+      <div id="infiniteScrollSentinel" style="height: 20px; width: 100%; pointer-events: none;"></div>
+      <div id="infiniteScrollSpinner" style="display: none; justify-content: center; align-items: center; padding: 18px 0; width: 100%;">
+        <div class="infinite-scroll-dot-spinner" aria-label="Carregant més plantes...">
+          <div class="is-dot"></div>
+          <div class="is-dot"></div>
+          <div class="is-dot"></div>
+        </div>
+      </div>
 
       <!-- ESTAT BUIT -->
       <div class="empty-state" id="emptyState" style="display:none;">
@@ -4973,7 +5008,7 @@
     <!-- Carrusel de fotos amb fletxes superposades -->
     <div class="modal-image-wrap">
       <button type="button" class="carousel-arrow prev" id="modalPhotoPrevBtn" onclick="stepModalGalleryPhoto(-1)" aria-label="Foto anterior">‹</button>
-      <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta">
+      <img id="modalImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Foto de la planta" onclick="openPhotoLightbox()" title="Fer zoom a la foto">
       <button type="button" class="carousel-arrow next" id="modalPhotoNextBtn" onclick="stepModalGalleryPhoto(1)" aria-label="Foto següent">›</button>
       <div class="modal-photo-caption-badge">
         <span class="modal-photo-date-pill" id="modalPhotoDatePill" style="display:none;"></span>
@@ -8523,6 +8558,216 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     `;
   }
 
+  const PLANTS_PER_BATCH = 9;
+  let currentFilteredPlants = [];
+  let displayedPlantsCount = 0;
+  let infiniteScrollObserver = null;
+  let isLoadingMorePlants = false;
+  let scrollThrottleTimer = null;
+
+  function renderPlantCardHtml(plant) {
+    getPlantGallery(plant);
+    const ws = computeWaterStatus(plant);
+    const fs = computeFertStatus(plant);
+    const isCardAlert = (ws.status === 'overdue');
+    const waterParts = formatAppDateParts(ws.nextDateObj, ws.daysLeft, ws.status);
+    const fertParts = formatAppDateParts(fs.nextDateObj, fs.daysLeft, fs.status);
+
+    return `
+      <div class="plant-card ${isCardAlert ? 'alert-water' : ''}" id="plant-card-${plant.id}">
+        <div class="card-image-wrap" onclick="openPlantModal('${plant.id}')">
+          <img src="${plant.photo}" alt="${plant.name}" loading="lazy" decoding="async">
+        </div>
+
+        <div class="card-body">
+          <div onclick="openPlantModal('${plant.id}')" style="cursor:pointer;">
+            <h2 class="plant-name">${plant.name}</h2>
+            <p class="plant-scientific">${plant.scientific}</p>
+          </div>
+
+          <div class="tracker-section">
+            <!-- PRÒXIM REG (Galeria - Vista llista.png) -->
+            <div class="tracker-card ${ws.statusClass}" id="plant-water-box-${plant.id}">
+              <div class="tracker-box-label">${t('PRÒXIM REG', 'PRÓXIMO RIEGO', 'NEXT WATERING')}</div>
+              <div class="tracker-date-row">
+                <span class="tracker-big-date" id="plant-water-date-${plant.id}">${waterParts.dateStr}</span>
+                <span class="tracker-badge-pill ${ws.status === 'overdue' ? 'is-alert' : ''}" id="plant-water-badge-${plant.id}">${waterParts.badgeStr}</span>
+              </div>
+              <div class="tracker-box-last" id="plant-water-last-${plant.id}">${ws.lastText}</div>
+              <div class="tracker-btn-row">
+                <button class="btn-app-water ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
+                  ${ws.isToday ? t('Regat avui', 'Regado hoy', 'Watered today') : t('Regar avui', 'Regar hoy', 'Water today')}
+                </button>
+                <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Opcions de reg', 'Opciones de riego', 'Watering options')}" aria-label="Opcions de reg">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- PRÒXIMA FERTILITZACIÓ (Galeria - Vista llista.png) -->
+            <div class="tracker-card ${fs.statusClass}" id="plant-fert-box-${plant.id}">
+              <div class="tracker-box-label">${t('PRÒXIMA FERTILITZACIÓ', 'PRÓXIMO ABONO', 'NEXT FERTILIZER')}</div>
+              <div class="tracker-date-row">
+                <span class="tracker-big-date" id="plant-fert-date-${plant.id}">${fertParts.dateStr}</span>
+                <span class="tracker-badge-pill ${fs.status === 'overdue' ? 'is-alert' : ''}" id="plant-fert-badge-${plant.id}">${fertParts.badgeStr}</span>
+              </div>
+              <div class="tracker-box-last" id="plant-fert-last-${plant.id}">${fs.lastText}</div>
+              <div class="tracker-btn-row">
+                <button class="btn-app-fert ${fs.isToday ? 'btn-done-today' : ''}" id="plant-fert-btn-${plant.id}" onclick="recordAction('${plant.id}', 'fert', event)">
+                  ${fs.isToday ? t('Abonat avui', 'Abonado hoy', 'Fertilized today') : t('Fertilitzar avui', 'Abonar hoy', 'Fertilize today')}
+                </button>
+                <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Opcions d\'adob', 'Opciones de abono', 'Fertilizer options')}" aria-label="Opcions d'adob">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </button>
+              </div>
+              <div style="margin-top: 8px;">
+                <a href="${getAmazonAffiliateUrl('fertilizer', plant)}" target="_blank" rel="noopener sponsored" class="btn-amz-pill" onclick="event.stopPropagation();">
+                  <span class="amz-tag">AMAZON</span>
+                  <span>${t("Comprar aquest tipus d'adob a Amazon ↗", "Comprar este tipo de abono en Amazon ↗", "Buy this fertilizer on Amazon ↗")}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderPlantGridItemHtml(plant) {
+    const st = getPlantGridStatus(plant);
+    let badgeHtml = '';
+    if (st === 'overdue') {
+      badgeHtml = `<div class="insta-status-badge is-overdue" title="${t('Manteniment endarrerit', 'Mantenimiento atrasado', 'Maintenance overdue')}"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10h2v4h-2zm0 6h2v2h-2z"/></svg></div>`;
+    } else if (st === 'today') {
+      badgeHtml = `<div class="insta-status-badge is-today" title="${t('Toca manteniment avui', 'Toca mantenimiento hoy', 'Maintenance due today')}"></div>`;
+    } else if (st === 'due_soon') {
+      badgeHtml = `<div class="insta-status-badge is-due-soon" title="${t('Manteniment properament', 'Mantenimiento próximo', 'Maintenance due soon')}"></div>`;
+    }
+
+    return `
+      <div class="insta-grid-item" onclick="openPlantModal('${plant.id}')" title="${plant.name}">
+        <img class="insta-grid-img" src="${plant.photo}" alt="${plant.name}" loading="lazy" decoding="async">
+        ${badgeHtml}
+        <div class="insta-gradient-overlay">
+          <span class="insta-plant-name">${plant.name}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function getPlantGridAddCardHtml() {
+    return `
+      <div class="insta-grid-item insta-grid-add-card" onclick="switchAppTab('add')" title="${t('Afegir planta', 'Añadir planta', 'Add plant')}" role="button" tabindex="0">
+        <div class="insta-add-icon-wrap">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </div>
+        <span class="insta-add-label">${t('Afegir planta', 'Añadir planta', 'Add plant')}</span>
+      </div>
+    `;
+  }
+
+  function updateInfiniteScrollStatus(hasMore) {
+    const sentinel = document.getElementById("infiniteScrollSentinel");
+    const spinner = document.getElementById("infiniteScrollSpinner");
+    if (sentinel) {
+      sentinel.style.display = hasMore ? "block" : "none";
+    }
+    if (spinner && !hasMore) {
+      spinner.style.display = "none";
+    }
+  }
+
+  function loadMorePlants() {
+    if (isLoadingMorePlants) return;
+    if (displayedPlantsCount >= currentFilteredPlants.length) {
+      updateInfiniteScrollStatus(false);
+      return;
+    }
+
+    isLoadingMorePlants = true;
+    const spinner = document.getElementById("infiniteScrollSpinner");
+    if (spinner && displayedPlantsCount > 0) {
+      spinner.style.display = "flex";
+    }
+
+    const nextBatch = currentFilteredPlants.slice(displayedPlantsCount, displayedPlantsCount + PLANTS_PER_BATCH);
+
+    if (gridEl) {
+      const cardsHtml = nextBatch.map(renderPlantCardHtml).join('');
+      gridEl.insertAdjacentHTML('beforeend', cardsHtml);
+    }
+
+    if (instaGridEl) {
+      const existingAdd = instaGridEl.querySelector('.insta-grid-add-card');
+      if (existingAdd) existingAdd.remove();
+
+      const itemsHtml = nextBatch.map(renderPlantGridItemHtml).join('');
+      instaGridEl.insertAdjacentHTML('beforeend', itemsHtml);
+      instaGridEl.insertAdjacentHTML('beforeend', getPlantGridAddCardHtml());
+    }
+
+    displayedPlantsCount += nextBatch.length;
+    isLoadingMorePlants = false;
+
+    if (spinner) {
+      spinner.style.display = "none";
+    }
+    updateInfiniteScrollStatus(displayedPlantsCount < currentFilteredPlants.length);
+  }
+
+  function handleWindowScrollCheck() {
+    if (scrollThrottleTimer) return;
+    scrollThrottleTimer = setTimeout(() => {
+      scrollThrottleTimer = null;
+      if (displayedPlantsCount >= currentFilteredPlants.length) return;
+      const viewPlants = document.getElementById("viewPlants");
+      if (!viewPlants || !viewPlants.classList.contains("active")) return;
+
+      const scrollBottom = window.innerHeight + window.scrollY;
+      const docHeight = document.documentElement.offsetHeight || document.body.offsetHeight;
+      if (docHeight - scrollBottom <= 400) {
+        loadMorePlants();
+      }
+    }, 150);
+  }
+
+  function setupInfiniteScrollObserver() {
+    if (infiniteScrollObserver) {
+      infiniteScrollObserver.disconnect();
+      infiniteScrollObserver = null;
+    }
+
+    const sentinel = document.getElementById("infiniteScrollSentinel");
+    if (sentinel && "IntersectionObserver" in window) {
+      infiniteScrollObserver = new IntersectionObserver((entries) => {
+        const entry = entries[0];
+        if (entry && entry.isIntersecting) {
+          const viewPlants = document.getElementById("viewPlants");
+          if (viewPlants && viewPlants.classList.contains("active")) {
+            loadMorePlants();
+          }
+        }
+      }, {
+        root: null,
+        rootMargin: "300px",
+        threshold: 0.01
+      });
+      infiniteScrollObserver.observe(sentinel);
+    }
+
+    window.removeEventListener("scroll", handleWindowScrollCheck);
+    window.addEventListener("scroll", handleWindowScrollCheck, { passive: true });
+  }
+
   function renderPlants() {
     renderStats();
     renderCalendar();
@@ -8591,122 +8836,21 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       emptyStateEl.style.display = "block";
       gridEl.innerHTML = "";
       if (instaGridEl) instaGridEl.innerHTML = "";
+      currentFilteredPlants = [];
+      displayedPlantsCount = 0;
+      updateInfiniteScrollStatus(false);
       return;
     } else {
       emptyStateEl.style.display = "none";
     }
 
-    gridEl.innerHTML = filtered.map(plant => {
-      getPlantGallery(plant);
-      const ws = computeWaterStatus(plant);
-      const fs = computeFertStatus(plant);
-      const isCardAlert = (ws.status === 'overdue');
-      const waterParts = formatAppDateParts(ws.nextDateObj, ws.daysLeft, ws.status);
-      const fertParts = formatAppDateParts(fs.nextDateObj, fs.daysLeft, fs.status);
+    currentFilteredPlants = filtered;
+    displayedPlantsCount = 0;
+    gridEl.innerHTML = "";
+    if (instaGridEl) instaGridEl.innerHTML = "";
 
-      return `
-        <div class="plant-card ${isCardAlert ? 'alert-water' : ''}" id="plant-card-${plant.id}">
-          <div class="card-image-wrap" onclick="openPlantModal('${plant.id}')">
-            <img src="${plant.photo}" alt="${plant.name}" loading="lazy">
-          </div>
-
-          <div class="card-body">
-            <div onclick="openPlantModal('${plant.id}')" style="cursor:pointer;">
-              <h2 class="plant-name">${plant.name}</h2>
-              <p class="plant-scientific">${plant.scientific}</p>
-            </div>
-
-            <div class="tracker-section">
-              <!-- PRÒXIM REG (Galeria - Vista llista.png) -->
-              <div class="tracker-card ${ws.statusClass}" id="plant-water-box-${plant.id}">
-                <div class="tracker-box-label">${t('PRÒXIM REG', 'PRÓXIMO RIEGO', 'NEXT WATERING')}</div>
-                <div class="tracker-date-row">
-                  <span class="tracker-big-date" id="plant-water-date-${plant.id}">${waterParts.dateStr}</span>
-                  <span class="tracker-badge-pill ${ws.status === 'overdue' ? 'is-alert' : ''}" id="plant-water-badge-${plant.id}">${waterParts.badgeStr}</span>
-                </div>
-                <div class="tracker-box-last" id="plant-water-last-${plant.id}">${ws.lastText}</div>
-                <div class="tracker-btn-row">
-                  <button class="btn-app-water ${ws.isToday ? 'btn-done-today' : ''}" id="plant-water-btn-${plant.id}" onclick="recordAction('${plant.id}', 'water', event)">
-                    ${ws.isToday ? t('Regat avui', 'Regado hoy', 'Watered today') : t('Regar avui', 'Regar hoy', 'Water today')}
-                  </button>
-                  <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'water', event)" title="${t('Opcions de reg', 'Opciones de riego', 'Watering options')}" aria-label="Opcions de reg">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              <!-- PRÒXIMA FERTILITZACIÓ (Galeria - Vista llista.png) -->
-              <div class="tracker-card ${fs.statusClass}" id="plant-fert-box-${plant.id}">
-                <div class="tracker-box-label">${t('PRÒXIMA FERTILITZACIÓ', 'PRÓXIMO ABONO', 'NEXT FERTILIZER')}</div>
-                <div class="tracker-date-row">
-                  <span class="tracker-big-date" id="plant-fert-date-${plant.id}">${fertParts.dateStr}</span>
-                  <span class="tracker-badge-pill ${fs.status === 'overdue' ? 'is-alert' : ''}" id="plant-fert-badge-${plant.id}">${fertParts.badgeStr}</span>
-                </div>
-                <div class="tracker-box-last" id="plant-fert-last-${plant.id}">${fs.lastText}</div>
-                <div class="tracker-btn-row">
-                  <button class="btn-app-fert ${fs.isToday ? 'btn-done-today' : ''}" id="plant-fert-btn-${plant.id}" onclick="recordAction('${plant.id}', 'fert', event)">
-                    ${fs.isToday ? t('Abonat avui', 'Abonado hoy', 'Fertilized today') : t('Fertilitzar avui', 'Abonar hoy', 'Fertilize today')}
-                  </button>
-                  <button type="button" class="btn-app-clock" onclick="openQuickDateModal('${plant.id}', 'fert', event)" title="${t('Opcions d\'adob', 'Opciones de abono', 'Fertilizer options')}" aria-label="Opcions d'adob">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                  </button>
-                </div>
-                <div style="margin-top: 8px;">
-                  <a href="${getAmazonAffiliateUrl('fertilizer', plant)}" target="_blank" rel="noopener sponsored" class="btn-amz-pill" onclick="event.stopPropagation();">
-                    <span class="amz-tag">AMAZON</span>
-                    <span>${t("Comprar aquest tipus d'adob a Amazon ↗", "Comprar este tipo de abono en Amazon ↗", "Buy this fertilizer on Amazon ↗")}</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    if (instaGridEl) {
-      const itemsHtml = filtered.map(plant => {
-        const st = getPlantGridStatus(plant);
-        let badgeHtml = '';
-        if (st === 'overdue') {
-          badgeHtml = `<div class="insta-status-badge is-overdue" title="${t('Manteniment endarrerit', 'Mantenimiento atrasado', 'Maintenance overdue')}"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10h2v4h-2zm0 6h2v2h-2z"/></svg></div>`;
-        } else if (st === 'today') {
-          badgeHtml = `<div class="insta-status-badge is-today" title="${t('Toca manteniment avui', 'Toca mantenimiento hoy', 'Maintenance due today')}"></div>`;
-        } else if (st === 'due_soon') {
-          badgeHtml = `<div class="insta-status-badge is-due-soon" title="${t('Manteniment properament', 'Mantenimiento próximo', 'Maintenance due soon')}"></div>`;
-        }
-
-        return `
-          <div class="insta-grid-item" onclick="openPlantModal('${plant.id}')" title="${plant.name}">
-            <img class="insta-grid-img" src="${plant.photo}" alt="${plant.name}" loading="lazy">
-            ${badgeHtml}
-            <div class="insta-gradient-overlay">
-              <span class="insta-plant-name">${plant.name}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      const addCardHtml = `
-        <div class="insta-grid-item insta-grid-add-card" onclick="switchAppTab('add')" title="${t('Afegir planta', 'Añadir planta', 'Add plant')}" role="button" tabindex="0">
-          <div class="insta-add-icon-wrap">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-          </div>
-          <span class="insta-add-label">${t('Afegir planta', 'Añadir planta', 'Add plant')}</span>
-        </div>
-      `;
-
-      instaGridEl.innerHTML = itemsHtml + addCardHtml;
-    }
+    loadMorePlants();
+    setupInfiniteScrollObserver();
   }
 
   function getPlantGridStatus(plant) {
@@ -8886,6 +9030,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     if (!plant) return;
     currentModalGalleryIndex = index;
     renderModalGallery(plant);
+    openPhotoLightbox();
   }
 
   function stepModalGalleryPhoto(delta) {
