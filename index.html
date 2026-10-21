@@ -774,8 +774,8 @@
       background: #9ab0a6;
       border: none;
       color: #16261d;
-      padding: 6px 11px;
-      border-radius: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
       font-size: 0.80rem;
       font-weight: 700;
       cursor: pointer;
@@ -1006,18 +1006,18 @@
     .preset-chip-btn {
       background: #f4f8f4;
       border: 1px solid #cce0cd;
-      border-radius: 20px;
+      border-radius: 8px;
       padding: 6px 12px;
       font-size: 0.82rem;
       cursor: pointer;
       color: #243525;
       transition: all 0.15s ease;
-      font-weight: 500;
+      font-weight: 600;
     }
     .preset-chip-btn:hover {
-      background: #256a38;
+      background: #5f9b65;
       color: #ffffff;
-      border-color: #256a38;
+      border-color: #5f9b65;
     }
 
     /* HISTÒRIC LIST */
@@ -1035,7 +1035,7 @@
     .history-item.fert { background: #f0f9ff; }
     .history-delete-btn {
       background: #fee2e2; color: #991b1b; border: 1px solid #fecaca;
-      padding: 5px 11px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
+      padding: 5px 11px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
       display: inline-flex; align-items: center; gap: 5px;
       transition: background 0.15s ease, transform 0.1s ease;
     }
@@ -1444,6 +1444,11 @@
       color: #d1e5d5;
       border-color: var(--border-strong);
     }
+    body.dark-mode .preset-chip-btn:hover {
+      background: #5f9b65;
+      color: #ffffff;
+      border-color: #5f9b65;
+    }
     body.dark-mode th {
       background: #192b1e;
       color: var(--text-main);
@@ -1479,7 +1484,7 @@
       background: var(--bg-primary);
       border: 2px solid var(--border-subtle);
       color: var(--text-main);
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 10px 10px;
       font-size: 0.88rem;
       font-weight: 600;
@@ -1492,19 +1497,19 @@
       font-family: inherit;
     }
     .pref-option-btn:hover {
-      border-color: var(--accent);
+      border-color: #5f9b65;
       background: var(--bg-tertiary);
     }
     .pref-option-btn.active {
-      border-color: var(--accent);
-      background: var(--accent-light);
-      color: var(--accent);
+      border-color: #5f9b65;
+      background: #5f9b65;
+      color: #ffffff;
       font-weight: 700;
     }
     body.dark-mode .pref-option-btn.active {
-      background: rgba(37, 106, 56, 0.28);
-      border-color: #4ade80;
-      color: #86efac;
+      background: #5f9b65;
+      border-color: #5f9b65;
+      color: #ffffff;
     }
     /* Switch toggle per a notificacions */
     .switch-toggle {
@@ -1568,7 +1573,7 @@
       background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
       color: #ffffff;
       border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: var(--radius-sm);
+      border-radius: 8px;
       padding: 9px 15px;
       font-size: 0.86rem;
       font-weight: 700;
@@ -2497,6 +2502,103 @@
     .btn-app-water.btn-done-today, .btn-app-fert.btn-done-today {
       background: #1b542a;
     }
+
+    /* BOTONS D'ACCIÓ GENERALS I POPUPS */
+    .btn-action {
+      background: #5f9b65;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 0.90rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s ease, transform 0.1s ease;
+      font-family: inherit;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      min-height: 40px;
+    }
+    .btn-action:hover {
+      background: #4e8554;
+    }
+    .btn-action:active {
+      transform: scale(0.97);
+    }
+    .btn-action.btn-action-secondary {
+      background: var(--border-subtle);
+      color: var(--text-main);
+      border: 1px solid transparent;
+      font-weight: 600;
+      box-shadow: none;
+    }
+    .btn-action.btn-action-secondary:hover {
+      background: #d5ded3;
+    }
+    body.dark-mode .btn-action.btn-action-secondary {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+    }
+    body.dark-mode .btn-action.btn-action-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .btn-action.btn-water-action,
+    .btn-action.btn-fert-action {
+      background: #5f9b65;
+      color: #ffffff;
+    }
+    .btn-action.btn-water-action:hover,
+    .btn-action.btn-fert-action:hover {
+      background: #4e8554;
+    }
+    .btn-action.btn-transplant-action {
+      background: #8b5e34;
+      color: #ffffff;
+    }
+    .btn-action.btn-transplant-action:hover {
+      background: #734c28;
+    }
+    .btn-action.btn-pruning-action {
+      background: #4d7c0f;
+      color: #ffffff;
+    }
+    .btn-action.btn-pruning-action:hover {
+      background: #3f6212;
+    }
+    #quickWaterOptionsGroup .preset-chip-btn {
+      border-radius: 8px !important;
+      font-weight: 700 !important;
+      padding: 9px 4px !important;
+      background: #eef4ee;
+      border: 1px solid #c8dac9;
+      color: var(--text-main);
+      font-size: 0.84rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    #quickWaterOptionsGroup .preset-chip-btn:hover {
+      background: #5f9b65;
+      border-color: #5f9b65;
+      color: #ffffff;
+    }
+    body.dark-mode #quickWaterOptionsGroup .preset-chip-btn {
+      background: #1c2b20;
+      border-color: #2e4434;
+      color: #d1e5d5;
+    }
+    body.dark-mode #quickWaterOptionsGroup .preset-chip-btn:hover {
+      background: #5f9b65;
+      color: #ffffff;
+    }
+    .notif-quick-item .btn-app-water {
+      min-height: auto;
+      padding: 6px 12px;
+      border-radius: 8px;
+      flex: 0 0 auto;
+    }
     .btn-app-clock {
       width: 44px;
       height: 44px;
@@ -2919,7 +3021,7 @@
       gap: 6px;
       padding: 12px 6px;
       border: 1px solid transparent;
-      border-radius: 10px;
+      border-radius: 8px;
       background: transparent;
       cursor: pointer;
       font-size: 0.82rem;
@@ -2929,14 +3031,15 @@
     }
     .theme-segment-btn.active {
       background: var(--bg-surface);
-      border-color: var(--border-strong);
+      border-color: #5f9b65;
+      color: #3b6b41;
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
       font-weight: 700;
     }
     body.dark-mode .theme-segment-btn.active {
       background: var(--bg-surface);
-      border-color: var(--accent);
-      color: #86efac;
+      border-color: #5f9b65;
+      color: #8cd493;
     }
     .settings-select {
       width: 100%;
@@ -3008,12 +3111,12 @@
       gap: 10px;
     }
     .btn-settings-action {
-      background: var(--accent);
+      background: #5f9b65;
       color: #ffffff;
       border: none;
       border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 0.86rem;
+      padding: 11px 16px;
+      font-size: 0.88rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
@@ -3021,6 +3124,9 @@
       justify-content: center;
       gap: 8px;
       transition: background 0.15s, transform 0.1s ease;
+      font-family: inherit;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      min-height: 44px;
     }
     .btn-settings-action:active {
       transform: scale(0.98);
@@ -3038,29 +3144,29 @@
       justify-content: center;
     }
     .btn-settings-action:hover {
-      background: var(--accent-hover);
+      background: #4e8554;
     }
     .btn-settings-action.full-width {
       width: 100%;
     }
     .btn-settings-action.btn-google-play {
-      background: #1e6b35;
+      background: #5f9b65;
     }
     .btn-settings-action.btn-google-play:hover {
-      background: #154e26;
+      background: #4e8554;
     }
     body.dark-mode .btn-settings-action {
-      background: #256a38;
+      background: #5f9b65;
       color: #ffffff;
     }
     body.dark-mode .btn-settings-action:hover {
-      background: #2f8547;
+      background: #4e8554;
     }
     body.dark-mode .btn-settings-action.btn-google-play {
-      background: #205c31;
+      background: #5f9b65;
     }
     body.dark-mode .btn-settings-action.btn-google-play:hover {
-      background: #2a7a40;
+      background: #4e8554;
     }
     .legal-links-card {
       gap: 0;
@@ -3463,14 +3569,19 @@
       background: #5f9b65;
       color: #ffffff;
       border: none;
-      border-radius: 6px;
-      padding: 6px 14px;
-      font-size: 0.80rem;
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 0.84rem;
       font-weight: 700;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
       transition: background 0.15s, transform 0.1s ease;
       margin-left: auto;
       flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
     .btn-maint-reg:hover {
       background: #4e8554;
@@ -3749,7 +3860,7 @@
 
           <!-- ENLLAÇ ENTRADA MANUAL -->
           <div class="manual-add-link-wrap" style="text-align: center; margin: 18px 0 14px;">
-            <button type="button" class="btn-manual-add" onclick="openEditPlantModal(null)" style="background: none; border: 1px dashed var(--border-strong); padding: 10px 18px; border-radius: 10px; color: var(--text-muted); cursor: pointer; font-size: 0.88rem; font-family: inherit;">
+            <button type="button" class="btn-manual-add" onclick="openEditPlantModal(null)" style="background: none; border: 1px dashed var(--border-strong); padding: 10px 18px; border-radius: 8px; color: var(--text-muted); cursor: pointer; font-size: 0.88rem; font-family: inherit;">
               O afegir les dades manualment sense foto
             </button>
           </div>
@@ -3846,7 +3957,7 @@
             <button type="button" class="btn-action btn-action-secondary" onclick="resetAIModal()">
               Repetir foto
             </button>
-            <button type="button" class="btn-action" style="background: var(--accent); color: white; padding: 10px 20px; font-size: 0.92rem; font-weight: 700;" onclick="confirmSaveAIPlant()">
+            <button type="button" class="btn-action" onclick="confirmSaveAIPlant()">
               Afegir al meu jardí
             </button>
           </div>
@@ -4298,7 +4409,7 @@
             </button>
           </div>
           <div style="text-align:right; border-top:1px solid var(--border-subtle); padding-top:12px;">
-            <button type="button" class="btn-action" style="background:var(--border-subtle); color:var(--text-main); padding:8px 18px; border-radius:8px; border:none; cursor:pointer; font-weight:600;" onclick="closeGalleryPhotoSourcePicker()">
+            <button type="button" class="btn-action btn-action-secondary" onclick="closeGalleryPhotoSourcePicker()">
               Cancel·lar
             </button>
           </div>
@@ -4492,10 +4603,10 @@
 
         <!-- BOTONS ACCIÓ -->
         <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
-          <button type="button" class="btn-action" style="background: var(--border-subtle); color: var(--text-main); padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;" onclick="closeModal('editPlantModal')">
+          <button type="button" class="btn-action btn-action-secondary" onclick="closeModal('editPlantModal')">
             Cancel·lar
           </button>
-          <button type="submit" id="editPlantSubmitBtn" class="btn-action" style="background: #256a38; color: white; padding: 9px 22px; font-size: 0.90rem; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;">
+          <button type="submit" id="editPlantSubmitBtn" class="btn-action">
             Desar canvis
           </button>
         </div>
@@ -4522,16 +4633,16 @@
           <button type="button" class="preset-chip-btn" id="histPreset2DaysBtn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="setHistoryDateOffset(-2)">Fa 2 dies</button>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-          <button class="btn-action btn-water-action" id="btnHistoryAddWater" style="justify-content:center;">
+          <button type="button" class="btn-action btn-water-action" id="btnHistoryAddWater">
             Registrar Reg
           </button>
-          <button class="btn-action btn-fert-action" id="btnHistoryAddFert" style="justify-content:center;">
+          <button type="button" class="btn-action btn-fert-action" id="btnHistoryAddFert">
             Registrar Adob
           </button>
-          <button class="btn-action" id="btnHistoryAddTransplant" style="background:#78350f; color:#fff; justify-content:center;">
+          <button type="button" class="btn-action btn-transplant-action" id="btnHistoryAddTransplant">
             Trasplantament
           </button>
-          <button class="btn-action" id="btnHistoryAddPruning" style="background:#3f6212; color:#fff; justify-content:center;">
+          <button type="button" class="btn-action btn-pruning-action" id="btnHistoryAddPruning">
             Poda / Neteja
           </button>
         </div>
@@ -4706,10 +4817,10 @@
       </div>
 
       <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
-        <button type="button" class="btn-action" id="resetFiltersBtn" style="background: var(--bg-tertiary); color: var(--text-main); border: 1px solid var(--border-subtle); padding: 8px 16px; font-size: 0.84rem;" onclick="resetAllFilters()">
+        <button type="button" class="btn-action btn-action-secondary" id="resetFiltersBtn" onclick="resetAllFilters()">
           Restablir filtres
         </button>
-        <button type="button" class="btn-action" id="closeFilterBtn" style="background: #256a38; color: white; padding: 8px 22px; font-weight: 600;" onclick="closeModal('filterModal')">
+        <button type="button" class="btn-action" id="closeFilterBtn" onclick="closeModal('filterModal')">
           Fet
         </button>
       </div>
@@ -4728,10 +4839,10 @@
         Informació legal i privacitat
       </h2>
       <div style="display:flex; gap:8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px;">
-        <button type="button" class="btn-action" id="legalTabTermsBtn" style="background:var(--accent-light); color:var(--text-main); border:1px solid var(--accent); padding:5px 12px; font-size:0.82rem;" onclick="switchLegalTab('terms')">
+        <button type="button" class="btn-action btn-action-secondary" id="legalTabTermsBtn" style="border-radius:8px; padding:6px 14px; font-size:0.84rem; min-height:auto;" onclick="switchLegalTab('terms')">
           Condicions d'Ús
         </button>
-        <button type="button" class="btn-action" id="legalTabPrivacyBtn" style="background:var(--bg-tertiary); color:var(--text-muted); border:1px solid var(--border-subtle); padding:5px 12px; font-size:0.82rem;" onclick="switchLegalTab('privacy')">
+        <button type="button" class="btn-action btn-action-secondary" id="legalTabPrivacyBtn" style="border-radius:8px; padding:6px 14px; font-size:0.84rem; min-height:auto;" onclick="switchLegalTab('privacy')">
           Privacitat de Dades
         </button>
       </div>
@@ -4741,7 +4852,7 @@
       </div>
 
       <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border-subtle); padding-top: 14px; margin-top: 16px;">
-        <button type="button" class="btn-action" style="background: #256a38; color: white; padding: 8px 18px;" onclick="closeModal('legalModal')" id="legalModalCloseBtn">
+        <button type="button" class="btn-action" onclick="closeModal('legalModal')" id="legalModalCloseBtn">
           Entès
         </button>
       </div>
@@ -4785,10 +4896,10 @@
         </div>
 
         <div style="display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
-          <button type="button" class="btn-action" style="background: var(--bg-tertiary); color: var(--text-main); border: 1px solid var(--border-subtle); padding: 8px 16px;" onclick="closeModal('feedbackModal')" id="feedbackCancelBtn">
+          <button type="button" class="btn-action btn-action-secondary" onclick="closeModal('feedbackModal')" id="feedbackCancelBtn">
             Cancel·lar
           </button>
-          <button type="submit" class="btn-action" style="background: var(--accent); color: white; padding: 8px 20px; font-weight: 700;" id="feedbackSubmitBtn">
+          <button type="submit" class="btn-action" id="feedbackSubmitBtn">
             Enviar comentari
           </button>
         </div>
@@ -9684,14 +9795,16 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     if (tab === 'terms') {
       if (tabTermsBtn) {
-        tabTermsBtn.style.background = "var(--accent-light)";
-        tabTermsBtn.style.color = "var(--text-main)";
-        tabTermsBtn.style.borderColor = "var(--accent)";
+        tabTermsBtn.style.background = "#5f9b65";
+        tabTermsBtn.style.color = "#ffffff";
+        tabTermsBtn.style.borderColor = "#5f9b65";
+        tabTermsBtn.style.borderRadius = "8px";
       }
       if (tabPrivacyBtn) {
         tabPrivacyBtn.style.background = "var(--bg-tertiary)";
         tabPrivacyBtn.style.color = "var(--text-muted)";
         tabPrivacyBtn.style.borderColor = "var(--border-subtle)";
+        tabPrivacyBtn.style.borderRadius = "8px";
       }
       if (bodyEl) {
         bodyEl.innerHTML = currentLang === 'en' ? `
@@ -9719,14 +9832,16 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       }
     } else {
       if (tabPrivacyBtn) {
-        tabPrivacyBtn.style.background = "var(--accent-light)";
-        tabPrivacyBtn.style.color = "var(--text-main)";
-        tabPrivacyBtn.style.borderColor = "var(--accent)";
+        tabPrivacyBtn.style.background = "#5f9b65";
+        tabPrivacyBtn.style.color = "#ffffff";
+        tabPrivacyBtn.style.borderColor = "#5f9b65";
+        tabPrivacyBtn.style.borderRadius = "8px";
       }
       if (tabTermsBtn) {
         tabTermsBtn.style.background = "var(--bg-tertiary)";
         tabTermsBtn.style.color = "var(--text-muted)";
         tabTermsBtn.style.borderColor = "var(--border-subtle)";
+        tabTermsBtn.style.borderRadius = "8px";
       }
       if (bodyEl) {
         bodyEl.innerHTML = currentLang === 'en' ? `
