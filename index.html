@@ -3918,9 +3918,10 @@
 
       <!-- ESTAT BUIT -->
       <div class="empty-state" id="emptyState" style="display:none;">
-        <h2 id="emptyStateTitle" style="font-size: 1.25rem; font-family: var(--font-display); font-weight: 600; color: var(--text-main); margin-bottom: 4px;">No s'ha trobat cap planta</h2>
-        <p id="emptyStateDesc">Prova de canviar els filtres de cerca o afegeix una nova planta.</p>
-        <button type="button" class="btn-app-water" id="emptyStateAddBtn" style="margin-top:14px; align-self:center;" onclick="switchAppTab('add')">Afegir planta</button>
+        <div id="emptyStateIcon" style="font-size: 3.2rem; margin-bottom: 12px; line-height: 1;">🌱</div>
+        <h2 id="emptyStateTitle" style="font-size: 1.25rem; font-family: var(--font-display); font-weight: 600; color: var(--text-main); margin-bottom: 6px;">No tens cap planta registrada</h2>
+        <p id="emptyStateDesc" style="font-size: 0.92rem; max-width: 320px; margin: 0 auto 16px; line-height: 1.45;">Afegeix la teva primera planta per començar a cuidar el teu jardí de forma senzilla.</p>
+        <button type="button" class="btn-app-water" id="emptyStateAddBtn" style="margin-top:6px; align-self:center;" onclick="switchAppTab('add')">Afegir la teva primera planta</button>
       </div>
     </div>
 
@@ -5896,405 +5897,190 @@
       fertType: "🌱 Orgànic líquid culinari",
       fertDays: 15,
       tip: "Pessigar les puntes per evitar que floreixi ràpid i prolongar les fulles aromàtiques."
+    },
+    "Palmera de saló (Chamaedorea elegans)": {
+      scientific: "Chamaedorea elegans",
+      zone: "interior",
+      difficulty: "facil",
+      toxic: false,
+      waterSummer: 5,
+      waterWinter: 12,
+      light: "Llum indirecta moderada / ombra suau (mai sol directe)",
+      ppfdMin: 70,
+      ppfdMax: 160,
+      ppfdText: "70 - 160 µmol/m²s",
+      substrate: "70% substrat universal + 30% perlita",
+      fertType: "Líquid plantes verdes (ric en N)",
+      fertDays: 25,
+      tip: "Si les puntes es posen marrons, sol ser per manca d'humitat ambiental (calefacció) o aigua amb calç."
+    },
+    "Espatifil·le (Spathiphyllum wallisii)": {
+      scientific: "Spathiphyllum wallisii",
+      zone: "interior",
+      difficulty: "facil",
+      toxic: true,
+      waterSummer: 4,
+      waterWinter: 8,
+      light: "Llum indirecta mitjana a suau",
+      ppfdMin: 70,
+      ppfdMax: 180,
+      ppfdText: "70 - 180 µmol/m²s",
+      substrate: "Substrat universal ric en matèria orgànica + 20% perlita",
+      fertType: "Líquid plantes amb flor (ric en P i K)",
+      fertDays: 18,
+      tip: "Li agrada la terra humida sense entollar. Avisa tombant les fulles quan té set."
+    },
+    "Anturi (Anthurium andreanum)": {
+      scientific: "Anthurium andreanum",
+      zone: "interior",
+      difficulty: "mitjana",
+      toxic: true,
+      waterSummer: 7,
+      waterWinter: 11,
+      light: "Llum indirecta molt abundant",
+      ppfdMin: 150,
+      ppfdMax: 280,
+      ppfdText: "150 - 280 µmol/m²s",
+      substrate: "50% universal + 30% escorça pi orquídia + 20% perlita",
+      fertType: "Específic flor o orquídies (dosi meitat)",
+      fertDays: 18,
+      tip: "Com a epífita, les arrels necessiten airejar-se. No deixis mai aigua al cubrellits."
+    },
+    "Potos (Epipremnum aureum)": {
+      scientific: "Epipremnum aureum",
+      zone: "interior",
+      difficulty: "molt_facil",
+      toxic: true,
+      waterSummer: 6,
+      waterWinter: 12,
+      light: "Molt adaptable: llum indirecta mitjana a brillant",
+      ppfdMin: 90,
+      ppfdMax: 250,
+      ppfdText: "90 - 250 µmol/m²s",
+      substrate: "Universal amb bona dosi de perlita",
+      fertType: "Líquid plantes verdes",
+      fertDays: 15,
+      tip: "Suporta molt millor la falta d'aigua que l'excés. Ideal tant penjant com enfiladís amb tutor."
+    },
+    "Llengua de sogra (Sansevieria trifasciata)": {
+      scientific: "Sansevieria trifasciata",
+      zone: "interior",
+      difficulty: "molt_facil",
+      toxic: true,
+      waterSummer: 18,
+      waterWinter: 32,
+      light: "Tot terreny: des d'ombra fins a sol suau",
+      ppfdMin: 80,
+      ppfdMax: 300,
+      ppfdText: "80 - 300 µmol/m²s",
+      substrate: "Substrat de cactus o 50% universal + 50% perlita",
+      fertType: "Cactus i suculentes (moderat)",
+      fertDays: 30,
+      tip: "Davant del dubte, no reguis. El substrat ha d'estar totalment sec abans de regar."
+    },
+    "Tronc del Brasil (Dracaena fragrans)": {
+      scientific: "Dracaena fragrans",
+      zone: "interior",
+      difficulty: "facil",
+      toxic: true,
+      waterSummer: 8,
+      waterWinter: 18,
+      light: "Llum indirecta abundant o mitjana",
+      ppfdMin: 120,
+      ppfdMax: 250,
+      ppfdText: "120 - 250 µmol/m²s",
+      substrate: "Substrat universal de qualitat amb perlita",
+      fertType: "Líquid plantes verdes",
+      fertDays: 25,
+      tip: "Deixar assecar els primers 3-4 cm de terra abans de regar. Sensible al clor."
+    },
+    "Callisia fragrans (Planta Cistella)": {
+      scientific: "Callisia fragrans",
+      zone: "exterior",
+      difficulty: "molt_facil",
+      toxic: false,
+      waterSummer: 5,
+      waterWinter: 12,
+      light: "Llum brillant indirecta o sol matinal suau",
+      ppfdMin: 180,
+      ppfdMax: 380,
+      ppfdText: "180 - 380 µmol/m²s",
+      substrate: "Universal drenant en test de terracota",
+      fertType: "Universal o suculentes (dosi baixa)",
+      fertDays: 30,
+      tip: "Tiges carnoses que guarden aigua. Molt fàcil de reproduir per fillols."
+    },
+    "Romaní (Salvia rosmarinus)": {
+      scientific: "Salvia rosmarinus",
+      zone: "exterior",
+      difficulty: "facil",
+      toxic: false,
+      waterSummer: 7,
+      waterWinter: 18,
+      light: "Ple sol directe (mínim 5 hores/dia)",
+      ppfdMin: 400,
+      ppfdMax: 800,
+      ppfdText: "400 - 800+ µmol/m²s",
+      substrate: "Molt porós amb sorra o grava",
+      fertType: "🌱 Orgànic (Humus de cuc)",
+      fertDays: 60,
+      tip: "Planta de secà: esperar que la terra s'assequi del tot abans de regar."
+    },
+    "Menta (Mentha spicata)": {
+      scientific: "Mentha spicata",
+      zone: "exterior",
+      difficulty: "facil",
+      toxic: false,
+      waterSummer: 3,
+      waterWinter: 7,
+      light: "Semisombra o sol suau del matí",
+      ppfdMin: 220,
+      ppfdMax: 500,
+      ppfdText: "220 - 500 µmol/m²s",
+      substrate: "Substrat universal ric en humus que retingui la humitat",
+      fertType: "🌱 Orgànic hort/humus",
+      fertDays: 21,
+      tip: "Requereix terra constantment fresca i humida. Poda si s'espiga."
+    },
+    "Farigola (Thymus vulgaris)": {
+      scientific: "Thymus vulgaris",
+      zone: "exterior",
+      difficulty: "facil",
+      toxic: false,
+      waterSummer: 8,
+      waterWinter: 18,
+      light: "Ple sol directe",
+      ppfdMin: 400,
+      ppfdMax: 800,
+      ppfdText: "400 - 800+ µmol/m²s",
+      substrate: "Pobre, calcari i molt drenant",
+      fertType: "🌱 Orgànic suau (humus a la base)",
+      fertDays: 120,
+      tip: "Molt resistent a la sequera. No regar mai si la terra està encara humida."
+    },
+    "Calaminta (Clinopodium nepeta)": {
+      scientific: "Clinopodium nepeta",
+      zone: "exterior",
+      difficulty: "facil",
+      toxic: false,
+      waterSummer: 4,
+      waterWinter: 12,
+      light: "Sol o semisombra lluminosa",
+      ppfdMin: 300,
+      ppfdMax: 650,
+      ppfdText: "300 - 650 µmol/m²s",
+      substrate: "Universal amb bona perlita",
+      fertType: "Líquid flor o fertilitzant ecològic",
+      fertDays: 30,
+      tip: "Reg moderat mantenint certa frescor. Atrau pol·linitzadors."
     }
   };
 
 
   // -------------------------------------------------------------
-  // LES 13 PLANTES INICIALS PER DEFECTE
+  // CATÀLEG INICIAL BUIT PER A NOUS USUARIS
   // -------------------------------------------------------------
-  const initialDefaultPlants = [
-    {
-      id: "chamaedorea",
-      name: "Palmera de saló",
-      scientific: "Chamaedorea elegans",
-      photo: "01_chamaedorea_elegans.jpeg",
-      difficulty: "facil",
-      difficultyLabel: "Fàcil",
-      difficultyClass: "badge-diff-easy",
-      zone: "interior",
-      zoneLabel: "🏠 Interior",
-      waterDaysSummer: 5,
-      waterDaysWinter: 12,
-      waterSummerText: "1-2 cops / setmana",
-      waterWinterText: "Cada 10-14 dies",
-      waterDetail: "Mantenir el substrat lleugerament humit a l'estiu sense embassar. A l'hivern, deixar assecar el primer terç abans de regar.",
-      fertilizerType: "Líquid plantes verdes (ric en N)",
-      fertilizerDays: 25,
-      fertilizerActiveMonths: [3, 4, 5, 6, 7, 8],
-      fertilizerFreq: "Cada 3-4 setmanes",
-      fertilizerSeason: "Abril a Setembre",
-      fertilizerNotes: "És de creixement lent: no sobrealimentar per no danyar arrels.",
-      light: "Llum indirecta moderada / ombra suau (mai sol directe)",
-      ppfdMin: 70,
-      ppfdMax: 160,
-      ppfdText: "70 - 160 µmol/m²s",
-      substrate: "70% substrat universal + 30% perlita.",
-      toxic: false,
-      toxicityDetail: "🟢 Totalment segura per a mascotes.",
-      tip: "Si les puntes es posen marrons, sol ser per manca d'humitat ambiental (calefacció) o aigua amb calç."
-    },
-    {
-      id: "spathiphyllum",
-      name: "Espatifil·le (Liri de pau)",
-      scientific: "Spathiphyllum wallisii",
-      photo: "02_spathiphyllum_espatifil.jpeg",
-      difficulty: "facil",
-      difficultyLabel: "Fàcil",
-      difficultyClass: "badge-diff-easy",
-      zone: "interior",
-      zoneLabel: "🏠 Interior",
-      waterDaysSummer: 4,
-      waterDaysWinter: 8,
-      waterSummerText: "2 cops / setmana",
-      waterWinterText: "1 cop / setmana",
-      waterDetail: "Li agrada la terra humida sense entollar. Avisa tombant les fulles quan té set.",
-      fertilizerType: "Líquid plantes amb flor (ric en P i K)",
-      fertilizerDays: 18,
-      fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8, 9],
-      fertilizerFreq: "Cada 15-20 dies",
-      fertilizerSeason: "Març a Octubre",
-      fertilizerNotes: "L'adob per a flor estimula noves espates blanques contínuament.",
-      light: "Llum indirecta mitjana a suau.",
-      ppfdMin: 70,
-      ppfdMax: 180,
-      ppfdText: "70 - 180 µmol/m²s",
-      substrate: "Substrat universal ric en matèria orgànica + 20% perlita.",
-      toxic: true,
-      toxicityDetail: "🔴 Tòxica per a mascotes (oxalats).",
-      tip: "Regar amb aigua reposada 24 hores per evaporar el clor."
-    },
-    {
-      id: "anthurium",
-      name: "Anturi Rosa",
-      scientific: "Anthurium andreanum",
-      photo: "03_anthurium_anturi.jpeg",
-      difficulty: "mitjana",
-      difficultyLabel: "Mitjana",
-      difficultyClass: "badge-diff-medium",
-      zone: "interior",
-      zoneLabel: "🏠 Interior",
-      waterDaysSummer: 7,
-      waterDaysWinter: 11,
-      waterSummerText: "1 cop / setmana",
-      waterWinterText: "Cada 10-12 dies",
-      waterDetail: "Esperar que la superfície del substrat s'assequi abans de regar. Retirar sempre l'aigua del platet.",
-      fertilizerType: "Específic flor o orquídies (dosi meitat)",
-      fertilizerDays: 18,
-      fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8],
-      fertilizerFreq: "Cada 2-3 setmanes",
-      fertilizerSeason: "Març a Setembre",
-      fertilizerNotes: "Diluir a la meitat de la dosi del fabricant.",
-      light: "Llum indirecta molt abundant.",
-      ppfdMin: 150,
-      ppfdMax: 280,
-      ppfdText: "150 - 280 µmol/m²s",
-      substrate: "50% universal + 30% escorça pi orquídia + 20% perlita.",
-      toxic: true,
-      toxicityDetail: "🔴 Tòxica per a mascotes.",
-      tip: "Com a epífita, les arrels necessiten airejar-se. No deixis mai aigua al cubrellits."
-    },
-    {
-      id: "pothos_penjant",
-      name: "Potos Daurat (Penjant)",
-      scientific: "Epipremnum aureum",
-      photo: "04_pothos_epipremnum.jpeg",
-      difficulty: "molt_facil",
-      difficultyLabel: "Molt fàcil",
-      difficultyClass: "badge-diff-very-easy",
-      zone: "interior",
-      zoneLabel: "🏠 Interior",
-      waterDaysSummer: 6,
-      waterDaysWinter: 12,
-      waterSummerText: "Cada 5-7 dies",
-      waterWinterText: "Cada 10-15 dies",
-      waterDetail: "Esperar que la meitat del substrat s'assequi. Suporta molt millor la falta que l'excés.",
-      fertilizerType: "Líquid plantes verdes",
-      fertilizerDays: 15,
-      fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8, 9],
-      fertilizerFreq: "Cada 15 dies",
-      fertilizerSeason: "Març a Octubre",
-      fertilizerNotes: "El nitrogen afavoreix el creixement ràpid.",
-      light: "Molt adaptable: llum indirecta mitjana a brillant.",
-      ppfdMin: 90,
-      ppfdMax: 250,
-      ppfdText: "90 - 250 µmol/m²s",
-      substrate: "Universal amb bona dosi de perlita.",
-      toxic: true,
-      toxicityDetail: "🔴 Tòxic per a mascotes.",
-      tip: "Si les fulles es posen grogues i toves és excés d'aigua; si s'arronsen és set."
-    },
-    {
-      id: "sansevieria_gran",
-      name: "Llengua de sogra (Gran)",
-      scientific: "Sansevieria trifasciata 'Laurentii'",
-      photo: "05_sansevieria_trifasciata.jpeg",
-      difficulty: "molt_facil",
-      difficultyLabel: "Molt fàcil",
-      difficultyClass: "badge-diff-very-easy",
-      zone: "interior",
-      zoneLabel: "🏠 Interior",
-      waterDaysSummer: 18,
-      waterDaysWinter: 32,
-      waterSummerText: "Cada 15-20 dies",
-      waterWinterText: "1 cop al mes",
-      waterDetail: "El substrat ha d'estar TOTALMENT sec abans de regar.",
-      fertilizerType: "Cactus i suculentes (moderat)",
-      fertilizerDays: 30,
-      fertilizerActiveMonths: [4, 5, 6, 7],
-      fertilizerFreq: "1 cop al mes",
-      fertilizerSeason: "Maig a Agost",
-      fertilizerNotes: "Consum de nutrients molt baix. Mai abonar a la tardor/hivern.",
-      light: "Tot terreny: des d'ombra fins a sol suau.",
-      ppfdMin: 80,
-      ppfdMax: 300,
-      ppfdText: "80 - 300 µmol/m²s",
-      substrate: "Substrat de cactus o 50% universal + 50% perlita.",
-      toxic: true,
-      toxicityDetail: "🔴 Tòxica en cas d'ingesta.",
-      tip: "Davant del dubte, NO REGAR. És immune a la sequera."
-    },
-    {
-      id: "dracaena",
-      name: "Tronc del Brasil",
-      scientific: "Dracaena fragrans",
-      photo: "06_dracaena_tronc_brasil.jpeg",
-      difficulty: "facil",
-      difficultyLabel: "Fàcil",
-      difficultyClass: "badge-diff-easy",
-      zone: "interior",
-      zoneLabel: "🏠 Interior",
-      waterDaysSummer: 8,
-      waterDaysWinter: 18,
-      waterSummerText: "Cada 7-10 dies",
-      waterWinterText: "Cada 15-20 dies",
-      waterDetail: "Deixar assecar els primers 3-4 cm de terra abans de regar.",
-      fertilizerType: "Líquid plantes verdes",
-      fertilizerDays: 25,
-      fertilizerActiveMonths: [3, 4, 5, 6, 7, 8],
-      fertilizerFreq: "Cada 3-4 setmanes",
-      fertilizerSeason: "Abril a Setembre",
-      fertilizerNotes: "Ajuda a mantenir la intensitat del verd.",
-      light: "Llum indirecta abundant o mitjana.",
-      ppfdMin: 120,
-      ppfdMax: 250,
-      ppfdText: "120 - 250 µmol/m²s",
-      substrate: "Substrat universal de qualitat amb perlita.",
-      toxic: true,
-      toxicityDetail: "🔴 Tòxica per a gossos i gats.",
-      tip: "Sensible al clor i calç. Deixa reposar l'aigua 24h."
-    },
-    {
-      id: "pothos_tutor",
-      name: "Potos Enfiladís (amb Tutor)",
-      scientific: "Epipremnum aureum",
-      photo: "07_pothos_tutor_bambu.jpeg",
-      difficulty: "molt_facil",
-      difficultyLabel: "Molt fàcil",
-      difficultyClass: "badge-diff-very-easy",
-      zone: "interior",
-      zoneLabel: "🏠 Interior",
-      waterDaysSummer: 6,
-      waterDaysWinter: 12,
-      waterSummerText: "Cada 5-7 dies",
-      waterWinterText: "Cada 10-14 dies",
-      waterDetail: "Regar quan el substrat comenci a assecar-se a dalt.",
-      fertilizerType: "Líquid plantes verdes",
-      fertilizerDays: 15,
-      fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8, 9],
-      fertilizerFreq: "Cada 15 dies",
-      fertilizerSeason: "Març a Octubre",
-      fertilizerNotes: "L'adob afavoreix fulles més grosses.",
-      light: "Llum indirecta abundant.",
-      ppfdMin: 140,
-      ppfdMax: 300,
-      ppfdText: "140 - 300 µmol/m²s",
-      substrate: "Universal amb bona dosi de perlita.",
-      toxic: true,
-      toxicityDetail: "🔴 Tòxic per a mascotes.",
-      tip: "Quan creix enfilant-se cap amunt, desenvolupa fulles més amples."
-    },
-    {
-      id: "callisia",
-      name: "Callisia fragrans (Planta Cistella)",
-      scientific: "Callisia fragrans",
-      photo: "08_callisia_fragrans.jpeg",
-      difficulty: "molt_facil",
-      difficultyLabel: "Molt fàcil",
-      difficultyClass: "badge-diff-very-easy",
-      zone: "exterior",
-      zoneLabel: "☀️ Balcó / Exterior",
-      waterDaysSummer: 5,
-      waterDaysWinter: 12,
-      waterSummerText: "1-2 cops / setmana",
-      waterWinterText: "Cada 10-15 dies",
-      waterDetail: "Tiges carnoses que guarden aigua.",
-      fertilizerType: "Universal o suculentes (dosi baixa)",
-      fertilizerDays: 30,
-      fertilizerActiveMonths: [3, 4, 5, 6, 7, 8],
-      fertilizerFreq: "1 cop al mes",
-      fertilizerSeason: "Abril a Setembre",
-      fertilizerNotes: "Poc exigent.",
-      light: "Llum brillant indirecta o sol matinal suau.",
-      ppfdMin: 180,
-      ppfdMax: 380,
-      ppfdText: "180 - 380 µmol/m²s",
-      substrate: "Universal drenant en test de terracota.",
-      toxic: false,
-      toxicityDetail: "🟢 Molt segura.",
-      tip: "Molt fàcil de reproduir per fillols."
-    },
-    {
-      id: "romani",
-      name: "Romaní",
-      scientific: "Salvia rosmarinus",
-      photo: "09_romani_salvia_rosmarinus.jpeg",
-      difficulty: "facil",
-      difficultyLabel: "Fàcil",
-      difficultyClass: "badge-diff-easy",
-      zone: "exterior",
-      zoneLabel: "☀️ Balcó / Exterior",
-      waterDaysSummer: 7,
-      waterDaysWinter: 18,
-      waterSummerText: "1 cop / setmana",
-      waterWinterText: "Cada 15-20 dies",
-      waterDetail: "Planta de secà: esperar que la terra s'assequi del tot.",
-      fertilizerType: "🌱 Orgànic (Humus de cuc)",
-      fertilizerDays: 60,
-      fertilizerActiveMonths: [2, 3, 4, 5],
-      fertilizerFreq: "Cada 2 mesos",
-      fertilizerSeason: "Març a Juny",
-      fertilizerNotes: "L'adob químic li fa perdre aroma.",
-      light: "Ple sol directe (mínim 5 hores/dia).",
-      ppfdMin: 400,
-      ppfdMax: 800,
-      ppfdText: "400 - 800+ µmol/m²s",
-      substrate: "Molt porós amb sorra o grava.",
-      toxic: false,
-      toxicityDetail: "🟢 Comestible i no tòxica.",
-      tip: "El test de fang és ideal perquè transpira."
-    },
-    {
-      id: "menta",
-      name: "Menta (Herba-sana)",
-      scientific: "Mentha spicata",
-      photo: "10_menta_mentha.jpeg",
-      difficulty: "facil",
-      difficultyLabel: "Fàcil",
-      difficultyClass: "badge-diff-easy",
-      zone: "exterior",
-      zoneLabel: "☀️ Balcó / Exterior",
-      waterDaysSummer: 3,
-      waterDaysWinter: 7,
-      waterSummerText: "2-3 cops / setmana",
-      waterWinterText: "1 cop / setmana",
-      waterDetail: "Requereix terra constantment fresca i humida.",
-      fertilizerType: "🌱 Orgànic hort/humus",
-      fertilizerDays: 21,
-      fertilizerActiveMonths: [2, 3, 4, 5, 6, 7, 8],
-      fertilizerFreq: "Cada 3 setmanes",
-      fertilizerSeason: "Març a Setembre",
-      fertilizerNotes: "Planta voraç en ple creixement.",
-      light: "Semisombra o sol suau del matí.",
-      ppfdMin: 220,
-      ppfdMax: 500,
-      ppfdText: "220 - 500 µmol/m²s",
-      substrate: "Substrat universal ric en humus que retingui la humitat.",
-      toxic: false,
-      toxicityDetail: "🟢 Comestible i segura.",
-      tip: "Si s'espiga molt, fes una poda severa i rebrotarà frondosa."
-    },
-    {
-      id: "farigola",
-      name: "Farigola (Timó)",
-      scientific: "Thymus vulgaris",
-      photo: "11_farigola_thymus_vulgaris.jpeg",
-      difficulty: "facil",
-      difficultyLabel: "Fàcil",
-      difficultyClass: "badge-diff-easy",
-      zone: "exterior",
-      zoneLabel: "☀️ Balcó / Exterior",
-      waterDaysSummer: 8,
-      waterDaysWinter: 18,
-      waterSummerText: "Cada 7-10 dies",
-      waterWinterText: "Cada 2-3 setmanes",
-      waterDetail: "Molt resistent a la sequera.",
-      fertilizerType: "🌱 Orgànic suau (humus a la base)",
-      fertilizerDays: 120,
-      fertilizerActiveMonths: [2, 3],
-      fertilizerFreq: "1 sol cop a l'any",
-      fertilizerSeason: "Març - Abril",
-      fertilizerNotes: "En terres pobres és quan concentra més essència.",
-      light: "Ple sol directe.",
-      ppfdMin: 400,
-      ppfdMax: 800,
-      ppfdText: "400 - 800+ µmol/m²s",
-      substrate: "Pobre, calcari i molt drenant.",
-      toxic: false,
-      toxicityDetail: "🟢 Comestible i segura.",
-      tip: "No regar mai si la terra està encara humida."
-    },
-    {
-      id: "calaminta",
-      name: "Calaminta (Neveda de bosc)",
-      scientific: "Clinopodium nepeta (Calamintha)",
-      photo: "12_calaminta_neveda.jpeg",
-      difficulty: "facil",
-      difficultyLabel: "Fàcil",
-      difficultyClass: "badge-diff-easy",
-      zone: "exterior",
-      zoneLabel: "☀️ Balcó / Exterior",
-      waterDaysSummer: 4,
-      waterDaysWinter: 12,
-      waterSummerText: "2 cops / setmana",
-      waterWinterText: "Cada 10-15 dies",
-      waterDetail: "Reg moderat. Mantenir certa frescor.",
-      fertilizerType: "Líquid flor o fertilitzant ecològic",
-      fertilizerDays: 30,
-      fertilizerActiveMonths: [4, 5, 6, 7, 8],
-      fertilizerFreq: "1 cop al mes",
-      fertilizerSeason: "Maig a Setembre",
-      fertilizerNotes: "Reforç mensual durant la floració.",
-      light: "Sol o semisombra lluminosa.",
-      ppfdMin: 300,
-      ppfdMax: 650,
-      ppfdText: "300 - 650 µmol/m²s",
-      substrate: "Universal amb bona perlita.",
-      toxic: false,
-      toxicityDetail: "🟢 Segura i mel·lífera.",
-      tip: "Atrau abelles i pol·linitzadors beneficiosos."
-    },
-    {
-      id: "sansevieria_esqueix",
-      name: "Llengua de sogra (Esqueix / Fillol)",
-      scientific: "Sansevieria trifasciata 'Laurentii'",
-      photo: "13_sansevieria_esqueix.jpeg",
-      difficulty: "molt_facil",
-      difficultyLabel: "Molt fàcil",
-      difficultyClass: "badge-diff-very-easy",
-      zone: "interior",
-      zoneLabel: "🏠 Interior",
-      waterDaysSummer: 18,
-      waterDaysWinter: 35,
-      waterSummerText: "Cada 15-20 dies",
-      waterWinterText: "Cada 4-5 setmanes",
-      waterDetail: "Exemplar jove d'una sola fulla, gairebé no consumeix aigua.",
-      fertilizerType: "Cactus (molt diluït)",
-      fertilizerDays: 60,
-      fertilizerActiveMonths: [5, 6],
-      fertilizerFreq: "1 sol cop a l'estiu",
-      fertilizerSeason: "Juny - Juliol",
-      fertilizerNotes: "No aplicar adob fort.",
-      light: "Llum indirecta moderada a brillant.",
-      ppfdMin: 80,
-      ppfdMax: 220,
-      ppfdText: "80 - 220 µmol/m²s",
-      substrate: "Substrat de cactus i suculentes molt sorrenc.",
-      toxic: true,
-      toxicityDetail: "🔴 Tòxica per a mascotes.",
-      tip: "Té un creixement inicial lent; tardarà uns mesos a treure nous fillols."
-    }
-  ];
+  const initialDefaultPlants = [];
 
   // -------------------------------------------------------------
   // EMMAGATZEMATGE DE PLANTES I HISTÒRIC A SUPABASE & LOCAL
@@ -6439,7 +6225,7 @@
       const saved = localStorage.getItem(STORAGE_CATALOG_KEY);
       if (saved) return JSON.parse(saved);
     } catch(e) {}
-    return initialDefaultPlants;
+    return [];
   }
 
   // Guarda el catàleg a localStorage alleugerint les fotos Base64 cap a IndexedDB per no superar mai els 5 MB
@@ -6513,8 +6299,8 @@
             plantsCatalog = parsedCat;
             saveLocalCatalog(plantsCatalog);
           }
-        } else {
-          // Si el núvol és buit, pugem el catàleg inicial complet de 13 plantes
+        } else if (plantsCatalog && plantsCatalog.length > 0) {
+          // Si el catàleg local conté plantes noves, les sincronitzem al núvol
           await supabaseClient
             .from('plantes_history')
             .upsert({ id: 'plants_catalog', data: plantsCatalog, updated_at: new Date().toISOString() });
@@ -7145,8 +6931,8 @@
         text: plant.ppfdText || `${plant.ppfdMin} - ${plant.ppfdMax} µmol/m²s`
       };
     }
-    // Cerca al catàleg inicial o presets botànics
-    const matchDef = initialDefaultPlants.find(p => p.id === plant?.id || (p.scientific && plant?.scientific && p.scientific.toLowerCase() === plant.scientific.toLowerCase()));
+    // Cerca a la biblioteca botànica de referència
+    const matchDef = Object.values(botanicalPresets).find(b => (b.scientific && plant?.scientific && b.scientific.toLowerCase() === plant.scientific.toLowerCase()) || (b.scientific && plant?.name && b.scientific.toLowerCase().includes(plant.name.toLowerCase())));
     if (matchDef && matchDef.ppfdMin) {
       return {
         min: matchDef.ppfdMin,
@@ -7348,75 +7134,38 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const container = document.getElementById("fallbackPresetsContainer");
     const q = query.toLowerCase().trim();
 
-    // Llista unificada de totes les espècies conegudes
+    // Llista unificada de totes les espècies de la biblioteca botànica
     const allPresets = [];
-
-    // 1. Les plantes del catàleg actual
-    initialDefaultPlants.forEach(p => {
-      allPresets.push({
-        id: p.id,
-        name: p.name,
-        scientific: p.scientific,
-        data: {
-          name: p.name,
-          scientific: p.scientific,
-          zone: p.zone,
-          difficulty: p.difficulty,
-          difficultyLabel: p.difficultyLabel,
-          toxic: p.toxic,
-          waterDaysSummer: p.waterDaysSummer,
-          waterDaysWinter: p.waterDaysWinter,
-          waterSummerText: p.waterSummerText,
-          waterWinterText: p.waterWinterText,
-          waterDetail: p.waterDetail,
-          fertilizerType: p.fertilizerType,
-          fertilizerDays: p.fertilizerDays,
-          fertilizerFreq: p.fertilizerFreq,
-          fertilizerSeason: p.fertilizerSeason,
-          fertilizerNotes: p.fertilizerNotes,
-          light: p.light,
-          ppfdMin: p.ppfdMin,
-          ppfdMax: p.ppfdMax,
-          ppfdText: p.ppfdText,
-          substrate: p.substrate,
-          tip: p.tip
-        }
-      });
-    });
-
-    // 2. Les plantes de la biblioteca botànica
     Object.entries(botanicalPresets).forEach(([k, b]) => {
-      if (!allPresets.some(item => item.scientific.toLowerCase() === b.scientific.toLowerCase())) {
-        allPresets.push({
-          id: k,
+      allPresets.push({
+        id: k,
+        name: k.split('(')[0].trim(),
+        scientific: b.scientific,
+        data: {
           name: k.split('(')[0].trim(),
           scientific: b.scientific,
-          data: {
-            name: k.split('(')[0].trim(),
-            scientific: b.scientific,
-            zone: b.zone,
-            difficulty: b.difficulty,
-            difficultyLabel: b.difficulty === 'molt_facil' ? 'Molt fàcil' : (b.difficulty === 'facil' ? 'Fàcil' : 'Mitjana'),
-            toxic: b.toxic,
-            waterDaysSummer: b.waterSummer,
-            waterDaysWinter: b.waterWinter,
-            waterSummerText: "Cada " + b.waterSummer + " dies",
-            waterWinterText: "Cada " + b.waterWinter + " dies",
-            waterDetail: "Regar moderadament quan el substrat s'assequi.",
-            fertilizerType: b.fertType,
-            fertilizerDays: b.fertDays,
-            fertilizerFreq: "Cada " + b.fertDays + " dies",
-            fertilizerSeason: "Primavera i Estiu",
-            fertilizerNotes: "Adobar en temps de creixement actiu.",
-            light: b.light,
-            ppfdMin: b.ppfdMin,
-            ppfdMax: b.ppfdMax,
-            ppfdText: b.ppfdText,
-            substrate: b.substrate,
-            tip: b.tip
-          }
-        });
-      }
+          zone: b.zone,
+          difficulty: b.difficulty,
+          difficultyLabel: b.difficulty === 'molt_facil' ? 'Molt fàcil' : (b.difficulty === 'facil' ? 'Fàcil' : 'Mitjana'),
+          toxic: b.toxic,
+          waterDaysSummer: b.waterSummer,
+          waterDaysWinter: b.waterWinter,
+          waterSummerText: "Cada " + b.waterSummer + " dies",
+          waterWinterText: "Cada " + b.waterWinter + " dies",
+          waterDetail: b.waterDetail || "Regar moderadament quan el substrat s'assequi.",
+          fertilizerType: b.fertType,
+          fertilizerDays: b.fertDays,
+          fertilizerFreq: "Cada " + b.fertDays + " dies",
+          fertilizerSeason: "Primavera i Estiu",
+          fertilizerNotes: b.fertilizerNotes || "Adobar en temps de creixement actiu.",
+          light: b.light,
+          ppfdMin: b.ppfdMin,
+          ppfdMax: b.ppfdMax,
+          ppfdText: b.ppfdText,
+          substrate: b.substrate,
+          tip: b.tip
+        }
+      });
     });
 
     const filtered = allPresets.filter(p => {
@@ -8106,6 +7855,32 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     renderCalendar();
     updateBellBadgeDot();
 
+    const searchRowEl = document.querySelector(".app-search-row");
+
+    // Si el catàleg no té cap planta (usuari nou o llista buida)
+    if (!plantsCatalog || plantsCatalog.length === 0) {
+      if (searchRowEl) searchRowEl.style.display = "none";
+      if (emptyStateEl) {
+        emptyStateEl.style.display = "block";
+        const iconEl = document.getElementById("emptyStateIcon");
+        if (iconEl) iconEl.innerText = "🌱";
+        const titleEl = document.getElementById("emptyStateTitle");
+        const descEl = document.getElementById("emptyStateDesc");
+        const btnEl = document.getElementById("emptyStateAddBtn");
+        if (titleEl) titleEl.innerText = t("No tens cap planta registrada", "No tienes ninguna planta registrada", "No plants registered yet");
+        if (descEl) descEl.innerText = t("Afegeix la teva primera planta per començar a cuidar el teu jardí de forma senzilla.", "Añade tu primera planta para empezar a cuidar tu jardín de forma sencilla.", "Add your first plant to start caring for your garden easily.");
+        if (btnEl) btnEl.innerText = t("Afegir la teva primera planta", "Añadir tu primera planta", "Add your first plant");
+      }
+      if (gridEl) gridEl.innerHTML = "";
+      if (instaGridEl) instaGridEl.innerHTML = "";
+      currentFilteredPlants = [];
+      displayedPlantsCount = 0;
+      updateInfiniteScrollStatus(false);
+      return;
+    }
+
+    if (searchRowEl) searchRowEl.style.display = "flex";
+
     const searchVal = document.getElementById("searchInput").value.toLowerCase().trim();
     const statusVal = document.getElementById("statusFilter").value;
     const zoneVal = document.getElementById("zoneFilter").value;
@@ -8166,7 +7941,17 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     });
 
     if (filtered.length === 0) {
-      emptyStateEl.style.display = "block";
+      if (emptyStateEl) {
+        emptyStateEl.style.display = "block";
+        const iconEl = document.getElementById("emptyStateIcon");
+        if (iconEl) iconEl.innerText = "🔍";
+        const titleEl = document.getElementById("emptyStateTitle");
+        const descEl = document.getElementById("emptyStateDesc");
+        const btnEl = document.getElementById("emptyStateAddBtn");
+        if (titleEl) titleEl.innerText = t("No s'ha trobat cap planta", "No se ha encontrado ninguna planta", "No plants found");
+        if (descEl) descEl.innerText = t("Prova de canviar els filtres de cerca o afegeix una nova planta.", "Prueba a cambiar los filtros de búsqueda o añade una nueva planta.", "Try adjusting search filters or add a new plant.");
+        if (btnEl) btnEl.innerText = t("Afegir planta", "Añadir planta", "Add plant");
+      }
       gridEl.innerHTML = "";
       if (instaGridEl) instaGridEl.innerHTML = "";
       currentFilteredPlants = [];
@@ -8174,7 +7959,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       updateInfiniteScrollStatus(false);
       return;
     } else {
-      emptyStateEl.style.display = "none";
+      if (emptyStateEl) emptyStateEl.style.display = "none";
     }
 
     currentFilteredPlants = filtered;
@@ -9771,9 +9556,15 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       for (let i = 0; i < 7; i++) wkRow.children[i].innerText = days[i];
     }
 
-    setElText("emptyStateTitle", t("No s'ha trobat cap planta", "No se ha encontrado ninguna planta", "No plants found"));
-    setElText("emptyStateDesc", t("Prova de canviar els filtres o el text de cerca.", "Prueba a cambiar los filtros o el texto de búsqueda.", "Try adjusting filters or search text."));
-    setElText("emptyStateAddBtn", t("Afegir planta", "Añadir planta", "Add plant"));
+    if (!plantsCatalog || plantsCatalog.length === 0) {
+      setElText("emptyStateTitle", t("No tens cap planta registrada", "No tienes ninguna planta registrada", "No plants registered yet"));
+      setElText("emptyStateDesc", t("Afegeix la teva primera planta per començar a cuidar el teu jardí de forma senzilla.", "Añade tu primera planta para empezar a cuidar tu jardín de forma sencilla.", "Add your first plant to start caring for your garden easily."));
+      setElText("emptyStateAddBtn", t("Afegir la teva primera planta", "Añadir tu primera planta", "Add your first plant"));
+    } else {
+      setElText("emptyStateTitle", t("No s'ha trobat cap planta", "No se ha encontrado ninguna planta", "No plants found"));
+      setElText("emptyStateDesc", t("Prova de canviar els filtres o el text de cerca.", "Prueba a cambiar los filtros o el texto de búsqueda.", "Try adjusting filters or search text."));
+      setElText("emptyStateAddBtn", t("Afegir planta", "Añadir planta", "Add plant"));
+    }
 
     // Preferències / Ajustaments
     setElText("settingsScreenTitle", t("Ajustaments", "Ajustes", "Settings"));
