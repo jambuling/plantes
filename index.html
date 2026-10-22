@@ -9976,13 +9976,16 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   // -------------------------------------------------------------
   // EXPORTACIÓ I IMPORTACIÓ DE DADES (BACKUP JSON)
   // -------------------------------------------------------------
-  function exportDataBackup() {
+  async function exportDataBackup() {
     try {
+      // Assegurem que totes les fotografies d'IndexedDB estiguin totalment hidratades en Base64
+      const fullCatalog = await hydrateCatalogFromIDB(JSON.parse(JSON.stringify(plantsCatalog)));
+
       const backupPayload = {
         app: "PlantesApp",
         version: "1.0",
         exportDate: new Date().toISOString(),
-        plantsCatalog: plantsCatalog,
+        plantsCatalog: fullCatalog,
         history: inMemoryHistory,
         language: currentLang,
         themeDark: document.body.classList.contains("dark-mode")
