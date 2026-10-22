@@ -3531,6 +3531,103 @@
       color: var(--text-main);
       line-height: 1.4;
     }
+
+    /* INDICADOR I BARRA DE NIVELL PPFD (RADIACIÓ FOTOSINTÈTICA PAR) */
+    .ppfd-gauge-box {
+      margin-top: 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .ppfd-gauge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.80rem;
+    }
+    .ppfd-gauge-title {
+      font-weight: 700;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ppfd-gauge-title i[class*="ph-"] {
+      font-size: 1.05rem;
+      color: #eab308;
+    }
+    .ppfd-gauge-val {
+      font-weight: 800;
+      font-size: 0.78rem;
+      color: #275d36;
+      background: #eef6ef;
+      border: 1px solid #c9decb;
+      padding: 2px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    body.dark-mode .ppfd-gauge-val {
+      background: rgba(95, 155, 101, 0.22);
+      border-color: #5f9b65;
+      color: #8cd493;
+    }
+    .ppfd-gauge-track-wrap {
+      position: relative;
+      width: 100%;
+      padding: 2px 0;
+    }
+    .ppfd-gauge-track {
+      position: relative;
+      width: 100%;
+      height: 10px;
+      border-radius: 6px;
+      background: #e2e8e3;
+      display: flex;
+      overflow: hidden;
+    }
+    body.dark-mode .ppfd-gauge-track {
+      background: #1f3024;
+    }
+    .ppfd-gauge-zone {
+      height: 100%;
+      border-right: 1px dashed rgba(0, 0, 0, 0.12);
+    }
+    body.dark-mode .ppfd-gauge-zone {
+      border-right-color: rgba(255, 255, 255, 0.15);
+    }
+    .ppfd-gauge-zone.zone-low { width: 12.5%; }    /* 0 - 100 µmol/m²s */
+    .ppfd-gauge-zone.zone-med { width: 18.75%; }  /* 100 - 250 µmol/m²s */
+    .ppfd-gauge-zone.zone-high { width: 25%; }     /* 250 - 450 µmol/m²s */
+    .ppfd-gauge-zone.zone-direct { width: 43.75%; border-right: none; } /* 450 - 800+ µmol/m²s */
+
+    .ppfd-gauge-highlight {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      background: #5f9b65;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(95, 155, 101, 0.55);
+      border: 1px solid #ffffff;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+    body.dark-mode .ppfd-gauge-highlight {
+      border-color: #27402f;
+    }
+    .ppfd-gauge-scale {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.2;
+    }
     .guide-item-divider,
     .maint-item-divider {
       width: 100% !important;
@@ -3928,6 +4025,10 @@
               <span style="color: var(--text-muted);">☀️ Exposició de llum:</span>
               <strong id="aiResultLightText" style="color: var(--text-main);"></strong>
             </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;" id="aiResultPpfdRow">
+              <span style="color: var(--text-muted);">💡 Radiació PPFD ideal:</span>
+              <strong id="aiResultPpfdText" style="color: var(--text-main);"></strong>
+            </div>
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
               <span style="color: var(--text-muted);">🐾 Toxicitat mascotes:</span>
               <span id="aiResultToxicBadge" class="badge"></span>
@@ -4308,8 +4409,9 @@
         <div class="detail-section-label" id="modalGuideHeading">GUIA BÀSICA</div>
         <div class="tracker-card">
           <div class="guide-item">
-            <div class="guide-item-title" id="modalLightSectionTitle">Llum i ubicació</div>
+            <div class="guide-item-title" id="modalLightSectionTitle">Llum i radiació PAR (PPFD)</div>
             <div class="guide-item-text" id="modalLight"></div>
+            <div id="modalPpfdGaugeContainer"></div>
           </div>
           <div class="guide-item-divider"></div>
           <div class="guide-item">
@@ -4567,6 +4669,15 @@
           <div class="edit-field-row">
             <label for="editPlantLight" id="editPlantLightLabel">Llum i ubicació:</label>
             <input type="text" id="editPlantLight" class="form-control">
+          </div>
+          <div class="edit-field-row">
+            <label for="editPlantPpfdMin" id="editPlantPpfdLabel">Radiació PPFD ideal (mín - màx µmol/m²s):</label>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="number" id="editPlantPpfdMin" class="form-control" placeholder="Mín (ex: 150)" style="max-width: 120px;">
+              <span style="color: var(--text-muted); font-weight: 700;">-</span>
+              <input type="number" id="editPlantPpfdMax" class="form-control" placeholder="Màx (ex: 280)" style="max-width: 120px;">
+              <span style="color: var(--text-muted); font-size: 0.80rem; font-weight: 600;">µmol/m²s</span>
+            </div>
           </div>
           <div class="edit-field-row">
             <label for="editPlantSubstrate" id="editPlantSubstrateLabel">Substrat recomanat:</label>
@@ -5650,6 +5761,9 @@
       waterSummer: 7,
       waterWinter: 14,
       light: "Llum indirecta abundant o mitjana",
+      ppfdMin: 150,
+      ppfdMax: 300,
+      ppfdText: "150 - 300 µmol/m²s",
       substrate: "Substrat ric en torba amb un 30% de perlita i escorça",
       fertType: "Líquid plantes verdes",
       fertDays: 20,
@@ -5663,6 +5777,9 @@
       waterSummer: 7,
       waterWinter: 14,
       light: "Llum indirecta molt brillant",
+      ppfdMin: 180,
+      ppfdMax: 350,
+      ppfdText: "180 - 350 µmol/m²s",
       substrate: "Universal amb bona dosi de perlita",
       fertType: "Líquid plantes verdes",
       fertDays: 21,
@@ -5676,6 +5793,9 @@
       waterSummer: 7,
       waterWinter: 12,
       light: "Molta llum indirecta (agraeix una mica de sol suau matinal)",
+      ppfdMin: 200,
+      ppfdMax: 420,
+      ppfdText: "200 - 420 µmol/m²s",
       substrate: "Lleuger i drenant amb torba i perlita",
       fertType: "Líquid equilibrat",
       fertDays: 21,
@@ -5689,6 +5809,9 @@
       waterSummer: 15,
       waterWinter: 30,
       light: "Molt adaptable: tolera espais foscos o amb poca llum",
+      ppfdMin: 60,
+      ppfdMax: 160,
+      ppfdText: "60 - 160 µmol/m²s",
       substrate: "Substrat de cactus o universal molt sorrenc",
       fertType: "Universal a meitat de dosi",
       fertDays: 30,
@@ -5702,6 +5825,9 @@
       waterSummer: 5,
       waterWinter: 9,
       light: "Llum indirecta mitjana a suau (l'ombra la protegeix)",
+      ppfdMin: 80,
+      ppfdMax: 180,
+      ppfdText: "80 - 180 µmol/m²s",
       substrate: "Substrat airejat ric en matèria orgànica",
       fertType: "Líquid a mitja dosi",
       fertDays: 21,
@@ -5715,6 +5841,9 @@
       waterSummer: 7,
       waterWinter: 12,
       light: "Llum indirecta molt abundant (finestres est o sud filtrades)",
+      ppfdMin: 120,
+      ppfdMax: 240,
+      ppfdText: "120 - 240 µmol/m²s",
       substrate: "100% escorça de pi especial orquídies",
       fertType: "Específic orquídies",
       fertDays: 21,
@@ -5728,6 +5857,9 @@
       waterSummer: 12,
       waterWinter: 28,
       light: "Sol directe o llum molt abundant",
+      ppfdMin: 300,
+      ppfdMax: 600,
+      ppfdText: "300 - 600 µmol/m²s",
       substrate: "Substrat de cactus i suculentes amb drenatge total",
       fertType: "Cactus (molt suau)",
       fertDays: 45,
@@ -5741,6 +5873,9 @@
       waterSummer: 7,
       waterWinter: 18,
       light: "Ple sol directe (mínim 6 hores/dia)",
+      ppfdMin: 450,
+      ppfdMax: 850,
+      ppfdText: "450 - 850+ µmol/m²s",
       substrate: "Calcari, pobre i extremadament drenant",
       fertType: "Orgànic molt moderat",
       fertDays: 60,
@@ -5754,6 +5889,9 @@
       waterSummer: 2,
       waterWinter: 6,
       light: "Sol suau o molta claredat protegida del sol abrasador de tarda",
+      ppfdMin: 350,
+      ppfdMax: 700,
+      ppfdText: "350 - 700 µmol/m²s",
       substrate: "Universal ric i ben humit",
       fertType: "🌱 Orgànic líquid culinari",
       fertDays: 15,
@@ -5788,6 +5926,9 @@
       fertilizerSeason: "Abril a Setembre",
       fertilizerNotes: "És de creixement lent: no sobrealimentar per no danyar arrels.",
       light: "Llum indirecta moderada / ombra suau (mai sol directe)",
+      ppfdMin: 70,
+      ppfdMax: 160,
+      ppfdText: "70 - 160 µmol/m²s",
       substrate: "70% substrat universal + 30% perlita.",
       toxic: false,
       toxicityDetail: "🟢 Totalment segura per a mascotes.",
@@ -5815,6 +5956,9 @@
       fertilizerSeason: "Març a Octubre",
       fertilizerNotes: "L'adob per a flor estimula noves espates blanques contínuament.",
       light: "Llum indirecta mitjana a suau.",
+      ppfdMin: 70,
+      ppfdMax: 180,
+      ppfdText: "70 - 180 µmol/m²s",
       substrate: "Substrat universal ric en matèria orgànica + 20% perlita.",
       toxic: true,
       toxicityDetail: "🔴 Tòxica per a mascotes (oxalats).",
@@ -5842,6 +5986,9 @@
       fertilizerSeason: "Març a Setembre",
       fertilizerNotes: "Diluir a la meitat de la dosi del fabricant.",
       light: "Llum indirecta molt abundant.",
+      ppfdMin: 150,
+      ppfdMax: 280,
+      ppfdText: "150 - 280 µmol/m²s",
       substrate: "50% universal + 30% escorça pi orquídia + 20% perlita.",
       toxic: true,
       toxicityDetail: "🔴 Tòxica per a mascotes.",
@@ -5869,6 +6016,9 @@
       fertilizerSeason: "Març a Octubre",
       fertilizerNotes: "El nitrogen afavoreix el creixement ràpid.",
       light: "Molt adaptable: llum indirecta mitjana a brillant.",
+      ppfdMin: 90,
+      ppfdMax: 250,
+      ppfdText: "90 - 250 µmol/m²s",
       substrate: "Universal amb bona dosi de perlita.",
       toxic: true,
       toxicityDetail: "🔴 Tòxic per a mascotes.",
@@ -5896,6 +6046,9 @@
       fertilizerSeason: "Maig a Agost",
       fertilizerNotes: "Consum de nutrients molt baix. Mai abonar a la tardor/hivern.",
       light: "Tot terreny: des d'ombra fins a sol suau.",
+      ppfdMin: 80,
+      ppfdMax: 300,
+      ppfdText: "80 - 300 µmol/m²s",
       substrate: "Substrat de cactus o 50% universal + 50% perlita.",
       toxic: true,
       toxicityDetail: "🔴 Tòxica en cas d'ingesta.",
@@ -5923,6 +6076,9 @@
       fertilizerSeason: "Abril a Setembre",
       fertilizerNotes: "Ajuda a mantenir la intensitat del verd.",
       light: "Llum indirecta abundant o mitjana.",
+      ppfdMin: 120,
+      ppfdMax: 250,
+      ppfdText: "120 - 250 µmol/m²s",
       substrate: "Substrat universal de qualitat amb perlita.",
       toxic: true,
       toxicityDetail: "🔴 Tòxica per a gossos i gats.",
@@ -5950,6 +6106,9 @@
       fertilizerSeason: "Març a Octubre",
       fertilizerNotes: "L'adob afavoreix fulles més grosses.",
       light: "Llum indirecta abundant.",
+      ppfdMin: 140,
+      ppfdMax: 300,
+      ppfdText: "140 - 300 µmol/m²s",
       substrate: "Universal amb bona dosi de perlita.",
       toxic: true,
       toxicityDetail: "🔴 Tòxic per a mascotes.",
@@ -5977,6 +6136,9 @@
       fertilizerSeason: "Abril a Setembre",
       fertilizerNotes: "Poc exigent.",
       light: "Llum brillant indirecta o sol matinal suau.",
+      ppfdMin: 180,
+      ppfdMax: 380,
+      ppfdText: "180 - 380 µmol/m²s",
       substrate: "Universal drenant en test de terracota.",
       toxic: false,
       toxicityDetail: "🟢 Molt segura.",
@@ -6004,6 +6166,9 @@
       fertilizerSeason: "Març a Juny",
       fertilizerNotes: "L'adob químic li fa perdre aroma.",
       light: "Ple sol directe (mínim 5 hores/dia).",
+      ppfdMin: 400,
+      ppfdMax: 800,
+      ppfdText: "400 - 800+ µmol/m²s",
       substrate: "Molt porós amb sorra o grava.",
       toxic: false,
       toxicityDetail: "🟢 Comestible i no tòxica.",
@@ -6031,6 +6196,9 @@
       fertilizerSeason: "Març a Setembre",
       fertilizerNotes: "Planta voraç en ple creixement.",
       light: "Semisombra o sol suau del matí.",
+      ppfdMin: 220,
+      ppfdMax: 500,
+      ppfdText: "220 - 500 µmol/m²s",
       substrate: "Substrat universal ric en humus que retingui la humitat.",
       toxic: false,
       toxicityDetail: "🟢 Comestible i segura.",
@@ -6058,6 +6226,9 @@
       fertilizerSeason: "Març - Abril",
       fertilizerNotes: "En terres pobres és quan concentra més essència.",
       light: "Ple sol directe.",
+      ppfdMin: 400,
+      ppfdMax: 800,
+      ppfdText: "400 - 800+ µmol/m²s",
       substrate: "Pobre, calcari i molt drenant.",
       toxic: false,
       toxicityDetail: "🟢 Comestible i segura.",
@@ -6085,6 +6256,9 @@
       fertilizerSeason: "Maig a Setembre",
       fertilizerNotes: "Reforç mensual durant la floració.",
       light: "Sol o semisombra lluminosa.",
+      ppfdMin: 300,
+      ppfdMax: 650,
+      ppfdText: "300 - 650 µmol/m²s",
       substrate: "Universal amb bona perlita.",
       toxic: false,
       toxicityDetail: "🟢 Segura i mel·lífera.",
@@ -6112,6 +6286,9 @@
       fertilizerSeason: "Juny - Juliol",
       fertilizerNotes: "No aplicar adob fort.",
       light: "Llum indirecta moderada a brillant.",
+      ppfdMin: 80,
+      ppfdMax: 220,
+      ppfdText: "80 - 220 µmol/m²s",
       substrate: "Substrat de cactus i suculentes molt sorrenc.",
       toxic: true,
       toxicityDetail: "🔴 Tòxica per a mascotes.",
@@ -6958,6 +7135,77 @@
   }
 
   // -------------------------------------------------------------
+  // CALCULADOR I FORMATADOR DE RADIACIÓ FOTOSINTÈTICA (PPFD / PAR)
+  // -------------------------------------------------------------
+  function getPlantPPFD(plant) {
+    if (plant && (plant.ppfdMin !== undefined && plant.ppfdMin !== null) && (plant.ppfdMax !== undefined && plant.ppfdMax !== null)) {
+      return {
+        min: parseInt(plant.ppfdMin) || 120,
+        max: parseInt(plant.ppfdMax) || 280,
+        text: plant.ppfdText || `${plant.ppfdMin} - ${plant.ppfdMax} µmol/m²s`
+      };
+    }
+    // Cerca al catàleg inicial o presets botànics
+    const matchDef = initialDefaultPlants.find(p => p.id === plant?.id || (p.scientific && plant?.scientific && p.scientific.toLowerCase() === plant.scientific.toLowerCase()));
+    if (matchDef && matchDef.ppfdMin) {
+      return {
+        min: matchDef.ppfdMin,
+        max: matchDef.ppfdMax,
+        text: matchDef.ppfdText || `${matchDef.ppfdMin} - ${matchDef.ppfdMax} µmol/m²s`
+      };
+    }
+
+    const lightStr = (plant?.light || "").toLowerCase();
+    if (lightStr.includes("ple sol") || lightStr.includes("sol directe") || (plant?.zone === "exterior" && lightStr.includes("sol"))) {
+      return { min: 400, max: 800, text: "400 - 800+ µmol/m²s" };
+    } else if (lightStr.includes("molt brillant") || lightStr.includes("molta llum") || lightStr.includes("abundant") || lightStr.includes("sol matinal")) {
+      return { min: 180, max: 350, text: "180 - 350 µmol/m²s" };
+    } else if (lightStr.includes("ombra") || lightStr.includes("poca llum") || lightStr.includes("suau") || lightStr.includes("foscos")) {
+      return { min: 70, max: 160, text: "70 - 160 µmol/m²s" };
+    }
+    return { min: 120, max: 260, text: "120 - 260 µmol/m²s" };
+  }
+
+  function renderPpfdGaugeHtml(min, max, text) {
+    const minVal = Math.max(0, parseInt(min) || 120);
+    const maxVal = Math.max(minVal + 10, parseInt(max) || 260);
+    const maxScale = 800;
+
+    const leftPct = Math.max(0, Math.min(88, Math.round((minVal / maxScale) * 100)));
+    const rightPct = Math.max(leftPct + 10, Math.min(100, Math.round((maxVal / maxScale) * 100)));
+    const widthPct = Math.max(10, rightPct - leftPct);
+
+    const valDisplay = maxVal >= 800 ? `${minVal} - 800+ µmol/m²s` : `${minVal} - ${maxVal} µmol/m²s`;
+
+    return `
+      <div class="ppfd-gauge-box">
+        <div class="ppfd-gauge-header">
+          <span class="ppfd-gauge-title">
+            <i class="ph-thin ph-sun-dim"></i>
+            <span>${t("Radiació PAR òptima (PPFD):", "Radiación PAR óptima (PPFD):", "Optimal PAR radiation (PPFD):")}</span>
+          </span>
+          <span class="ppfd-gauge-val">${valDisplay}</span>
+        </div>
+        <div class="ppfd-gauge-track-wrap">
+          <div class="ppfd-gauge-track">
+            <div class="ppfd-gauge-zone zone-low" title="0 - 100 µmol/m²s"></div>
+            <div class="ppfd-gauge-zone zone-med" title="100 - 250 µmol/m²s"></div>
+            <div class="ppfd-gauge-zone zone-high" title="250 - 450 µmol/m²s"></div>
+            <div class="ppfd-gauge-zone zone-direct" title="450 - 800+ µmol/m²s"></div>
+            <div class="ppfd-gauge-highlight" style="left: ${leftPct}%; width: ${widthPct}%;"></div>
+          </div>
+        </div>
+        <div class="ppfd-gauge-scale">
+          <span>${t("Ombra", "Sombra", "Low")}</span>
+          <span>${t("Indirecta", "Indirecta", "Medium")}</span>
+          <span>${t("Brillant", "Brillante", "Bright")}</span>
+          <span>${t("Sol", "Sol", "Sun")}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  // -------------------------------------------------------------
   // ALTA DE NOVA PLANTA AMB IA (Gemini Vision 100% Automàtic)
   // -------------------------------------------------------------
   let aiAppConfig = {
@@ -7048,6 +7296,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
   "fertilizerSeason": "Primavera i Estiu",
   "fertilizerNotes": "Notes d'adob en català",
   "light": "Requisits d'exposició solar en català",
+  "ppfdMin": nombre enter del valor mínim òptim de radiació fotosintètica PPFD en µmol/m²s (ex: 150),
+  "ppfdMax": nombre enter del valor màxim recomanat de PPFD en µmol/m²s abans de cremar fulles (ex: 280),
+  "ppfdText": "Rang òptim de PPFD (ex: 150 - 280 µmol/m²s)",
   "substrate": "Substrat idoni en català",
   "tip": "Consell clau per mantenir-la sana en català"
 }`;
@@ -7124,6 +7375,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
           fertilizerSeason: p.fertilizerSeason,
           fertilizerNotes: p.fertilizerNotes,
           light: p.light,
+          ppfdMin: p.ppfdMin,
+          ppfdMax: p.ppfdMax,
+          ppfdText: p.ppfdText,
           substrate: p.substrate,
           tip: p.tip
         }
@@ -7155,6 +7409,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
             fertilizerSeason: "Primavera i Estiu",
             fertilizerNotes: "Adobar en temps de creixement actiu.",
             light: b.light,
+            ppfdMin: b.ppfdMin,
+            ppfdMax: b.ppfdMax,
+            ppfdText: b.ppfdText,
             substrate: b.substrate,
             tip: b.tip
           }
@@ -7243,6 +7500,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     document.getElementById("aiResultWaterText").innerText = "Estiu: cada " + plant.waterDaysSummer + " dies | Hivern: cada " + plant.waterDaysWinter + " dies";
     document.getElementById("aiResultFertText").innerText = plant.fertilizerType + " (" + plant.fertilizerFreq + ")";
     document.getElementById("aiResultLightText").innerText = plant.light;
+    const ppfdData = getPlantPPFD(plant);
+    const ppfdValEl = document.getElementById("aiResultPpfdText");
+    if (ppfdValEl) {
+      ppfdValEl.innerText = `${ppfdData.min} - ${ppfdData.max} µmol/m²s`;
+    }
 
     const toxicBadge = document.getElementById("aiResultToxicBadge");
     toxicBadge.className = "badge " + (plant.toxic ? "badge-toxic" : "badge-safe");
@@ -7265,6 +7527,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     const storedUrl = await storeUploadedPhoto(photoId, currentAIPhotoBase64);
 
     const roomVal = document.getElementById("aiResultRoomSelect") ? document.getElementById("aiResultRoomSelect").value : (p.zone === "exterior" ? "terrassa" : "salo");
+    const ppfdData = getPlantPPFD(p);
 
     const newPlantObj = {
       id: "planta_" + Date.now(),
@@ -7292,6 +7555,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       fertilizerSeason: p.fertilizerSeason || "Primavera i Estiu",
       fertilizerNotes: p.fertilizerNotes || "Adobar regularment en temps de creixement actiu.",
       light: p.light || "Llum indirecta moderada",
+      ppfdMin: parseInt(p.ppfdMin) || ppfdData.min,
+      ppfdMax: parseInt(p.ppfdMax) || ppfdData.max,
+      ppfdText: p.ppfdText || ppfdData.text,
       substrate: p.substrate || "Universal ben drenat",
       potSize: "",
       toxic: !!p.toxic,
@@ -8199,6 +8465,12 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     document.getElementById("modalFertNotes").innerText = plant.fertilizerNotes || "";
     document.getElementById("modalLight").innerText = plant.light;
 
+    const ppfdData = getPlantPPFD(plant);
+    const ppfdGaugeEl = document.getElementById("modalPpfdGaugeContainer");
+    if (ppfdGaugeEl) {
+      ppfdGaugeEl.innerHTML = renderPpfdGaugeHtml(ppfdData.min, ppfdData.max, ppfdData.text);
+    }
+
     const summerDays = plant.waterDaysSummer;
     const summerText = plant.waterSummerText;
     let summerDisplay = "-";
@@ -8336,6 +8608,10 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       if (fnInp) fnInp.value = "";
       const lInp = document.getElementById("editPlantLight");
       if (lInp) lInp.value = "";
+      const ppMinInp = document.getElementById("editPlantPpfdMin");
+      if (ppMinInp) ppMinInp.value = 120;
+      const ppMaxInp = document.getElementById("editPlantPpfdMax");
+      if (ppMaxInp) ppMaxInp.value = 260;
       const sInp = document.getElementById("editPlantSubstrate");
       if (sInp) sInp.value = "";
       const potInp = document.getElementById("editPlantPotSize");
@@ -8398,6 +8674,11 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
 
     const lInp = document.getElementById("editPlantLight");
     if (lInp) lInp.value = plant.light || "";
+    const ppfdData = getPlantPPFD(plant);
+    const ppMinInp = document.getElementById("editPlantPpfdMin");
+    if (ppMinInp) ppMinInp.value = plant.ppfdMin || ppfdData.min;
+    const ppMaxInp = document.getElementById("editPlantPpfdMax");
+    if (ppMaxInp) ppMaxInp.value = plant.ppfdMax || ppfdData.max;
     const sInp = document.getElementById("editPlantSubstrate");
     if (sInp) sInp.value = plant.substrate || "";
     const potInp = document.getElementById("editPlantPotSize");
@@ -8495,6 +8776,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
         fertilizerSeason: document.getElementById("editPlantFertSeason").value.trim() || "Primavera i Estiu",
         fertilizerNotes: document.getElementById("editPlantFertNotes").value.trim(),
         light: document.getElementById("editPlantLight").value.trim(),
+        ppfdMin: parseInt(document.getElementById("editPlantPpfdMin")?.value) || 120,
+        ppfdMax: parseInt(document.getElementById("editPlantPpfdMax")?.value) || 280,
+        ppfdText: `${parseInt(document.getElementById("editPlantPpfdMin")?.value) || 120} - ${parseInt(document.getElementById("editPlantPpfdMax")?.value) || 280} µmol/m²s`,
         substrate: document.getElementById("editPlantSubstrate").value.trim(),
         potSize: potSizeVal,
         toxic: isToxic,
@@ -8552,6 +8836,9 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
       fertilizerSeason: document.getElementById("editPlantFertSeason").value.trim() || "Primavera i Estiu",
       fertilizerNotes: document.getElementById("editPlantFertNotes").value.trim(),
       light: document.getElementById("editPlantLight").value.trim(),
+      ppfdMin: parseInt(document.getElementById("editPlantPpfdMin")?.value) || (existingPlant.ppfdMin || 120),
+      ppfdMax: parseInt(document.getElementById("editPlantPpfdMax")?.value) || (existingPlant.ppfdMax || 280),
+      ppfdText: `${parseInt(document.getElementById("editPlantPpfdMin")?.value) || (existingPlant.ppfdMin || 120)} - ${parseInt(document.getElementById("editPlantPpfdMax")?.value) || (existingPlant.ppfdMax || 280)} µmol/m²s`,
       substrate: document.getElementById("editPlantSubstrate").value.trim(),
       potSize: potSizeVal || existingPlant.potSize || "",
       toxic: isToxic,
@@ -9595,7 +9882,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("modalFertSeasonLabel", t("Temporada activa:", "Temporada activa:", "Active season:"));
     setElText("modalWaterSummerLabel", t("Estiu:", "Verano:", "Summer:"));
     setElText("modalWaterWinterLabel", t("Hivern:", "Invierno:", "Winter:"));
-    setElText("modalLightSectionTitle", t("Llum i ubicació", "Luz y ubicación", "Light & placement"));
+    setElText("modalLightSectionTitle", t("Llum i radiació PAR (PPFD)", "Luz y radiación PAR (PPFD)", "Light & PAR radiation (PPFD)"));
     setElText("modalSubstrateSectionTitle", t("Substrat recomanat", "Sustrato recomendado", "Recommended soil mix"));
     setElText("modalTipSectionTitle", t("Consell clau", "Consejo clave", "Key tip"));
     setElText("modalGuideHeading", t("GUIA BÀSICA", "GUÍA BÁSICA", "BASIC GUIDE"));
@@ -9630,6 +9917,7 @@ Identifica l'espècie botànica i retorna EXCLUSIVAMENT un objecte JSON vàlid a
     setElText("editPlantFertSeasonLabel", t("Temporada activa:", "Temporada activa:", "Active season:"));
     setElText("editPlantFertNotesLabel", t("Notes d'abonament:", "Notas de abonado:", "Fertilizer notes:"));
     setElText("editPlantLightLabel", t("Llum i ubicació:", "Luz y ubicación:", "Light and location:"));
+    setElText("editPlantPpfdLabel", t("Radiació PPFD ideal (mín - màx µmol/m²s):", "Radiación PPFD ideal (mín - máx µmol/m²s):", "Ideal PPFD radiation (min - max µmol/m²s):"));
     setElText("editPlantSubstrateLabel", t("Substrat recomanat:", "Sustrato recomendado:", "Recommended soil:"));
     setElText("editPlantPotSizeLabel", t("Mida / tipus de test actual (opcional):", "Tamaño / tipo de maceta actual (opcional):", "Current pot size / type (optional):"));
     setElText("editPlantToxicLabel", t("Toxicitat mascotes:", "Toxicidad mascotas:", "Pet toxicity:"));
